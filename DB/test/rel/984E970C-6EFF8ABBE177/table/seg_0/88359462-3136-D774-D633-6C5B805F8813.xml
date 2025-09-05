@@ -1,0 +1,72 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="88359462-3136-D774-D633-6C5B805F8813" name="Payment_Types">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>0630D31D-E429-CCA7-08EC-459356935ACB</importedID>
+<ordsAlias>table_15</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="pty_id" id="3EE8B444-D7B1-3C11-7085-396671A1C0DB">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>8ACDB589-84A7-140E-C6AA-B4A829D691B5</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="pty_payment_type" id="C44371DF-8D80-3BA5-428C-7FA768C25047">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>67CADD84-2CEB-E150-F19C-9D2DF8A13AB0</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="pty_createdAt" id="14FC52C6-6263-A98B-6A41-C0CC8794BC72">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>9A1CF2AF-047A-341B-6A33-AF0EB92E516A</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="pty_updatedAt" id="5DCA33E0-0517-3475-85B3-EFF33F89E87F">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>8488766D-CC0C-3D9D-9235-732EE48DEAE9</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="pty_publishedAt" id="A002032F-F920-8C99-252C-C651D3EEC5E9">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>38DE036A-47C1-1FEC-2E9A-EC89D9FEF945</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C3E0DC3E-A96D-BEA3-696E-A7AF42A70A15" name="Payment_Types_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>820C46B1-6C48-5487-B79B-CA56010A04D7</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3EE8B444-D7B1-3C11-7085-396671A1C0DB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

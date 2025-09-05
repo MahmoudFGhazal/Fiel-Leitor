@@ -1,0 +1,47 @@
+.cartItemsContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: 400px;
+  box-sizing: border-box;
+}
+
+.cartItemsList {
+  flex: 1 1 auto;       
+  overflow-y: auto;     
+  margin-bottom: 10px;
+}
+
+.cartItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  gap: 20px;
+}
+
+.itemDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.total {
+  flex-shrink: 0;       
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.couponInput {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.couponInput:focus {
+  border-color: #0070f3;
+  box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+  outline: none;
+}

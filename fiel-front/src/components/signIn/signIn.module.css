@@ -1,0 +1,25 @@
+
+.formContainer {
+    flex: 1;  
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: 20px; 
+    padding: 10px 0;
+}
+
+.formStep {
+    width: 60%;
+}
+
+.buttonContainer {
+    width: 80%;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+}
+
+.buttonContent {
+    width: 100px;
+}

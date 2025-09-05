@@ -1,0 +1,91 @@
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+
+.cartSidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    z-index: 999;
+    animation: slideIn 0.3s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.cartHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.cartItems {
+    flex: 1; 
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cartItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    gap: 1rem;
+}
+
+.itemName {
+    flex: 1;             
+    text-align: left;    
+    font-weight: bold;
+}
+
+.cartButton {
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+}
+
+.nameContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.purchaseButtonContainer {
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+}

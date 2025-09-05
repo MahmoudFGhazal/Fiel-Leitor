@@ -1,0 +1,94 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="30999DA2-82A2-3C3C-F835-231A175A26AF" name="User_Address">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:11:56 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<ordsAlias>table_18</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="uad_usr_id" id="3BDC501F-2607-2A96-CC49-AF198DA1F74B">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:16:23 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="3C88B979-60F3-4119-E6DE-166CD49B27F6" referredColumn="A7C072B7-1440-AB76-F1B1-A2980493ACB6"/>
+</associations>
+</Column>
+<Column name="uad_ana_id" id="7806AD9F-4EF0-09B7-5B68-167BDC7521A9">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:13:48 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="BD45B847-26AD-57F7-50C4-E5CDB2D7FA91" referredColumn="3867D4EB-EB54-31F8-B7D7-993BF870D9CE"/>
+</associations>
+</Column>
+<Column name="udd_publishedAt" id="F2328359-8A2C-ED27-6856-662791F64C54">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:13:01 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="udd_createdAt" id="F43ACE44-AE53-51FF-5042-B1C0F839EF0B">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:13:01 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="udd_updatedAt" id="8772D95F-480F-E03A-2553-C411AA3C3803">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:13:01 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C7DBF3AB-0FF3-1E4A-F04E-7474EA2F4A56" name="User_Address_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:13:01 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7806AD9F-4EF0-09B7-5B68-167BDC7521A9"/>
+<colUsage columnID="3BDC501F-2607-2A96-CC49-AF198DA1F74B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="414F71CB-F046-9DBB-4A6C-BEBE336D4290" name="udd_ana_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:13:48 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7806AD9F-4EF0-09B7-5B68-167BDC7521A9"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="5B5A3D11-DD2A-05CF-315B-E991CEA51CD1" name="udd_usr_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:16:23 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3BDC501F-2607-2A96-CC49-AF198DA1F74B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

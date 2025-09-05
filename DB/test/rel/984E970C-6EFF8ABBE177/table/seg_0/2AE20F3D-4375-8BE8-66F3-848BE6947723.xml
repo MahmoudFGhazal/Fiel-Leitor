@@ -1,0 +1,72 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="2AE20F3D-4375-8BE8-66F3-848BE6947723" name="Users_Cards">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>2F84CA29-9928-A98D-B391-F8349ECC5FB1</importedID>
+<ordsAlias>table_16</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="uca_car_id" id="64559B6E-955D-9B33-5C93-01A01C5CDCE7">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>5F2AD87B-156E-60E0-01D1-8C3FA61F41B4</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="9017C718-EF0E-1E0F-EC96-8A3CB7B9782C" referredColumn="C3564574-7ADB-256C-2E5B-9E291034C828"/>
+</associations>
+</Column>
+<Column name="uca_usr_id" id="34CE87A3-BBE3-67B5-87FD-DA2E0917133B">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>4D97917F-30FD-8891-E8DF-2C904A471E76</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="F822EFA0-0AFE-3A91-EC16-1002280C587B" referredColumn="A7C072B7-1440-AB76-F1B1-A2980493ACB6"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="471AB2A9-902D-934C-3509-5CCB3784BC6F" name="Clients_Cards_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>6DDA0E42-15F8-152F-DE16-11CCEC59AB54</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="64559B6E-955D-9B33-5C93-01A01C5CDCE7"/>
+<colUsage columnID="34CE87A3-BBE3-67B5-87FD-DA2E0917133B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="688A9D42-7688-0289-4D33-096B725ED664" name="uca_usr_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="34CE87A3-BBE3-67B5-87FD-DA2E0917133B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E1D2E403-D3EB-2379-7CAD-5753045F690D" name="uca_car_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="64559B6E-955D-9B33-5C93-01A01C5CDCE7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

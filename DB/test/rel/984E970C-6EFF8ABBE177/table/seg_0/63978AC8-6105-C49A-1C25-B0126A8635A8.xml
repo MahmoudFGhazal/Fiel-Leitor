@@ -1,0 +1,94 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="63978AC8-6105-C49A-1C25-B0126A8635A8" name="Address_Name">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>0A79BA67-057F-7CCE-0A8C-B7D186636969</importedID>
+<ordsAlias>table_23</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ana_id" id="3867D4EB-EB54-31F8-B7D7-993BF870D9CE">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>EED3823B-7220-BCE5-3662-F4725B99A8E5</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ana_name" id="C5138311-8DF0-2A2B-3449-1095CF136B72">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>096CAC9B-2E49-B7A2-3359-3FEB21EDB92B</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ana_add_id" id="78C864D5-EDC7-F86E-027B-6FDC957195FE">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>94C7AD11-52E6-8841-9F76-D5A255589FDB</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="098608EA-C78E-A8CC-BCD0-EF4E6A77C508" referredColumn="BB77460E-DD72-00BD-9384-896D3114CA75"/>
+</associations>
+</Column>
+<Column name="ana_createdAt" id="DBFF85A0-C801-432F-B6DB-6FFA5E74A2D9">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>342C1C03-4576-AB34-BC2B-3C375E6C4C2F</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ana_updatedAt" id="7537427D-A7F7-7587-CFB3-5B915C7E7CDE">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>D810D15D-ECAB-21DB-BBB4-CA519901346B</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ana_publishedAt" id="30AF9AFD-803B-91F2-3F94-C1CE32FAA2E0">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>91F6A6E8-2238-B76E-607C-E14F476D1808</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="4CED4E26-FF92-B09A-7306-E4CBA5D052C8" name="Address_Name_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>BB1DD5DB-BFF0-71D2-A697-C3D886F880AA</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3867D4EB-EB54-31F8-B7D7-993BF870D9CE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B7067551-5295-FF0B-3984-3842D62DA628" name="ana_add_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="78C864D5-EDC7-F86E-027B-6FDC957195FE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

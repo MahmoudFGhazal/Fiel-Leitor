@@ -1,0 +1,65 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="AFC78486-C1E9-A4F9-AE33-42FB785FB8B6" name="Status_Sale">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:57:55 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<ordsAlias>table_23</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ssa_id" id="F9CA1BEB-E1E7-3856-2BC1-E30C3F09DD3F">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:59:48 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ssa_name" id="E48F59D1-0F0A-6C20-C32D-39C40DA00A77">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:59:48 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ssa_createdAt" id="541936C9-58BC-C95B-309F-EB5E6BE60BA8">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:59:48 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ssa_updatedAt" id="D91148F9-C8AB-E0A4-1F8C-123DBDD520E3">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:59:48 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ssa_publishedAt" id="B96402C1-A12C-6BEC-D4FB-B1A29FE4DFE2">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:59:48 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="B97248C8-E67E-2CDE-E45E-9CF8C77195D2" name="Status_Sale_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:59:48 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F9CA1BEB-E1E7-3856-2BC1-E30C3F09DD3F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

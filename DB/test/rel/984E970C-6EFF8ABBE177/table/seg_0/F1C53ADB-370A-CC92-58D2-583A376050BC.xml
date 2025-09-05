@@ -1,0 +1,73 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="F1C53ADB-370A-CC92-58D2-583A376050BC" name="Administrator">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 21:02:01 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<ordsAlias>table_24</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="adm_id" id="C23AEDA7-79A1-DDF4-81BE-DC3673767743">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 21:02:56 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="adm_email" id="974A3E6C-2E21-5C12-92AE-148869CFDDFE">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 21:02:56 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="adm_password" id="0F13222A-6636-8850-9655-9D303D6A0246">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 21:02:56 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="adm_createdAt" id="C3DD549B-2822-04ED-FD5D-D2B8AF105483">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 21:02:56 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="adm_updatedAt" id="3B930B9D-D13D-7100-E4C6-8CDFD0C3ACF8">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 21:02:56 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="adm_publishedAt" id="48422D33-5825-8137-8E14-88873FE53897">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 21:02:56 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="96DCFCA6-0A19-0845-BB15-0308D7A28B72" name="Administrator_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 21:02:56 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C23AEDA7-79A1-DDF4-81BE-DC3673767743"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

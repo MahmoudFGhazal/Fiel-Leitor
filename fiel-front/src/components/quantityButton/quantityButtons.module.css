@@ -1,0 +1,31 @@
+
+
+.quantityControls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantityControls button {
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.quantityControls span {
+    min-width: 20px;
+    text-align: center;
+}
+
+.arrowButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.quantity {
+  font-weight: bold;
+  font-size: 16px;
+}

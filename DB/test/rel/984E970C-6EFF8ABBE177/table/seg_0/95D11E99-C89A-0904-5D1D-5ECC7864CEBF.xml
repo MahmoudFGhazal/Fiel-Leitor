@@ -1,0 +1,103 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="95D11E99-C89A-0904-5D1D-5ECC7864CEBF" name="States">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>5B0D22EE-DC52-DF95-D697-B3173D982D73</importedID>
+<ordsAlias>table_9</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="sta_id" id="544DE480-0E87-854E-56CB-DD0B3AFE4611">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>F51C533B-C554-B730-3262-B98BDDE4854A</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sta_state" id="838CE8CC-51C7-DF70-FFC4-304C34D6C2AF">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>1126F294-3684-EAC6-444F-183CDCC5A259</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sta_uf" id="7A3A5E8B-3BD3-B457-FB91-69A33766793F">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>C4BD19F3-3250-8541-DD9F-3E95134ACD29</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sta_createdAt" id="DC1A69C5-FD9C-8F29-D733-90547FEA83DB">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>5D85469C-334C-C9C4-BDB3-A651897B086E</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sta_updateAt" id="DC1F1C0F-2C9E-78D6-E050-4056B5984210">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>9FA93740-030B-D03E-13A5-228397F76490</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sta_publishedAt" id="A6B2EF64-9374-14E3-B6B5-C070AB022766">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>F1F24C22-528F-60A3-4051-5F296613D3DF</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sta_cou_id" id="32C4CC03-130F-35ED-D3A7-A605CD66202C">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>F7A39AC3-9955-D740-03A5-A2F8E6B88824</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="F7A642F4-9BDB-906A-AEB7-2CAB3A46F7DF" referredColumn="255BD163-499F-8C49-D5A0-62086C724233"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="7067CC33-3054-1731-ACD9-EFEE27FA57BF" name="States_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>F28C6376-3911-9AD0-7F4A-8720E0A28FFF</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="544DE480-0E87-854E-56CB-DD0B3AFE4611"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="A15A2AED-3606-CB9F-3045-D4ABC98F0E7F" name="sta_cou_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="32C4CC03-130F-35ED-D3A7-A605CD66202C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

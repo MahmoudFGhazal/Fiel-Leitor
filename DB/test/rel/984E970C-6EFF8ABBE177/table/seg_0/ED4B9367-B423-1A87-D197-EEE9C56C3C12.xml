@@ -1,0 +1,81 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="ED4B9367-B423-1A87-D197-EEE9C56C3C12" name="Sales_Books">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>EA747FEC-B4BE-7F67-88F7-D9116C0931AB</importedID>
+<ordsAlias>table_22</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="sbo_sal_id" id="E8A5E82F-9A64-1372-B74C-34B435F9BCE3">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>C942108C-14CD-2A44-C7D3-FDBCC751B722</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="D2C75FE9-7A4D-B5E2-BAEE-D842F39A06FF" referredColumn="59CE2296-A744-1108-4C64-33556681BF61"/>
+</associations>
+</Column>
+<Column name="sbo_bok_id" id="75B4DC2A-5539-7B35-8948-57C2E1A2EC29">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>A3EE65F0-FE56-062A-BF7A-BF12A29840A4</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="DEC6F811-7665-27D9-F494-D0626B634821" referredColumn="4F2D367C-98AE-743C-8678-B9E9CE93D012"/>
+</associations>
+</Column>
+<Column name="sbo_quantity" id="25055E41-CE65-F820-263F-3BF4C414EA7A">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>DB6AD406-646B-BECF-AB95-4274ACF933B1</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="4AA7D2E6-BED7-CA19-C2AA-AE5A3F0104AA" name="Sales_Books_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>DE1B529E-3E6F-376B-4665-6750F077236D</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="75B4DC2A-5539-7B35-8948-57C2E1A2EC29"/>
+<colUsage columnID="E8A5E82F-9A64-1372-B74C-34B435F9BCE3"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="BC1A4201-8AB9-3583-CCCA-8744CFB96AD3" name="sbo_sal_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E8A5E82F-9A64-1372-B74C-34B435F9BCE3"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="AA0F1130-6362-E1F2-C052-BA51E3FCF506" name="sbo_bok_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="75B4DC2A-5539-7B35-8948-57C2E1A2EC29"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

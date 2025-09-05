@@ -1,0 +1,108 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="71F021A5-81CF-9925-486A-79552455DD05" name="Carts">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>4FDAA875-DDC1-B870-D216-E849A583A042</importedID>
+<ordsAlias>table_21</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="cat_cli_id" id="75C56358-54D8-8B72-8A51-FDB840B49500">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>66830FFD-08F9-DDA5-9C73-38DD4FAB6D3E</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="DCA1CE6F-2010-51E3-79BD-B3D3A86F8C77" referredColumn="A7C072B7-1440-AB76-F1B1-A2980493ACB6"/>
+</associations>
+</Column>
+<Column name="cat_bok_id" id="D9056501-A427-6DEB-0851-8FDA422273EE">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>7FB2354D-DD8E-0D6F-C1D1-532913881BC8</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="A36B7D24-0B2D-8E50-3E15-F4C121AEC03B" referredColumn="4F2D367C-98AE-743C-8678-B9E9CE93D012"/>
+</associations>
+</Column>
+<Column name="cat_quantity" id="84C151CD-19AE-4848-1DE8-74C774BE33C4">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>CB8C7629-9342-7BAA-6144-F744CEFE1FEF</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="cat_createAt" id="6D74B83A-9027-3C2E-1F00-AC7F169EEB79">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>910726E9-E4B6-E941-EA5C-2365A7D38B1B</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="cat_updatedAt" id="39B01FBA-304E-BC80-DC61-730A82CEB13E">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>74FDB908-8448-6135-2AAB-8E6EC93DDC10</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="cat_publishedAt" id="F913312B-6441-9D5C-C307-1612BF2483BB">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>3FA4B4E7-EBF0-5B6F-1F49-652E2E21E031</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="60ED6ADE-AF4A-92D7-FF5E-B808386BD148" name="Carts_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>C3FB0886-FF6E-150E-964D-CE8783643A90</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="75C56358-54D8-8B72-8A51-FDB840B49500"/>
+<colUsage columnID="D9056501-A427-6DEB-0851-8FDA422273EE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="27D51392-EAB9-360A-D735-670BA9C4380E" name="cat_bok_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="D9056501-A427-6DEB-0851-8FDA422273EE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B4149B49-B6B6-FEFA-632A-65592C3CA9DF" name="cat_usr_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="75C56358-54D8-8B72-8A51-FDB840B49500"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

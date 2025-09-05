@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="C4BE4653-0FC0-4A46-2F0C-9930AFF43602" containerWithKeyObject="EB6C8740-812C-836B-5957-E7A96C7F237B" localFKIndex="E00760C5-473B-9A18-8615-980B88940D3E" name="sal_ana_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>64F9D5BD-D5AB-6AA4-7ABF-B49B48BEC283</importedID>
+<referredTableLongName>Address_Name</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>63978AC8-6105-C49A-1C25-B0126A8635A8</referredTableID>
+<keyObject>4CED4E26-FF92-B09A-7306-E4CBA5D052C8</keyObject>
+<referredKeyID>4CED4E26-FF92-B09A-7306-E4CBA5D052C8</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ana_id</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

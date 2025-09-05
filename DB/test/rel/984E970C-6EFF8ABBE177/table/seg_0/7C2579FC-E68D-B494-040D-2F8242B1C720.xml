@@ -1,0 +1,121 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="7C2579FC-E68D-B494-040D-2F8242B1C720" name="Cards">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>7FB3BCC2-CEB3-84A8-4E2E-3A81A8F1D759</importedID>
+<ordsAlias>table_18</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="car_id" id="C3564574-7ADB-256C-2E5B-9E291034C828">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>D12E1479-EBFA-C97A-91C1-2D838FE4905C</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="car_number" id="B051B233-F9F8-2A4E-54F1-0BB08D67ED11">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>6B1B1CFE-82FE-3F94-20BC-AB1CCDE8F9A5</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="car_ccv" id="3DC70E2E-C8E8-21DA-89B3-1D7AB001A7FA">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>21A4AE39-FF1C-5EED-A52C-5157D4C38D58</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="car_holder" id="995448B0-EEFB-FA34-18FE-E9FFFDC8EF7E">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>D5F7875F-5F1D-3F03-9AC9-10D28AC27E22</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="car_valid" id="F8E32464-A33D-8FA3-3722-8CD87555D421">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>BAFE669C-2F1E-02B6-617C-3F0E5427EA32</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="car_createdAt" id="9EFB2B6F-2A53-AD4C-AF64-3FEE99D2E47D">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>F337E7AC-5C32-A0A7-F7E4-935A258F9C6D</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="car_updatedAt" id="9CFD8FA0-6D64-4842-5F42-2A0C47B491D9">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>F45DC98F-287A-6E2A-8A12-079C2E976440</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="car_publishedAt" id="CF1C1357-0623-0C6A-1C28-461671E5B3AB">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>4F2310AE-97F1-E565-0FC1-8074F0658EA5</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="car_pty_id" id="B4CDB45D-53C1-29CD-0698-BE4A6FD585F7">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>88FC8759-B260-CB53-3939-5390C4CB14DF</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="C68C4589-B6A5-5371-3556-036CE9BFDFA7" referredColumn="3EE8B444-D7B1-3C11-7085-396671A1C0DB"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C8FA5EC7-60FF-2C1E-0FA1-FAE3058D0B14" name="Cards_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>CF80CD38-03C1-5BE1-9294-10AD990FB73B</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C3564574-7ADB-256C-2E5B-9E291034C828"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="A633133B-6ABE-51EA-B1FD-402B73D8A4D7" name="car_pty_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B4CDB45D-53C1-29CD-0698-BE4A6FD585F7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

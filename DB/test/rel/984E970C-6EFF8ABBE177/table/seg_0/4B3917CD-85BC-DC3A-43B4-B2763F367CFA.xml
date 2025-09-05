@@ -1,0 +1,149 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="4B3917CD-85BC-DC3A-43B4-B2763F367CFA" name="Addresses">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>79FE38E2-368D-C366-3367-73B5B3878C61</importedID>
+<ordsAlias>table_5</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="add_id" id="BB77460E-DD72-00BD-9384-896D3114CA75">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>C4477218-1C67-8A9F-075A-E27932A85D7C</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="add_number" id="29EC66C8-165C-D706-4397-27F8E3215A64">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>5E5999FD-D60B-D8AA-7934-FA291BF138D6</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="add_complement" id="7732687D-2580-2A1F-726E-AC13D6BF4586">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>47C9848D-FF92-39FA-82F0-E7FFFF550DF4</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="add_createdAt" id="DEB91771-CC51-6CED-021B-09A3D2465108">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>923AB5AF-44D5-D1D1-900C-BB2B3BEC2139</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="add_updatedAt" id="381D630A-2534-2C3F-C663-9CE89795830F">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>4C07A56D-4C15-D49C-608D-E58DA721DD85</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="add_publishedAt" id="4CA6C52B-9649-0FE4-AD39-850EFC89608C">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>90B50528-AA02-40C9-3B39-377B2BC58CD8</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="add_rty_id" id="AD1F8350-2A02-1B2C-F55A-366A34C5585C">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>09851863-EDC0-9162-0267-DCFD2492B3A5</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="8D03D68B-226A-5B22-D70D-677FB5B0FA49" referredColumn="A2C4BA2E-A977-2105-642B-F3DBAFA667A5"/>
+</associations>
+</Column>
+<Column name="add_cit_id" id="73F5A039-4AA8-36A9-2C40-403E283C1B39">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>0C49B064-17C7-AB41-2A6D-B8B0D5B7EAA1</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="6C8B056F-95D9-9203-6E1C-BF6A5B71E728" referredColumn="B8E86537-DD7B-F4DA-9369-DAE922F4EAED"/>
+</associations>
+</Column>
+<Column name="add_str_id" id="90366F21-3BBF-1B2F-555E-3BE1C20C1353">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>2B9CBA79-3F66-6E26-B1E7-3DF32849B7E0</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="A96DFD6E-F3AF-845B-9EC8-F2F7AF4D2FB5" referredColumn="6E761F34-7F64-175B-D1DD-F42D040A1678"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="B84F121E-7BAF-45CA-731B-2A73A6A6B10E" name="Addresses_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>A4EA39FD-0083-CF8B-9680-2DE84C71E542</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="BB77460E-DD72-00BD-9384-896D3114CA75"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="13997129-59E2-C099-45CA-66ABBBCD3C8F" name="add_str_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="90366F21-3BBF-1B2F-555E-3BE1C20C1353"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="FAA675B5-282B-074E-0F28-79E12E8352E7" name="add_rty_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="AD1F8350-2A02-1B2C-F55A-366A34C5585C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="DBA12EB9-DDD7-3EC1-DA7B-E3F8C2CE269D" name="add_cit_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="73F5A039-4AA8-36A9-2C40-403E283C1B39"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

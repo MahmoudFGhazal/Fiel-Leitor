@@ -1,0 +1,151 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="EB6C8740-812C-836B-5957-E7A96C7F237B" name="Sales">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>ACE91F33-0AF9-DEDA-84F6-CA2918EE10D0</importedID>
+<ordsAlias>table_2</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="sal_id" id="59CE2296-A744-1108-4C64-33556681BF61">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>59AEE44D-89EC-63A9-811F-D78A346D621E</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sal_createdAt" id="5E186347-3B42-86B4-877F-46015DF93070">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>EA04ACA9-F297-D061-3E23-F4E286D5B7EC</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sal_updatedAt" id="8F77A7CC-FC8F-0B93-0F9D-85CEFB21BBC5">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>DE7E9221-3EF1-813B-F76C-BC8DCC451534</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sal_publishedAt" id="928EF24B-6885-88D9-91ED-886CBAA1819B">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>358363FF-7A2E-9313-A3D7-46FDFC349B50</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="sal_cli_id" id="F6E80871-98E2-94BB-40EA-F20D372E9165">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>CA018742-965A-508D-E51B-4568B54CBF01</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="0B79844D-93B4-90CB-4913-65A4531BC919" referredColumn="A7C072B7-1440-AB76-F1B1-A2980493ACB6"/>
+</associations>
+</Column>
+<Column name="sal_ana_id" id="B1B8FA12-F01C-4D6D-D42F-937B0E9BFFAF">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>C5B22E7D-4D2E-0CCC-F289-95091BA7E03A</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="C4BE4653-0FC0-4A46-2F0C-9930AFF43602" referredColumn="3867D4EB-EB54-31F8-B7D7-993BF870D9CE"/>
+</associations>
+</Column>
+<Column name="sal_car_id" id="16D125C6-8AE7-9597-A20F-77B9A89441B9">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>19116669-2863-4AC4-D7FF-B1A4DE239F9F</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="6BC437A6-542C-D61D-B728-DB52C4EC70BD" referredColumn="C3564574-7ADB-256C-2E5B-9E291034C828"/>
+</associations>
+</Column>
+<Column name="sal_ssa_id" id="1DD7630C-6588-0AFA-5F67-4A49D98EF65B">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 20:01:33 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="1E2FEB3F-3D1E-E4C2-1569-92E5CCCA35A8" referredColumn="F9CA1BEB-E1E7-3856-2BC1-E30C3F09DD3F"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="57B5CBDC-BB8B-4D02-0D0A-B354DEAEC032" name="Sales_PK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<importedID>85B8EFC0-6F65-4A5D-586A-874583DB3CC8</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="59CE2296-A744-1108-4C64-33556681BF61"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E00760C5-473B-9A18-8615-980B88940D3E" name="sal_ana_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B1B8FA12-F01C-4D6D-D42F-937B0E9BFFAF"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="581E7FF1-E029-4EA0-F55F-358655A958F1" name="sal_usr_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F6E80871-98E2-94BB-40EA-F20D372E9165"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="3934BECA-382A-4FFD-9B42-0DA555FAC82D" name="sal_car_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 19:07:45 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="16D125C6-8AE7-9597-A20F-77B9A89441B9"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="940208FD-EE69-EDED-1C94-3499A6325010" name="sal_ssa_FK">
+<createdBy>User</createdBy>
+<createdTime>2025-08-26 20:01:33 UTC</createdTime>
+<ownerDesignName>test</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1DD7630C-6588-0AFA-5F67-4A49D98EF65B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>
