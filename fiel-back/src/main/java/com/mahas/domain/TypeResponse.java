@@ -2,6 +2,6 @@ package com.mahas.domain;
 
 public enum TypeResponse {
     OK,
-    CLIENT,
-    SERVER
+    CLIENT_ERROR,
+    SERVER_ERROR
 }

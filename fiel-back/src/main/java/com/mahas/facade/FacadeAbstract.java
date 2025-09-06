@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mahas.dao.IDAO;
-import com.mahas.dao.UserDAO;
+import com.mahas.dao.user.UserDAO;
 
 import ch.qos.logback.core.net.server.Client;
 import jakarta.annotation.PostConstruct;

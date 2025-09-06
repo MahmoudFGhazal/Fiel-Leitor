@@ -19,7 +19,7 @@ public class UserController {
     private IFacade facade;
 
     @GetMapping
-    public ResponseEntity getAllClients() {
+    public ResponseEntity<FacadeResponse> getAllClients() {
         FacadeRequest request = new FacadeRequest();
 
         FacadeResponse response = facade.query(request);
