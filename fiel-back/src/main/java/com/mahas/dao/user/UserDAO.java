@@ -79,9 +79,8 @@ public class UserDAO implements IDAO {
             parameters.forEach(countQuery::setParameter);
             Number totalCount = (Number) countQuery.getSingleResult();
             int totalItems = totalCount.intValue();
-
             int totalPage = (limit != null) ? (int) Math.ceil((double) totalItems / limit) : 1;
-
+            System.out.println(resultList.get(0).getGender().getGender());
             if (!resultList.isEmpty()) {
                 if (limit != null && limit == 1) {
                     response.setEntity(resultList.get(0));
@@ -130,6 +129,35 @@ public class UserDAO implements IDAO {
             if (result > 0) {
                 response.setEntity(user);
             } else {
+                response.setEntity(null);
+            }
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return response;
+    }
+
+    public SQLResponse delete(FacadeRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if (!(entity instanceof User)) {
+            return null;
+        }
+
+        User user = (User) entity;
+
+        String jpql = "DELETE FROM User u WHERE u.id = :id";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("id", user.getId());
+
+        try {
+            int result = query.executeUpdate();
+            if (result > 0) {
+                response.setEntity(user); 
+            }else {
                 response.setEntity(null);
             }
         } catch (PersistenceException e) {

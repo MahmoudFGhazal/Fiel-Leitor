@@ -106,6 +106,39 @@ public class Facade extends FacadeAbstract implements IFacade {
     @Override
     public FacadeResponse delete(FacadeRequest request) {
         FacadeResponse response = new FacadeResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(entity == null) {
+            response.setMessage(entity + " não é uma entidade");
+            response.setTypeResponse(TypeResponse.SERVER_ERROR);
+            return response;
+        }
+
+        String nameEntity = entity.getClass().getName();
+
+        String error = runRules(request);
+        if(error != null) {
+            response.setTypeResponse(TypeResponse.CLIENT_ERROR);
+            response.setMessage(error);
+            return response;
+        }
+
+        IDAO dao = daos.get(nameEntity);
+        if(dao == null) {
+            response.setMessage(nameEntity + " não encontrado o dao");
+            response.setTypeResponse(TypeResponse.SERVER_ERROR);
+            return response;
+        }
+
+        SQLResponse result = dao.delete(request);
+        if(result == null) {
+            response.setMessage("Erro ao fazer a query no banco");
+            response.setTypeResponse(TypeResponse.SERVER_ERROR);
+            return response;
+        }
+
+        response.setData(result);
+        
         return response;
     }
 }

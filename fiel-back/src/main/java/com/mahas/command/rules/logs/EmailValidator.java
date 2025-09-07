@@ -41,9 +41,9 @@ public class EmailValidator {
 
         FacadeResponse response = facade.query(request);
 
-        DomainEntity entities = response.getData().getEntity();
+        DomainEntity entity = response.getData().getEntity();
 
-        if(entities != null) {
+        if(entity != null) {
             return "E-mail já cadastrado";
         }
 
