@@ -1,7 +1,5 @@
 package com.mahas.domain;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
@@ -15,11 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FacadeResponse {
-    private List<DomainEntity> entities;
-    private DomainEntity entity;
+    private SQLResponse data;
+
+    private TypeResponse typeResponse = TypeResponse.OK;
 
     private Integer errorType;
-    private TypeResponse typeResponse = TypeResponse.OK;
     private String message;
 
      /* private Map<String, String> errorDetails; // Detalhes de validação/erros específicos

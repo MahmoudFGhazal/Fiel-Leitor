@@ -1,24 +1,22 @@
 package com.mahas.dao;
 
-import java.util.Collections;
-import java.util.List;
-
-import com.mahas.domain.DomainEntity;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLResponse;
 
 public interface IDAO {
-    default public DomainEntity save(DomainEntity entity) {
+    default public SQLResponse save(FacadeRequest request) {
         return null;
     }
 
-    default public DomainEntity delete(DomainEntity entity) {
+    default public SQLResponse delete(FacadeRequest request) {
         return null;
     }
 
-    default public DomainEntity update(DomainEntity entity) {
+    default public SQLResponse update(FacadeRequest request) {
         return null;
     }
 
-    default public List<DomainEntity> query(DomainEntity entity) {
-        return Collections.emptyList();
+    default public SQLResponse query(FacadeRequest request) {
+        return null;
     }
 }

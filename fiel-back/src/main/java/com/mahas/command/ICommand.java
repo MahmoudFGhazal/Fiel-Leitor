@@ -1,5 +1,7 @@
 package com.mahas.command;
 
-public class ICommand {
+import com.mahas.domain.FacadeRequest;
 
+public interface ICommand {
+    String execute(FacadeRequest request);
 }

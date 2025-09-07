@@ -2,6 +2,8 @@ package com.mahas.domain;
 
 import org.springframework.stereotype.Component;
 
+import com.mahas.command.ICommand;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +16,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FacadeRequest {
     private DomainEntity entity;
-    //private ICommand[] commands;
+    private ICommand[] commands;
+
+    private Integer page;
+    private Integer limit;
+
+    private TypeRequest typeRequest;
 }

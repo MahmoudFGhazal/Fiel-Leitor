@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.mahas.command.ICommand;
+import com.mahas.command.rules.verifyPagination;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.user.User;
 import com.mahas.facade.IFacade;
 
 @Controller
@@ -21,6 +24,14 @@ public class UserController {
     @GetMapping
     public ResponseEntity<FacadeResponse> getAllClients() {
         FacadeRequest request = new FacadeRequest();
+
+        verifyPagination verifyPagination = new verifyPagination();
+
+        ICommand[] commands = new ICommand[]{verifyPagination};
+        request.setCommands(commands);
+        request.setLimit(10);
+        request.setPage(1);
+        request.setEntity(new User());
 
         FacadeResponse response = facade.query(request);
         
