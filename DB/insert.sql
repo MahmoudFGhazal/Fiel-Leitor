@@ -1,6 +1,6 @@
 USE Fiel;
 
-INSERT INTO genders (gen_name) VALUES
+INSERT INTO genders (gen_gender) VALUES
 ('Male'),
 ('Female'),
 ('Other'),

@@ -3,12 +3,16 @@ package com.mahas.domain.address;
 import java.time.LocalDateTime;
 
 import com.mahas.domain.DomainEntity;
+import com.mahas.domain.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -30,23 +34,44 @@ public class Address extends DomainEntity {
     @Column(name = "add_id")
     private Long id;
 
-    @Column(name = "add_name", nullable = false)
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "add_usr_id", nullable = false)
+    private User user;
+    
+    @Column(name = "add_nickname", nullable = false)
+    private String nickname;
 
     @Column(name = "add_number", nullable = false)
-    private String number;
+    private Integer number;
 
-    @Column(name = "add_complement", nullable = false)
+    @Column(name = "add_complement")
     private String complement;
 
-    @Column(name = "add_rty_id", nullable = false)
-    private Long rtyId;
+    @Column(name = "add_street", nullable = false)
+    private String street;
 
-    @Column(name = "add_cit_id", nullable = false)
-    private Long citId;
+    @Column(name = "add_neighborhood", nullable = false)
+    private String neighborhood;
 
-    @Column(name = "add_str_id", nullable = false)
-    private Long strId;
+    @Column(name = "add_zip", nullable = false)
+    private String zip;
+
+    @Column(name = "add_city", nullable = false)
+    private String city;
+
+    @Column(name = "add_state", nullable = false)
+    private String state;
+
+    @Column(name = "add_country", nullable = false)
+    private String country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "add_sty_id", nullable = false)
+    private StreetType streetType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "add_rty_id", nullable = false)
+    private ResidenceType residenceType;
 
     @Column(name = "add_createdAt", nullable = false)
     private LocalDateTime createdAt;

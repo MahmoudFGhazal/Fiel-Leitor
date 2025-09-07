@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mahas.command.ICommand;
-import com.mahas.command.rules.verifyPagination;
+import com.mahas.command.rules.VerifyPagination;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.user.User;
@@ -25,7 +25,7 @@ public class UserController {
     public ResponseEntity<FacadeResponse> getAllClients() {
         FacadeRequest request = new FacadeRequest();
 
-        verifyPagination verifyPagination = new verifyPagination();
+        VerifyPagination verifyPagination = new VerifyPagination();
 
         ICommand[] commands = new ICommand[]{verifyPagination};
         request.setCommands(commands);

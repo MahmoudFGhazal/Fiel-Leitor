@@ -39,19 +39,19 @@ public class UserDAO implements IDAO {
         StringBuilder whereClause = new StringBuilder();
 
         if (user.getId() != null) {
-            whereClause.append(" AND id = :id");
+            whereClause.append(" AND usr_id = :id");
             parameters.put("id", user.getId());
         }
         if (user.getName() != null && !user.getName().isBlank()) {
-            whereClause.append(" AND unaccent(LOWER(name)) LIKE unaccent(LOWER(:name))");
+            whereClause.append(" AND LOWER(usr_name) LIKE LOWER(:name)");
             parameters.put("name", "%" + user.getName() + "%");
         }
         if (user.getEmail() != null && !user.getEmail().isBlank()) {
-            whereClause.append(" AND LOWER(email) = LOWER(:email)");
+            whereClause.append(" AND LOWER(usr_email) = LOWER(:email)");
             parameters.put("email", user.getEmail());
         }
         if (user.getActive() != null) {
-            whereClause.append(" AND active = :active");
+            whereClause.append(" AND usr_active = :active");
             parameters.put("active", user.getActive());
         }
 
@@ -62,13 +62,11 @@ public class UserDAO implements IDAO {
         Integer limit = request.getLimit() != null ? request.getLimit() : 10;
         int offset = (page - 1) * limit;
 
-        sql.append(" LIMIT :limit OFFSET :offset");
+        sql.append(" LIMIT ").append(limit).append(" OFFSET ").append(offset);
 
         try {
             Query nativeQuery = entityManager.createNativeQuery(sql.toString(), User.class);
             parameters.forEach(nativeQuery::setParameter);
-            nativeQuery.setParameter("limit", limit);
-            nativeQuery.setParameter("offset", offset);
 
             @SuppressWarnings("unchecked")
             List<User> resultList = nativeQuery.getResultList();
@@ -84,7 +82,7 @@ public class UserDAO implements IDAO {
             response.setEntity(resultList.isEmpty() ? null : resultList.get(0));
             response.setPage(page);
             response.setLimit(limit);
-            response.setTotalPage(totalItems);
+            response.setTotalItem(totalItems);
             response.setPageCount(pageCount);
 
         } catch (PersistenceException e) {
@@ -94,7 +92,7 @@ public class UserDAO implements IDAO {
             response.setEntity(null);
             response.setPage(0);
             response.setLimit(0);
-            response.setTotalPage(0);
+            response.setTotalItem(0);
             response.setPageCount(0);
         }
 
@@ -110,20 +108,17 @@ public class UserDAO implements IDAO {
         }
 
         User user = (User) entity;
-        String sql = "INSERT INTO users (usr_email, usr_password, usr_name, usr_cpf, usr_gen_id, usr_birthday, usr_phone_number, usr_created_at, usr_updated_at, usr_published_at) " +
-                 "VALUES (:email, :password, :name, :cpf, :genId, :birthday, :phoneNumber, :createdAt, :updatedAt, :publishedAt);";
+        String sql = "INSERT INTO users (usr_email, usr_password, usr_name, usr_cpf, usr_gen_id, usr_birthday, usr_phone_number) " +
+                 "VALUES (:email, :password, :name, :cpf, :genId, :birthday, :phoneNumber);";
         Query query = entityManager.createNativeQuery(sql);
 
         query.setParameter("email", user.getEmail());
         query.setParameter("password", user.getPassword());
         query.setParameter("name", user.getName());
         query.setParameter("cpf", user.getCpf());
-        query.setParameter("genId", user.getGenId());
+        query.setParameter("genId", user.getGender().getId());
         query.setParameter("birthday", user.getBirthday());
         query.setParameter("phoneNumber", user.getPhoneNumber());
-        query.setParameter("createdAt", user.getCreatedAt());
-        query.setParameter("updatedAt", user.getUpdatedAt());
-        query.setParameter("publishedAt", user.getPublishedAt());
 
         try {
             int result = query.executeUpdate();
