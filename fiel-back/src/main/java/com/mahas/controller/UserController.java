@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.ICommand;
 import com.mahas.command.rules.VerifyCreateUser;
@@ -24,15 +25,18 @@ public class UserController {
     private IFacade facade;
 
     @GetMapping
-    public ResponseEntity<FacadeResponse> getAllUsers() {
+    public ResponseEntity<FacadeResponse> getAllUsers(
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "limit") Integer limit
+        ) {
         FacadeRequest request = new FacadeRequest();
 
         VerifyPagination verifyPagination = new VerifyPagination();
 
         ICommand[] commands = new ICommand[]{verifyPagination};
         request.setCommands(commands);
-        request.setLimit(10);
-        request.setPage(1);
+        request.setLimit(limit);
+        request.setPage(page);
         request.setEntity(new User());
 
         FacadeResponse response = facade.query(request);

@@ -25,70 +25,76 @@ public class UserDAO implements IDAO {
 
     public SQLResponse query(FacadeRequest request) {
         SQLResponse response = new SQLResponse();
-
         DomainEntity entity = request.getEntity();
+
         if (!(entity instanceof User)) {
             return null;
         }
 
         User user = (User) entity;
-        StringBuilder sql = new StringBuilder("SELECT * FROM users WHERE 1=1");
-        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM users WHERE 1=1");
+
+        StringBuilder jpql = new StringBuilder("SELECT u FROM User u WHERE 1=1");
+        StringBuilder countJpql = new StringBuilder("SELECT COUNT(u) FROM User u WHERE 1=1");
 
         Map<String, Object> parameters = new HashMap<>();
         StringBuilder whereClause = new StringBuilder();
 
         if (user.getId() != null) {
-            whereClause.append(" AND usr_id = :id");
+            whereClause.append(" AND u.id = :id");
             parameters.put("id", user.getId());
         }
         if (user.getName() != null && !user.getName().isBlank()) {
-            whereClause.append(" AND LOWER(usr_name) LIKE LOWER(:name)");
+            whereClause.append(" AND LOWER(u.name) LIKE LOWER(:name)");
             parameters.put("name", "%" + user.getName() + "%");
         }
         if (user.getEmail() != null && !user.getEmail().isBlank()) {
-            whereClause.append(" AND LOWER(usr_email) = LOWER(:email)");
+            whereClause.append(" AND LOWER(u.email) = LOWER(:email)");
             parameters.put("email", user.getEmail());
         }
         if (user.getActive() != null) {
-            whereClause.append(" AND usr_active = :active");
+            whereClause.append(" AND u.active = :active");
             parameters.put("active", user.getActive());
         }
 
-        sql.append(whereClause);
-        countSql.append(whereClause);
+        jpql.append(whereClause);
+        countJpql.append(whereClause);
 
         Integer page = request.getPage() != null ? request.getPage() : 1;
-        Integer limit = request.getLimit() != null ? request.getLimit() : 10;
-        int offset = (page - 1) * limit;
-
-        sql.append(" LIMIT ").append(limit).append(" OFFSET ").append(offset);
+        Integer limit = request.getLimit();
+        int offset = (limit != null) ? (page - 1) * limit : 0;
 
         try {
-            Query nativeQuery = entityManager.createNativeQuery(sql.toString(), User.class);
-            parameters.forEach(nativeQuery::setParameter);
+            Query query = entityManager.createQuery(jpql.toString(), User.class);
+            parameters.forEach(query::setParameter);
+
+            if (limit != null) {
+                query.setFirstResult(offset);
+                query.setMaxResults(limit);
+            }
 
             @SuppressWarnings("unchecked")
-            List<User> resultList = nativeQuery.getResultList();
+            List<User> resultList = query.getResultList();
 
-            Query countQuery = entityManager.createNativeQuery(countSql.toString());
+            Query countQuery = entityManager.createQuery(countJpql.toString());
             parameters.forEach(countQuery::setParameter);
-            Number totalCount = ((Number) countQuery.getSingleResult());
-
+            Number totalCount = (Number) countQuery.getSingleResult();
             int totalItems = totalCount.intValue();
-            int totalPage = (int) Math.ceil((double) totalItems / limit);
-            int pageCount = (int) Math.ceil((double) totalItems / limit);
 
-            if (resultList.size() == 1) {
-                response.setEntity(resultList.get(0));
-            } else if (!resultList.isEmpty()) {
-                response.setEntities(new ArrayList<>(resultList));
+            int totalPage = (limit != null) ? (int) Math.ceil((double) totalItems / limit) : 1;
+
+            if (!resultList.isEmpty()) {
+                if (limit != null && limit == 1) {
+                    response.setEntity(resultList.get(0));
+                } else {
+                    response.setEntities(new ArrayList<>(resultList));
+                }
             }
+
             response.setPage(page);
             response.setLimit(limit);
             response.setTotalItem(totalItems);
-            response.setTotalPage(totalPage);    
-            response.setPageCount(pageCount);
+            response.setTotalPage(totalPage);
+            response.setPageCount(totalPage);
 
         } catch (PersistenceException e) {
             e.printStackTrace();

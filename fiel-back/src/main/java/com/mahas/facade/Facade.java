@@ -47,6 +47,7 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         if(result == null) {
             response.setMessage("Erro ao fazer o insert no banco");
+            response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
 
@@ -89,7 +90,8 @@ public class Facade extends FacadeAbstract implements IFacade {
         SQLResponse result = dao.query(request);
 
         if(result == null) {
-            response.setMessage("Erro ao fazer o insert no banco");
+            response.setMessage("Erro ao fazer a query no banco");
+            response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
 

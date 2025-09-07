@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.ICommand;
 import com.mahas.command.rules.VerifyPagination;
@@ -22,16 +23,19 @@ public class GenderController {
     private IFacade facade;
 
     @GetMapping
-    public ResponseEntity<FacadeResponse> getAllGenders() {
+    public ResponseEntity<FacadeResponse> getAllGenders(
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "limit") Integer limit
+        ) {
         FacadeRequest request = new FacadeRequest();
 
         VerifyPagination verifyPagination = new VerifyPagination();
 
         ICommand[] commands = new ICommand[]{verifyPagination};
         request.setCommands(commands);
-        request.setLimit(10);
-        request.setPage(1);
         request.setEntity(new Gender());
+        request.setLimit(limit);
+        request.setPage(page);
 
         FacadeResponse response = facade.query(request);
         

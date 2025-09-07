@@ -13,11 +13,11 @@ public class VerifyPagination implements ICommand {
         Integer limit = request.getLimit();
         Integer page = request.getPage();
 
-        if(limit <= 0) {
+        if (limit != null && limit <= 0) {
             return "Quantidade de Limite Invalida";
         }
 
-        if(page <= 0) {
+        if (page != null && page <= 0) {
             return "Quantidade de Pagina Invalida";
         }
 

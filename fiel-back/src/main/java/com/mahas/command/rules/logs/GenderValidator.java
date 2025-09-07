@@ -18,6 +18,7 @@ public class GenderValidator {
         gender.setId(genderId);
 
         request.setEntity(gender);
+        request.setLimit(1);
 
         FacadeResponse response = facade.query(request);
 
