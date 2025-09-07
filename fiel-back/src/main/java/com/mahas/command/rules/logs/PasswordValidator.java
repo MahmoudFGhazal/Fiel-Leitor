@@ -1,5 +1,8 @@
 package com.mahas.command.rules.logs;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PasswordValidator {
     public String isValidPasswordFormat(String password) {
         if (password == null || password.isBlank()) {

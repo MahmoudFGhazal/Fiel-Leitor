@@ -1,17 +1,23 @@
 package com.mahas.command.rules.logs;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.user.Gender;
 import com.mahas.facade.Facade;
 
+@Component
 public class GenderValidator {
+    @Autowired
+    Facade facade;
+
     public String validateGenderExists(Long genderId) {
         if (genderId == null) {
             return "Id do genero não pode ser vazio";
         }
 
-        Facade facade = new Facade();
         FacadeRequest request = new FacadeRequest();
 
         Gender gender = new Gender();
@@ -23,8 +29,7 @@ public class GenderValidator {
         FacadeResponse response = facade.query(request);
 
         if (response.getData() == null || 
-            response.getData().getEntities() == null || 
-            response.getData().getEntities().isEmpty()) {
+            response.getData().getEntity() == null) {
             return "Gênero não existente";
         }
 

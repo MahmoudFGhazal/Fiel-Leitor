@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,14 +25,18 @@ public class UserController {
     @Autowired
     private IFacade facade;
 
+    @Autowired
+    VerifyPagination verifyPagination;
+
+    @Autowired
+    VerifyCreateUser verifyCreateUser;
+
     @GetMapping
     public ResponseEntity<FacadeResponse> getAllUsers(
-            @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "limit") Integer limit
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "limit", required = false) Integer limit
         ) {
         FacadeRequest request = new FacadeRequest();
-
-        VerifyPagination verifyPagination = new VerifyPagination();
 
         ICommand[] commands = new ICommand[]{verifyPagination};
         request.setCommands(commands);
@@ -45,14 +50,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<FacadeResponse> createUser() {
+    public ResponseEntity<FacadeResponse> createUser(@RequestBody User user) {
         FacadeRequest request = new FacadeRequest();
-
-        VerifyCreateUser verifyCreateUser = new VerifyCreateUser();
-
+       
         ICommand[] commands = new ICommand[]{verifyCreateUser};
         request.setCommands(commands);
-        request.setEntity(new User());
+        request.setEntity(user);
 
         FacadeResponse response = facade.save(request);
         

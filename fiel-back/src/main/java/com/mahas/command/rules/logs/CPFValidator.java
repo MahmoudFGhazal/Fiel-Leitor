@@ -1,5 +1,8 @@
 package com.mahas.command.rules.logs;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class CPFValidator {
     public String isValidCPFFormat(String cpf) {
         if (cpf == null || cpf.isBlank()) {

@@ -2,13 +2,20 @@ package com.mahas.command.rules.logs;
 
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.user.User;
 import com.mahas.facade.Facade;
 
+@Component
 public class EmailValidator {
+    @Autowired
+    Facade facade;
+    
     public String isValidEmailFormat(String email) {
         if (email == null || email.isBlank()) {
             return "Email não pode ser vazio";
@@ -25,13 +32,12 @@ public class EmailValidator {
     }
 
     public String emailExists(String email) {
-        Facade facade = new Facade();
-
         User user = new User();
         user.setEmail(email);
 
         FacadeRequest request = new FacadeRequest();
         request.setEntity(user);
+        request.setLimit(1);
 
         FacadeResponse response = facade.query(request);
 

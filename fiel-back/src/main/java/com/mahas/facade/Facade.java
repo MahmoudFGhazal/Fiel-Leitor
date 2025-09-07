@@ -17,7 +17,6 @@ public class Facade extends FacadeAbstract implements IFacade {
     @Override
     public FacadeResponse save(FacadeRequest request) {
         FacadeResponse response = new FacadeResponse();
-
         DomainEntity entity = request.getEntity();
 
         if(entity == null) {
@@ -62,7 +61,6 @@ public class Facade extends FacadeAbstract implements IFacade {
         FacadeResponse response = new FacadeResponse();
 
         DomainEntity entity = request.getEntity();
-
         if(entity == null) {
             response.setMessage(entity + " não é uma entidade");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
@@ -71,16 +69,14 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         String nameEntity = entity.getClass().getName();
 
-        IDAO dao = daos.get(nameEntity);
-        
         String error = runRules(request);
-
         if(error != null) {
             response.setTypeResponse(TypeResponse.CLIENT_ERROR);
             response.setMessage(error);
             return response;
         }
 
+        IDAO dao = daos.get(nameEntity);
         if(dao == null) {
             response.setMessage(nameEntity + " não encontrado o dao");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
@@ -88,7 +84,6 @@ public class Facade extends FacadeAbstract implements IFacade {
         }
 
         SQLResponse result = dao.query(request);
-
         if(result == null) {
             response.setMessage("Erro ao fazer a query no banco");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);

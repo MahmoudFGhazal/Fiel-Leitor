@@ -2,6 +2,9 @@ package com.mahas.command.rules.logs;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class BirthdayValidator {
     public String verifyBirthdayDate(LocalDate birthday) {
         if (birthday == null) {

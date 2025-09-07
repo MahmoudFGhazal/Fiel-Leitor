@@ -22,14 +22,15 @@ public class GenderController {
     @Autowired
     private IFacade facade;
 
+    @Autowired
+    VerifyPagination verifyPagination;
+
     @GetMapping
     public ResponseEntity<FacadeResponse> getAllGenders(
-            @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "limit") Integer limit
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "limit", required = false) Integer limit
         ) {
         FacadeRequest request = new FacadeRequest();
-
-        VerifyPagination verifyPagination = new VerifyPagination();
 
         ICommand[] commands = new ICommand[]{verifyPagination};
         request.setCommands(commands);

@@ -1,5 +1,6 @@
 package com.mahas.command.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mahas.command.ICommand;
@@ -14,16 +15,27 @@ import com.mahas.domain.user.User;
 
 @Component
 public class VerifyCreateUser implements ICommand {
+    @Autowired
+    private EmailValidator emailValidator;
+
+    @Autowired
+    private PasswordValidator passwordValidator;
+
+    @Autowired
+    private BirthdayValidator birthdayValidator;
+
+    @Autowired
+    private GenderValidator genderValidator;
+
+    @Autowired
+    private PhoneNumberValidator phoneNumberValidator;
+
+    @Autowired
+    private CPFValidator cpfValidator;
+
     @Override
     public String execute(FacadeRequest request) {
         User user = (User) request.getEntity();
-
-        EmailValidator emailValidator = new EmailValidator();
-        PasswordValidator passwordValidator = new PasswordValidator();
-        BirthdayValidator birthdayValidator = new BirthdayValidator();
-        GenderValidator genderValidator = new GenderValidator();
-        PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
-        CPFValidator cpfValidator = new CPFValidator();
 
         String error;
 
