@@ -20,6 +20,7 @@ public class SQLResponse {
     Integer page;
     Integer limit;
     Integer pageCount;
+    Integer totalItem;
     Integer totalPage;
 
 }

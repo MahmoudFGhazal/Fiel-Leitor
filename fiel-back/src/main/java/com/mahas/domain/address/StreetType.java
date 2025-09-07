@@ -33,13 +33,13 @@ public class StreetType extends DomainEntity {
     @Column(name = "sty_street_type", nullable = false)
     private String residenceType;
 
-    @Column(name = "sty_createdAt", nullable = false)
+    @Column(name = "sty_created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "sty_updatedAt", nullable = false)
+    @Column(name = "sty_updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "sty_publishedAt", nullable = false)
+    @Column(name = "sty_published_at", nullable = false)
     private LocalDateTime publishedAt;
 
     @PrePersist

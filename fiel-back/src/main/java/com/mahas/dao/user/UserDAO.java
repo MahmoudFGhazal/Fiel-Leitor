@@ -76,24 +76,23 @@ public class UserDAO implements IDAO {
             Number totalCount = ((Number) countQuery.getSingleResult());
 
             int totalItems = totalCount.intValue();
+            int totalPage = (int) Math.ceil((double) totalItems / limit);
             int pageCount = (int) Math.ceil((double) totalItems / limit);
 
-            response.setEntities(new ArrayList<>(resultList));
-            response.setEntity(resultList.isEmpty() ? null : resultList.get(0));
+            if (resultList.size() == 1) {
+                response.setEntity(resultList.get(0));
+            } else if (!resultList.isEmpty()) {
+                response.setEntities(new ArrayList<>(resultList));
+            }
             response.setPage(page);
             response.setLimit(limit);
             response.setTotalItem(totalItems);
+            response.setTotalPage(totalPage);    
             response.setPageCount(pageCount);
 
         } catch (PersistenceException e) {
             e.printStackTrace();
-
-            response.setEntities(null);
-            response.setEntity(null);
-            response.setPage(0);
-            response.setLimit(0);
-            response.setTotalItem(0);
-            response.setPageCount(0);
+            throw e;
         }
 
         return response;
@@ -129,7 +128,7 @@ public class UserDAO implements IDAO {
             }
         } catch (PersistenceException e) {
             e.printStackTrace();
-            response.setEntity(null);
+            throw e;
         }
 
         return response;

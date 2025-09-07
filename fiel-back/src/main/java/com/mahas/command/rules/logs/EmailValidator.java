@@ -8,8 +8,8 @@ import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.user.User;
 import com.mahas.facade.Facade;
 
-public class UserEmail {
-    public String isValidEmailUserFormat(String email) {
+public class EmailValidator {
+    public String isValidEmailFormat(String email) {
         if (email == null || email.isBlank()) {
             return "Email não pode ser vazio";
         }

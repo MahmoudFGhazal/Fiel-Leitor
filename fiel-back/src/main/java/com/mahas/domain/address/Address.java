@@ -73,13 +73,13 @@ public class Address extends DomainEntity {
     @JoinColumn(name = "add_rty_id", nullable = false)
     private ResidenceType residenceType;
 
-    @Column(name = "add_createdAt", nullable = false)
+    @Column(name = "add_created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "add_updatedAt", nullable = false)
+    @Column(name = "add_updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "add_publishedAt", nullable = false)
+    @Column(name = "add_published_at", nullable = false)
     private LocalDateTime publishedAt;
 
     @PrePersist

@@ -59,13 +59,13 @@ public class User extends DomainEntity {
     @Column(name = "usr_phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
-    @Column(name = "usr_createdAt", nullable = false)
+    @Column(name = "usr_created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "usr_updatedAt", nullable = false)
+    @Column(name = "usr_updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "usr_publishedAt", nullable = false)
+    @Column(name = "usr_published_at", nullable = false)
     private LocalDateTime publishedAt;
 
     @PrePersist

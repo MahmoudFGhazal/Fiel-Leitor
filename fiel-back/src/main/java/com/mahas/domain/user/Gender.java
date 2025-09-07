@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name = "Gender")
 @Table(name = "genders")
 @Getter
 @Setter
@@ -30,16 +30,16 @@ public class Gender extends DomainEntity {
     @Column(name = "gen_id")
     private Long id;
 
-    @Column(name = "gen_name", nullable = false)
-    private String name;
+    @Column(name = "gen_gender", nullable = false)
+    private String gender;
 
-    @Column(name = "gen_createdAt", nullable = false)
+    @Column(name = "gen_created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "gen_updatedAt", nullable = false)
+    @Column(name = "gen_updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "gen_publishedAt", nullable = false)
+    @Column(name = "gen_published_at", nullable = false)
     private LocalDateTime publishedAt;
 
     @PrePersist
@@ -50,6 +50,5 @@ public class Gender extends DomainEntity {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-        publishedAt = LocalDateTime.now();
     }
 }

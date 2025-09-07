@@ -20,6 +20,4 @@ public class FacadeRequest {
 
     private Integer page;
     private Integer limit;
-
-    private TypeRequest typeRequest;
 }

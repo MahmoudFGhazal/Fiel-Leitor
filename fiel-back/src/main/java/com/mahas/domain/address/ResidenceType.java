@@ -33,13 +33,13 @@ public class ResidenceType extends DomainEntity {
     @Column(name = "rty_residence_type", nullable = false)
     private String residenceType;
 
-    @Column(name = "rty_createdAt", nullable = false)
+    @Column(name = "rty_created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "rty_updatedAt", nullable = false)
+    @Column(name = "rty_updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "rty_publishedAt", nullable = false)
+    @Column(name = "rty_published_at", nullable = false)
     private LocalDateTime publishedAt;
 
     @PrePersist
