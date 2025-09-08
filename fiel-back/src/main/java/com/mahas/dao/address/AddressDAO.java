@@ -91,4 +91,28 @@ public class AddressDAO implements IDAO {
 
         return response;
     }
+
+    public SQLResponse save(FacadeRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof Address)){
+            return null;
+        }
+
+        Address address = (Address) entity;
+
+        try {
+            entityManager.persist(address);
+
+            entityManager.flush();
+
+            response.setEntity(address);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return response;
+    }
 }

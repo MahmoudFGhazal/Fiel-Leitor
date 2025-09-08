@@ -16,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FacadeRequest {
     private DomainEntity entity;
-    private ICommand[] commands;
+    private ICommand command;
 
     private Integer page;
     private Integer limit;

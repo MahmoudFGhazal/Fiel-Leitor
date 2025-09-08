@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mahas.command.ICommand;
 import com.mahas.command.rules.VerifyCreateUser;
 import com.mahas.command.rules.VerifyDeleteUser;
 import com.mahas.command.rules.VerifyPagination;
@@ -85,8 +84,7 @@ public class UserController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{verifyPagination};
-        request.setCommands(commands);
+        request.setCommand(verifyPagination);
         request.setLimit(limit);
         request.setPage(page);
         request.setEntity(new User());
@@ -100,8 +98,7 @@ public class UserController {
     public ResponseEntity<FacadeResponse> createUser(@RequestBody User user) {
         FacadeRequest request = new FacadeRequest();
        
-        ICommand[] commands = new ICommand[]{verifyCreateUser};
-        request.setCommands(commands);
+        request.setCommand(verifyCreateUser);
         request.setEntity(user);
 
         FacadeResponse response = facade.save(request);
@@ -115,8 +112,7 @@ public class UserController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{verifyDeleteUser};
-        request.setCommands(commands);
+        request.setCommand(verifyDeleteUser);
 
         User user = new User();
         user.setId(userId);
@@ -131,8 +127,7 @@ public class UserController {
     public ResponseEntity<FacadeResponse> updateProfile(@RequestBody User user) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{verifyUpdateUser};
-        request.setCommands(commands);
+        request.setCommand(verifyUpdateUser);
         
         user.setEmail(null);
         user.setPassword(null);

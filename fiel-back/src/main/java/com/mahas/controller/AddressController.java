@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mahas.command.ICommand;
+import com.mahas.command.rules.VerifyCreateAddress;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.TypeResponse;
@@ -26,6 +26,9 @@ import com.mahas.facade.IFacade;
 public class AddressController {
     @Autowired
     private IFacade facade;
+
+    @Autowired
+    private VerifyCreateAddress verifyCreateAddress;
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getAddress(
@@ -67,8 +70,6 @@ public class AddressController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{};
-        request.setCommands(commands);
         request.setLimit(limit);
         request.setPage(page);
         request.setEntity(new Address());
@@ -82,8 +83,7 @@ public class AddressController {
     public ResponseEntity<FacadeResponse> createAddress(@RequestBody Address address) {
         FacadeRequest request = new FacadeRequest();
        
-        ICommand[] commands = new ICommand[]{};
-        request.setCommands(commands);
+        request.setCommand(verifyCreateAddress);
         request.setEntity(address);
 
         FacadeResponse response = facade.save(request);
@@ -97,9 +97,6 @@ public class AddressController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{};
-        request.setCommands(commands);
-
         Address address = new Address();
         address.setId(addressId);
         request.setEntity(address);
@@ -112,9 +109,6 @@ public class AddressController {
     @PutMapping
     public ResponseEntity<FacadeResponse> updateAddress(@RequestBody Address address) {
         FacadeRequest request = new FacadeRequest();
-
-        ICommand[] commands = new ICommand[]{};
-        request.setCommands(commands);
     
         request.setEntity(address);
         

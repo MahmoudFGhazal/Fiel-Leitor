@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mahas.command.ICommand;
 import com.mahas.command.rules.VerifyPagination;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -32,8 +31,7 @@ public class GenderController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{verifyPagination};
-        request.setCommands(commands);
+        request.setCommand(verifyPagination);
         request.setEntity(new Gender());
         request.setLimit(limit);
         request.setPage(page);

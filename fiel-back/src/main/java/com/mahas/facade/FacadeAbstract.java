@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mahas.command.Command;
 import com.mahas.command.ICommand;
 import com.mahas.dao.IDAO;
 import com.mahas.dao.address.AddressDAO;
@@ -53,16 +52,12 @@ public abstract class FacadeAbstract {
     }
 
     protected String runRules(FacadeRequest request){
-        ICommand[] commands = request.getCommands(); 
-        if(commands == null || commands.length == 0) return null;
+        ICommand command = request.getCommand(); 
+        if(command == null) return null;
         
-        for(ICommand c : commands){
-            Command command = new Command();
-            command.setCommand(c);
-            String response = command.execute(request);
-            if(response != null) {
-                return response;
-            }
+        String response = command.execute(request);
+        if(response != null) {
+            return response;
         }
 
         return null;

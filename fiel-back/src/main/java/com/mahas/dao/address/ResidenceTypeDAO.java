@@ -40,11 +40,11 @@ public class ResidenceTypeDAO implements IDAO {
         StringBuilder whereClause = new StringBuilder();
 
         if (residenceType.getId() != null) {
-            whereClause.append(" AND g.id = :id");
+            whereClause.append(" AND r.id = :id");
             parameters.put("id", residenceType.getId());
         }
         if (residenceType.getResidenceType() != null && !residenceType.getResidenceType().isBlank()) {
-            whereClause.append(" AND LOWER(g.typeResidence) LIKE LOWER(:typeResidence)");
+            whereClause.append(" AND LOWER(r.typeResidence) LIKE LOWER(:typeResidence)");
             parameters.put("typeResidence", "%" + residenceType.getResidenceType() + "%");
         }
 
