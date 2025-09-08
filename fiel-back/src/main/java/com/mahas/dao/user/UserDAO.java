@@ -159,4 +159,57 @@ public class UserDAO implements IDAO {
 
         return response;
     }
+
+    public SQLResponse update(FacadeRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof User)){
+            return null;
+        }
+
+        User user = (User) entity;
+
+        try {
+           User existingUser = entityManager.find(User.class, user.getId());
+            if (existingUser == null) {
+                response.setEntity(null);
+                return response;
+            }
+
+            if (user.getName() != null) {
+                existingUser.setName(user.getName());
+            }
+            if (user.getEmail() != null) {
+                existingUser.setEmail(user.getEmail());
+            }
+            if (user.getPassword() != null) {
+                existingUser.setPassword(user.getPassword());
+            }
+            if (user.getCpf() != null) {
+                existingUser.setCpf(user.getCpf());
+            }
+            if (user.getPhoneNumber() != null) {
+                existingUser.setPhoneNumber(user.getPhoneNumber());
+            }
+            if (user.getGender() != null) {
+                existingUser.setGender(user.getGender());
+            }
+            if (user.getBirthday() != null) {
+                existingUser.setBirthday(user.getBirthday());
+            }
+            if (user.getActive() != null) {
+                existingUser.setActive(user.getActive());
+            }
+
+            entityManager.flush();
+
+            response.setEntity(existingUser);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return response;
+    }
 }

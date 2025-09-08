@@ -14,26 +14,22 @@ public class UserValidator {
     @Autowired
     Facade facade;
     
-    public String userExists(Long id) {
-        if (id == null) {
-            return "Id do usuario não pode ser vazio";
-        }
+    public boolean userExists(Long id) {
+        User user = new User();
+        user.setId(id);
 
         FacadeRequest request = new FacadeRequest();
-
-        User user = new User();
         request.setEntity(user);
-
         request.setLimit(1);
 
         FacadeResponse response = facade.query(request);
 
         DomainEntity entity = response.getData().getEntity();
-
-        if(entity == null) {
-            return "Usuario não encontrado";
+        
+        if(entity != null) {
+            return true;
         }
         
-        return null; 
+        return false; 
     }
 }

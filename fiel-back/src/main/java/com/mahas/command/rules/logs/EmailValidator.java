@@ -31,7 +31,7 @@ public class EmailValidator {
         return null;
     }
 
-    public String emailExists(String email) {
+    public boolean emailExists(String email) {
         User user = new User();
         user.setEmail(email);
 
@@ -44,9 +44,9 @@ public class EmailValidator {
         DomainEntity entity = response.getData().getEntity();
 
         if(entity != null) {
-            return "E-mail já cadastrado";
+            return true;
         }
 
-        return null;
+        return false;
     }
 }

@@ -71,7 +71,7 @@ public class CPFValidator {
         }
     }
 
-    public String cpfExists(String cpf) {
+    public boolean cpfExists(String cpf) {
         User user = new User();
         user.setCpf(cpf);
 
@@ -84,9 +84,9 @@ public class CPFValidator {
         DomainEntity entity = response.getData().getEntity();
 
         if(entity != null) {
-            return "CPF já cadastrado";
+            return true;
         }
 
-        return null;
+        return false;
     }
 }

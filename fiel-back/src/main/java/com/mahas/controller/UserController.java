@@ -16,6 +16,7 @@ import com.mahas.command.ICommand;
 import com.mahas.command.rules.VerifyCreateUser;
 import com.mahas.command.rules.VerifyDeleteUser;
 import com.mahas.command.rules.VerifyPagination;
+import com.mahas.command.rules.VerifyUpdateUser;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.user.User;
@@ -37,7 +38,27 @@ public class UserController {
     @Autowired
     VerifyDeleteUser verifyDeleteUser;
 
+    @Autowired
+    VerifyUpdateUser verifyUpdateUser;
+
     @GetMapping
+    public ResponseEntity<FacadeResponse> getUser(
+            @RequestParam(value = "id", required = true) Long id
+        ) {
+        FacadeRequest request = new FacadeRequest();
+        
+        User user = new User();
+        user.setId(id);
+
+        request.setEntity(user);
+        request.setLimit(1);
+
+        FacadeResponse response = facade.query(request);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all")
     public ResponseEntity<FacadeResponse> getAllUsers(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit
@@ -87,19 +108,19 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<FacadeResponse> updateUser(
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "limit", required = false) Integer limit
-        ) {
+    public ResponseEntity<FacadeResponse> updateProfile(@RequestBody User user) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{verifyPagination};
+        ICommand[] commands = new ICommand[]{verifyUpdateUser};
         request.setCommands(commands);
-        request.setLimit(limit);
-        request.setPage(page);
-        request.setEntity(new User());
+        
+        user.setEmail(null);
+        user.setPassword(null);
+        user.setCpf(null);
 
-        FacadeResponse response = facade.query(request);
+        request.setEntity(user);
+        
+        FacadeResponse response = facade.update(request);
         
         return ResponseEntity.ok(response);
     }

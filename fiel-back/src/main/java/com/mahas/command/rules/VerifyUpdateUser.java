@@ -5,22 +5,14 @@ import org.springframework.stereotype.Component;
 
 import com.mahas.command.ICommand;
 import com.mahas.command.rules.logs.BirthdayValidator;
-import com.mahas.command.rules.logs.CPFValidator;
-import com.mahas.command.rules.logs.EmailValidator;
 import com.mahas.command.rules.logs.GenderValidator;
-import com.mahas.command.rules.logs.PasswordValidator;
 import com.mahas.command.rules.logs.PhoneNumberValidator;
+import com.mahas.command.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.user.User;
 
 @Component
-public class VerifyCreateUser implements ICommand {
-    @Autowired
-    private EmailValidator emailValidator;
-
-    @Autowired
-    private PasswordValidator passwordValidator;
-
+public class VerifyUpdateUser implements ICommand {
     @Autowired
     private BirthdayValidator birthdayValidator;
 
@@ -31,7 +23,7 @@ public class VerifyCreateUser implements ICommand {
     private PhoneNumberValidator phoneNumberValidator;
 
     @Autowired
-    private CPFValidator cpfValidator;
+    private UserValidator userValidator;
 
     @Override
     public String execute(FacadeRequest request) {
@@ -39,32 +31,9 @@ public class VerifyCreateUser implements ICommand {
 
         String error;
 
-        // Validar formato do email
-        error = emailValidator.isValidEmailFormat(user.getEmail());
-        if (error != null) {
-            return error;
-        }
-
-        // Verificar se email já existe
-        if (emailValidator.emailExists(user.getEmail())) {
-            return "E-mail já cadastrado";
-        }
-
-        //Verificar formato da senha
-        error = passwordValidator.isValidPasswordFormat(user.getPassword());
-        if (error != null) {
-            return error;
-        }
-
-        // Validar CPF
-        error = cpfValidator.isValidCPFFormat(user.getCpf());
-        if (error != null) {
-            return error;
-        }
-
-        // Verificar CPF existe
-        if (cpfValidator.cpfExists(user.getCpf())) {
-            return "CPF já cadastrado";
+        // Verificar usuario existe
+        if (!userValidator.userExists(user.getId())) {
+            return "Usuario não encontrado";
         }
 
         // Validar número de telefone
