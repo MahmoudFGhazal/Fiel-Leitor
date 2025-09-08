@@ -44,8 +44,8 @@ public class GenderDAO implements IDAO {
             parameters.put("id", gender.getId());
         }
         if (gender.getGender() != null && !gender.getGender().isBlank()) {
-            whereClause.append(" AND LOWER(g.name) LIKE LOWER(:name)");
-            parameters.put("name", "%" + gender.getGender() + "%");
+            whereClause.append(" AND LOWER(g.gender) LIKE LOWER(:gender)");
+            parameters.put("gender", "%" + gender.getGender() + "%");
         }
 
         jpql.append(whereClause);

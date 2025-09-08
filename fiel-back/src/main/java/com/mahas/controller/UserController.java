@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<FacadeResponse> getAllUsers(
+    public ResponseEntity<FacadeResponse> getUsers(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit
         ) {

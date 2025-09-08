@@ -31,7 +31,7 @@ public class StreetType extends DomainEntity {
     private Long id;
 
     @Column(name = "sty_street_type", nullable = false)
-    private String residenceType;
+    private String streetType;
 
     @Column(name = "sty_created_at", nullable = false)
     private LocalDateTime createdAt;

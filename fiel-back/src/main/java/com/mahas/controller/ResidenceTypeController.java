@@ -6,40 +6,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mahas.command.ICommand;
-import com.mahas.command.rules.VerifyPagination;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.user.Gender;
+import com.mahas.domain.address.ResidenceType;
 import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
-@RequestMapping("/gender")
-public class GenderController {
+@RequestMapping("/residenceType")
+public class ResidenceTypeController {
     @Autowired
     private IFacade facade;
 
-    @Autowired
-    VerifyPagination verifyPagination;
-
     @GetMapping("/all")
-    public ResponseEntity<FacadeResponse> getGenders(
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "limit", required = false) Integer limit
-        ) {
+    public ResponseEntity<FacadeResponse> getStreetTypes() {
         FacadeRequest request = new FacadeRequest();
-
-        ICommand[] commands = new ICommand[]{verifyPagination};
-        request.setCommands(commands);
-        request.setEntity(new Gender());
-        request.setLimit(limit);
-        request.setPage(page);
+        
+        request.setEntity(new ResidenceType());
 
         FacadeResponse response = facade.query(request);
         
         return ResponseEntity.ok(response);
     }
+
 }
