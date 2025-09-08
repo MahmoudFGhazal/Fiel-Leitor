@@ -16,8 +16,6 @@ public class FacadeResponse {
     private SQLResponse data;
 
     private TypeResponse typeResponse = TypeResponse.OK;
-
-    private Integer errorType;
     private String message;
 
      /* private Map<String, String> errorDetails; // Detalhes de validação/erros específicos

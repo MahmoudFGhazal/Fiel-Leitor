@@ -14,53 +14,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.ICommand;
-import com.mahas.command.rules.VerifyCreateUser;
-import com.mahas.command.rules.VerifyDeleteUser;
-import com.mahas.command.rules.VerifyPagination;
-import com.mahas.command.rules.VerifyUpdateUser;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.TypeResponse;
-import com.mahas.domain.user.User;
+import com.mahas.domain.address.Address;
 import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/address")
+public class AddressController {
     @Autowired
     private IFacade facade;
 
-    @Autowired
-    VerifyPagination verifyPagination;
-
-    @Autowired
-    VerifyCreateUser verifyCreateUser;
-
-    @Autowired
-    VerifyDeleteUser verifyDeleteUser;
-
-    @Autowired
-    VerifyUpdateUser verifyUpdateUser;
-
     @GetMapping
-    public ResponseEntity<FacadeResponse> getUser(
+    public ResponseEntity<FacadeResponse> getAddress(
             @RequestParam(value = "id", required = false) Long id
         ) {
         FacadeRequest request = new FacadeRequest();
         
-        User user = new User();
+        Address address = new Address();
         if(id != null) {
-            user.setId(id);
+            address.setId(id);
         }
 
-        request.setEntity(user);
-        request.setLimit(1);
-
+        request.setEntity(address);
         FacadeResponse response = facade.query(request);
         
         if (response.getData().getTotalItem() == 0) {
-            response.setMessage("Usuário não encontrado");
+            response.setMessage("Endereço não encontrado");
             response.setTypeResponse(TypeResponse.CONFLICT);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -68,7 +50,7 @@ public class UserController {
         }
 
         if (response.getData().getTotalItem() > 1) {
-            response.setMessage("Mais de um usuário encontrado para o ID informado");
+            response.setMessage("Mais de um endereço encontrado para o ID informado");
             response.setTypeResponse(TypeResponse.CONFLICT);
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
@@ -79,17 +61,17 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<FacadeResponse> getUsers(
+    public ResponseEntity<FacadeResponse> getAddresses(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{verifyPagination};
+        ICommand[] commands = new ICommand[]{};
         request.setCommands(commands);
         request.setLimit(limit);
         request.setPage(page);
-        request.setEntity(new User());
+        request.setEntity(new Address());
 
         FacadeResponse response = facade.query(request);
         
@@ -97,12 +79,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<FacadeResponse> createUser(@RequestBody User user) {
+    public ResponseEntity<FacadeResponse> createAddress(@RequestBody Address address) {
         FacadeRequest request = new FacadeRequest();
        
-        ICommand[] commands = new ICommand[]{verifyCreateUser};
+        ICommand[] commands = new ICommand[]{};
         request.setCommands(commands);
-        request.setEntity(user);
+        request.setEntity(address);
 
         FacadeResponse response = facade.save(request);
         
@@ -110,17 +92,17 @@ public class UserController {
     }
 
     @DeleteMapping
-    public ResponseEntity<FacadeResponse> deleteUser(
-            @RequestParam(value = "userId") Long userId
+    public ResponseEntity<FacadeResponse> deleteAddress(
+            @RequestParam(value = "addressId") Long addressId
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{verifyDeleteUser};
+        ICommand[] commands = new ICommand[]{};
         request.setCommands(commands);
 
-        User user = new User();
-        user.setId(userId);
-        request.setEntity(user);
+        Address address = new Address();
+        address.setId(addressId);
+        request.setEntity(address);
         
         FacadeResponse response = facade.delete(request);
         
@@ -128,17 +110,13 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<FacadeResponse> updateProfile(@RequestBody User user) {
+    public ResponseEntity<FacadeResponse> updateAddress(@RequestBody Address address) {
         FacadeRequest request = new FacadeRequest();
 
-        ICommand[] commands = new ICommand[]{verifyUpdateUser};
+        ICommand[] commands = new ICommand[]{};
         request.setCommands(commands);
-        
-        user.setEmail(null);
-        user.setPassword(null);
-        user.setCpf(null);
-
-        request.setEntity(user);
+    
+        request.setEntity(address);
         
         FacadeResponse response = facade.update(request);
         
