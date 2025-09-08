@@ -63,6 +63,12 @@ public class VerifyCreateUser implements ICommand {
             return error;
         }
 
+        // Verificar CPF existe
+        error = cpfValidator.cpfExists(user.getCpf());
+        if (error != null) {
+            return error;
+        }
+
         // Validar número de telefone
         error = phoneNumberValidator.isValidPhoneNumberFormat(user.getPhoneNumber());
         if (error != null) {

@@ -44,7 +44,7 @@ CREATE TABLE users (
     usr_email VARCHAR(255) NOT NULL UNIQUE,
     usr_password VARCHAR(255) NOT NULL,
     usr_name VARCHAR(255) NOT NULL,
-    usr_active TINYINT(1) NOT NULL DEFAULT 1,
+    usr_active TINYINT(1) DEFAULT 1,
     usr_gen_id BIGINT NOT NULL,
     usr_birthday DATE NOT NULL,
     usr_cpf VARCHAR(20) NOT NULL,

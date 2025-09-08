@@ -51,6 +51,10 @@ public class UserDAO implements IDAO {
             whereClause.append(" AND LOWER(u.email) = LOWER(:email)");
             parameters.put("email", user.getEmail());
         }
+        if (user.getCpf() != null && !user.getCpf().isBlank()) {
+            whereClause.append(" AND LOWER(u.cpf) = LOWER(:cpf)");
+            parameters.put("cpf", user.getCpf());
+        }
         if (user.getActive() != null) {
             whereClause.append(" AND u.active = :active");
             parameters.put("active", user.getActive());
@@ -80,7 +84,7 @@ public class UserDAO implements IDAO {
             Number totalCount = (Number) countQuery.getSingleResult();
             int totalItems = totalCount.intValue();
             int totalPage = (limit != null) ? (int) Math.ceil((double) totalItems / limit) : 1;
-            System.out.println(resultList.get(0).getGender().getGender());
+
             if (!resultList.isEmpty()) {
                 if (limit != null && limit == 1) {
                     response.setEntity(resultList.get(0));
@@ -112,25 +116,13 @@ public class UserDAO implements IDAO {
         }
 
         User user = (User) entity;
-        String sql = "INSERT INTO users (usr_email, usr_password, usr_name, usr_cpf, usr_gen_id, usr_birthday, usr_phone_number) " +
-                 "VALUES (:email, :password, :name, :cpf, :genId, :birthday, :phoneNumber);";
-        Query query = entityManager.createNativeQuery(sql);
-
-        query.setParameter("email", user.getEmail());
-        query.setParameter("password", user.getPassword());
-        query.setParameter("name", user.getName());
-        query.setParameter("cpf", user.getCpf());
-        query.setParameter("genId", user.getGender().getId());
-        query.setParameter("birthday", user.getBirthday());
-        query.setParameter("phoneNumber", user.getPhoneNumber());
 
         try {
-            int result = query.executeUpdate();
-            if (result > 0) {
-                response.setEntity(user);
-            } else {
-                response.setEntity(null);
-            }
+            entityManager.persist(user);
+
+            entityManager.flush();
+
+            response.setEntity(user);
         } catch (PersistenceException e) {
             e.printStackTrace();
             throw e;
