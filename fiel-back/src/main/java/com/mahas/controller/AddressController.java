@@ -120,8 +120,8 @@ public class AddressController {
         FacadeRequest request = new FacadeRequest();
     
         request.setCommand(verifyUpdateAddress);
-        Address sendAddress = address;
-        sendAddress.setUser(null);
+        Address requestAddress = address;
+        requestAddress.setUser(null);
         request.setEntity(address);
         
         

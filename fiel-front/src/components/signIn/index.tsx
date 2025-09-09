@@ -5,7 +5,7 @@ import StepUser from "./stepsSign/StepUser";
 import StepAddress from "./stepsSign/StepAddress";
 import StepProfile from "./stepsSign/StepProfile";
 import { UserData } from '@/modal/userModal';
-import BoxInput from '../boxInput';
+import BoxInput from '../formBox';
 import Button from '../button';
 
 export default function SignInComponent() {

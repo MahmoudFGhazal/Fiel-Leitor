@@ -1,8 +1,8 @@
 
-.container {
+.boxContainer {
     display: flex;
     width: 80%;
-    margin: 10px 5%;
+    max-width: 800px;
     overflow: hidden;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -25,10 +25,7 @@
     flex: 2;
     display: flex;
     flex-direction: column;
-    width: 100%;
     align-items: center;
-    justify-content: flex-start; /* Alinha o conteúdo ao topo */
-    gap: 20px;  /* Espaçamento entre os campos */
-    padding: 20px;  /* Espaçamento interno para não colar os campos nas bordas */
-    min-height: 300px;
+    justify-content: flex-start; 
+    padding: 20px; 
 }
