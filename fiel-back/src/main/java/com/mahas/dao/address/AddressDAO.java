@@ -145,4 +145,65 @@ public class AddressDAO implements IDAO {
         return response;
     }
 
+    public SQLResponse update(FacadeRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof Address)){
+            return null;
+        }
+
+        Address address = (Address) entity;
+
+        try {
+            Address existingAddress = entityManager.find(Address.class, address.getId());
+            if (existingAddress == null) {
+                response.setEntity(null);
+                return response;
+            }
+
+            if (address.getNickname() != null) {
+                existingAddress.setNickname(address.getNickname());
+            }
+            if (address.getNumber() != null) {
+                existingAddress.setNumber(address.getNumber());
+            }
+            if (address.getComplement() != null) {
+                existingAddress.setComplement(address.getComplement());
+            }
+            if (address.getStreet() != null) {
+                existingAddress.setStreet(address.getStreet());
+            }
+            if (address.getNeighborhood() != null) {
+                existingAddress.setNeighborhood(address.getNeighborhood());
+            }
+            if (address.getZip() != null) {
+                existingAddress.setZip(address.getZip());
+            }
+            if (address.getCity() != null) {
+                existingAddress.setCity(address.getCity());
+            }
+            if (address.getState() != null) {
+                existingAddress.setState(address.getState());
+            }
+            if (address.getCountry() != null) {
+                existingAddress.setCountry(address.getCountry());
+            }
+            if (address.getStreetType() != null) {
+                existingAddress.setStreetType(address.getStreetType());
+            }
+            if (address.getResidenceType() != null) {
+                existingAddress.setResidenceType(address.getResidenceType());
+            }
+
+            entityManager.flush();
+
+            response.setEntity(existingAddress);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return response;
+    }
 }

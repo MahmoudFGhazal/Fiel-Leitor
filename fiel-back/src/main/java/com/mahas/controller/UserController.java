@@ -129,11 +129,12 @@ public class UserController {
 
         request.setCommand(verifyUpdateUser);
         
-        user.setEmail(null);
-        user.setPassword(null);
-        user.setCpf(null);
+        User sendUser = user;
+        sendUser.setEmail(null);
+        sendUser.setPassword(null);
+        sendUser.setCpf(null);
 
-        request.setEntity(user);
+        request.setEntity(sendUser);
         
         FacadeResponse response = facade.update(request);
         

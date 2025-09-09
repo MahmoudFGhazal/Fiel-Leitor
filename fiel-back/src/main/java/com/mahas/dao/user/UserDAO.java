@@ -171,7 +171,7 @@ public class UserDAO implements IDAO {
         User user = (User) entity;
 
         try {
-           User existingUser = entityManager.find(User.class, user.getId());
+            User existingUser = entityManager.find(User.class, user.getId());
             if (existingUser == null) {
                 response.setEntity(null);
                 return response;

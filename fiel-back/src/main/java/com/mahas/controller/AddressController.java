@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.rules.VerifyCreateAddress;
 import com.mahas.command.rules.VerifyDeleteAddress;
+import com.mahas.command.rules.VerifyUpdateAddress;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.TypeResponse;
@@ -33,6 +34,9 @@ public class AddressController {
 
     @Autowired
     private VerifyDeleteAddress verifyDeleteAddress;
+
+    @Autowired
+    private VerifyUpdateAddress verifyUpdateAddress;
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getAddress(
@@ -115,7 +119,11 @@ public class AddressController {
     public ResponseEntity<FacadeResponse> updateAddress(@RequestBody Address address) {
         FacadeRequest request = new FacadeRequest();
     
+        request.setCommand(verifyUpdateAddress);
+        Address sendAddress = address;
+        sendAddress.setUser(null);
         request.setEntity(address);
+        
         
         FacadeResponse response = facade.update(request);
         
