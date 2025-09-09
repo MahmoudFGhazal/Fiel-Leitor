@@ -22,11 +22,11 @@ export default function InputSelect({ text, onChange, disabled, options, value }
                 disabled={disabled}
             >
                 <option value="">{`Selecione ${text?.toLowerCase()}`}</option>
-                {options.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                    </option>
-                ))}
+                    {options.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                        </option>
+                    ))}
             </select>
         </div>
     );

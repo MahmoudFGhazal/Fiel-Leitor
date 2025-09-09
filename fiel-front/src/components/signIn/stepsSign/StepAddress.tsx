@@ -21,7 +21,7 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
             try {
                 const streets: StreetType[] = await getStreetTypes();
                 const residences: ResidenceType[] = await getResidenceTypes();
-                console.log(streets)
+
                 setStreetTypes(streets);
                 setResidenceTypes(residences);
             } catch (err) {

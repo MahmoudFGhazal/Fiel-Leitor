@@ -41,11 +41,13 @@ export default function LoginComponent() {
             name: null,
             phoneNumber: null
         }
+        console.log(JSON.stringify(loginData, null, 2))
         const res = await api.post<ApiResponse>('/user/login', loginData);
 
         const data = res.data;
-
+        console.log(JSON.stringify(data, null, 2))
         if(data.entity) {
+
             const user = data.entity as User;
 
             if(!user.active) {

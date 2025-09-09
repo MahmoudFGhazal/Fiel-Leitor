@@ -1,5 +1,5 @@
-import Input from '@/components/input';
 import styles from '../signIn.module.css';
+import InputText from '@/components/inputs/inputText';
 
 type StepUserProps = {
     formData: any;
@@ -11,21 +11,21 @@ export default function StepUser({ formData, updateFormData }: StepUserProps) {
     
     return (
         <div className={styles.formStep}>
-            <Input
+            <InputText
                 type="email"
                 text="Email"
                 value={formData.email}
                 onChange={(val) => updateFormData({ email: val })}
             />
 
-            <Input
+            <InputText
                 type="password"
                 text="Senha"
                 value={formData.password}
                 onChange={(val) => updateFormData({ password: val })}
             />
 
-            <Input
+            <InputText
                 type="password"
                 text="Confirmar Senha"
                 value={oi}

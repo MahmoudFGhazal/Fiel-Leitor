@@ -1,9 +1,9 @@
 
 export enum Genders {
-    MALE = 'male',
-    FEMALE = 'female',
-    OTHER = 'other',
-    NOTSHARE = 'notShare'
+    MALE = 'Male',
+    FEMALE = 'Female',
+    OTHER = 'Other',
+    PREFERNOTTOSAY = 'Prefer not to say'
 }
 
 
@@ -15,14 +15,18 @@ export enum Categories {
 }
 
 export enum TypeResidences {
-    HOUSE = 'house',
-    APARTMENT = 'apartment',
-    CONDOMINIUM = 'condominium'
+    HOUSE = 'House',
+    APARTMENT = 'Apartment',
+    TOWNHOUSE = 'Townhouse',
+    STUDIO = 'Studio',
+    FARMHOUSE = 'Farmhouse'
 }
 
 export enum TypeStreets {
-    AVENUE = 'avenue',
-    STREET = 'street',
-    ROAD = 'road',
-    HIGHWAY = 'highway'
+    AVENUE = 'Avenue',
+    STREET = 'Street',
+    ALLEY = 'Alley',
+    BOULEVARD = 'Boulevard',
+    HIGHWAY = 'Highway',
+    SQUARE = 'Square'
 }

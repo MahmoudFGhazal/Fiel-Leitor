@@ -1,8 +1,12 @@
 
 import { GendersPortuguese } from '@/translate/portuguses';
 import styles from '../signIn.module.css';
-import Input from "@/components/input";
 import { Genders } from '@/translate/base';
+import InputText from '@/components/inputs/inputText';
+import { useEffect, useState } from 'react';
+import { Gender } from '@/api/objects';
+import { getGenders } from '@/utils/getTypes';
+import InputSelect from '@/components/inputs/inputSelect';
 
 type StepProfileProps = {
     formData: any;
@@ -10,26 +14,44 @@ type StepProfileProps = {
 };
 
 export default function StepProfile({ formData, updateFormData }: StepProfileProps) {
+    const [genderTypes, setGenderTypes] = useState<Gender[] | null>(null);
+    
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const genders: Gender[] = await getGenders();
+                console.log(genders)
+                setGenderTypes(genders);
+            } catch (err) {
+                console.error("Erro ao carregar dados", err);
+            }
+        }
+
+        fetchData();
+    }, []);
+    
     return (
         <div className={styles.formStep}>
-            <Input
+            <InputText
                 type='text'
                 text="Nome"
                 value={formData.name}
                 onChange={(val) => updateFormData({ name: val })}
             />
             
-            <Input
+            <InputSelect
                 text="Gênero"
                 value={formData.gender || ""}
-                onChange={(val) => updateFormData({ gender: val as Genders })}
-                options={Object.entries(GendersPortuguese).map(([key, label]) => ({
-                    value: key,
-                    label,
-                }))}
+                onChange={(val: string) => updateFormData({ gender: val })}
+                options={
+                    genderTypes?.map(g => ({
+                        value: g.id?.toString() || "",
+                        label: GendersPortuguese[g.gender as keyof typeof GendersPortuguese],
+                    })) || []
+                }
             />
             
-            <Input
+            <InputText
                 type='date'
                 text="Data de Nascimento"
                 value={
@@ -40,14 +62,14 @@ export default function StepProfile({ formData, updateFormData }: StepProfilePro
                 onChange={(val) => updateFormData({ birthday: val as string })}
             />
 
-            <Input
+            <InputText
                 type='text'
                 text="CPF"
                 value={formData.cpf}
                 onChange={(val) => updateFormData({ cpf: val })}
             />
 
-            <Input
+            <InputText
                 type='text'
                 text="Telefone"
                 value={formData.phoneNumber}
