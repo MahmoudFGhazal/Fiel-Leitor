@@ -3,12 +3,12 @@ import { useState } from 'react';
 import styles from './loginComponent.module.css';
 
 import Button from '@/components/button';
-import Input from '@/components/input';
 import FormBox from '@/components/formBox';
 import { ApiResponse, User } from '@/api/objects';
 import InputText from '../inputs/inputText';
 import InputCheckBox from '../inputs/inputCheckBox';
 import api from '@/api/route';
+import showToast from '@/utils/showToast';
 
 interface LoginData {
     email: string,
@@ -27,13 +27,6 @@ export default function LoginComponent() {
         setFormData({ ...formData, ...data });
     };
 
-    const showToast = (msg: string) => {
-        return new Promise<void>((resolve) => {
-            alert(msg); 
-            resolve();
-        });
-    };
-
     const executeLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -48,7 +41,7 @@ export default function LoginComponent() {
             name: null,
             phoneNumber: null
         }
-        const res: ApiResponse = await api.post('/user/login', loginData);
+        const res = await api.post<ApiResponse>('/user/login', loginData);
 
         const data = res.data;
 

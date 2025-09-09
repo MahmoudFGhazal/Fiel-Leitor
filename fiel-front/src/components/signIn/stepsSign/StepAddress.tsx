@@ -1,9 +1,11 @@
-/* import { AddressData, TypeResidences, TypeStreets } from "@/modal/addressModal";
-import { TypeResidencesPortuguese, TypeStreetsPortuguese } from "@/modal/translate/portuguses";
-import { Genders, UserData } from "@/modal/userModal";
+'use client'
+import { Address, ResidenceType, StreetType } from '@/api/objects';
 import styles from '../signIn.module.css';
-import Input from "@/components/input";
-import { useState } from "react";
+import { TypeResidencesPortuguese, TypeStreetsPortuguese } from '@/translate/portuguses';
+import { useEffect, useState } from 'react';
+import { getResidenceTypes, getStreetTypes } from '@/utils/getTypes';
+import InputSelect from '@/components/inputs/inputSelect';
+import InputText from '@/components/inputs/inputText';
 
 type StepAddressProps = {
     formData: any;
@@ -11,78 +13,101 @@ type StepAddressProps = {
 };
 
 export default function StepAddress({ formData, updateFormData }: StepAddressProps) {
-    const handleChange = (field: keyof AddressData, value: string | null) => {
-        const address = formData.addresses[0] || { id: Date.now() } as AddressData;
+    const [streetTypes, setStreetTypes] = useState<StreetType[] | null>(null);
+    const [residenceTypes, setResidenceTypes] = useState<ResidenceType[] | null>(null);
+    
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const streets: StreetType[] = await getStreetTypes();
+                const residences: ResidenceType[] = await getResidenceTypes();
+                console.log(streets)
+                setStreetTypes(streets);
+                setResidenceTypes(residences);
+            } catch (err) {
+                console.error("Erro ao carregar dados", err);
+            }
+        }
 
-        const updatedAddress = { ...address, [field]: value };
+        fetchData();
+    }, []);
+
+    const currentAddress = formData.addresses?.[0] as Address | undefined;
+        
+    const handleChange = <K extends keyof Address>(field: K, value: Address[K]) => {
+        const updatedAddress = { ...currentAddress, [field]: value };
         updateFormData({ addresses: [updatedAddress] });
     };
 
     return (
         <div className={`${styles.formStep} ${styles.formAddress}`}>
-            <Input
+            <InputText
                 type='text'
                 text="CEP"
                 value={formData.addresses?.[0]?.zip || ""}
                 onChange={(val) => handleChange('zip', val)}
             />
 
-            <Input
+            <InputSelect
                 text="Tipo de Residência"
-                value={formData.addresses?.[0]?.typeResidence || ""}
-                onChange={(val) => handleChange('typeResidence', val)}
-                options={Object.entries(TypeResidencesPortuguese).map(([key, label]) => ({
-                    value: key,
-                    label,
-                }))}
+                value={currentAddress?.residenceType?.id?.toString() || ""}
+                onChange={(val: string) =>
+                    handleChange("residenceType", residenceTypes?.find(r => r.id?.toString() === val) || null)
+                }
+                options={residenceTypes?.map(res => ({
+                    value: res.id?.toString() || "",
+                    label: TypeResidencesPortuguese[res.residenceType as keyof typeof TypeResidencesPortuguese],
+                })) || []}
             />
 
-            <Input
+            <InputSelect
                 text="Tipo de Logradouro"
-                value={formData.addresses?.[0]?.typeStreet || ""}
-                onChange={(val) =>  handleChange('typeStreet', val)}
-                options={Object.entries(TypeStreetsPortuguese).map(([key, label]) => ({
-                    value: key,
-                    label,
-                }))}
+                value={currentAddress?.streetType?.id?.toString() || ""}
+                onChange={(val: string) =>
+                    handleChange("streetType", streetTypes?.find(s => s.id?.toString() === val) || null)
+                }
+                options={streetTypes?.map(street => ({
+                    value: street.id?.toString() || "",
+                    label: TypeStreetsPortuguese[street.streetType as keyof typeof TypeStreetsPortuguese],
+                })) || []}
             />
             
-            <Input
+            <InputText
                 type='text'
                 text="Rua"
                 value={formData.addresses?.[0]?.street || ""}
                 onChange={(val) => handleChange('street', val)}
             />
 
-            <Input
+            <InputText
                 type='text'
                 text="Número"
                 value={formData.addresses?.[0]?.number || ""}
                 onChange={(val) => handleChange('number', val)}
             />
 
-            <Input
+            <InputText
                 type='text'
                 text="Bairro"
                 value={formData.addresses?.[0]?.neighborhood || ""}
                 onChange={(val) => handleChange('neighborhood', val)}
             />
 
-            <Input
+            <InputText
                 type='text'
                 text="Cidade"
                 value={formData.addresses?.[0]?.city || ""}
                 onChange={(val) => handleChange('city', val)}
             />
 
-            <Input
+            <InputText
                 type='text'
                 text="Estado"
                 value={formData.addresses?.[0]?.state || ""}
                 onChange={(val) => handleChange('state', val)}
             />
 
-            <Input
+            <InputText
                 type='text'
                 text="País"
                 value={formData.addresses?.[0]?.country || ""}
@@ -90,4 +115,4 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
             />
         </div>
     );
-} */
+}

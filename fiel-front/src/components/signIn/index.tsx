@@ -4,13 +4,13 @@ import { useState } from "react";
 import StepUser from "./stepsSign/StepUser";
 import StepAddress from "./stepsSign/StepAddress";
 import StepProfile from "./stepsSign/StepProfile";
-import { UserData } from '@/modal/userModal';
 import BoxInput from '../formBox';
 import Button from '../button';
+import { User } from '@/api/objects';
 
 export default function SignInComponent() {
     const [step, setStep] = useState(1);
-    const [formData, setFormData] = useState<UserData>({
+    const [formData, setFormData] = useState<User>({
         id: Date.now(),
         email: "",
         password: "",
@@ -19,9 +19,7 @@ export default function SignInComponent() {
         birthday: null,
         cpf: "",
         phoneNumber: "",
-        addresses: [],
-        cards: [],
-        isActive: true
+        active: true
     });
 
     const nextStep = () => {

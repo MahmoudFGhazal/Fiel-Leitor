@@ -1,7 +1,8 @@
-/* import { GendersPortuguese } from "@/modal/translate/portuguses";
-import { Genders } from "@/modal/userModal";
+
+import { GendersPortuguese } from '@/translate/portuguses';
 import styles from '../signIn.module.css';
 import Input from "@/components/input";
+import { Genders } from '@/translate/base';
 
 type StepProfileProps = {
     formData: any;
@@ -54,4 +55,4 @@ export default function StepProfile({ formData, updateFormData }: StepProfilePro
             />
         </div>
     );
-} */
+} 
