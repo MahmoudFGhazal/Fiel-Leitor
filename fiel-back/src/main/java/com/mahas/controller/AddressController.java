@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.rules.VerifyCreateAddress;
+import com.mahas.command.rules.VerifyDeleteAddress;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.TypeResponse;
@@ -30,9 +31,12 @@ public class AddressController {
     @Autowired
     private VerifyCreateAddress verifyCreateAddress;
 
+    @Autowired
+    private VerifyDeleteAddress verifyDeleteAddress;
+
     @GetMapping
     public ResponseEntity<FacadeResponse> getAddress(
-            @RequestParam(value = "id", required = false) Long id
+            @RequestParam(value = "addressId", required = false) Long id
         ) {
         FacadeRequest request = new FacadeRequest();
         
@@ -93,13 +97,14 @@ public class AddressController {
 
     @DeleteMapping
     public ResponseEntity<FacadeResponse> deleteAddress(
-            @RequestParam(value = "addressId") Long addressId
+            @RequestParam(value = "addressId", required = false) Long id
         ) {
         FacadeRequest request = new FacadeRequest();
 
         Address address = new Address();
-        address.setId(addressId);
+        address.setId(id);
         request.setEntity(address);
+        request.setCommand(verifyDeleteAddress);
         
         FacadeResponse response = facade.delete(request);
         

@@ -44,7 +44,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getUser(
-            @RequestParam(value = "id", required = false) Long id
+            @RequestParam(value = "userId", required = false) Long id
         ) {
         FacadeRequest request = new FacadeRequest();
         
@@ -108,14 +108,14 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<FacadeResponse> deleteUser(
-            @RequestParam(value = "userId") Long userId
+            @RequestParam(value = "userId") Long id
         ) {
         FacadeRequest request = new FacadeRequest();
 
         request.setCommand(verifyDeleteUser);
 
         User user = new User();
-        user.setId(userId);
+        user.setId(id);
         request.setEntity(user);
         
         FacadeResponse response = facade.delete(request);

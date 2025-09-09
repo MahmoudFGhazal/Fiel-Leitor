@@ -17,6 +17,10 @@ public class VerifyDeleteUser implements ICommand {
     public String execute(FacadeRequest request) {
         User user = (User) request.getEntity();
 
+        if(user.getId() == null) {
+            return "Id do usuario não especificado";
+        }
+
         // Verificar se usuario existe
         if (!userValidator.userExists(user.getId())) {
             return "Usuario não encontrado";

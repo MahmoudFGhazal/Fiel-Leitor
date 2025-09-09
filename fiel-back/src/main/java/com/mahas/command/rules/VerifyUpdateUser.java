@@ -31,6 +31,10 @@ public class VerifyUpdateUser implements ICommand {
 
         String error;
 
+        if(user.getId() == null) {
+            return "Id do usuario não especificado";
+        }
+
         // Verificar usuario existe
         if (!userValidator.userExists(user.getId())) {
             return "Usuario não encontrado";

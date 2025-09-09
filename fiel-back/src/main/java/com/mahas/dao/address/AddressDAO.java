@@ -115,4 +115,34 @@ public class AddressDAO implements IDAO {
 
         return response;
     }
+
+    public SQLResponse delete(FacadeRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if (!(entity instanceof Address)) {
+            return null;
+        }
+
+        Address address = (Address) entity;
+
+        String jpql = "DELETE FROM Address a WHERE a.id = :id";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("id", address.getId());
+
+        try {
+            int result = query.executeUpdate();
+            if (result > 0) {
+                response.setEntity(address); 
+            }else {
+                response.setEntity(null);
+            }
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return response;
+    }
+
 }
