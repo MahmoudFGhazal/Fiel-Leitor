@@ -1,4 +1,4 @@
-import { AddressData, TypeResidences, TypeStreets } from "@/modal/addressModal";
+/* import { AddressData, TypeResidences, TypeStreets } from "@/modal/addressModal";
 import { TypeResidencesPortuguese, TypeStreetsPortuguese } from "@/modal/translate/portuguses";
 import { Genders, UserData } from "@/modal/userModal";
 import styles from '../signIn.module.css';
@@ -90,4 +90,4 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
             />
         </div>
     );
-}
+} */

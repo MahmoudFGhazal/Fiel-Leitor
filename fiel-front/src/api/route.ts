@@ -10,6 +10,7 @@ async function request<T>(method: Method, url: string, data?: Datas): Promise<T>
         method,
         headers: {
             "Content-Type": "application/json",
+
         },
         body: data ? JSON.stringify(data) : undefined,
     };
@@ -19,7 +20,7 @@ async function request<T>(method: Method, url: string, data?: Datas): Promise<T>
         const json: ApiResponse = await res.json();
 
         if(!res.ok){
-            throw new Error(json.message);
+            throw new Error(json.message ?? "Erro no Back");
         }
 
         if(json.typeResponse === TypeResponse.SERVER_ERROR){

@@ -3,6 +3,7 @@
     display: flex;
     width: 80%;
     max-width: 800px;
+    min-height: 500px;
     overflow: hidden;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -11,9 +12,9 @@
 .logoContent {
     flex: 1;
     background-color: black;
-    padding-top: 75px;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .logo {

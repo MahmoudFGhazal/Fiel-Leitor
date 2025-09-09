@@ -12,10 +12,8 @@ interface ButtonProps {
 
 export default function Button({ type, text, children, onClick, disabled }: ButtonProps) {
     return (
-        <div className={styles.container}>
-            <button type={type} className={styles.button} onClick={onClick} disabled={disabled}>
-                {children ?? text}
-            </button>
-        </div>
+        <button type={type} className={styles.button} onClick={onClick} disabled={disabled}>
+            {children ?? text}
+        </button>
     );
 }

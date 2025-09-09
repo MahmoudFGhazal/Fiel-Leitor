@@ -1,74 +1,74 @@
 export interface Address {
-    id: number,
-    user: User,
-    nickname: string,
-    number: string,
-    complement: string,
-    street: string,
-    neighborhood: string,
-    zip: string,
-    city: string,
-    state: string,
-    country: string,
-    streetType: StreetType,
-    residenceType: ResidenceType
+    id: number | null,
+    user: User | null,
+    nickname: string | null,
+    number: string | null,
+    complement: string | null,
+    street: string | null,
+    neighborhood: string | null,
+    zip: string | null,
+    city: string | null,
+    state: string | null,
+    country: string | null,
+    streetType: StreetType | null,
+    residenceType: ResidenceType | null
 }
 
 export interface Card {
-    id: number,
-    user: User,
-    principal: boolean,
-    number: string,
-    ccv: string,
-    holder: string,
-    valid: string,
-    paymentType: PaymentType
+    id: number | null,
+    user: User | null,
+    principal: boolean | null,
+    number: string | null,
+    ccv: string | null,
+    holder: string | null,
+    valid: string | null,
+    paymentType: PaymentType | null
 }
 
 export interface Gender {
-    id: number,
-    gender: string
+    id: number | null,
+    gender: string | null
 }
 
 export interface PaymentType {
-    id: number,
-    paymentType: string
+    id: number | null,
+    paymentType: string | null
 }
 
 export interface ResidenceType {
-    id: number,
-    residenceType: string
+    id: number | null,
+    residenceType: string | null
 }
 
 export interface StreetType {
-    id: number,
-    streetType: string
+    id: number | null,
+    streetType: string | null
 }
 
 export interface User {
-    id: number,
-    email: string,
-    password: string,
-    name: string,
-    active: boolean,
-    gender: Gender,
-    birthday: Date,
-    cpf: string,
-    phoneNumber: string
+    id: number | null,
+    email: string | null,
+    password: string | null,
+    name: string | null,
+    active: boolean | null,
+    gender: Gender | null,
+    birthday: Date | null,
+    cpf: string | null,
+    phoneNumber: string | null
 }
 
 export interface ApiResponse {
     data: {
-        entity: Datas,
-        entities: Datas,
-        page: number,
-        limit: number,
-        pageCount: number,
-        totalItem: number,
-        totalPage: number
+        entity: Datas | null,
+        entities: Datas | null,
+        page: number | null,
+        limit: number | null,
+        pageCount: number | null,
+        totalItem: number | null,
+        totalPage: number | null
     },
-    typeResponse: TypeResponse,
-    message: string
+    typeResponse: TypeResponse | null,
+    message: string | null
 }
 
 export enum TypeResponse {

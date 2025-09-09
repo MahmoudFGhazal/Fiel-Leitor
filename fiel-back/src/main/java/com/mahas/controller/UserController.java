@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.rules.VerifyCreateUser;
 import com.mahas.command.rules.VerifyDeleteUser;
+import com.mahas.command.rules.VerifyLogin;
 import com.mahas.command.rules.VerifyPagination;
 import com.mahas.command.rules.VerifyUpdateUser;
 import com.mahas.domain.FacadeRequest;
@@ -41,6 +42,28 @@ public class UserController {
 
     @Autowired
     VerifyUpdateUser verifyUpdateUser;
+
+    @Autowired
+    VerifyLogin verifyLogin;
+
+    @PostMapping("/login")
+    public ResponseEntity<FacadeResponse> Login(@RequestBody User user) {
+        FacadeRequest request = new FacadeRequest();
+
+        User requestUser = new User();
+        requestUser.setEmail(user.getEmail());
+        requestUser.setPassword(user.getPassword());
+
+        request.setEntity(requestUser);
+        request.setLimit(1);
+        request.setCommand(verifyLogin);
+        
+
+        FacadeResponse response = facade.query(request);
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getUser(

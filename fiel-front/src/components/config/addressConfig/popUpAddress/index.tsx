@@ -1,4 +1,4 @@
-'use client';
+/* 'use client';
 import { AddressData } from "@/modal/addressModal";
 import styles from './popUpAddress.module.css';
 import Input from "@/components/input";
@@ -103,3 +103,4 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
         </div>
     );
 }
+ */

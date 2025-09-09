@@ -1,4 +1,4 @@
-'use client';
+/* 'use client';
 import { useEffect, useState } from "react";
 import { UserData } from "@/modal/userModal";
 import styles from './addressConfig.module.css';
@@ -185,3 +185,4 @@ export default function AddressConfig() {
         </div>
     );
 }
+ */

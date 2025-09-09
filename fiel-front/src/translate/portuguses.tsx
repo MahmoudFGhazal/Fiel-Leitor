@@ -1,6 +1,4 @@
-import { TypeResidences, TypeStreets } from "../addressModal"
-import { Categories } from "../productModal"
-import { Genders } from "../userModal"
+import { Categories, Genders, TypeResidences, TypeStreets } from "./base"
 
 export const TypeResidencesPortuguese: Record<TypeResidences, string> = {
     [TypeResidences.HOUSE]: 'Casa',

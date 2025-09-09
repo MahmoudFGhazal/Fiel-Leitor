@@ -51,6 +51,10 @@ public class UserDAO implements IDAO {
             whereClause.append(" AND LOWER(u.email) = LOWER(:email)");
             parameters.put("email", user.getEmail());
         }
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            whereClause.append(" AND LOWER(u.password) = LOWER(:password)");
+            parameters.put("password", user.getPassword());
+        }
         if (user.getCpf() != null && !user.getCpf().isBlank()) {
             whereClause.append(" AND LOWER(u.cpf) = LOWER(:cpf)");
             parameters.put("cpf", user.getCpf());
@@ -176,7 +180,7 @@ public class UserDAO implements IDAO {
                 response.setEntity(null);
                 return response;
             }
-
+            
             if (user.getName() != null) {
                 existingUser.setName(user.getName());
             }

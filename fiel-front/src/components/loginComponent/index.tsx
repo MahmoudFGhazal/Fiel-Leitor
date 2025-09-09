@@ -4,8 +4,17 @@ import styles from './loginComponent.module.css';
 
 import Button from '@/components/button';
 import Input from '@/components/input';
-import { LoginData, UserData } from '@/modal/userModal';
 import FormBox from '@/components/formBox';
+import { ApiResponse, User } from '@/api/objects';
+import InputText from '../inputs/inputText';
+import InputCheckBox from '../inputs/inputCheckBox';
+import api from '@/api/route';
+
+interface LoginData {
+    email: string,
+    password: string,
+    refresh: boolean
+}
 
 export default function LoginComponent() {
     const [formData, setFormData] = useState<LoginData>({
@@ -28,15 +37,25 @@ export default function LoginComponent() {
     const executeLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const matchedUser = users.find(
-            (user: UserData) =>
-                user.email === formData.email &&
-                user.password === formData.password
-        );
+        const loginData: User = {
+            email: formData.email,
+            password: formData.password,
+            active: null,
+            birthday: null,
+            cpf: null,
+            gender: null,
+            id: null,
+            name: null,
+            phoneNumber: null
+        }
+        const res: ApiResponse = await api.post('/user/login', loginData);
 
-        if(matchedUser) {
-            if(!matchedUser.isActive) {
+        const data = res.data;
+
+        if(data.entity) {
+            const user = data.entity as User;
+
+            if(!user.active) {
                 await showToast('Usuario Inativado!');
                 return;
             }
@@ -45,9 +64,9 @@ export default function LoginComponent() {
             window.location.href = "/";
 
             if (formData.refresh) {
-                localStorage.setItem('currentUser', JSON.stringify(matchedUser));
+                localStorage.setItem('currentUser', JSON.stringify(user.id));
             } else {
-                sessionStorage.setItem('currentUser', JSON.stringify(matchedUser));
+                sessionStorage.setItem('currentUser', JSON.stringify(user.id));
             }
         }else {
             alert('Email ou senha incorretos.');
@@ -55,46 +74,29 @@ export default function LoginComponent() {
     }
     
     return (
-        <div className={styles.container}>
+        <div className={styles.loginCotent}>
             <FormBox>
                 <form onSubmit={executeLogin} className={styles.formContent}>
-                    <div className={styles.form}>
+                    <div className={styles.inputContainer}>
                         <div className={styles.inputContent}>
-                            <Input
+                            <InputText
                                 type="email"
                                 text="Email"
                                 value={formData.email}
-                                onChange={(val: string | boolean | string[]) => {
-                                    if (typeof val === "string") {
-                                        updateFormData({ email: val });
-                                    }
-                                }}
+                                onChange={(val: string) => updateFormData({ email: val })}
                             />
-                            <Input
+                            <InputText
                                 type="password"
                                 text="Senha"
                                 value={formData.password}
-                                onChange={(val: string | boolean | string[]) => {
-                                    if (typeof val === "string") {
-                                        updateFormData({ password: val });
-                                    }
-                                }}                            
+                                onChange={(val: string) => updateFormData({ password: val })}                          
                             />
                         </div>
-                        <label className={styles.checkbox}>
-                            <div>
-                                <Input 
-                                    type='checkbox'
-                                    checked={formData.refresh}
-                                    onChange={(val: string | boolean | string[]) => {
-                                        if (typeof val === "boolean") {
-                                            updateFormData({ refresh: val });
-                                        }
-                                    }}                            
-                                />
-                            </div>
-                            Manter-se conectado
-                        </label>
+                        <InputCheckBox 
+                            text='Manter-se Contectado'
+                            checked={formData.refresh}
+                            onChange={(val: boolean) => updateFormData({ refresh: val })}                          
+                        />
                     </div>
                     <div className={styles.buttonContent}>
                         <Button type='submit' text="Entrar" />
