@@ -67,8 +67,15 @@ export interface ApiResponse {
         totalItem: number,
         totalPage: number
     },
-    typeResponse: string,
+    typeResponse: TypeResponse,
     message: string
+}
+
+export enum TypeResponse {
+    OK = 200,
+    CLIENT_ERROR = 400,
+    CONFLICT = 409,
+    SERVER_ERROR = 500,
 }
 
 export type Datas =

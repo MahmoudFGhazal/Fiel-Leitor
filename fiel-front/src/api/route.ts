@@ -1,4 +1,4 @@
-import { Datas } from "./objects";
+import { ApiResponse, Datas, TypeResponse } from "./objects";
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -16,18 +16,13 @@ async function request<T>(method: Method, url: string, data?: Datas): Promise<T>
 
     try{
         const res = await fetch(`${BASE_URL}${url}`, options);
-        const json = await res.json();
+        const json: ApiResponse = await res.json();
 
         if(!res.ok){
-            throw new Error("Error na Requisição");
+            throw new Error(json.message);
         }
 
-        if(json.type === "" ){
-            const error = await res.text();
-            throw new Error(error || "Erro na requisição");
-        }
-
-        if(json.typeResponse === "BACK_ERROR" || json.typeResponse === "SERVER_ERROR"){
+        if(json.typeResponse === TypeResponse.SERVER_ERROR){
             const error = json.message;
             throw new Error(error || "Erro no Back");
         }
