@@ -13,7 +13,7 @@ public class GenderValidator {
     @Autowired
     Facade facade;
 
-    public String validateGenderExists(Long genderId) {
+    public String validateGenderExists(Integer genderId) {
         if (genderId == null) {
             return "Id do genero não pode ser vazio";
         }

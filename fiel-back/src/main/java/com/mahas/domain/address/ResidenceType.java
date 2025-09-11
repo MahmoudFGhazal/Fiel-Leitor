@@ -28,7 +28,7 @@ public class ResidenceType extends DomainEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rty_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "rty_residence_type", nullable = false)
     private String residenceType;

@@ -1,15 +1,32 @@
 'use client'
-import { UserData } from '@/modal/userModal';
 import styles from './page.module.css';
 import { useEffect, useState } from "react";
 import ActionButton from '@/components/actionButton';
+import { ApiResponse, User } from '@/api/objects';
+import api from '@/api/route';
 
 export default function CRUDClientComponent() {
-    const [users, setUsers] = useState<UserData[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
     
     useEffect(() => {
-        const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-        setUsers(storedUsers);
+        const fetchUsers = async () => {
+            try {
+                const res = await api.get("/user/all") as ApiResponse;
+
+                if (res.message) {
+                    alert(res.message);
+                    return;
+                }
+
+                const users = res.data.entities as User[];
+                setUsers(users);
+            } catch (err) {
+                console.error(err);
+                alert("Erro ao carregar usuários");
+            }
+        };
+
+        fetchUsers();
     }, []);
 
     const deleteUser = async(index: number) => {
@@ -23,7 +40,7 @@ export default function CRUDClientComponent() {
     const updateActive = async(index: number) => {
         const updatedUsers = [...users];
         const user = updatedUsers[index];
-        user.isActive = !user.isActive;  
+        user.active = !user.active;  
         setUsers(updatedUsers);
         localStorage.setItem('users', JSON.stringify(updatedUsers));  
     }
@@ -58,7 +75,7 @@ export default function CRUDClientComponent() {
                                             onClick={() => deleteUser(index)}
                                         />
                                         <ActionButton
-                                            label={user.isActive ? "Desativar" : "Ativar"}
+                                            label={user.active ? "Desativar" : "Ativar"}
                                             onClick={() => updateActive(index)}
                                         />
                                     </td>

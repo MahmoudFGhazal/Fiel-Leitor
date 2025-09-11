@@ -83,10 +83,6 @@ public class CPFValidator {
 
         DomainEntity entity = response.getData().getEntity();
 
-        if(entity != null) {
-            return true;
-        }
-
-        return false;
+        return entity != null;
     }
 }

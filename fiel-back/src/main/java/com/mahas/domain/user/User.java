@@ -31,7 +31,7 @@ public class User extends DomainEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usr_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "usr_name", nullable = false)
     private String name;

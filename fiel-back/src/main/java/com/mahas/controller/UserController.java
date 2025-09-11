@@ -18,6 +18,7 @@ import com.mahas.command.rules.VerifyDeleteUser;
 import com.mahas.command.rules.VerifyLogin;
 import com.mahas.command.rules.VerifyPagination;
 import com.mahas.command.rules.VerifyUpdateUser;
+import com.mahas.command.rules.VerifyUserExist;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.TypeResponse;
@@ -46,6 +47,9 @@ public class UserController {
     @Autowired
     VerifyLogin verifyLogin;
 
+    @Autowired
+    VerifyUserExist verifyUserExist;
+
     @PostMapping("/login")
     public ResponseEntity<FacadeResponse> Login(@RequestBody User user) {
         FacadeRequest request = new FacadeRequest();
@@ -63,10 +67,9 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-
     @GetMapping
     public ResponseEntity<FacadeResponse> getUser(
-            @RequestParam(value = "userId", required = false) Long id
+            @RequestParam(value = "userId", required = false) Integer id
         ) {
         FacadeRequest request = new FacadeRequest();
         
@@ -130,7 +133,7 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<FacadeResponse> deleteUser(
-            @RequestParam(value = "userId") Long id
+            @RequestParam(value = "userId") Integer id
         ) {
         FacadeRequest request = new FacadeRequest();
 
@@ -163,4 +166,23 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/active")
+    public ResponseEntity<FacadeResponse> activeUser(
+        @RequestParam(value = "userId", required = true) Integer userId,
+        @RequestParam(value = "active", required = true) boolean active
+    ) {
+        FacadeRequest request = new FacadeRequest();
+
+        request.setCommand(verifyUserExist);
+        
+        User requestUser = new User();
+        requestUser.setId(userId);
+        requestUser.setActive(active);
+
+        request.setEntity(requestUser);
+        
+        FacadeResponse response = facade.update(request);
+        
+        return ResponseEntity.ok(response);
+    }
 }

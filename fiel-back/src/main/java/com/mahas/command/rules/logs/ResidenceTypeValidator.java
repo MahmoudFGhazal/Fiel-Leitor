@@ -14,7 +14,7 @@ public class ResidenceTypeValidator {
     @Autowired
     Facade facade;
 
-    public boolean residenceTypeExists(Long streetTypeId) {
+    public boolean residenceTypeExists(Integer streetTypeId) {
         ResidenceType residenceType = new ResidenceType();
         residenceType.setId(streetTypeId);
 
@@ -26,10 +26,6 @@ public class ResidenceTypeValidator {
 
         DomainEntity entity = response.getData().getEntity();
 
-        if(entity != null) {
-            return true;
-        }
-
-        return false;
+        return entity != null;
     }
 }

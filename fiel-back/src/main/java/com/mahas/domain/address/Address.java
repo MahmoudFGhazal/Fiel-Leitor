@@ -31,7 +31,7 @@ public class Address extends DomainEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "add_id")
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "add_usr_id", nullable = false)

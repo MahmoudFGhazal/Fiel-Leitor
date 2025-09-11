@@ -14,7 +14,7 @@ public class StreetTypeValidator {
     @Autowired
     Facade facade;
 
-    public boolean streetTypeExists(Long streetTypeId) {
+    public boolean streetTypeExists(Integer streetTypeId) {
         StreetType streetType = new StreetType();
         streetType.setId(streetTypeId);
 
@@ -26,10 +26,6 @@ public class StreetTypeValidator {
 
         DomainEntity entity = response.getData().getEntity();
 
-        if(entity != null) {
-            return true;
-        }
-
-        return false;
+        return entity != null;
     }
 }

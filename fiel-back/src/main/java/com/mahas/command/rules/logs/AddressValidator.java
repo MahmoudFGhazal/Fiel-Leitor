@@ -14,7 +14,7 @@ public class AddressValidator {
     @Autowired
     Facade facade;
     
-    public boolean addressExists(Long id) {
+    public boolean addressExists(Integer id) {
         Address address = new Address();
         address.setId(id);
 
@@ -26,10 +26,6 @@ public class AddressValidator {
 
         DomainEntity entity = response.getData().getEntity();
         
-        if(entity != null) {
-            return true;
-        }
-        
-        return false; 
+        return entity != null; 
     }
 }

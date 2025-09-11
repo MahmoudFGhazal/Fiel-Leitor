@@ -28,7 +28,7 @@ public class StreetType extends DomainEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sty_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "sty_street_type", nullable = false)
     private String streetType;

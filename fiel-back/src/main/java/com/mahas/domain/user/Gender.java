@@ -28,7 +28,7 @@ public class Gender extends DomainEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "gen_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "gen_gender", nullable = false)
     private String gender;

@@ -40,7 +40,7 @@ public class AddressController {
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getAddress(
-            @RequestParam(value = "addressId", required = false) Long id
+            @RequestParam(value = "addressId", required = false) Integer id
         ) {
         FacadeRequest request = new FacadeRequest();
         
@@ -101,7 +101,7 @@ public class AddressController {
 
     @DeleteMapping
     public ResponseEntity<FacadeResponse> deleteAddress(
-            @RequestParam(value = "addressId", required = false) Long id
+            @RequestParam(value = "addressId", required = false) Integer id
         ) {
         FacadeRequest request = new FacadeRequest();
 

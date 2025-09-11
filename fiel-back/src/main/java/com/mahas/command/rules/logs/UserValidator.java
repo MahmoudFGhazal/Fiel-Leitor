@@ -14,7 +14,7 @@ public class UserValidator {
     @Autowired
     Facade facade;
     
-    public boolean userExists(Long id) {
+    public boolean userExists(Integer id) {
         User user = new User();
         user.setId(id);
 
@@ -26,10 +26,6 @@ public class UserValidator {
 
         DomainEntity entity = response.getData().getEntity();
         
-        if(entity != null) {
-            return true;
-        }
-        
-        return false; 
+        return entity != null; 
     }
 }
