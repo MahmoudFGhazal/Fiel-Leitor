@@ -73,7 +73,7 @@ CREATE TABLE addresses (
     add_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     add_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     add_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_addresses_users FOREIGN KEY (add_usr_id) REFERENCES users (usr_id),
+    CONSTRAINT fk_addresses_users FOREIGN KEY (add_usr_id) REFERENCES users (usr_id) ON DELETE CASCADE,
     CONSTRAINT fk_addresses_street_types FOREIGN KEY (add_sty_id) REFERENCES street_types (sty_id),
     CONSTRAINT fk_addresses_residence_types FOREIGN KEY (add_rty_id) REFERENCES residence_types (rty_id)
 );
@@ -92,5 +92,5 @@ CREATE TABLE cards (
     car_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     car_pty_id BIGINT NOT NULL,
     CONSTRAINT fk_cards_payment_types FOREIGN KEY (car_pty_id) REFERENCES payment_types (pty_id),
-    CONSTRAINT fk_cards_users FOREIGN KEY (car_usr_id) REFERENCES users (usr_id)
+    CONSTRAINT fk_cards_users FOREIGN KEY (car_usr_id) REFERENCES users (usr_id) ON DELETE CASCADE
 );

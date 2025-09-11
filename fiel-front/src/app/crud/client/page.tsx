@@ -29,12 +29,18 @@ export default function CRUDClientComponent() {
         fetchUsers();
     }, []);
 
-    const deleteUser = async(index: number) => {
-        const updatedUsers = [...users];
-        updatedUsers.splice(index, 1);
+    const deleteUser = async(userId: number) => {
+        const res = await api.delete("/user", { params: { userId } }) as ApiResponse;
+
+        if(res.message) {
+            alert(res.message);
+            return;
+        }
+
+        const updatedUsers = users.filter(u => u.id !== userId);
         setUsers(updatedUsers);
-        localStorage.setItem('users', JSON.stringify(updatedUsers));    
-        alert('Exclusão concluído com sucesso!');
+
+        alert("Usuario deletado com sucesso");
     };
 
     const updateActive = async(userId: number, currentActive: boolean) => {
@@ -80,7 +86,7 @@ export default function CRUDClientComponent() {
                                     <td>
                                         <ActionButton
                                             label="Excluir"
-                                            onClick={() => deleteUser(index)}
+                                            onClick={() => user.id !== null && deleteUser(user.id)}
                                         />
                                         <ActionButton
                                             label={user.active ? "Desativar" : "Ativar"}
