@@ -65,7 +65,7 @@ export default function SignInComponent() {
     };
 
     const saveUser = async () => {
-        const res: ApiResponse = await api.post("/user", formData.user);
+        const res: ApiResponse = await api.post("/user", { data: formData.user });
         console.log(JSON.stringify(res,null,2))
 
         if(res.message) {
@@ -83,8 +83,8 @@ export default function SignInComponent() {
         }));
 
         await api.post("/address", {
-            ...formData.address,
-            user: user
+            data: { ...formData.address,
+                    user: user }
         });
 
         await showToast('Cadastro concluído com sucesso!');

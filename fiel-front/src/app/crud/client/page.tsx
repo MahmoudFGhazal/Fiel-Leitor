@@ -37,12 +37,20 @@ export default function CRUDClientComponent() {
         alert('Exclusão concluído com sucesso!');
     };
 
-    const updateActive = async(index: number) => {
-        const updatedUsers = [...users];
-        const user = updatedUsers[index];
-        user.active = !user.active;  
+    const updateActive = async(userId: number, currentActive: boolean) => {
+        const res = await api.put("/user/active", { params: { active: currentActive, userId } }) as ApiResponse;
+
+        if(res.message) {
+            alert(res.message);
+            return;
+        }
+
+        const updatedUsers = users.map(u =>
+            u.id === userId ? { ...u, active: currentActive } : u
+        );
         setUsers(updatedUsers);
-        localStorage.setItem('users', JSON.stringify(updatedUsers));  
+
+        alert(currentActive ? "Usuário ativado com sucesso" : "Usuário inativado com sucesso");
     }
 
     return (
@@ -76,7 +84,7 @@ export default function CRUDClientComponent() {
                                         />
                                         <ActionButton
                                             label={user.active ? "Desativar" : "Ativar"}
-                                            onClick={() => updateActive(index)}
+                                            onClick={() => user.id !== null && updateActive(user.id, !user.active)}
                                         />
                                     </td>
                                 </tr>

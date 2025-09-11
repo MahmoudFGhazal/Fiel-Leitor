@@ -42,7 +42,7 @@ export default function LoginComponent() {
             phoneNumber: null
         }
 
-        const res = await api.post<ApiResponse>('/user/login', loginData);
+        const res = await api.post<ApiResponse>('/user/login', { data: loginData });
 
         if(res.message) {
             alert(res.message);
