@@ -23,6 +23,7 @@ public class GenderDAO implements IDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
     public SQLResponse query(FacadeRequest request) {
         SQLResponse response = new SQLResponse();
         DomainEntity entity = request.getEntity();
@@ -43,7 +44,7 @@ public class GenderDAO implements IDAO {
             whereClause.append(" AND g.id = :id");
             parameters.put("id", gender.getId());
         }
-        if (gender.getGender() != null && !gender.getGender().isBlank()) {
+        if (gender.getGender() != null && !gender.getGender().isEmpty()) {
             whereClause.append(" AND LOWER(g.gender) LIKE LOWER(:gender)");
             parameters.put("gender", "%" + gender.getGender() + "%");
         }
@@ -89,7 +90,6 @@ public class GenderDAO implements IDAO {
             response.setPageCount(totalPage);
 
         } catch (PersistenceException e) {
-            e.printStackTrace();
             throw e;
         }
 

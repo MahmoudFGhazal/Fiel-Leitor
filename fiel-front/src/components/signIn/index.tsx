@@ -6,23 +6,57 @@ import StepAddress from "./stepsSign/StepAddress";
 import StepProfile from "./stepsSign/StepProfile";
 import BoxInput from '../formBox';
 import Button from '../button';
-import { User } from '@/api/objects';
+import { Address, ApiResponse, User } from '@/api/objects';
+import CreateAccountValidator from '@/utils/validator/createAccountValidator';
+import showToast from '@/utils/showToast';
+import api from '@/api/route';
+
+interface formData {
+    user: User,
+    address: Address
+}
 
 export default function SignInComponent() {
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [step, setStep] = useState(1);
-    const [formData, setFormData] = useState<User>({
-        id: Date.now(),
-        email: "",
-        password: "",
-        name: "",
-        gender: null,
-        birthday: null,
-        cpf: "",
-        phoneNumber: "",
-        active: true
+    const [formData, setFormData] = useState<formData>({
+        user: {  
+            id: null,
+            email: "",
+            password: "",
+            name: "",
+            gender: null,
+            birthday: null,
+            cpf: "",
+            phoneNumber: "",
+            active: true
+        },
+        address: {
+            id: null,
+            user: null,
+            nickname: "",
+            number: "",
+            complement: "",
+            street: "",
+            neighborhood: "",
+            zip: "",
+            city: "",
+            state: "",
+            country: "",
+            streetType: null,
+            residenceType: null
+        }
     });
 
     const nextStep = () => {
+        const validator = CreateAccountValidator();
+        let error = validator.validateStep(step, formData, { confirmPassword });
+
+        if (error) {
+            showToast(error);
+            return;
+        } 
+
         if (step < 3) {
             setStep(step + 1);
         } else {
@@ -30,25 +64,51 @@ export default function SignInComponent() {
         }
     };
 
-    const showToast = (msg: string) => {
-        return new Promise<void>((resolve) => {
-            alert(msg); 
-            resolve();
-        });
-    };
-
     const saveUser = async () => {
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        users.push(formData);
-        localStorage.setItem('users', JSON.stringify(users));
+        const res: ApiResponse = await api.post("/user", formData.user);
+        console.log(JSON.stringify(res,null,2))
+
+        if(res.message) {
+            alert(res.message);
+            return;
+        }
+        const user = res.data.entity as User;
+        console.log(JSON.stringify(res,null,2))
+        setFormData(prev => ({
+            ...prev,
+            address: {
+                ...prev.address,
+                user: user
+            }
+        }));
+
+        await api.post("/address", {
+            ...formData.address,
+            user: user
+        });
+
         await showToast('Cadastro concluído com sucesso!');
         window.location.href = "/login";
     };
 
     const prevStep = () => setStep(step - 1);
 
-    const updateFormData = (data: any) => {
-        setFormData({ ...formData, ...data });
+    const updateUserData = (data: Partial<User>) => {
+        setFormData(prev => ({
+            ...prev,
+            user: { ...prev.user, ...data }
+        }));
+    };
+
+    const updateConfirmPassword = (data: string) => {
+        setConfirmPassword(data);
+    };
+
+    const updateAddressData = (data: Partial<Address>) => {
+        setFormData(prev => ({
+            ...prev,
+            address: { ...prev.address, ...data }
+        }));
     };
 
     return (
@@ -56,20 +116,22 @@ export default function SignInComponent() {
             <div className={styles.formContainer}>
                 {step === 1 && 
                     <StepUser 
-                        formData={formData}
-                        updateFormData={updateFormData}
+                        formData={formData.user}
+                        confirmPassword={confirmPassword}
+                        updateFormData={updateUserData}
+                        updateConfirmPassword={updateConfirmPassword}
                     />
                 }
                 {step === 2 && 
                     <StepProfile 
-                        formData={formData}
-                        updateFormData={updateFormData}
+                        formData={formData.user}
+                        updateFormData={updateUserData}
                     />
                 }
                 {step === 3 && 
                     <StepAddress 
-                        formData={formData}
-                        updateFormData={updateFormData}
+                        formData={formData.address}
+                        updateFormData={updateAddressData}
                     />
                 }
                 <div className={styles.buttonContainer}>

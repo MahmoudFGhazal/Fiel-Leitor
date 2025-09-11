@@ -12,14 +12,14 @@ public class VerifyLogin implements ICommand {
     public String execute(FacadeRequest request) {
         User user = (User) request.getEntity();
 
-        if(user.getEmail() == null) {
+        if(user.getEmail() == null || user.getEmail().isEmpty()) {
             return "Email não especificado";
         }
 
-        if(user.getPassword() == null) {
+        if(user.getPassword() == null|| user.getPassword().isEmpty()) {
             return "Senha não especificado";
         }
-
+        System.out.println("Oi");
         return null;
     }
 }

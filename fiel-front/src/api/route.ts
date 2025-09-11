@@ -27,7 +27,7 @@ async function request<T>(method: Method, url: string, data?: Datas): Promise<T>
             const error = json.message;
             throw new Error(error || "Erro no Back");
         }
-
+        
         return json as T;
     } catch(error){
         console.error("Erro na Requisição", error);

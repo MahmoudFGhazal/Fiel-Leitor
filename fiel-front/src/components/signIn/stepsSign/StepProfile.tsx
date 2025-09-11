@@ -20,7 +20,7 @@ export default function StepProfile({ formData, updateFormData }: StepProfilePro
         async function fetchData() {
             try {
                 const genders: Gender[] = await getGenders();
-                console.log(genders)
+
                 setGenderTypes(genders);
             } catch (err) {
                 console.error("Erro ao carregar dados", err);
@@ -41,8 +41,11 @@ export default function StepProfile({ formData, updateFormData }: StepProfilePro
             
             <InputSelect
                 text="Gênero"
-                value={formData.gender || ""}
-                onChange={(val: string) => updateFormData({ gender: val })}
+                value={formData.gender?.id?.toString() || ""}
+                onChange={(val: string) => {
+                    const selectedGender = genderTypes?.find(g => g.id?.toString() === val) || null;
+                    updateFormData({ gender: selectedGender });
+                }}
                 options={
                     genderTypes?.map(g => ({
                         value: g.id?.toString() || "",

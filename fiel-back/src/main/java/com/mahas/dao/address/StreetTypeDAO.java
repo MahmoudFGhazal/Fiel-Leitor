@@ -23,6 +23,7 @@ public class StreetTypeDAO implements IDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
     public SQLResponse query(FacadeRequest request) {
         SQLResponse response = new SQLResponse();
         DomainEntity entity = request.getEntity();
@@ -89,7 +90,6 @@ public class StreetTypeDAO implements IDAO {
             response.setPageCount(totalPage);
 
         } catch (PersistenceException e) {
-            e.printStackTrace();
             throw e;
         }
 

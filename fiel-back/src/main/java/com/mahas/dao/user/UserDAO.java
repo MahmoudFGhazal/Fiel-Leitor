@@ -23,6 +23,7 @@ public class UserDAO implements IDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
     public SQLResponse query(FacadeRequest request) {
         SQLResponse response = new SQLResponse();
         DomainEntity entity = request.getEntity();
@@ -32,7 +33,7 @@ public class UserDAO implements IDAO {
         }
 
         User user = (User) entity;
-
+        System.out.println("Oi2");
         StringBuilder jpql = new StringBuilder("SELECT u FROM User u WHERE 1=1");
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(u) FROM User u WHERE 1=1");
 
@@ -43,19 +44,19 @@ public class UserDAO implements IDAO {
             whereClause.append(" AND u.id = :id");
             parameters.put("id", user.getId());
         }
-        if (user.getName() != null && !user.getName().isBlank()) {
+        if (user.getName() != null && !user.getName().isEmpty()) {
             whereClause.append(" AND LOWER(u.name) LIKE LOWER(:name)");
             parameters.put("name", "%" + user.getName() + "%");
         }
-        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
             whereClause.append(" AND LOWER(u.email) = LOWER(:email)");
             parameters.put("email", user.getEmail());
         }
-        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             whereClause.append(" AND LOWER(u.password) = LOWER(:password)");
             parameters.put("password", user.getPassword());
         }
-        if (user.getCpf() != null && !user.getCpf().isBlank()) {
+        if (user.getCpf() != null && !user.getCpf().isEmpty()) {
             whereClause.append(" AND LOWER(u.cpf) = LOWER(:cpf)");
             parameters.put("cpf", user.getCpf());
         }
@@ -63,7 +64,7 @@ public class UserDAO implements IDAO {
             whereClause.append(" AND u.active = :active");
             parameters.put("active", user.getActive());
         }
-
+        System.out.println("Oi3");
         jpql.append(whereClause);
         countJpql.append(whereClause);
 
@@ -72,9 +73,10 @@ public class UserDAO implements IDAO {
         int offset = (limit != null) ? (page - 1) * limit : 0;
 
         try {
+            System.out.println("Oi4");
             Query query = entityManager.createQuery(jpql.toString(), User.class);
             parameters.forEach(query::setParameter);
-
+            System.out.println("Oi5");
             if (limit != null) {
                 query.setFirstResult(offset);
                 query.setMaxResults(limit);
@@ -88,7 +90,7 @@ public class UserDAO implements IDAO {
             Number totalCount = (Number) countQuery.getSingleResult();
             int totalItems = totalCount.intValue();
             int totalPage = (limit != null) ? (int) Math.ceil((double) totalItems / limit) : 1;
-
+            System.out.println("Oi6");
             if (!resultList.isEmpty()) {
                 if (limit != null && limit == 1) {
                     response.setEntity(resultList.get(0));
@@ -104,13 +106,13 @@ public class UserDAO implements IDAO {
             response.setPageCount(totalPage);
 
         } catch (PersistenceException e) {
-            e.printStackTrace();
             throw e;
         }
 
         return response;
     }
 
+    @Override
     public SQLResponse save(FacadeRequest request) {
         SQLResponse response = new SQLResponse();
 
@@ -128,13 +130,13 @@ public class UserDAO implements IDAO {
 
             response.setEntity(user);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             throw e;
         }
 
         return response;
     }
 
+    @Override
     public SQLResponse delete(FacadeRequest request) {
         SQLResponse response = new SQLResponse();
 
@@ -157,13 +159,13 @@ public class UserDAO implements IDAO {
                 response.setEntity(null);
             }
         } catch (PersistenceException e) {
-            e.printStackTrace();
             throw e;
         }
 
         return response;
     }
 
+    @Override
     public SQLResponse update(FacadeRequest request) {
         SQLResponse response = new SQLResponse();
 
@@ -210,7 +212,6 @@ public class UserDAO implements IDAO {
 
             response.setEntity(existingUser);
         } catch (PersistenceException e) {
-            e.printStackTrace();
             throw e;
         }
 

@@ -41,30 +41,40 @@ export default function LoginComponent() {
             name: null,
             phoneNumber: null
         }
-        console.log(JSON.stringify(loginData, null, 2))
+
         const res = await api.post<ApiResponse>('/user/login', loginData);
 
+        if(res.message) {
+            alert(res.message);
+            return;
+        }
+
         const data = res.data;
-        console.log(JSON.stringify(data, null, 2))
-        if(data.entity) {
 
-            const user = data.entity as User;
-
-            if(!user.active) {
-                await showToast('Usuario Inativado!');
-                return;
-            }
-
-            await showToast('Login efetuado com sucesso!');
-            window.location.href = "/";
-
-            if (formData.refresh) {
-                localStorage.setItem('currentUser', JSON.stringify(user.id));
-            } else {
-                sessionStorage.setItem('currentUser', JSON.stringify(user.id));
-            }
-        }else {
+        if (!data) {
             alert('Email ou senha incorretos.');
+            return;
+        }
+
+        const user = (data.entity ?? data) as User | null;
+
+        if (!user || !user.id) {
+            alert('Email ou senha incorretos.');
+            return;
+        }
+
+        if (!user.active) {
+            await showToast('Usuario Inativado!');
+            return;
+        }
+
+        await showToast('Login efetuado com sucesso!');
+        window.location.href = "/";
+
+        if (formData.refresh) {
+            localStorage.setItem('currentUser', JSON.stringify(user.id));
+        } else {
+            sessionStorage.setItem('currentUser', JSON.stringify(user.id));
         }
     }
     

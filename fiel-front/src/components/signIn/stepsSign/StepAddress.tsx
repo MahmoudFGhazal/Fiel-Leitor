@@ -32,19 +32,26 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
         fetchData();
     }, []);
 
-    const currentAddress = formData.addresses?.[0] as Address | undefined;
-        
+    const currentAddress = formData as Address;
+
     const handleChange = <K extends keyof Address>(field: K, value: Address[K]) => {
         const updatedAddress = { ...currentAddress, [field]: value };
-        updateFormData({ addresses: [updatedAddress] });
+        updateFormData(updatedAddress);
     };
 
     return (
         <div className={`${styles.formStep} ${styles.formAddress}`}>
             <InputText
                 type='text'
+                text="Apelido do Endereço"
+                value={currentAddress?.nickname || ""}
+                onChange={(val) => handleChange('nickname', val)}
+            />
+            
+            <InputText
+                type='text'
                 text="CEP"
-                value={formData.addresses?.[0]?.zip || ""}
+                value={currentAddress?.zip || ""}
                 onChange={(val) => handleChange('zip', val)}
             />
 
@@ -75,43 +82,50 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
             <InputText
                 type='text'
                 text="Rua"
-                value={formData.addresses?.[0]?.street || ""}
+                value={currentAddress?.street || ""}
                 onChange={(val) => handleChange('street', val)}
             />
 
             <InputText
                 type='text'
                 text="Número"
-                value={formData.addresses?.[0]?.number || ""}
+                value={currentAddress?.number || ""}
                 onChange={(val) => handleChange('number', val)}
             />
 
             <InputText
                 type='text'
                 text="Bairro"
-                value={formData.addresses?.[0]?.neighborhood || ""}
+                value={currentAddress?.neighborhood || ""}
                 onChange={(val) => handleChange('neighborhood', val)}
             />
 
             <InputText
                 type='text'
                 text="Cidade"
-                value={formData.addresses?.[0]?.city || ""}
+                value={currentAddress?.city || ""}
                 onChange={(val) => handleChange('city', val)}
             />
 
             <InputText
                 type='text'
                 text="Estado"
-                value={formData.addresses?.[0]?.state || ""}
+                value={currentAddress?.state || ""}
                 onChange={(val) => handleChange('state', val)}
             />
 
             <InputText
                 type='text'
                 text="País"
-                value={formData.addresses?.[0]?.country || ""}
+                value={currentAddress?.country || ""}
                 onChange={(val) => handleChange('country', val)}
+            />
+
+            <InputText
+                type='text'
+                text="Complemento"
+                value={currentAddress?.complement || ""}
+                onChange={(val) => handleChange('complement', val)}
             />
         </div>
     );

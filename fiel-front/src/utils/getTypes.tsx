@@ -3,6 +3,7 @@ import api from "@/api/route";
 
 export async function getGenders(): Promise<Gender[]> {
     const response = await api.get<ApiResponse>(`/gender/all`);
+    console.log(JSON.stringify(response, null, 2))
     return (response.data.entities as Gender[]) ?? [];
 }
 

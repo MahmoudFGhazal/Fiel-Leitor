@@ -3,10 +3,12 @@ import InputText from '@/components/inputs/inputText';
 
 type StepUserProps = {
     formData: any;
+    confirmPassword: string;
     updateFormData: (data: any) => void;
+    updateConfirmPassword: (data: string) => void;
 };
 
-export default function StepUser({ formData, updateFormData }: StepUserProps) {
+export default function StepUser({ formData, confirmPassword, updateFormData, updateConfirmPassword }: StepUserProps) {
     let oi: string = '';
     
     return (
@@ -28,8 +30,8 @@ export default function StepUser({ formData, updateFormData }: StepUserProps) {
             <InputText
                 type="password"
                 text="Confirmar Senha"
-                value={oi}
-                onChange={() => {}}
+                value={confirmPassword}
+                onChange={(val) => updateConfirmPassword(val)}
             />
         </div>
     );
