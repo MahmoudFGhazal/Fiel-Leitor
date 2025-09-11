@@ -19,7 +19,7 @@ public class VerifyLogin implements ICommand {
         if(user.getPassword() == null|| user.getPassword().isEmpty()) {
             return "Senha não especificado";
         }
-        System.out.println("Oi");
+
         return null;
     }
 }

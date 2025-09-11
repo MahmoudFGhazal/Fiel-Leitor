@@ -16,7 +16,7 @@ public class VerifyDeleteAddress implements ICommand {
     @Override
     public String execute(FacadeRequest request) {
         Address address = (Address) request.getEntity();
-        System.out.println(address.getId());
+
         if(address.getId() == null) {
             return "Id do endereço não especificado";
         }

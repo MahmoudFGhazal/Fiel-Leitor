@@ -33,7 +33,6 @@ public class UserDAO implements IDAO {
         }
 
         User user = (User) entity;
-        System.out.println("Oi2");
         StringBuilder jpql = new StringBuilder("SELECT u FROM User u WHERE 1=1");
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(u) FROM User u WHERE 1=1");
 
@@ -64,7 +63,6 @@ public class UserDAO implements IDAO {
             whereClause.append(" AND u.active = :active");
             parameters.put("active", user.getActive());
         }
-        System.out.println("Oi3");
         jpql.append(whereClause);
         countJpql.append(whereClause);
 
@@ -73,10 +71,8 @@ public class UserDAO implements IDAO {
         int offset = (limit != null) ? (page - 1) * limit : 0;
 
         try {
-            System.out.println("Oi4");
             Query query = entityManager.createQuery(jpql.toString(), User.class);
             parameters.forEach(query::setParameter);
-            System.out.println("Oi5");
             if (limit != null) {
                 query.setFirstResult(offset);
                 query.setMaxResults(limit);
@@ -90,7 +86,7 @@ public class UserDAO implements IDAO {
             Number totalCount = (Number) countQuery.getSingleResult();
             int totalItems = totalCount.intValue();
             int totalPage = (limit != null) ? (int) Math.ceil((double) totalItems / limit) : 1;
-            System.out.println("Oi6");
+
             if (!resultList.isEmpty()) {
                 if (limit != null && limit == 1) {
                     response.setEntity(resultList.get(0));

@@ -70,6 +70,7 @@ public class Facade extends FacadeAbstract implements IFacade {
         String nameEntity = entity.getClass().getName();
 
         String error = runRules(request);
+
         if(error != null) {
             response.setTypeResponse(TypeResponse.CLIENT_ERROR);
             response.setMessage(error);

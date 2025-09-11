@@ -58,7 +58,7 @@ public class UserController {
         request.setLimit(1);
         request.setCommand(verifyLogin);
         
-        FacadeResponse response = facade.save(request);
+        FacadeResponse response = facade.query(request);
 
         return ResponseEntity.ok(response);
     }
