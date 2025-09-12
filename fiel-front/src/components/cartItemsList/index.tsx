@@ -2,7 +2,7 @@
 import { FaTrash } from 'react-icons/fa';
 import styles from './cartItemsList.module.css';
 import QuantityButtons from '@/components/quantityButton';
-import Button from '@/components/button';
+import Button from '@/components/buttonComponents/button';
 import { useMemo, useState } from 'react';
 
 type CartItem = {

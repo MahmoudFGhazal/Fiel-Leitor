@@ -5,7 +5,7 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import bookImage from '@/../public/book.png';
 import { BookData, CartItem } from '@/modal/productModal';
-import Button from '@/components/button';
+import Button from '@/components/buttonComponents/button';
 import QuantityButtons from '@/components/quantityButton';
 import { useSearchParams } from 'next/navigation';
 

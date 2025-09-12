@@ -8,25 +8,14 @@ import styles from './header.module.css';
 import { useEffect, useState } from 'react';
 import CartSidebar from "./cart";
 import Link from "next/link";
+import { useGlobal } from "@/context/GlobalContext";
 
 const size = 20;
 
 export default function Header(){
     const [searchQuery, setSearchQuery] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
-
-    useEffect(() => {
-        const currentUser =
-            JSON.parse(localStorage.getItem('currentUser') || 'null') ||
-            JSON.parse(sessionStorage.getItem('currentUser') || 'null');
-
-        if (currentUser) {
-            setIsLoggedIn(true);
-        } else {
-            setIsLoggedIn(false);
-        }
-    }, []);
+    const { currentUser, setCurrentUser } = useGlobal();
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -35,8 +24,7 @@ export default function Header(){
 
     const handleLogout = () => {
         localStorage.removeItem('currentUser');
-        sessionStorage.removeItem('currentUser');
-        setIsLoggedIn(false);
+        setCurrentUser(0);
         window.location.href = '/login'; 
     };
 
@@ -70,23 +58,23 @@ export default function Header(){
                     </form>
                 </div>
                 <div className={styles.right}>
-                    {isLoggedIn ? (
+                    {currentUser ? ( 
                         <div className={styles.userHeaderOptions}>
                             <p className={styles.cartButton} onClick={toggleCart}>
                                 <FaShoppingCart size={size} />    
                             </p>
-                            <a href="/config" className={styles.link}>
+                            <Link href="/config" className={styles.link}>
                                 <FaGear size={size} />
-                            </a>
+                            </Link>
                             <p className={styles.logoutButton} onClick={handleLogout}>
                                 <FaDoorOpen size={size} />
                             </p>
                         </div>
                     ) : (
                         <div className={styles.userHeaderOptions}>
-                            <a href="/login" className={styles.link}>
+                            <Link href="/login" className={styles.link}>
                                 <IoLogIn size={size} />
-                            </a>
+                            </Link>
                         </div>
                     )}
                 </div>

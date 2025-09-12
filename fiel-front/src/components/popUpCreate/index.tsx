@@ -4,7 +4,7 @@ import { BookData, Categories } from '@/modal/productModal';
 import styles from './createBookPopup.module.css';
 import Input from '@/components/input';
 import { CategoriesPortuguese } from '@/modal/translate/portuguses';
-import Button from '@/components/button';
+import Button from '@/components/buttonComponents/button';
 
 interface Props {
     onClose: () => void;

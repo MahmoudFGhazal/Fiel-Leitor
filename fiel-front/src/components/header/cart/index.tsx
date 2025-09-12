@@ -3,7 +3,7 @@ import { FaTrash } from "react-icons/fa";
 import { useEffect, useState } from 'react';
 import styles from './cart.module.css';
 import QuantityButtons from "@/components/quantityButton";
-import Button from "@/components/button";
+import Button from "@/components/buttonComponents/button";
 import { CartItem } from "@/modal/productModal";
 
 type Props = {

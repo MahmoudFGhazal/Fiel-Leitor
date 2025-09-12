@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import styles from './selectAddressMethod.module.css';
 import { AddressData } from '@/modal/addressModal';
-import Button from '@/components/button';
+import Button from '@/components/buttonComponents/button';
 import PopUpAddress from '../config/addressConfig/popUpAddress';
 
 export default function SelectAddressMethod() {

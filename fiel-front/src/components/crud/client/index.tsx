@@ -1,7 +1,7 @@
 'use client'
 import styles from './client.module.css';
 import { useEffect, useState } from "react";
-import ActionButton from '@/components/actionButton';
+import ActionButton from '@/components/buttonComponents/actionButton';
 import { ApiResponse, User } from '@/api/objects';
 import api from '@/api/route';
 

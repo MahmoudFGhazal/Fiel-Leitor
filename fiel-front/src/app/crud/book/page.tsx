@@ -2,7 +2,7 @@
 import { BookData } from '@/modal/productModal';
 import styles from './page.module.css';
 import { useEffect, useState } from "react";
-import ActionButton from '@/components/actionButton';
+import ActionButton from '@/components/buttonComponents/actionButton';
 import CreateBookPopup from '@/components/popUpCreate';
 
 export default function CRUDBookComponent() {

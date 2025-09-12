@@ -5,7 +5,7 @@ import StepUser from "./stepsSign/StepUser";
 import StepAddress from "./stepsSign/StepAddress";
 import StepProfile from "./stepsSign/StepProfile";
 import BoxInput from '../formBox';
-import Button from '../button';
+import Button from '../buttonComponents/button';
 import { Address, ApiResponse, User } from '@/api/objects';
 import CreateAccountValidator from '@/utils/validator/createAccountValidator';
 import showToast from '@/utils/showToast';

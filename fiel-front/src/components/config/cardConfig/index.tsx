@@ -1,4 +1,4 @@
-'use client';
+/* 'use client';
 import { useEffect, useState } from "react";
 import { CardData } from "@/modal/cardModal";
 import styles from './cardConfig.module.css';
@@ -177,3 +177,4 @@ export default function CardConfig() {
         </div>
     );
 }
+ */

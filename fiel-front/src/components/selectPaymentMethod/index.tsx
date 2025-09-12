@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import styles from './selectPaymentMethod.module.css';
 import { CardData } from '@/modal/cardModal';
-import Button from '@/components/button';
+import Button from '@/components/buttonComponents/button';
 import PopUpCard from '../config/cardConfig/popUpCard';
 
 interface SelectedCard {

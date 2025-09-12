@@ -4,9 +4,16 @@ import SelectPaymentMethod from '@/components/selectPaymentMethod';
 import CartItemsList from '@/components/cartItemsList';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { CartItem } from '@/modal/productModal';
-import Button from '@/components/button';
+import Button from '@/components/buttonComponents/button';
 import SelectAddressMethod from '@/components/selectAddressMethod';
+
+export interface CartItem {
+    id: number;         
+    name: string;        
+    price: number;       
+    quantity: number;  
+    imageUrl?: string;   
+}
 
 export default function Sale() {
     const searchParams = useSearchParams();

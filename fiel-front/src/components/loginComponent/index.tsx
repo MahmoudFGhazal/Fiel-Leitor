@@ -1,14 +1,15 @@
 'use client'
 import { useState } from 'react';
 import styles from './loginComponent.module.css';
-
-import Button from '@/components/button';
+const { setCurrentUser } = useGlobal();
+import Button from '@/components/buttonComponents/button';
 import FormBox from '@/components/formBox';
 import { ApiResponse, User } from '@/api/objects';
 import InputText from '../inputs/inputText';
 import InputCheckBox from '../inputs/inputCheckBox';
 import api from '@/api/route';
 import showToast from '@/utils/showToast';
+import { useGlobal } from '@/context/GlobalContext';
 
 interface LoginData {
     email: string,
@@ -73,8 +74,9 @@ export default function LoginComponent() {
 
         if (formData.refresh) {
             localStorage.setItem('currentUser', JSON.stringify(user.id));
+            setCurrentUser(user.id);
         } else {
-            sessionStorage.setItem('currentUser', JSON.stringify(user.id));
+            setCurrentUser(user.id);
         }
     }
     

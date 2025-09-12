@@ -1,7 +1,7 @@
 'use client';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import styles from './quantityButtons.module.css'; 
-import Button from '../button';
+import Button from '../buttonComponents/button';
 
 interface QuantityButtonsProps {
   quantity: number;

@@ -1,4 +1,4 @@
-'use client'
+/* 'use client'
 import { Genders, UserData } from '@/modal/userModal';
 import { GendersPortuguese } from '@/modal/translate/portuguses';
 import styles from './userFormEdit.module.css';
@@ -104,3 +104,4 @@ export default function UserForm({ user, disable, onChange }: UserFormProps) {
         </div>
     );
 }
+ */

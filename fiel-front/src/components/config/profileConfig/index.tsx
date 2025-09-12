@@ -1,13 +1,14 @@
 'use client'
+import { ApiResponse, User } from '@/api/objects';
 import styles from './profileConfig.module.css';
-import { UserData } from "@/modal/userModal";
 import { useEffect, useState } from "react";
-import UserFormEdit from "../../userFormEdit";
+import api from '@/api/route';
+import { useGlobal } from '@/context/GlobalContext';
 
 export default function ProfileConfig() {
-    const [user, setUser] = useState<UserData | null>(null);
+    const { currentUser, setCurrentUser } = useGlobal();
     const [disable, setDisable] = useState<boolean>(true);
-    const [editedUser, setEditedUser] = useState<UserData>({
+    const [editedUser, setEditedUser] = useState<User>({
         id: 0,
         email: "",
         password: "",
@@ -16,52 +17,66 @@ export default function ProfileConfig() {
         birthday: null,
         cpf: "",
         phoneNumber: "",
-        addresses: [],
-        cards: [],
-        isActive: true
+        active: true
     });
 
     useEffect(() => {
-        const localUser = localStorage.getItem('currentUser');
-        const sessionUser = sessionStorage.getItem('currentUser');
+        const fetchUser = async () => {
+            try {
+                const res = await api.get<ApiResponse>(`/user?id=${currentUser}`);
+                if(!res.data) {
+                    return;
+                }
 
-        const currentUser = localUser ? JSON.parse(localUser) 
-                                      : sessionUser ? JSON.parse(sessionUser) 
-                                      : null;
+                const entity = res.data.entity as User;
 
-        if (currentUser) {
-            setUser(currentUser);
-            setEditedUser(currentUser);
-        }
+                if(!entity) {
+                    return;
+                }
+
+                setEditedUser(entity);
+            } catch (err) {
+                console.error(err);
+                alert("Erro ao carregar usuário");
+            }
+        };
+
+        fetchUser();
     }, []);
     
-    if(!user) {
-        return <p>Nenhum usuário logado.</p>;
-    }
-    
-    const handleChange = (field: string, value: string) => {
+    const handleChange = (field: keyof User, value: string) => {
         setEditedUser(prev => ({ ...prev, [field]: value }));
     };
 
     const cancelEdit = () => {
-        setEditedUser(user);
         setDisable(true);
+
+        if (currentUser) {
+            const storedUser = JSON.parse(localStorage.getItem('currentUser') || 'null') as User;
+            if (storedUser?.id === currentUser) {
+                setEditedUser(storedUser);
+            }
+        }
     };
 
     const toggleEdit = () => {
-        if (!disable) {
-            saveUser();
-        }
+        if (!disable) saveUser();
         setDisable(!disable);
     };
 
-    const saveUser = () => {
-        setUser(editedUser);
+    const saveUser = async () => {
+        try {
+            await api.post("/user/update", { data: editedUser });
 
-        localStorage.setItem('currentUser', JSON.stringify(editedUser));
-        sessionStorage.setItem('currentUser', JSON.stringify(editedUser));
+            //setCurrentUser(editedUser.id);
+            localStorage.setItem('currentUser', JSON.stringify(editedUser));
 
-        alert("Dados atualizados com sucesso!");
+            alert("Dados atualizados com sucesso!");
+            setDisable(true);
+        } catch (err) {
+            console.error(err);
+            alert("Erro ao salvar usuário");
+        }
     };
 
     return (
@@ -84,11 +99,11 @@ export default function ProfileConfig() {
                     )
                 }
             </div>
-            <UserFormEdit
+            {/* <UserFormEdit
                 user={editedUser} 
                 disable={disable} 
                 onChange={handleChange} 
-            />
+            /> */}
         </div>
     );
-}
+} 

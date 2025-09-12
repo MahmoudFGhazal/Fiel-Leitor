@@ -1,40 +1,25 @@
-'use client'
-import { useState } from 'react';
-import styles from './page.module.css';
+'use server'
 import ProfileConfig from '@/components/config/profileConfig';
-import Button from '@/components/button';
-import AddressConfig from '@/components/config/addressConfig';
-import CardConfig from '@/components/config/cardConfig';
+import styles from './page.module.css';
+import ButtonLink from '@/components/buttonComponents/buttonLink';
 
 type Tab = 'profile' | 'addresses' | 'cards';
 
-export default function ConfigComponent() {
-    const [activeTab, setActiveTab] = useState<Tab>('profile');
+export default async function Config({ searchParams }: { searchParams: { tab?: Tab } }) {
+    const activeTab = searchParams.tab ?? 'profile';
 
     return (
         <div className={styles.container}>
             <div className={styles.sideBar}>
-                <Button
-                    type="button"
-                    text="Profile"
-                    onClick={() => setActiveTab('profile')}
-                />
-                <Button
-                    type="button"
-                    text="Endereços"
-                    onClick={() => setActiveTab('addresses')}
-                />
-                <Button
-                    type="button"
-                    text="Cartões"
-                    onClick={() => setActiveTab('cards')}
-                />
+                <ButtonLink text="Profile" href="?tab=profile" />
+                <ButtonLink text="Endereços" href="?tab=addresses" />
+                <ButtonLink text="Cartões" href="?tab=cards" />
             </div>
 
             <div className={styles.tabContent}>
                 {activeTab === 'profile' && <ProfileConfig />}
-                {activeTab === 'addresses' && <AddressConfig />}
-                {activeTab === 'cards' && <CardConfig />}
+                {/* {activeTab === 'addresses' && <AddressConfig />}
+                {activeTab === 'cards' && <CardConfig />} */}
             </div>
         </div>
     );
