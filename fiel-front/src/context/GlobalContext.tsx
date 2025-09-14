@@ -1,4 +1,5 @@
 "use client";
+import styles from './GlobalContext.module.css';
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 type GlobalContextType = {
@@ -20,7 +21,7 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
 
     return (
         <GlobalContext.Provider value={{ currentUser, setCurrentUser }}>
-            <main className="content">{children}</main>
+            <main className={styles.content}>{children}</main>
         </GlobalContext.Provider>
     );
 }

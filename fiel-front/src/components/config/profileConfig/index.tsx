@@ -70,7 +70,6 @@ export default function ProfileConfig() {
 
     const saveUser = async () => {
         try {
-            console.log(JSON.stringify(editedUser, null, 2))
             await api.put("/user", { data: editedUser });
 
             alert("Dados atualizados com sucesso!");

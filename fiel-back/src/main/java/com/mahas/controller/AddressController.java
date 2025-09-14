@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.rules.VerifyCreateAddress;
 import com.mahas.command.rules.VerifyDeleteAddress;
+import com.mahas.command.rules.VerifyGetUserByUser;
 import com.mahas.command.rules.VerifyUpdateAddress;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.TypeResponse;
 import com.mahas.domain.address.Address;
+import com.mahas.domain.user.User;
 import com.mahas.facade.IFacade;
 
 @Controller
@@ -37,6 +39,9 @@ public class AddressController {
 
     @Autowired
     private VerifyUpdateAddress verifyUpdateAddress;
+
+    @Autowired
+    private VerifyGetUserByUser verifyGetUserByUser;
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getAddress(
@@ -71,16 +76,22 @@ public class AddressController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<FacadeResponse> getAddresses(
+    @GetMapping("/user")
+    public ResponseEntity<FacadeResponse> getAddressesByUser(
+            @RequestParam(value = "userId", required = false) Integer userId,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit
         ) {
         FacadeRequest request = new FacadeRequest();
 
+        request.setCommand(verifyGetUserByUser);
         request.setLimit(limit);
         request.setPage(page);
-        request.setEntity(new Address());
+        Address address = new Address();
+        User user = new User();
+        user.setId(userId);
+        address.setUser(user);
+        request.setEntity(address); 
 
         FacadeResponse response = facade.query(request);
         

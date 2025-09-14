@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react';
 import styles from './loginComponent.module.css';
-const { setCurrentUser } = useGlobal();
 import Button from '@/components/buttonComponents/button';
 import FormBox from '@/components/formBox';
 import { ApiResponse, User } from '@/api/objects';
@@ -10,6 +9,7 @@ import InputCheckBox from '../inputComponents/inputCheckBox';
 import api from '@/api/route';
 import showToast from '@/utils/showToast';
 import { useGlobal } from '@/context/GlobalContext';
+import { useRouter } from 'next/navigation';
 
 interface LoginData {
     email: string,
@@ -18,6 +18,8 @@ interface LoginData {
 }
 
 export default function LoginComponent() {
+    const router = useRouter();
+    const { setCurrentUser, currentUser } = useGlobal();
     const [formData, setFormData] = useState<LoginData>({
         email: '',
         password: '',
@@ -56,9 +58,10 @@ export default function LoginComponent() {
             alert('Email ou senha incorretos.');
             return;
         }
-
+        
         const user = (data.entity ?? data) as User | null;
-
+        console.log("oi")
+        console.log(user?.id)
         if (!user || !user.id) {
             alert('Email ou senha incorretos.');
             return;
@@ -70,14 +73,17 @@ export default function LoginComponent() {
         }
 
         await showToast('Login efetuado com sucesso!');
-        window.location.href = "/";
 
         if (formData.refresh) {
             localStorage.setItem('currentUser', JSON.stringify(user.id));
-            setCurrentUser(user.id);
-        } else {
-            setCurrentUser(user.id);
-        }
+            console.log("tchau")
+        } 
+        setCurrentUser(user.id);
+
+        router.push("/");
+
+        console.log(currentUser)
+        await showToast("oii")
     }
     
     return (

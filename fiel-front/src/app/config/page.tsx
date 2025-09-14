@@ -2,11 +2,17 @@
 import ProfileConfig from '@/components/config/profileConfig';
 import styles from './page.module.css';
 import ButtonLink from '@/components/buttonComponents/buttonLink';
+import AddressConfig from '@/components/config/addressConfig';
 
 type Tab = 'profile' | 'addresses' | 'cards';
 
-export default async function Config({ searchParams }: { searchParams: { tab?: Tab } }) {
-    const activeTab = searchParams.tab ?? 'profile';
+export default async function Config({
+        searchParams,
+    }: {
+        searchParams: Promise<{ tab?: Tab }>;
+}) {
+    const params = await searchParams;
+    const activeTab = params.tab ?? 'profile';
 
     return (
         <div className={styles.container}>
@@ -18,8 +24,8 @@ export default async function Config({ searchParams }: { searchParams: { tab?: T
 
             <div className={styles.tabContent}>
                 {activeTab === 'profile' && <ProfileConfig />}
-                {/* {activeTab === 'addresses' && <AddressConfig />}
-                {activeTab === 'cards' && <CardConfig />} */}
+                {activeTab === 'addresses' && <AddressConfig />}
+                {/* {activeTab === 'cards' && <CardConfig />} */}
             </div>
         </div>
     );

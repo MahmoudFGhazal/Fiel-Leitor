@@ -45,6 +45,11 @@ public class AddressDAO implements IDAO {
             parameters.put("id", address.getId());
         }
 
+        if (address.getUser() != null && address.getUser().getId() != null) {
+            whereClause.append(" AND a.user.id = :userId");
+            parameters.put("userId", address.getUser().getId());
+        }
+
         jpql.append(whereClause);
         countJpql.append(whereClause);
 

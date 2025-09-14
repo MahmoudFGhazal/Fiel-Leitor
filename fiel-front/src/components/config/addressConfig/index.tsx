@@ -10,8 +10,8 @@ import { useGlobal } from '@/context/GlobalContext';
 
 export default function AddressConfig() {
     const { currentUser } = useGlobal();
-    const [user, setUser] = useState<User>();
-    const [addresses, setAddresses] = useState<Address[]>();
+    const [user, setUser] = useState<User | null>(null);
+    const [addresses, setAddresses] = useState<Address[]>([]);
     const [editedAddress, setEditedAddress] = useState<Address | null>();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,7 +20,7 @@ export default function AddressConfig() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await api.post<ApiResponse>('/user/login', { params: currentUser });
+                const res = await api.get<ApiResponse>('/address/user', { params: { userId: currentUser } });
 
                 if(res.message) {
                     alert(res.message);
@@ -29,18 +29,14 @@ export default function AddressConfig() {
 
                 const data = res.data;
 
-                if (!data) {
-                    alert('Nenhum Endereço Encontrado.');
-                    return;
-                }
-
                 const entities = (data.entities ?? data) as Address[] | null;
 
                 if (!entities?.length) {
                     alert('Nenhum Endereço Encontrado.');
                     return;
                 }
-
+                console.log("oi")
+                console.log(JSON.stringify(entities, null, 2))
                 setAddresses(entities);
             } catch (err) {
                 console.error("Erro ao carregar dados", err);
@@ -50,9 +46,9 @@ export default function AddressConfig() {
         fetchData();
     }, []);
 
-    const openEditModal = (address: Address) => {
+    const openEditModal = (address: Address, editable = false) => {
         setEditedAddress({ ...address });
-        setIsFormEditable(false);
+        setIsFormEditable(editable);
         setIsModalOpen(true);
     };
 
@@ -106,10 +102,6 @@ export default function AddressConfig() {
         localStorage.setItem('user', JSON.stringify(updatedUser));
     };
 
-    if (!user) {
-        return <p>Sem usuário logado.</p>;
-    }
-
     if (!addresses || addresses.length === 0) {
         return <p>Sem endereços cadastrados.</p>;
     }
@@ -123,6 +115,8 @@ export default function AddressConfig() {
                     onClick={() => {
                         setEditedAddress({
                             id: Date.now(),
+                            user: null,
+                            nickname: '',
                             street: '',
                             number: '',
                             neighborhood: '',
@@ -131,8 +125,8 @@ export default function AddressConfig() {
                             country: '',
                             zip: '',
                             complement: '',
-                            typeResidence: null,
-                            typeStreet: null
+                            residenceType: null,
+                            streetType: null
                         });
                         setIsFormEditable(true);   
                         setIsModalOpen(true);
@@ -162,7 +156,7 @@ export default function AddressConfig() {
                                     </button>
                                     <button 
                                         className={styles.deleteButton} 
-                                        onClick={() => handleDelete(addr.id)}
+                                        onClick={() => handleDelete(addr.id!)}
                                     >
                                         Apagar
                                     </button>
