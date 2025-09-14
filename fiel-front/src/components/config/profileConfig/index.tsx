@@ -4,21 +4,14 @@ import styles from './profileConfig.module.css';
 import { useEffect, useState } from "react";
 import api from '@/api/route';
 import { useGlobal } from '@/context/GlobalContext';
+import UserFormEdit from '@/components/forms/userFormEdit';
 
 export default function ProfileConfig() {
-    const { currentUser, setCurrentUser } = useGlobal();
+    const { currentUser } = useGlobal();
     const [disable, setDisable] = useState<boolean>(true);
-    const [editedUser, setEditedUser] = useState<User>({
-        id: 0,
-        email: "",
-        password: "",
-        name: "",
-        gender: null,
-        birthday: null,
-        cpf: "",
-        phoneNumber: "",
-        active: true
-    });
+    const [editedUser, setEditedUser] = useState<User>();
+    const [user, setUser] = useState<User>();
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -34,29 +27,40 @@ export default function ProfileConfig() {
                     return;
                 }
 
+                setUser(entity);
                 setEditedUser(entity);
             } catch (err) {
                 console.error(err);
                 alert("Erro ao carregar usuário");
+            }  finally {
+                setLoading(false);
             }
         };
 
         fetchUser();
     }, []);
     
-    const handleChange = (field: keyof User, value: string) => {
-        setEditedUser(prev => ({ ...prev, [field]: value }));
+    const handleChange = (field: string, value: string) => {
+        setEditedUser(prev => {
+            if (!prev) return prev;
+
+            if (field === "gender") {
+                return {
+                    ...prev,
+                    gender: { id: Number(value) } as any,
+                };
+            }
+
+            return {
+                ...prev,
+                [field as keyof User]: value,
+            };
+        });
     };
 
     const cancelEdit = () => {
         setDisable(true);
-
-        if (currentUser) {
-            const storedUser = JSON.parse(localStorage.getItem('currentUser') || 'null') as User;
-            if (storedUser?.id === currentUser) {
-                setEditedUser(storedUser);
-            }
-        }
+        setEditedUser(user);
     };
 
     const toggleEdit = () => {
@@ -66,10 +70,8 @@ export default function ProfileConfig() {
 
     const saveUser = async () => {
         try {
-            await api.post("/user/update", { data: editedUser });
-
-            //setCurrentUser(editedUser.id);
-            localStorage.setItem('currentUser', JSON.stringify(editedUser));
+            console.log(JSON.stringify(editedUser, null, 2))
+            await api.put("/user", { data: editedUser });
 
             alert("Dados atualizados com sucesso!");
             setDisable(true);
@@ -79,14 +81,16 @@ export default function ProfileConfig() {
         }
     };
 
+    if (loading) return <p>Carregando...</p>;
+
     return (
         <div>
             <div className={styles.container}>
                 <h1>Configurações da Conta</h1>
                 {disable ? (
-                    <p className={styles.editButton} onClick={toggleEdit}>
-                        Editar
-                    </p> 
+                        <p className={styles.editButton} onClick={toggleEdit}>
+                            Editar
+                        </p> 
                     ) : (
                         <div className={styles.cancelContainer}>
                             <p className={styles.editButton} onClick={toggleEdit}>
@@ -99,11 +103,13 @@ export default function ProfileConfig() {
                     )
                 }
             </div>
-            {/* <UserFormEdit
-                user={editedUser} 
-                disable={disable} 
-                onChange={handleChange} 
-            /> */}
+            {editedUser && (
+                <UserFormEdit
+                    user={editedUser} 
+                    disable={disable} 
+                    onChange={handleChange} 
+                /> 
+            )} 
         </div>
     );
 } 

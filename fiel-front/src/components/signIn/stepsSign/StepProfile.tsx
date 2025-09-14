@@ -2,11 +2,11 @@
 import { GendersPortuguese } from '@/translate/portuguses';
 import styles from '../signIn.module.css';
 import { Genders } from '@/translate/base';
-import InputText from '@/components/inputs/inputText';
+import InputText from '@/components/inputComponents/inputText';
 import { useEffect, useState } from 'react';
 import { Gender } from '@/api/objects';
 import { getGenders } from '@/utils/getTypes';
-import InputSelect from '@/components/inputs/inputSelect';
+import InputSelect from '@/components/inputComponents/inputSelect';
 
 type StepProfileProps = {
     formData: any;

@@ -1,5 +1,5 @@
 import styles from '../signIn.module.css';
-import InputText from '@/components/inputs/inputText';
+import InputText from '@/components/inputComponents/inputText';
 
 type StepUserProps = {
     formData: any;

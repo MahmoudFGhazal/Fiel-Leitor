@@ -72,7 +72,7 @@ public class UserController {
             @RequestParam(value = "userId", required = false) Integer id
         ) {
         FacadeRequest request = new FacadeRequest();
-        
+
         User user = new User();
         if(id != null) {
             user.setId(id);
@@ -82,20 +82,12 @@ public class UserController {
         request.setLimit(1);
 
         FacadeResponse response = facade.query(request);
-        
-        if (response.getData().getTotalItem() == 0) {
+
+        if (response.getData().getEntity() == null) {
             response.setMessage("Usuário não encontrado");
             response.setTypeResponse(TypeResponse.CONFLICT);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(response);
-        }
-
-        if (response.getData().getTotalItem() > 1) {
-            response.setMessage("Mais de um usuário encontrado para o ID informado");
-            response.setTypeResponse(TypeResponse.CONFLICT);
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
                     .body(response);
         }
 
@@ -158,7 +150,16 @@ public class UserController {
         requestUser.setEmail(null);
         requestUser.setPassword(null);
         requestUser.setCpf(null);
-
+        System.out.println("=== CAMPOS INDIVIDUAIS ===");
+        System.out.println("Id" + user.getId());
+        System.out.println("Name: " + user.getName());
+        System.out.println("Email: " + user.getEmail());
+        System.out.println("CPF: " + user.getCpf());
+        System.out.println("Password: " + user.getPassword());
+        System.out.println("Gender ID: " + (user.getGender() != null ? user.getGender().getId() : null));
+        System.out.println("Gender Name: " + (user.getGender() != null ? user.getGender().getGender() : null));
+        System.out.println("Birthday: " + user.getBirthday());
+        System.out.println("Phone: " + user.getPhoneNumber());
         request.setEntity(requestUser);
         
         FacadeResponse response = facade.update(request);

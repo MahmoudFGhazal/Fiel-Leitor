@@ -4,8 +4,8 @@ import styles from '../signIn.module.css';
 import { TypeResidencesPortuguese, TypeStreetsPortuguese } from '@/translate/portuguses';
 import { useEffect, useState } from 'react';
 import { getResidenceTypes, getStreetTypes } from '@/utils/getTypes';
-import InputSelect from '@/components/inputs/inputSelect';
-import InputText from '@/components/inputs/inputText';
+import InputSelect from '@/components/inputComponents/inputSelect';
+import InputText from '@/components/inputComponents/inputText';
 
 type StepAddressProps = {
     formData: any;

@@ -1,36 +1,56 @@
-/* 'use client';
-import { useEffect, useState } from "react";
-import { UserData } from "@/modal/userModal";
+'use client';
+import api from '@/api/route';
 import styles from './addressConfig.module.css';
-import { AddressData } from "@/modal/addressModal";
-import PopUpAddress from "./popUpAddress";
-import Button from "@/components/button";
-import ActionButton from "@/components/actionButton";
+import { Address, ApiResponse, User } from "@/api/objects";
+import ActionButton from "@/components/buttonComponents/actionButton";
+import Button from "@/components/buttonComponents/button";
+import { useEffect, useState } from "react";
+import { useGlobal } from '@/context/GlobalContext';
+
 
 export default function AddressConfig() {
-    const [user, setUser] = useState<UserData | null>(null);
-
-    const [editedAddress, setEditedAddress] = useState<AddressData | null>(null);
+    const { currentUser } = useGlobal();
+    const [user, setUser] = useState<User>();
+    const [addresses, setAddresses] = useState<Address[]>();
+    const [editedAddress, setEditedAddress] = useState<Address | null>();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFormEditable, setIsFormEditable] = useState(false);
 
     useEffect(() => {
-        const localUser = localStorage.getItem('currentUser');
-        const sessionUser = sessionStorage.getItem('currentUser');
+        async function fetchData() {
+            try {
+                const res = await api.post<ApiResponse>('/user/login', { params: currentUser });
 
-        const currentUser = localUser
-            ? JSON.parse(localUser)
-            : sessionUser
-            ? JSON.parse(sessionUser)
-            : null;
+                if(res.message) {
+                    alert(res.message);
+                    return;
+                }
 
-        if (currentUser) {
-            setUser(currentUser);
+                const data = res.data;
+
+                if (!data) {
+                    alert('Nenhum Endereço Encontrado.');
+                    return;
+                }
+
+                const entities = (data.entities ?? data) as Address[] | null;
+
+                if (!entities?.length) {
+                    alert('Nenhum Endereço Encontrado.');
+                    return;
+                }
+
+                setAddresses(entities);
+            } catch (err) {
+                console.error("Erro ao carregar dados", err);
+            }
         }
+
+        fetchData();
     }, []);
 
-    const openEditModal = (address: AddressData) => {
+    const openEditModal = (address: Address) => {
         setEditedAddress({ ...address });
         setIsFormEditable(false);
         setIsModalOpen(true);
@@ -40,7 +60,7 @@ export default function AddressConfig() {
         setEditedAddress(null);
     };
 
-    const handleAddressChange = (field: keyof AddressData, value: string) => {
+    const handleAddressChange = (field: keyof Address, value: string) => {
         if (!editedAddress) return;
         setEditedAddress(prev => ({ ...prev!, [field]: value }));
     };
@@ -53,14 +73,14 @@ export default function AddressConfig() {
 
         let updatedAddresses;
 
-        const exists = user.addresses.some(addr => addr.id === editedAddress.id);
+        const exists = addresses?.some(addr => addr.id === editedAddress.id);
 
         if (exists) {
-            updatedAddresses = user.addresses.map(addr =>
+            updatedAddresses = addresses?.map(addr =>
                 addr.id === editedAddress.id ? editedAddress : addr
             );
         } else {
-            updatedAddresses = [...user.addresses, editedAddress];
+            updatedAddresses = [...addresses, editedAddress];
         }
 
         const updatedUser = { ...user, addresses: updatedAddresses };
@@ -79,7 +99,7 @@ export default function AddressConfig() {
         const confirmed = confirm("Tem certeza que deseja apagar este endereço?");
         if (!confirmed) return;
 
-        const updatedAddresses = user.addresses.filter(addr => addr.id !== id);
+        const updatedAddresses = addresses.filter(addr => addr.id !== id);
         const updatedUser = { ...user, addresses: updatedAddresses };
         setUser(updatedUser);
 
@@ -90,7 +110,7 @@ export default function AddressConfig() {
         return <p>Sem usuário logado.</p>;
     }
 
-    if (!user.addresses || user.addresses.length === 0) {
+    if (!addresses || addresses.length === 0) {
         return <p>Sem endereços cadastrados.</p>;
     }
 
@@ -127,7 +147,7 @@ export default function AddressConfig() {
                     </tr>
                 </thead>
                 <tbody>
-                    {user.addresses.map((addr) => (
+                    {addresses.map((addr) => (
                         <tr key={addr.id}>
                             <td>
                                 {addr.street}, {addr.number} - {addr.neighborhood}, {addr.city}/{addr.state} - {addr.country}
@@ -160,11 +180,11 @@ export default function AddressConfig() {
                             <h3>{isFormEditable ? 'Editar Endereço' : 'Visualizar Endereço'}</h3>
                         </div>
 
-                        <PopUpAddress
+                        {/* <PopUpAddress
                             address={editedAddress}
                             onChange={handleAddressChange}
                             disable={!isFormEditable}
-                        />
+                        /> */}
 
                         <div className={styles.modalActions}>
                             {isFormEditable ? (
@@ -185,4 +205,3 @@ export default function AddressConfig() {
         </div>
     );
 }
- */

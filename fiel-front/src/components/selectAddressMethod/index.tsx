@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import styles from './selectAddressMethod.module.css';
 import { AddressData } from '@/modal/addressModal';
 import Button from '@/components/buttonComponents/button';
-import PopUpAddress from '../config/addressConfig/popUpAddress';
+import PopUpAddress from '../forms/popUpAddress';
 
 export default function SelectAddressMethod() {
     const [showPopup, setShowPopup] = useState(false);
