@@ -1,5 +1,5 @@
 'use client'
-import { FaHome, FaShoppingCart, FaDoorOpen, FaSearch } from "react-icons/fa";
+import { FaHome, FaShoppingCart, FaDoorOpen, FaSearch, FaArchive } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { IoLogIn } from "react-icons/io5";
 import Image from 'next/image';
@@ -9,8 +9,6 @@ import { useEffect, useState } from 'react';
 import CartSidebar from "./cart";
 import Link from "next/link";
 import { useGlobal } from "@/context/GlobalContext";
-
-const size = 20;
 
 export default function Header(){
     const [searchQuery, setSearchQuery] = useState('');
@@ -39,7 +37,10 @@ export default function Header(){
                     <div className={styles.logo}>
                         <Image src={logo} alt="Fiel Leitor Logo" className={styles.logoImage} />
                         <Link  href="/" className={styles.link}>
-                            <FaHome size={size} />
+                            <FaHome size={20} />
+                        </Link >
+                        <Link  href="/historical" className={styles.link}>
+                            <FaArchive size={18} />
                         </Link >
                     </div>
                 </div>
@@ -61,19 +62,19 @@ export default function Header(){
                     {currentUser ? ( 
                         <div className={styles.userHeaderOptions}>
                             <p className={styles.cartButton} onClick={toggleCart}>
-                                <FaShoppingCart size={size} />    
+                                <FaShoppingCart size={20} />    
                             </p>
                             <Link href="/config" className={styles.link}>
-                                <FaGear size={size} />
+                                <FaGear size={20} />
                             </Link>
                             <p className={styles.logoutButton} onClick={handleLogout}>
-                                <FaDoorOpen size={size} />
+                                <FaDoorOpen size={20} />
                             </p>
                         </div>
                     ) : (
                         <div className={styles.userHeaderOptions}>
                             <Link href="/login" className={styles.link}>
-                                <IoLogIn size={size} />
+                                <IoLogIn size={20} />
                             </Link>
                         </div>
                     )}
