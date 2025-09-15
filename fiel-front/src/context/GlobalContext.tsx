@@ -21,7 +21,7 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
 
     return (
         <GlobalContext.Provider value={{ currentUser, setCurrentUser }}>
-            <main className={styles.content}>{children}</main>
+            {children}
         </GlobalContext.Provider>
     );
 }

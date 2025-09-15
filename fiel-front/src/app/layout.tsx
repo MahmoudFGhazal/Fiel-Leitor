@@ -19,7 +19,7 @@ export default function RootLayout({
       <body className="app">
         <GlobalProvider>
           <Header />
-          {children}
+          <main className="content">{children}</main>
           <Footer />
         </GlobalProvider>
       </body>
