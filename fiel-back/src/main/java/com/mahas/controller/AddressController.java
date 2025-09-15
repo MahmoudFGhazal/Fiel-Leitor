@@ -101,7 +101,7 @@ public class AddressController {
     @PostMapping
     public ResponseEntity<FacadeResponse> createAddress(@RequestBody Address address) {
         FacadeRequest request = new FacadeRequest();
-        System.out.println("CREATE");
+
         request.setCommand(verifyCreateAddress);
         address.setId(null);
         request.setEntity(address);
@@ -129,8 +129,7 @@ public class AddressController {
     @PutMapping
     public ResponseEntity<FacadeResponse> updateAddress(@RequestBody Address address) {
         FacadeRequest request = new FacadeRequest();
-        System.out.println("UPDATE");
-        System.out.println(address.getUser().getId());
+
         request.setCommand(verifyUpdateAddress);
         request.setEntity(address);
         

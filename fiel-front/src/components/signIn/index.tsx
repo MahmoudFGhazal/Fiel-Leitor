@@ -66,14 +66,13 @@ export default function SignInComponent() {
 
     const saveUser = async () => {
         const res: ApiResponse = await api.post("/user", { data: formData.user });
-        console.log(JSON.stringify(res,null,2))
 
         if(res.message) {
             alert(res.message);
             return;
         }
         const user = res.data.entity as User;
-        console.log(JSON.stringify(res,null,2))
+
         setFormData(prev => ({
             ...prev,
             address: {

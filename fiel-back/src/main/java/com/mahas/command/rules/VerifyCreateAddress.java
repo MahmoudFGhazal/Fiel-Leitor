@@ -46,7 +46,7 @@ public class VerifyCreateAddress implements ICommand {
         if (!residenceTypeValidator.residenceTypeExists(address.getResidenceType().getId())) {
             return "Tipo de residencia não encontrada";
         }
-        System.out.println(address.getUser().getId());
+
         // Validar formato do email
         if (!userValidator.userExists(address.getUser().getId())) {
             return "Usuario não encontrado";

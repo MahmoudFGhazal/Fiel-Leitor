@@ -18,7 +18,7 @@ public class VerifyGetUserByUser implements ICommand {
     public String execute(FacadeRequest request) {
         Address address = (Address) request.getEntity();
         User user = address.getUser();
-        System.out.println(user.getId());
+
         if(user.getId() == null) {
             return "Id do usuario não especificado";
         }

@@ -60,8 +60,7 @@ export default function LoginComponent() {
         }
         
         const user = (data.entity ?? data) as User | null;
-        console.log("oi")
-        console.log(user?.id)
+
         if (!user || !user.id) {
             alert('Email ou senha incorretos.');
             return;
@@ -76,13 +75,11 @@ export default function LoginComponent() {
 
         if (formData.refresh) {
             localStorage.setItem('currentUser', JSON.stringify(user.id));
-            console.log("tchau")
         } 
         setCurrentUser(user.id);
 
         router.push("/");
 
-        console.log(currentUser)
         await showToast("oii")
     }
     

@@ -150,16 +150,7 @@ public class UserController {
         requestUser.setEmail(null);
         requestUser.setPassword(null);
         requestUser.setCpf(null);
-        System.out.println("=== CAMPOS INDIVIDUAIS ===");
-        System.out.println("Id" + user.getId());
-        System.out.println("Name: " + user.getName());
-        System.out.println("Email: " + user.getEmail());
-        System.out.println("CPF: " + user.getCpf());
-        System.out.println("Password: " + user.getPassword());
-        System.out.println("Gender ID: " + (user.getGender() != null ? user.getGender().getId() : null));
-        System.out.println("Gender Name: " + (user.getGender() != null ? user.getGender().getGender() : null));
-        System.out.println("Birthday: " + user.getBirthday());
-        System.out.println("Phone: " + user.getPhoneNumber());
+
         request.setEntity(requestUser);
         
         FacadeResponse response = facade.update(request);

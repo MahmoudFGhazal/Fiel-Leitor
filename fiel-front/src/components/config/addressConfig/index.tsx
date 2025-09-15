@@ -12,22 +12,23 @@ import showToast from '@/utils/showToast';
 export default function AddressConfig() {
     const { currentUser } = useGlobal();
     const [addresses, setAddresses] = useState<Address[]>([]);
-    const [editedAddress, setEditedAddress] = useState<Address | null>();
+    const [editedAddress, setEditedAddress] = useState<Address | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFormEditable, setIsFormEditable] = useState(false);
 
     useEffect(() => {
+        if (!currentUser) return; 
+
         async function fetchData() {
             try {
                 const res = await api.get<ApiResponse>('/address/user', { params: { userId: currentUser } });
 
-                if(res.message) {
+                if (res.message) {
                     alert(res.message);
                     return;
                 }
 
                 const data = res.data;
-
                 const entities = (data.entities ?? data) as Address[] | null;
 
                 if (!entities?.length) {
@@ -42,7 +43,7 @@ export default function AddressConfig() {
         }
 
         fetchData();
-    }, []);
+    }, [currentUser]);
 
     const openEditModal = (address: Address, editable = false) => {
         setEditedAddress({ ...address });
@@ -61,11 +62,10 @@ export default function AddressConfig() {
 
     const saveAddress = async () => {
         if (!editedAddress) return;
-        console.log(JSON.stringify(editedAddress, null, 2))
+
         let res: ApiResponse;
 
         if (!editedAddress.id || editedAddress.id === 0) {
-            console.log("Criar")
             res = await api.post("/address", { data: editedAddress }) as ApiResponse;
         
             if (res.message) {
@@ -75,7 +75,6 @@ export default function AddressConfig() {
 
             await showToast("Endereço Criado com Sucesso");
         } else {
-            console.log("Atualizar")
             res = await api.put(`/address`, { data: editedAddress }) as ApiResponse;
         
             if (res.message) {
@@ -91,16 +90,20 @@ export default function AddressConfig() {
     };
 
 
-    const handleDelete = (id: number) => {
+    const handleDelete = async(id: number) => {
         const confirmed = confirm("Tem certeza que deseja apagar este endereço?");
         if (!confirmed) return;
 
-        const updatedAddresses = addresses.filter(addr => addr.id !== id);
-    };
+        const res = await api.delete("/address", { params: { addressId: id } }) as ApiResponse;
+    
+        if(res.message) {
+            alert(res.message);
+            return;
+        }
 
-    if (!addresses || addresses.length === 0) {
-        return <p>Sem endereços cadastrados.</p>;
-    }
+        setAddresses(prev => prev.filter(addr => addr.id !== id));
+        await showToast("Endereço removido com sucesso");
+    };
 
     return (
         <div className={styles.container} >

@@ -108,7 +108,7 @@ public class AddressDAO implements IDAO {
         }
 
         Address address = (Address) entity;
-        System.out.println("Criar");
+
         try {
             if (address.getUser() != null && address.getUser().getId() != null) {
                 User managedUser = entityManager.find(User.class, address.getUser().getId());

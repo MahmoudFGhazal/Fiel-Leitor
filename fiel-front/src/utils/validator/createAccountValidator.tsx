@@ -16,7 +16,7 @@ export default function CreateAccountValidator() {
     const validateStep = (step: number, data: formData, extra?: any): string | null => {
         const user = data.user;
         const addr = data.address;
-        console.log(data)
+
         switch (step) {
             case 1:
                 if (!user.email || !emailRegex.test(user.email)) return "Email inválido";
