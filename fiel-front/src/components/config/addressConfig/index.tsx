@@ -6,14 +6,13 @@ import ActionButton from "@/components/buttonComponents/actionButton";
 import Button from "@/components/buttonComponents/button";
 import { useEffect, useState } from "react";
 import { useGlobal } from '@/context/GlobalContext';
-
+import PopUpAddress from '@/components/forms/popUpAddress';
+import showToast from '@/utils/showToast';
 
 export default function AddressConfig() {
     const { currentUser } = useGlobal();
-    const [user, setUser] = useState<User | null>(null);
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [editedAddress, setEditedAddress] = useState<Address | null>();
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFormEditable, setIsFormEditable] = useState(false);
 
@@ -35,8 +34,7 @@ export default function AddressConfig() {
                     alert('Nenhum Endereço Encontrado.');
                     return;
                 }
-                console.log("oi")
-                console.log(JSON.stringify(entities, null, 2))
+
                 setAddresses(entities);
             } catch (err) {
                 console.error("Erro ao carregar dados", err);
@@ -61,45 +59,43 @@ export default function AddressConfig() {
         setEditedAddress(prev => ({ ...prev!, [field]: value }));
     };
 
-    const saveAddress = () => {
-        if (!user || !editedAddress) return;
+    const saveAddress = async () => {
+        if (!editedAddress) return;
+        console.log(JSON.stringify(editedAddress, null, 2))
+        let res: ApiResponse;
 
-        const confirmed = confirm("Deseja realmente salvar este endereço?");
-        if (!confirmed) return;
+        if (!editedAddress.id || editedAddress.id === 0) {
+            console.log("Criar")
+            res = await api.post("/address", { data: editedAddress }) as ApiResponse;
+        
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
 
-        let updatedAddresses;
-
-        const exists = addresses?.some(addr => addr.id === editedAddress.id);
-
-        if (exists) {
-            updatedAddresses = addresses?.map(addr =>
-                addr.id === editedAddress.id ? editedAddress : addr
-            );
+            await showToast("Endereço Criado com Sucesso");
         } else {
-            updatedAddresses = [...addresses, editedAddress];
+            console.log("Atualizar")
+            res = await api.put(`/address`, { data: editedAddress }) as ApiResponse;
+        
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
+
+            await showToast("Endereço Atualizado com Sucesso");
         }
 
-        const updatedUser = { ...user, addresses: updatedAddresses };
-        setUser(updatedUser);
-
-        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-        sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
-
         setIsFormEditable(false);
-        setIsModalOpen(false); 
+        setIsModalOpen(false);
     };
 
 
     const handleDelete = (id: number) => {
-        if (!user) return;
         const confirmed = confirm("Tem certeza que deseja apagar este endereço?");
         if (!confirmed) return;
 
         const updatedAddresses = addresses.filter(addr => addr.id !== id);
-        const updatedUser = { ...user, addresses: updatedAddresses };
-        setUser(updatedUser);
-
-        localStorage.setItem('user', JSON.stringify(updatedUser));
     };
 
     if (!addresses || addresses.length === 0) {
@@ -114,8 +110,8 @@ export default function AddressConfig() {
                     label="Criar Endereço" 
                     onClick={() => {
                         setEditedAddress({
-                            id: Date.now(),
-                            user: null,
+                            id: null,
+                            user: { id: currentUser } as User,
                             nickname: '',
                             street: '',
                             number: '',
@@ -174,11 +170,11 @@ export default function AddressConfig() {
                             <h3>{isFormEditable ? 'Editar Endereço' : 'Visualizar Endereço'}</h3>
                         </div>
 
-                        {/* <PopUpAddress
+                        <PopUpAddress
                             address={editedAddress}
                             onChange={handleAddressChange}
                             disable={!isFormEditable}
-                        /> */}
+                        />
 
                         <div className={styles.modalActions}>
                             {isFormEditable ? (

@@ -12,6 +12,7 @@ import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.address.Address;
+import com.mahas.domain.user.User;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -107,12 +108,15 @@ public class AddressDAO implements IDAO {
         }
 
         Address address = (Address) entity;
-
+        System.out.println("Criar");
         try {
+            if (address.getUser() != null && address.getUser().getId() != null) {
+                User managedUser = entityManager.find(User.class, address.getUser().getId());
+                address.setUser(managedUser);
+            }
+
             entityManager.persist(address);
-
             entityManager.flush();
-
             response.setEntity(address);
         } catch (PersistenceException e) {
             throw e;
