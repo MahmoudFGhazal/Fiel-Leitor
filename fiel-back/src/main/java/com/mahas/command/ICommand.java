@@ -1,7 +1,8 @@
 package com.mahas.command;
 
 import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 
 public interface ICommand {
-    String execute(FacadeRequest request);
+    SQLRequest execute(FacadeRequest request);
 }

@@ -2,14 +2,14 @@ package com.mahas.command.rules.logs;
 
 import java.util.regex.Pattern;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.user.User;
+import com.mahas.dto.request.user.UserDTORequest;
+import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.Facade;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class EmailValidator {
@@ -32,7 +32,7 @@ public class EmailValidator {
     }
 
     public boolean emailExists(String email) {
-        User user = new User();
+        UserDTORequest user = new UserDTORequest();
         user.setEmail(email);
 
         FacadeRequest request = new FacadeRequest();
@@ -41,7 +41,7 @@ public class EmailValidator {
 
         FacadeResponse response = facade.query(request);
 
-        DomainEntity entity = response.getData().getEntity();
+        DTOResponse entity = response.getData().getEntity();
 
         return entity != null;
     }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
-import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.address.StreetType;
 
@@ -24,7 +24,7 @@ public class StreetTypeDAO implements IDAO {
     private EntityManager entityManager;
 
     @Override
-    public SQLResponse query(FacadeRequest request) {
+    public SQLResponse query(SQLRequest request) {
         SQLResponse response = new SQLResponse();
         DomainEntity entity = request.getEntity();
 

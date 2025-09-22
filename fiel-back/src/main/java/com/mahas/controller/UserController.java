@@ -1,5 +1,17 @@
 package com.mahas.controller;
 
+import com.mahas.command.rules.VerifyCreateUser;
+import com.mahas.command.rules.VerifyDeleteUser;
+import com.mahas.command.rules.VerifyLogin;
+import com.mahas.command.rules.VerifyPagination;
+import com.mahas.command.rules.VerifyUpdateUser;
+import com.mahas.command.rules.VerifyUserExist;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.TypeResponse;
+import com.mahas.dto.request.user.UserDTORequest;
+import com.mahas.facade.IFacade;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +24,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.mahas.command.rules.VerifyCreateUser;
-import com.mahas.command.rules.VerifyDeleteUser;
-import com.mahas.command.rules.VerifyLogin;
-import com.mahas.command.rules.VerifyPagination;
-import com.mahas.command.rules.VerifyUpdateUser;
-import com.mahas.command.rules.VerifyUserExist;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.TypeResponse;
-import com.mahas.domain.user.User;
-import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -51,14 +51,10 @@ public class UserController {
     VerifyUserExist verifyUserExist;
 
     @PostMapping("/login")
-    public ResponseEntity<FacadeResponse> Login(@RequestBody User user) {
+    public ResponseEntity<FacadeResponse> Login(@RequestBody UserDTORequest user) {
         FacadeRequest request = new FacadeRequest();
 
-        User requestUser = new User();
-        requestUser.setEmail(user.getEmail());
-        requestUser.setPassword(user.getPassword());
-
-        request.setEntity(requestUser);
+        request.setEntity(user);
         request.setLimit(1);
         request.setCommand(verifyLogin);
         
@@ -73,7 +69,7 @@ public class UserController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        User user = new User();
+        UserDTORequest user = new UserDTORequest();
         if(id != null) {
             user.setId(id);
         }
@@ -104,7 +100,7 @@ public class UserController {
         request.setCommand(verifyPagination);
         request.setLimit(limit);
         request.setPage(page);
-        request.setEntity(new User());
+        request.setEntity(new UserDTORequest());
 
         FacadeResponse response = facade.query(request);
         
@@ -112,7 +108,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<FacadeResponse> createUser(@RequestBody User user) {
+    public ResponseEntity<FacadeResponse> createUser(@RequestBody UserDTORequest user) {
         FacadeRequest request = new FacadeRequest();
        
         request.setCommand(verifyCreateUser);
@@ -131,7 +127,7 @@ public class UserController {
 
         request.setCommand(verifyDeleteUser);
 
-        User user = new User();
+        UserDTORequest user = new UserDTORequest();
         user.setId(id);
         request.setEntity(user);
         
@@ -141,17 +137,12 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<FacadeResponse> updateProfile(@RequestBody User user) {
+    public ResponseEntity<FacadeResponse> updateProfile(@RequestBody UserDTORequest user) {
         FacadeRequest request = new FacadeRequest();
 
         request.setCommand(verifyUpdateUser);
-        
-        User requestUser = user;
-        requestUser.setEmail(null);
-        requestUser.setPassword(null);
-        requestUser.setCpf(null);
 
-        request.setEntity(requestUser);
+        request.setEntity(user);
         
         FacadeResponse response = facade.update(request);
         
@@ -167,11 +158,11 @@ public class UserController {
 
         request.setCommand(verifyUserExist);
         
-        User requestUser = new User();
-        requestUser.setId(userId);
-        requestUser.setActive(active);
+        UserDTORequest user = new UserDTORequest();
+        user.setId(userId);
+        user.setActive(active);
 
-        request.setEntity(requestUser);
+        request.setEntity(user);
         
         FacadeResponse response = facade.update(request);
         

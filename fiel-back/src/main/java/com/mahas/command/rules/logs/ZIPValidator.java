@@ -2,6 +2,8 @@ package com.mahas.command.rules.logs;
 
 import org.springframework.stereotype.Component;
 
+import com.mahas.exception.ValidationException;
+
 @Component
 public class ZIPValidator {
     public String isValidZIPFormat(String zip) {
@@ -16,5 +18,19 @@ public class ZIPValidator {
         }
 
         return null;
+    }
+
+    public String convertZIP(String zip) {
+        if (zip == null) {
+            throw new ValidationException("CEP não pode ser nulo");
+        }
+
+        String digits = zip.replaceAll("\\D", "");
+
+        if (digits.length() != 8) {
+            throw new ValidationException("CEP inválido, deve conter 8 dígitos");
+        }
+
+        return digits.substring(0, 5) + "-" + digits.substring(5);
     }
 }

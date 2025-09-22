@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
-import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.user.User;
 
@@ -24,7 +24,7 @@ public class UserDAO implements IDAO {
     private EntityManager entityManager;
 
     @Override
-    public SQLResponse query(FacadeRequest request) {
+    public SQLResponse query(SQLRequest request) {
         SQLResponse response = new SQLResponse();
         DomainEntity entity = request.getEntity();
 
@@ -109,7 +109,7 @@ public class UserDAO implements IDAO {
     }
 
     @Override
-    public SQLResponse save(FacadeRequest request) {
+    public SQLResponse save(SQLRequest request) {
         SQLResponse response = new SQLResponse();
 
         DomainEntity entity = request.getEntity();
@@ -133,7 +133,7 @@ public class UserDAO implements IDAO {
     }
 
     @Override
-    public SQLResponse delete(FacadeRequest request) {
+    public SQLResponse delete(SQLRequest request) {
         SQLResponse response = new SQLResponse();
 
         DomainEntity entity = request.getEntity();
@@ -162,7 +162,7 @@ public class UserDAO implements IDAO {
     }
 
     @Override
-    public SQLResponse update(FacadeRequest request) {
+    public SQLResponse update(SQLRequest request) {
         SQLResponse response = new SQLResponse();
 
         DomainEntity entity = request.getEntity();

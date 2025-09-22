@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FacadeResponse {
-    private SQLResponse data;
+    private DataResponse data;
 
     private TypeResponse typeResponse = TypeResponse.OK;
     private String message;

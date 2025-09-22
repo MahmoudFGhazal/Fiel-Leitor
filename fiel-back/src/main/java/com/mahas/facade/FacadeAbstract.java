@@ -13,6 +13,7 @@ import com.mahas.dao.address.StreetTypeDAO;
 import com.mahas.dao.user.GenderDAO;
 import com.mahas.dao.user.UserDAO;
 import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.address.Address;
 import com.mahas.domain.address.ResidenceType;
 import com.mahas.domain.address.StreetType;
@@ -51,15 +52,10 @@ public abstract class FacadeAbstract {
         daos.put(StreetType.class.getName(), streetTypeDAO);
     }
 
-    protected String runRules(FacadeRequest request){
+    protected SQLRequest runRules(FacadeRequest request){
         ICommand command = request.getCommand(); 
         if(command == null) return null;
         
-        String response = command.execute(request);
-        if(response != null) {
-            return response;
-        }
-
-        return null;
+        return command.execute(request);
     }
 }

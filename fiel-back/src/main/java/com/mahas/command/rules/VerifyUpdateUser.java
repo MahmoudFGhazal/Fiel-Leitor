@@ -9,7 +9,9 @@ import com.mahas.command.rules.logs.GenderValidator;
 import com.mahas.command.rules.logs.PhoneNumberValidator;
 import com.mahas.command.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.user.User;
+import com.mahas.exception.ValidationException;
 
 @Component
 public class VerifyUpdateUser implements ICommand {
@@ -26,42 +28,44 @@ public class VerifyUpdateUser implements ICommand {
     private UserValidator userValidator;
 
     @Override
-    public String execute(FacadeRequest request) {
+    public SQLRequest execute(FacadeRequest request) {
         User user = (User) request.getEntity();
-
         String error;
 
-        if(user.getId() == null) {
-            return "Id do usuario não especificado";
+        // Verificar se ID do usuário foi fornecido
+        if (user.getId() == null) {
+            throw new ValidationException("Id do usuário não especificado");
         }
 
-        // Verificar usuario existe
+        // Verificar se o usuário existe
         if (!userValidator.userExists(user.getId())) {
-            return "Usuario não encontrado";
+            throw new ValidationException("Usuário não encontrado");
         }
 
         // Validar número de telefone
         error = phoneNumberValidator.isValidPhoneNumberFormat(user.getPhoneNumber());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
         // Validar data de nascimento (anterior a hoje)
         error = birthdayValidator.verifyBirthdayDate(user.getBirthday());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
-        // Validar se gênero existe (ID válido no banco)
+        // Validar gênero
         if (user.getGender() == null || user.getGender().getId() == null) {
-            return "Gênero não informado";
+            throw new ValidationException("Gênero não informado");
         }
 
         error = genderValidator.validateGenderExists(user.getGender().getId());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
-        return null;
+        SQLRequest sqlRequest = new SQLRequest();
+        sqlRequest.setEntity(user); 
+        return sqlRequest;
     }
 }

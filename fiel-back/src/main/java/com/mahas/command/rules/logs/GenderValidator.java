@@ -1,12 +1,13 @@
 package com.mahas.command.rules.logs;
 
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.facade.Facade;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.user.Gender;
-import com.mahas.facade.Facade;
+import com.mahas.dto.request.user.GenderDTORequest;
 
 @Component
 public class GenderValidator {
@@ -20,7 +21,7 @@ public class GenderValidator {
 
         FacadeRequest request = new FacadeRequest();
 
-        Gender gender = new Gender();
+        GenderDTORequest gender = new GenderDTORequest();
         gender.setId(genderId);
 
         request.setEntity(gender);

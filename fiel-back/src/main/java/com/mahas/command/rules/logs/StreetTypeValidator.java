@@ -1,13 +1,13 @@
 package com.mahas.command.rules.logs;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.address.StreetType;
+import com.mahas.dto.request.address.StreetTypeDTORequest;
+import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.Facade;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class StreetTypeValidator {
@@ -15,7 +15,7 @@ public class StreetTypeValidator {
     Facade facade;
 
     public boolean streetTypeExists(Integer streetTypeId) {
-        StreetType streetType = new StreetType();
+        StreetTypeDTORequest streetType = new StreetTypeDTORequest();
         streetType.setId(streetTypeId);
 
         FacadeRequest request = new FacadeRequest();
@@ -24,7 +24,7 @@ public class StreetTypeValidator {
 
         FacadeResponse response = facade.query(request);
 
-        DomainEntity entity = response.getData().getEntity();
+        DTOResponse entity = response.getData().getEntity();
 
         return entity != null;
     }

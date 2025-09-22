@@ -4,11 +4,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mahas.dao.IDAO;
-import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.TypeResponse;
+import com.mahas.dto.request.DTORequest;
 
 @Component
 public class Facade extends FacadeAbstract implements IFacade {
@@ -17,7 +18,7 @@ public class Facade extends FacadeAbstract implements IFacade {
     @Override
     public FacadeResponse save(FacadeRequest request) {
         FacadeResponse response = new FacadeResponse();
-        DomainEntity entity = request.getEntity();
+        DTORequest entity = request.getEntity();
 
         if(entity == null) {
             response.setMessage(entity + " não é uma entidade");
@@ -29,20 +30,14 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         IDAO dao = daos.get(nameEntity);
         
-        String error = runRules(request);
-
-        if(error != null) {
-            response.setTypeResponse(TypeResponse.CLIENT_ERROR);
-            response.setMessage(error);
-            return response;
-        }
+        SQLRequest sqlRequest = runRules(request);
 
         if(dao == null) {
             response.setMessage(nameEntity + " não encontrado o dao");
             return response;
         }
 
-        SQLResponse result = dao.save(request);
+        SQLResponse result = dao.save(sqlRequest);
 
         if(result == null) {
             response.setMessage("Erro ao fazer o insert no banco");
@@ -60,7 +55,7 @@ public class Facade extends FacadeAbstract implements IFacade {
     public FacadeResponse query(FacadeRequest request) {
         FacadeResponse response = new FacadeResponse();
 
-        DomainEntity entity = request.getEntity();
+        DTORequest entity = request.getEntity();
         if(entity == null) {
             response.setMessage(entity + " não é uma entidade");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
@@ -69,13 +64,7 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         String nameEntity = entity.getClass().getName();
 
-        String error = runRules(request);
-
-        if(error != null) {
-            response.setTypeResponse(TypeResponse.CLIENT_ERROR);
-            response.setMessage(error);
-            return response;
-        }
+        SQLRequest sqlRequest = runRules(request);
 
         IDAO dao = daos.get(nameEntity);
         if(dao == null) {
@@ -84,7 +73,7 @@ public class Facade extends FacadeAbstract implements IFacade {
             return response;
         }
 
-        SQLResponse result = dao.query(request);
+        SQLResponse result = dao.query(sqlRequest);
         if(result == null) {
             response.setMessage("Erro ao fazer a query no banco");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
@@ -101,7 +90,7 @@ public class Facade extends FacadeAbstract implements IFacade {
     public FacadeResponse update(FacadeRequest request) {
         FacadeResponse response = new FacadeResponse();
 
-        DomainEntity entity = request.getEntity();
+        DTORequest entity = request.getEntity();
         if(entity == null) {
             response.setMessage(entity + " não é uma entidade");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
@@ -110,12 +99,7 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         String nameEntity = entity.getClass().getName();
 
-        String error = runRules(request);
-        if(error != null) {
-            response.setTypeResponse(TypeResponse.CLIENT_ERROR);
-            response.setMessage(error);
-            return response;
-        }
+        SQLRequest sqlRequest = runRules(request);
 
         IDAO dao = daos.get(nameEntity);
         if(dao == null) {
@@ -124,7 +108,7 @@ public class Facade extends FacadeAbstract implements IFacade {
             return response;
         }
 
-        SQLResponse result = dao.update(request);
+        SQLResponse result = dao.update(sqlRequest);
         if(result == null) {
             response.setMessage("Erro ao fazer a query no banco");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
@@ -141,7 +125,7 @@ public class Facade extends FacadeAbstract implements IFacade {
     public FacadeResponse delete(FacadeRequest request) {
         FacadeResponse response = new FacadeResponse();
 
-        DomainEntity entity = request.getEntity();
+        DTORequest entity = request.getEntity();
         if(entity == null) {
             response.setMessage(entity + " não é uma entidade");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
@@ -150,12 +134,7 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         String nameEntity = entity.getClass().getName();
 
-        String error = runRules(request);
-        if(error != null) {
-            response.setTypeResponse(TypeResponse.CLIENT_ERROR);
-            response.setMessage(error);
-            return response;
-        }
+        SQLRequest sqlRequest = runRules(request);
 
         IDAO dao = daos.get(nameEntity);
         if(dao == null) {
@@ -164,7 +143,7 @@ public class Facade extends FacadeAbstract implements IFacade {
             return response;
         }
 
-        SQLResponse result = dao.delete(request);
+        SQLResponse result = dao.delete(sqlRequest);
         if(result == null) {
             response.setMessage("Erro ao fazer a query no banco");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);

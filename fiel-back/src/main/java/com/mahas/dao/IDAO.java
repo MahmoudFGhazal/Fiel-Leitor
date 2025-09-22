@@ -1,22 +1,22 @@
 package com.mahas.dao;
 
-import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 
 public interface IDAO {
-    default public SQLResponse save(FacadeRequest request) {
+    default public SQLResponse save(SQLRequest request) {
         return null;
     }
 
-    default public SQLResponse delete(FacadeRequest request) {
+    default public SQLResponse delete(SQLRequest request) {
         return null;
     }
 
-    default public SQLResponse update(FacadeRequest request) {
+    default public SQLResponse update(SQLRequest request) {
         return null;
     }
 
-    default public SQLResponse query(FacadeRequest request) {
+    default public SQLResponse query(SQLRequest request) {
         return null;
     }
 }

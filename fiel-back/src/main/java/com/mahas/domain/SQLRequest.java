@@ -1,8 +1,8 @@
 package com.mahas.domain;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
+
+import com.mahas.domain.sort.ISort;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,14 +14,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SQLResponse {
-    DomainEntity entity;
-    List<DomainEntity> entities;
-    
-    Integer page;
-    Integer limit;
-    Integer pageCount;
-    Integer totalItem;
-    Integer totalPage;
+public class SQLRequest {
+    private DomainEntity entity;
 
+    private Integer limit;
+    private Integer page;
+    private ISort sort;
 }

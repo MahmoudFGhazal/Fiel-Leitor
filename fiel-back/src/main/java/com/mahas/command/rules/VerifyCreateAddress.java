@@ -1,15 +1,20 @@
 package com.mahas.command.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.ICommand;
+import com.mahas.command.rules.logs.AddressValidator;
 import com.mahas.command.rules.logs.ResidenceTypeValidator;
 import com.mahas.command.rules.logs.StreetTypeValidator;
 import com.mahas.command.rules.logs.UserValidator;
 import com.mahas.command.rules.logs.ZIPValidator;
 import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.address.Address;
+import com.mahas.dto.request.DTORequest;
+import com.mahas.dto.request.address.AddressDTORequest;
+import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyCreateAddress implements ICommand {
@@ -25,33 +30,50 @@ public class VerifyCreateAddress implements ICommand {
     @Autowired
     private UserValidator userValidator;
 
-    @Override
-    public String execute(FacadeRequest request) {
-        Address address = (Address) request.getEntity();
+    @Autowired
+    private AddressValidator addressValidator;
 
+    @Override
+    public SQLRequest execute(FacadeRequest request) {
+        DTORequest entity = request.getEntity();
+
+        if (!(entity instanceof AddressDTORequest)) {
+            throw new ValidationException("Tipo de entidade inválido, esperado AddressDTORequest");
+        }
+
+        AddressDTORequest addressRequest = (AddressDTORequest) entity;
         String error;
 
-        // Validar formato do email
-        error = zipValidator.isValidZIPFormat(address.getZip());
+        //Validar ZIP
+        error = zipValidator.isValidZIPFormat(addressRequest.getZip());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
         // Validar formato do email
-        if (!streetTypeValidator.streetTypeExists(address.getStreetType().getId())) {
-            return "Tipo de rua não encotrada";
+        if (!streetTypeValidator.streetTypeExists(addressRequest.getStreetType())) {
+            throw new ValidationException("Tipo de rua não encontrada");
         }
 
         // Validar formato do email
-        if (!residenceTypeValidator.residenceTypeExists(address.getResidenceType().getId())) {
-            return "Tipo de residencia não encontrada";
+        if (!residenceTypeValidator.residenceTypeExists(addressRequest.getResidenceType())) {
+            throw new ValidationException("Tipo de residência não encontrada");
         }
 
         // Validar formato do email
-        if (!userValidator.userExists(address.getUser().getId())) {
-            return "Usuario não encontrado";
+        if (!userValidator.userExists(addressRequest.getUser())) {
+            throw new ValidationException("Usuário não encontrado");
         }
 
-        return null;
+        SQLRequest sqlRequest = new SQLRequest();
+
+        String zip = zipValidator.convertZIP(addressRequest.getZip());
+        addressRequest.setZip(zip);
+
+        Address address = addressValidator.toEntity(addressRequest);
+
+        sqlRequest.setEntity(address);
+        
+        return sqlRequest;
     }
 }

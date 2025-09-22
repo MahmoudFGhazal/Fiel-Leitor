@@ -1,13 +1,14 @@
 package com.mahas.command.rules.logs;
 
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.facade.Facade;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mahas.domain.DomainEntity;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.address.ResidenceType;
-import com.mahas.facade.Facade;
+import com.mahas.dto.request.address.ResidenceTypeDTORequest;
+import com.mahas.dto.response.DTOResponse;
 
 @Component
 public class ResidenceTypeValidator {
@@ -15,7 +16,7 @@ public class ResidenceTypeValidator {
     Facade facade;
 
     public boolean residenceTypeExists(Integer streetTypeId) {
-        ResidenceType residenceType = new ResidenceType();
+        ResidenceTypeDTORequest residenceType = new ResidenceTypeDTORequest();
         residenceType.setId(streetTypeId);
 
         FacadeRequest request = new FacadeRequest();
@@ -24,7 +25,7 @@ public class ResidenceTypeValidator {
 
         FacadeResponse response = facade.query(request);
 
-        DomainEntity entity = response.getData().getEntity();
+        DTOResponse entity = response.getData().getEntity();
 
         return entity != null;
     }

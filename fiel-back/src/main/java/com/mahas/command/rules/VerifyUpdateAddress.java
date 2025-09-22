@@ -9,7 +9,9 @@ import com.mahas.command.rules.logs.ResidenceTypeValidator;
 import com.mahas.command.rules.logs.StreetTypeValidator;
 import com.mahas.command.rules.logs.ZIPValidator;
 import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.address.Address;
+import com.mahas.exception.ValidationException;
 
 @Component
 public class VerifyUpdateAddress implements ICommand {
@@ -26,32 +28,33 @@ public class VerifyUpdateAddress implements ICommand {
     private ResidenceTypeValidator residenceTypeValidator;
 
     @Override
-    public String execute(FacadeRequest request) {
+    public SQLRequest execute(FacadeRequest request) {
         Address address = (Address) request.getEntity();
-
         String error;
 
-        // Verificar se endereço existe
+        // Verificar se o endereço existe
         if (!addressValidator.addressExists(address.getId())) {
-            return "Endereço não encontrado";
+            throw new ValidationException("Endereço não encontrado");
         }
 
-        // Validar formato do email
+        // Validar formato do CEP
         error = zipValidator.isValidZIPFormat(address.getZip());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
-        // Validar formato do email
+        // Validar tipo de rua
         if (!streetTypeValidator.streetTypeExists(address.getStreetType().getId())) {
-            return "Tipo de rua não encotrada";
+            throw new ValidationException("Tipo de rua não encontrado");
         }
 
-        // Validar formato do email
+        // Validar tipo de residência
         if (!residenceTypeValidator.residenceTypeExists(address.getResidenceType().getId())) {
-            return "Tipo de residencia não encontrada";
+            throw new ValidationException("Tipo de residência não encontrada");
         }
 
-        return null;
+        SQLRequest sqlRequest = new SQLRequest();
+        sqlRequest.setEntity(address);
+        return sqlRequest;
     }
 }

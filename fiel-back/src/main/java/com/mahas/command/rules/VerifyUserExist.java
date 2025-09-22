@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 import com.mahas.command.ICommand;
 import com.mahas.command.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.user.User;
+import com.mahas.exception.ValidationException;
 
 @Component
 public class VerifyUserExist implements ICommand {
@@ -14,18 +16,21 @@ public class VerifyUserExist implements ICommand {
     private UserValidator userValidator;
 
     @Override
-    public String execute(FacadeRequest request) {
+    public SQLRequest execute(FacadeRequest request) {
         User user = (User) request.getEntity();
 
-        if(user.getId() == null) {
-            return "Id do usuario não especificado";
+        // Verificar se ID do usuário foi fornecido
+        if (user.getId() == null) {
+            throw new ValidationException("Id do usuário não especificado");
         }
 
-        // Verificar usuario existe
+        // Verificar se o usuário existe
         if (!userValidator.userExists(user.getId())) {
-            return "Usuario não encontrado";
+            throw new ValidationException("Usuário não encontrado");
         }
 
-        return null;
+        SQLRequest sqlRequest = new SQLRequest();
+        sqlRequest.setEntity(user); 
+        return sqlRequest;
     }
 }

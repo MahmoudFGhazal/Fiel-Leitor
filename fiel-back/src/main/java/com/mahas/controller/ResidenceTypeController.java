@@ -1,16 +1,16 @@
 package com.mahas.controller;
 
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.dto.request.address.ResidenceTypeDTORequest;
+import com.mahas.facade.IFacade;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.address.ResidenceType;
-import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -23,7 +23,7 @@ public class ResidenceTypeController {
     public ResponseEntity<FacadeResponse> getStreetTypes() {
         FacadeRequest request = new FacadeRequest();
         
-        request.setEntity(new ResidenceType());
+        request.setEntity(new ResidenceTypeDTORequest());
 
         FacadeResponse response = facade.query(request);
         

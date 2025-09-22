@@ -1,8 +1,5 @@
 package com.mahas.command.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.ICommand;
 import com.mahas.command.rules.logs.BirthdayValidator;
 import com.mahas.command.rules.logs.CPFValidator;
@@ -10,8 +7,15 @@ import com.mahas.command.rules.logs.EmailValidator;
 import com.mahas.command.rules.logs.GenderValidator;
 import com.mahas.command.rules.logs.PasswordValidator;
 import com.mahas.command.rules.logs.PhoneNumberValidator;
+import com.mahas.command.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
 import com.mahas.domain.user.User;
+import com.mahas.dto.request.user.UserDTORequest;
+import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyCreateUser implements ICommand {
@@ -33,62 +37,70 @@ public class VerifyCreateUser implements ICommand {
     @Autowired
     private CPFValidator cpfValidator;
 
+    @Autowired
+    private UserValidator userValidator;
+
     @Override
-    public String execute(FacadeRequest request) {
-        User user = (User) request.getEntity();
+    public SQLRequest execute(FacadeRequest request) {
+        UserDTORequest userRequest = (UserDTORequest) request.getEntity();
+        SQLRequest sqlRequest = new SQLRequest();
 
         String error;
 
         // Validar formato do email
-        error = emailValidator.isValidEmailFormat(user.getEmail());
+        error = emailValidator.isValidEmailFormat(userRequest.getEmail());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
         // Verificar se email já existe
-        if (emailValidator.emailExists(user.getEmail())) {
-            return "E-mail já cadastrado";
+        if (emailValidator.emailExists(userRequest.getEmail())) {
+            throw new ValidationException("E-mail já cadastrado");
         }
 
-        //Verificar formato da senha
-        error = passwordValidator.isValidPasswordFormat(user.getPassword());
+        // Verificar formato da senha
+        error = passwordValidator.isValidPasswordFormat(userRequest.getPassword());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
         // Validar CPF
-        error = cpfValidator.isValidCPFFormat(user.getCpf());
+        error = cpfValidator.isValidCPFFormat(userRequest.getCpf());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
-        // Verificar CPF existe
-        if (cpfValidator.cpfExists(user.getCpf())) {
-            return "CPF já cadastrado";
+        // Verificar se CPF já existe
+        if (cpfValidator.cpfExists(userRequest.getCpf())) {
+            throw new ValidationException("CPF já cadastrado");
         }
 
         // Validar número de telefone
-        error = phoneNumberValidator.isValidPhoneNumberFormat(user.getPhoneNumber());
+        error = phoneNumberValidator.isValidPhoneNumberFormat(userRequest.getPhoneNumber());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
         // Validar data de nascimento (anterior a hoje)
-        error = birthdayValidator.verifyBirthdayDate(user.getBirthday());
+        error = birthdayValidator.verifyBirthdayDate(userRequest.getBirthday());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
 
-        // Validar se gênero existe (ID válido no banco)
-        if (user.getGender() == null || user.getGender().getId() == null) {
-            return "Gênero não informado";
+        // Validar gênero
+        if (userRequest.getGender() == null || userRequest.getGender() == null) {
+            throw new ValidationException("Gênero não informado");
         }
 
-        error = genderValidator.validateGenderExists(user.getGender().getId());
+        error = genderValidator.validateGenderExists(userRequest.getGender());
         if (error != null) {
-            return error;
+            throw new ValidationException(error);
         }
+    
+        User user = userValidator.toEntity(userRequest);
 
-        return null;
+        sqlRequest.setEntity(user);
+
+        return sqlRequest;
     }
 }

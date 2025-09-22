@@ -3,10 +3,10 @@ package com.mahas.command.rules.logs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.user.User;
+import com.mahas.dto.request.user.UserDTORequest;
+import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.Facade;
 
 @Component
@@ -72,7 +72,7 @@ public class CPFValidator {
     }
 
     public boolean cpfExists(String cpf) {
-        User user = new User();
+        UserDTORequest user = new UserDTORequest();
         user.setCpf(cpf);
 
         FacadeRequest request = new FacadeRequest();
@@ -81,7 +81,7 @@ public class CPFValidator {
 
         FacadeResponse response = facade.query(request);
 
-        DomainEntity entity = response.getData().getEntity();
+        DTOResponse entity = response.getData().getEntity();
 
         return entity != null;
     }
