@@ -1,5 +1,6 @@
 package com.mahas.controller;
 
+import com.mahas.command.pre.base.address.BaseResidenceTypeCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.dto.request.address.ResidenceTypeDTORequest;
@@ -19,11 +20,15 @@ public class ResidenceTypeController {
     @Autowired
     private IFacade facade;
 
+    @Autowired
+    private BaseResidenceTypeCommand baseResidenceTypeCommand;
+
     @GetMapping("/all")
     public ResponseEntity<FacadeResponse> getStreetTypes() {
         FacadeRequest request = new FacadeRequest();
         
         request.setEntity(new ResidenceTypeDTORequest());
+        request.setPreCommand(baseResidenceTypeCommand);
 
         FacadeResponse response = facade.query(request);
         

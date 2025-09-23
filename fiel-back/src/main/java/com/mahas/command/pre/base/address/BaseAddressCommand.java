@@ -34,6 +34,18 @@ public class BaseAddressCommand implements IPreCommand {
         SQLRequest sqlRequest = new SQLRequest();
 
         sqlRequest.setEntity(address);
+
+        if(request.getLimit() != null && request.getLimit() > 0) {
+            sqlRequest.setLimit(request.getLimit());
+            if(request.getPage() != null && request.getPage() > 0) {
+                sqlRequest.setPage(request.getPage());
+            }else {
+                sqlRequest.setPage(1);
+            }
+        }else {
+            sqlRequest.setLimit(0);
+            sqlRequest.setPage(1);
+        }
         
         return sqlRequest;
     }
