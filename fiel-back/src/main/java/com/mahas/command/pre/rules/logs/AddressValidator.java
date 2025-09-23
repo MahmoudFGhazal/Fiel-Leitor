@@ -1,8 +1,6 @@
 package com.mahas.command.pre.rules.logs;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import com.mahas.command.pre.base.address.BaseAddressCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.address.Address;
@@ -13,10 +11,16 @@ import com.mahas.dto.request.address.AddressDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.Facade;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 @Component
 public class AddressValidator {
     @Autowired
     Facade facade;
+    
+    @Autowired
+    BaseAddressCommand baseAddressCommand;
     
     public Address toEntity(AddressDTORequest dto) {
         if (dto == null) return null;
@@ -62,6 +66,7 @@ public class AddressValidator {
         FacadeRequest request = new FacadeRequest();
         request.setEntity(address);
         request.setLimit(1);
+        request.setPreCommand(baseAddressCommand);
 
         FacadeResponse response = facade.query(request);
 

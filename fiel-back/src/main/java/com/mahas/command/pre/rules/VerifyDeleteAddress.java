@@ -1,14 +1,16 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.AddressValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.address.Address;
+import com.mahas.dto.request.DTORequest;
+import com.mahas.dto.request.address.AddressDTORequest;
 import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyDeleteAddress implements IPreCommand {
@@ -17,7 +19,15 @@ public class VerifyDeleteAddress implements IPreCommand {
 
     @Override
     public SQLRequest execute(FacadeRequest request) {
-        Address address = (Address) request.getEntity();
+        DTORequest entity = request.getEntity();
+
+        if (!(entity instanceof AddressDTORequest)) {
+            throw new ValidationException("Tipo de entidade inválido, esperado AddressDTORequest");
+        }
+
+        AddressDTORequest addressRequest = (AddressDTORequest) entity;
+
+        Address address = addressValidator.toEntity(addressRequest);
 
         // Verificar se ID do endereço foi fornecido
         if (address.getId() == null) {
