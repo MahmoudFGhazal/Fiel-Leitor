@@ -1,5 +1,7 @@
 package com.mahas.dto.response.address;
 
+import com.mahas.domain.DomainEntity;
+import com.mahas.domain.address.StreetType;
 import com.mahas.dto.response.DTOResponse;
 
 import lombok.AllArgsConstructor;
@@ -14,4 +16,12 @@ import lombok.Setter;
 public class StreetTypeDTOResponse implements DTOResponse {
     private Integer id;
     private String streetType;
+
+    @Override
+    public void mapFromEntity(DomainEntity entity) {
+        if (entity instanceof StreetType st) {
+            this.id = st.getId();
+            this.streetType = st.getStreetType();
+        }
+    }
 }

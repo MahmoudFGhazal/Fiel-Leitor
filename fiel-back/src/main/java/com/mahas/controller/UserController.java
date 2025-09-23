@@ -1,17 +1,5 @@
 package com.mahas.controller;
 
-import com.mahas.command.pre.rules.VerifyCreateUser;
-import com.mahas.command.pre.rules.VerifyDeleteUser;
-import com.mahas.command.pre.rules.VerifyLogin;
-import com.mahas.command.pre.rules.VerifyPagination;
-import com.mahas.command.pre.rules.VerifyUpdateUser;
-import com.mahas.command.pre.rules.VerifyUserExist;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.TypeResponse;
-import com.mahas.dto.request.user.UserDTORequest;
-import com.mahas.facade.IFacade;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +12,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mahas.command.pre.rules.VerifyCreateUser;
+import com.mahas.command.pre.rules.VerifyDeleteUser;
+import com.mahas.command.pre.rules.VerifyLogin;
+import com.mahas.command.pre.rules.VerifyPagination;
+import com.mahas.command.pre.rules.VerifyUpdateUser;
+import com.mahas.command.pre.rules.VerifyUserExist;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.TypeResponse;
+import com.mahas.dto.request.user.UserDTORequest;
+import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")

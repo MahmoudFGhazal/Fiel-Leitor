@@ -1,5 +1,7 @@
 package com.mahas.dto.response;
 
-public interface DTOResponse {
+import com.mahas.domain.DomainEntity;
 
+public interface DTOResponse {
+    void mapFromEntity(DomainEntity entity);
 }
