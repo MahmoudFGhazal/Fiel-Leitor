@@ -19,27 +19,32 @@ public class Facade extends FacadeAbstract implements IFacade {
     @Override
     public FacadeResponse save(FacadeRequest request) {
         FacadeResponse response = new FacadeResponse();
+        
         DTORequest entity = request.getEntity();
-
         if(entity == null) {
             response.setMessage(entity + " não é uma entidade");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
 
-        String nameEntity = entity.getClass().getName();
+        SQLRequest sqlRequest = runRulesRequest(request);
+        
+        if(sqlRequest == null) {
+            response.setMessage("Command não especificado");
+            response.setTypeResponse(TypeResponse.SERVER_ERROR);
+            return response;
+        }
+
+        String nameEntity = sqlRequest.getEntity().getClass().getName();
 
         IDAO dao = daos.get(nameEntity);
-        
-        SQLRequest sqlRequest = runRulesRequest(request);
-
         if(dao == null) {
             response.setMessage(nameEntity + " não encontrado o dao");
+            response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
 
         SQLResponse result = dao.save(sqlRequest);
-
         if(result == null) {
             response.setMessage("Erro ao fazer o insert no banco");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
@@ -56,7 +61,6 @@ public class Facade extends FacadeAbstract implements IFacade {
     @Transactional
     @Override
     public FacadeResponse query(FacadeRequest request) {
-        System.out.println("Oi");
         FacadeResponse response = new FacadeResponse();
 
         DTORequest entity = request.getEntity();
@@ -65,7 +69,7 @@ public class Facade extends FacadeAbstract implements IFacade {
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
-        System.out.println("Oi0");
+
         SQLRequest sqlRequest = runRulesRequest(request);
         
         if(sqlRequest == null) {
@@ -73,29 +77,27 @@ public class Facade extends FacadeAbstract implements IFacade {
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
-        System.out.println("fdosio");
+
         String nameEntity = sqlRequest.getEntity().getClass().getName();
-        System.out.println("52");
+
         IDAO dao = daos.get(nameEntity);
-        System.out.println("53");
         if(dao == null) {
-            System.out.println("54");
             response.setMessage(nameEntity + " não encontrado o dao");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
-        System.out.println("Oi2");
+
         SQLResponse result = dao.query(sqlRequest);
         if(result == null) {
             response.setMessage("Erro ao fazer a query no banco");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
-        System.out.println("Oi3");
+
         DataResponse data = runRulesResponse(request, result);
-        System.out.println("Oi4");
+
         response.setData(data);
-        System.out.println("Oi5");
+
         return response;
     }
 

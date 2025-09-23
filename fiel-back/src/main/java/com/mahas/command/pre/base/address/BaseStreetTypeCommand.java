@@ -1,8 +1,5 @@
 package com.mahas.command.pre.base.address;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.StreetTypeValidator;
 import com.mahas.domain.FacadeRequest;
@@ -12,9 +9,14 @@ import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.address.StreetTypeDTORequest;
 import com.mahas.exception.ValidationException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 @Component
 public class BaseStreetTypeCommand implements IPreCommand {
     @Autowired
+    @Lazy
     StreetTypeValidator streetTypeValidator;
 
     @Override

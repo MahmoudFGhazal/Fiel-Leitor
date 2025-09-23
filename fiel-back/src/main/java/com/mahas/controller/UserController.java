@@ -76,6 +76,7 @@ public class UserController {
 
         request.setEntity(user);
         request.setLimit(1);
+        request.setPreCommand(baseUserCommand);
 
         FacadeResponse response = facade.query(request);
         

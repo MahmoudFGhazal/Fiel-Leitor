@@ -1,5 +1,6 @@
 package com.mahas.controller;
 
+import com.mahas.command.pre.base.user.BaseGenderCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.dto.request.user.GenderDTORequest;
@@ -20,6 +21,9 @@ public class GenderController {
     @Autowired
     private IFacade facade;
 
+    @Autowired
+    private BaseGenderCommand baseGenderCommand;
+
     @GetMapping("/all")
     public ResponseEntity<FacadeResponse> getGenders(
             @RequestParam(value = "page", required = false) Integer page,
@@ -30,6 +34,7 @@ public class GenderController {
         request.setEntity(new GenderDTORequest());
         request.setLimit(limit);
         request.setPage(page);
+        request.setPreCommand(baseGenderCommand);
 
         FacadeResponse response = facade.query(request);
         

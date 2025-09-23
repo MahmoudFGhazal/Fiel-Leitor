@@ -89,7 +89,6 @@ public class AddressDAO implements IDAO {
             response.setLimit(limit);
             response.setTotalItem(totalItems);
             response.setTotalPage(totalPage);
-            response.setPageCount(totalPage);
 
         } catch (PersistenceException e) {
             throw e;

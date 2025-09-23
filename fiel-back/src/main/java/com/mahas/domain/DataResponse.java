@@ -22,7 +22,6 @@ public class DataResponse {
     
     private Integer page;
     private Integer limit;
-    private Integer pageCount;
     private Integer totalItem;
     private Integer totalPage;
 }

@@ -87,7 +87,6 @@ public class ResidenceTypeDAO implements IDAO {
             response.setLimit(limit);
             response.setTotalItem(totalItems);
             response.setTotalPage(totalPage);
-            response.setPageCount(totalPage);
 
         } catch (PersistenceException e) {
             throw e;

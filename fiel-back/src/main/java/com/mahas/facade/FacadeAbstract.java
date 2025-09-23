@@ -91,7 +91,7 @@ public abstract class FacadeAbstract {
     protected DataResponse runRulesResponse(FacadeRequest request, SQLResponse sqlResponse){
         IPostCommand command = request.getPostCommand(); 
         if (command != null) return command.execute(sqlResponse);
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
         return executeDefault(sqlResponse);
     }
 
@@ -121,7 +121,6 @@ public abstract class FacadeAbstract {
 
         response.setLimit(sqlResponse.getLimit());
         response.setPage(sqlResponse.getPage());
-        response.setPageCount(sqlResponse.getPageCount());
         response.setTotalItem(sqlResponse.getTotalItem());
         response.setTotalPage(sqlResponse.getTotalPage());
 
@@ -131,20 +130,18 @@ public abstract class FacadeAbstract {
     @SuppressWarnings("CallToPrintStackTrace")
     private DTOResponse createDTOFromEntity(DomainEntity entity) {
         Class<? extends DTOResponse> dtoClass = dtos.get(entity.getClass().getName());
-        System.out.println("DTO class for " + entity.getClass().getName() + ": " + dtoClass);
 
         if (dtoClass != null) {
             try {
                 DTOResponse dto = dtoClass.getDeclaredConstructor().newInstance();
                 dto.mapFromEntity(entity);
-                System.out.println("Mapped DTO: " + dto);
+
                 return dto;
             } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("No DTO mapping found for entity: " + entity.getClass().getName());
-        }
+        } 
+
         return null;
     }
 }

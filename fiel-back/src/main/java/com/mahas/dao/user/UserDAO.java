@@ -90,7 +90,7 @@ public class UserDAO implements IDAO {
             List<User> resultList = query.getResultList();
             System.out.println("RESULT LIST SIZE: " + resultList.size());
             for (User u : resultList) {
-                System.out.println("USER: " + u); // aqui você pode colocar u.getId(), u.getName(), etc., dependendo do que quer ver
+                System.out.println("USER: " + u);
             }
 
             Query countQuery = entityManager.createQuery(countJpql.toString());
@@ -98,7 +98,7 @@ public class UserDAO implements IDAO {
             Number totalCount = (Number) countQuery.getSingleResult();
             int totalItems = totalCount.intValue();
             
-            int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
+            int totalPage = (int) Math.ceil((double) totalItems / limit);
 
             if (!resultList.isEmpty()) {
                 if (limit == 1) {
@@ -112,7 +112,6 @@ public class UserDAO implements IDAO {
             response.setLimit(limit);
             response.setTotalItem(totalItems);
             response.setTotalPage(totalPage);
-            response.setPageCount(totalPage);
 
         } catch (PersistenceException e) {
             throw e;

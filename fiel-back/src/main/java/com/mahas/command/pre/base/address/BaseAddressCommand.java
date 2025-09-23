@@ -11,11 +11,13 @@ import com.mahas.dto.request.user.GenderDTORequest;
 import com.mahas.exception.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BaseAddressCommand implements IPreCommand {
     @Autowired
+    @Lazy
     AddressValidator addressValidator;
 
     @Override

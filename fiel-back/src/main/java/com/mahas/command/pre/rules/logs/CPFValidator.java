@@ -1,18 +1,22 @@
 package com.mahas.command.pre.rules.logs;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import com.mahas.command.pre.base.user.BaseUserCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.Facade;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 @Component
 public class CPFValidator {
     @Autowired
     Facade facade;
+
+    @Autowired
+    BaseUserCommand baseUserCommand;
 
     public String isValidCPFFormat(String cpf) {
         if (cpf == null || cpf.isBlank()) {
@@ -78,6 +82,7 @@ public class CPFValidator {
         FacadeRequest request = new FacadeRequest();
         request.setEntity(user);
         request.setLimit(1);
+        request.setPreCommand(baseUserCommand);
 
         FacadeResponse response = facade.query(request);
 
