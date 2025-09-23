@@ -25,6 +25,7 @@ public class UserDAO implements IDAO {
 
     @Override
     public SQLResponse query(SQLRequest request) {
+        System.out.println("ofodsfhnsduio");
         SQLResponse response = new SQLResponse();
         DomainEntity entity = request.getEntity();
 
@@ -66,9 +67,16 @@ public class UserDAO implements IDAO {
         jpql.append(whereClause);
         countJpql.append(whereClause);
 
-        int page = request.getPage() > 0 ? request.getPage() : 1;
-        int limit = request.getLimit() > 0 ? request.getLimit() : 0;
+        System.out.println("JPQL: " + jpql.toString());
+        System.out.println("COUNT JPQL: " + countJpql.toString());
+        System.out.println("PARAMETERS: " + parameters);
+
+        int page = request.getPage();
+        int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
+
+        System.out.println(page);
+        System.out.println(limit);
 
         try {
             Query query = entityManager.createQuery(jpql.toString(), User.class);
@@ -79,8 +87,11 @@ public class UserDAO implements IDAO {
                 query.setMaxResults(limit);
             }
 
-            @SuppressWarnings("unchecked")
             List<User> resultList = query.getResultList();
+            System.out.println("RESULT LIST SIZE: " + resultList.size());
+            for (User u : resultList) {
+                System.out.println("USER: " + u); // aqui você pode colocar u.getId(), u.getName(), etc., dependendo do que quer ver
+            }
 
             Query countQuery = entityManager.createQuery(countJpql.toString());
             parameters.forEach(countQuery::setParameter);

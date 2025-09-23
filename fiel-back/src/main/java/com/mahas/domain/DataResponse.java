@@ -20,9 +20,9 @@ public class DataResponse {
     private DTOResponse entity;
     private List<DTOResponse> entities;
     
-    private int page;
-    private int limit;
-    private int pageCount;
-    private int totalItem;
-    private int totalPage;
+    private Integer page;
+    private Integer limit;
+    private Integer pageCount;
+    private Integer totalItem;
+    private Integer totalPage;
 }

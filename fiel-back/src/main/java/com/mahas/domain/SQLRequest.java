@@ -17,7 +17,7 @@ import lombok.Setter;
 public class SQLRequest {
     private DomainEntity entity;
 
-    private int limit;
-    private int page;
+    private Integer limit;
+    private Integer page;
     private ISort sort;
 }

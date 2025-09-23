@@ -1,18 +1,15 @@
 package com.mahas.facade;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mahas.command.post.IPostCommand;
 import com.mahas.command.pre.IPreCommand;
-import com.mahas.command.pre.base.address.BaseAddressCommand;
-import com.mahas.command.pre.base.address.BaseResidenceTypeCommand;
-import com.mahas.command.pre.base.address.BaseStreetTypeCommand;
-import com.mahas.command.pre.base.user.BaseGenderCommand;
-import com.mahas.command.pre.base.user.BaseUserCommand;
 import com.mahas.dao.IDAO;
 import com.mahas.dao.address.AddressDAO;
 import com.mahas.dao.address.ResidenceTypeDAO;
@@ -29,12 +26,6 @@ import com.mahas.domain.address.ResidenceType;
 import com.mahas.domain.address.StreetType;
 import com.mahas.domain.user.Gender;
 import com.mahas.domain.user.User;
-import com.mahas.dto.request.DTORequest;
-import com.mahas.dto.request.address.AddressDTORequest;
-import com.mahas.dto.request.address.ResidenceTypeDTORequest;
-import com.mahas.dto.request.address.StreetTypeDTORequest;
-import com.mahas.dto.request.user.GenderDTORequest;
-import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.address.AddressDTOResponse;
 import com.mahas.dto.response.address.ResidenceTypeDTOResponse;
@@ -66,13 +57,11 @@ public abstract class FacadeAbstract {
     protected final Map<String, IDAO> daos = new HashMap<>();
 
     protected final Map<String, Class<? extends DTOResponse>> dtos = new HashMap<>();
-    protected final Map<String, IPreCommand> baseCommands = new HashMap<>();
 
     @PostConstruct
     public void init() {
         initDaos();
         initDtos();
-        initBaseCommands();
     }
 
     public void initDaos() {
@@ -92,20 +81,9 @@ public abstract class FacadeAbstract {
         dtos.put(StreetType.class.getName(), StreetTypeDTOResponse.class);
     }
 
-    public void initBaseCommands() {
-        baseCommands.put(UserDTORequest.class.getName(), new BaseUserCommand());
-        baseCommands.put(GenderDTORequest.class.getName(), new BaseGenderCommand());
-        baseCommands.put(AddressDTORequest.class.getName(), new BaseAddressCommand());
-        baseCommands.put(ResidenceTypeDTORequest.class.getName(), new BaseResidenceTypeCommand());
-        baseCommands.put(StreetTypeDTORequest.class.getName(), new BaseStreetTypeCommand());
-    }
-
     protected SQLRequest runRulesRequest(FacadeRequest request){
-        DTORequest dto = request.getEntity();
-        if (dto == null) return null;
-
         IPreCommand command = request.getPreCommand(); 
-        if(command == null) command = baseCommands.get(dto.getClass().getName());
+        if(command == null) return null;
 
         return command.execute(request);
     }
@@ -113,7 +91,7 @@ public abstract class FacadeAbstract {
     protected DataResponse runRulesResponse(FacadeRequest request, SQLResponse sqlResponse){
         IPostCommand command = request.getPostCommand(); 
         if (command != null) return command.execute(sqlResponse);
-        
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         return executeDefault(sqlResponse);
     }
 
@@ -128,19 +106,44 @@ public abstract class FacadeAbstract {
             }
         }
 
+        if (sqlResponse.getEntities() != null && !sqlResponse.getEntities().isEmpty()) {
+            List<DTOResponse> dtoList = new ArrayList<>();
+            for (DomainEntity e : sqlResponse.getEntities()) {
+                DTOResponse dto = createDTOFromEntity(e);
+                if (dto != null) {
+                    dtoList.add(dto);
+                }
+            }
+            if (!dtoList.isEmpty()) {
+                response.setEntities(dtoList);
+            }
+        }
+
+        response.setLimit(sqlResponse.getLimit());
+        response.setPage(sqlResponse.getPage());
+        response.setPageCount(sqlResponse.getPageCount());
+        response.setTotalItem(sqlResponse.getTotalItem());
+        response.setTotalPage(sqlResponse.getTotalPage());
+
         return response;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private DTOResponse createDTOFromEntity(DomainEntity entity) {
         Class<? extends DTOResponse> dtoClass = dtos.get(entity.getClass().getName());
+        System.out.println("DTO class for " + entity.getClass().getName() + ": " + dtoClass);
+
         if (dtoClass != null) {
             try {
                 DTOResponse dto = dtoClass.getDeclaredConstructor().newInstance();
-                
                 dto.mapFromEntity(entity);
+                System.out.println("Mapped DTO: " + dto);
                 return dto;
             } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+                e.printStackTrace();
             }
+        } else {
+            System.out.println("No DTO mapping found for entity: " + entity.getClass().getName());
         }
         return null;
     }

@@ -67,7 +67,13 @@ public class Facade extends FacadeAbstract implements IFacade {
         }
         System.out.println("Oi0");
         SQLRequest sqlRequest = runRulesRequest(request);
-        System.out.println("Oi1");
+        
+        if(sqlRequest == null) {
+            response.setMessage("Command não especificado");
+            response.setTypeResponse(TypeResponse.SERVER_ERROR);
+            return response;
+        }
+        System.out.println("fdosio");
         String nameEntity = sqlRequest.getEntity().getClass().getName();
         System.out.println("52");
         IDAO dao = daos.get(nameEntity);
