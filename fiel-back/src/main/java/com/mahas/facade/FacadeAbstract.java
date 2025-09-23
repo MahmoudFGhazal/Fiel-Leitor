@@ -1,6 +1,7 @@
 package com.mahas.facade;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +65,22 @@ public abstract class FacadeAbstract {
 
     protected DataResponse runRulesResponse(FacadeRequest request, SQLResponse SQLResponse){
         IPostCommand command = request.getPostCommand(); 
-        if(command == null) return null;
         
-        return command.execute(SQLResponse);
+        DataResponse data;
+            if (command == null) {
+            // Cria um DataResponse vazio
+            data = new DataResponse();
+            data.setEntities(List.of()); 
+            data.setPage(request.getPage() > 0 ? request.getPage() : 1);
+            data.setLimit(request.getLimit() > 0 ? request.getLimit() : 0);
+            data.setPageCount(0);
+            data.setTotalItem(0);
+            data.setTotalPage(0);
+            return data;
+        }
+
+        data = command.execute(SQLResponse);
+        
+        return data;
     }
 }

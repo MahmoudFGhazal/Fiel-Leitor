@@ -15,13 +15,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SQLResponse {
-    DomainEntity entity;
-    List<DomainEntity> entities;
+    private DomainEntity entity;
+    private List<DomainEntity> entities;
     
-    Integer page;
-    Integer limit;
-    Integer pageCount;
-    Integer totalItem;
-    Integer totalPage;
+    private int page;
+    private int limit;
+    private int pageCount;
+    private int totalItem;
+    private int totalPage;
 
 }

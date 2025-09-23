@@ -65,9 +65,9 @@ public class Facade extends FacadeAbstract implements IFacade {
             return response;
         }
 
-        String nameEntity = entity.getClass().getName();
-
         SQLRequest sqlRequest = runRulesRequest(request);
+
+        String nameEntity = sqlRequest.getEntity().getClass().getName();
 
         IDAO dao = daos.get(nameEntity);
         if(dao == null) {

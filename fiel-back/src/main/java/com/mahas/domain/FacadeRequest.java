@@ -22,6 +22,6 @@ public class FacadeRequest {
     private IPreCommand preCommand;
     private IPostCommand postCommand;
 
-    private Integer page;
-    private Integer limit;
+    private int page;
+    private int limit;
 }

@@ -1,5 +1,15 @@
 package com.mahas.controller;
 
+import com.mahas.command.pre.rules.VerifyCreateAddress;
+import com.mahas.command.pre.rules.VerifyDeleteAddress;
+import com.mahas.command.pre.rules.VerifyGetUserByUser;
+import com.mahas.command.pre.rules.VerifyUpdateAddress;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.TypeResponse;
+import com.mahas.dto.request.address.AddressDTORequest;
+import com.mahas.facade.IFacade;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +22,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.mahas.command.pre.rules.VerifyCreateAddress;
-import com.mahas.command.pre.rules.VerifyDeleteAddress;
-import com.mahas.command.pre.rules.VerifyGetUserByUser;
-import com.mahas.command.pre.rules.VerifyUpdateAddress;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.TypeResponse;
-import com.mahas.dto.request.address.AddressDTORequest;
-import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -56,7 +56,7 @@ public class AddressController {
         request.setEntity(address);
         FacadeResponse response = facade.query(request);
         
-        if (response.getData().getTotalItem() == 0) {
+        if(response.getData() == null || response.getData().getTotalItem() == 0) {
             response.setMessage("Endereço não encontrado");
             response.setTypeResponse(TypeResponse.CONFLICT);
             return ResponseEntity
@@ -64,7 +64,7 @@ public class AddressController {
                     .body(response);
         }
 
-        if (response.getData().getTotalItem() > 1) {
+        if (response.getData() == null || response.getData().getTotalItem() > 1) {
             response.setMessage("Mais de um endereço encontrado para o ID informado");
             response.setTypeResponse(TypeResponse.CONFLICT);
             return ResponseEntity

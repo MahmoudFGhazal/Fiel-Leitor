@@ -1,8 +1,8 @@
 package com.mahas.domain;
 
-import org.springframework.stereotype.Component;
-
 import com.mahas.domain.sort.ISort;
+
+import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import lombok.Setter;
 public class SQLRequest {
     private DomainEntity entity;
 
-    private Integer limit;
-    private Integer page;
+    private int limit;
+    private int page;
     private ISort sort;
 }

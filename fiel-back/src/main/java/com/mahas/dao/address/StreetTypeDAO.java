@@ -52,15 +52,15 @@ public class StreetTypeDAO implements IDAO {
         jpql.append(whereClause);
         countJpql.append(whereClause);
 
-        Integer page = request.getPage() != null ? request.getPage() : 1;
-        Integer limit = request.getLimit();
-        int offset = (limit != null) ? (page - 1) * limit : 0;
+        int page = request.getPage() > 0 ? request.getPage() : 1;
+        int limit = request.getLimit() > 0 ? request.getLimit() : 0;
+        int offset = (limit > 0) ? (page - 1) * limit : 0;
 
         try {
             Query query = entityManager.createQuery(jpql.toString(), StreetType.class);
             parameters.forEach(query::setParameter);
 
-            if (limit != null) {
+            if (limit > 0) {
                 query.setFirstResult(offset);
                 query.setMaxResults(limit);
             }
@@ -73,10 +73,10 @@ public class StreetTypeDAO implements IDAO {
             Number totalCount = (Number) countQuery.getSingleResult();
             int totalItems = totalCount.intValue();
 
-            int totalPage = (limit != null) ? (int) Math.ceil((double) totalItems / limit) : 1;
+            int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
 
             if (!resultList.isEmpty()) {
-                if (limit != null && limit == 1) {
+                if (limit == 1) {
                     response.setEntity(resultList.get(0));
                 } else {
                     response.setEntities(new ArrayList<>(resultList));

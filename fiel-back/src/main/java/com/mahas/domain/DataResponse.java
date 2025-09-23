@@ -17,12 +17,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DataResponse {
-    DTOResponse entity;
-    List<DTOResponse> entities;
+    private DTOResponse entity;
+    private List<DTOResponse> entities;
     
-    Integer page;
-    Integer limit;
-    Integer pageCount;
-    Integer totalItem;
-    Integer totalPage;
+    private int page;
+    private int limit;
+    private int pageCount;
+    private int totalItem;
+    private int totalPage;
 }
