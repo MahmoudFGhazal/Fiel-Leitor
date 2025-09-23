@@ -1,8 +1,5 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.BirthdayValidator;
 import com.mahas.command.pre.rules.logs.GenderValidator;
@@ -11,7 +8,12 @@ import com.mahas.command.pre.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.user.User;
+import com.mahas.dto.request.DTORequest;
+import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyUpdateUser implements IPreCommand {
@@ -29,7 +31,16 @@ public class VerifyUpdateUser implements IPreCommand {
 
     @Override
     public SQLRequest execute(FacadeRequest request) {
-        User user = (User) request.getEntity();
+        DTORequest entity = request.getEntity();
+
+        if (!(entity instanceof UserDTORequest)) {
+            throw new ValidationException("Tipo de entidade inválido, esperado UserDTORequest");
+        }
+
+        UserDTORequest userRequest = (UserDTORequest) entity;
+
+        User user = userValidator.toEntity(userRequest);
+       
         String error;
 
         // Verificar se ID do usuário foi fornecido
