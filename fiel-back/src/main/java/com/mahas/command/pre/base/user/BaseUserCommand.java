@@ -28,8 +28,9 @@ public class BaseUserCommand implements IPreCommand {
         }
 
         UserDTORequest userRequest = (UserDTORequest) entity;
+        System.out.println(userRequest.getId());
         User user = userValidator.toEntity(userRequest);
-
+        System.out.println(user.getId());
         SQLRequest sqlRequest = new SQLRequest();
 
         sqlRequest.setEntity(user);

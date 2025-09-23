@@ -65,14 +65,12 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getUser(
-            @RequestParam(value = "userId", required = false) Integer id
+            @RequestParam(value = "userId", required = true) Integer id
         ) {
         FacadeRequest request = new FacadeRequest();
 
         UserDTORequest user = new UserDTORequest();
-        if(id != null) {
-            user.setId(id);
-        }
+        user.setId(id);
 
         request.setEntity(user);
         request.setLimit(1);
