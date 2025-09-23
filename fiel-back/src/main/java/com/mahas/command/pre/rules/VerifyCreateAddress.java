@@ -1,11 +1,14 @@
-package com.mahas.command.rules;
+package com.mahas.command.pre.rules;
 
-import com.mahas.command.ICommand;
-import com.mahas.command.rules.logs.AddressValidator;
-import com.mahas.command.rules.logs.ResidenceTypeValidator;
-import com.mahas.command.rules.logs.StreetTypeValidator;
-import com.mahas.command.rules.logs.UserValidator;
-import com.mahas.command.rules.logs.ZIPValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.mahas.command.pre.IPreCommand;
+import com.mahas.command.pre.rules.logs.AddressValidator;
+import com.mahas.command.pre.rules.logs.ResidenceTypeValidator;
+import com.mahas.command.pre.rules.logs.StreetTypeValidator;
+import com.mahas.command.pre.rules.logs.UserValidator;
+import com.mahas.command.pre.rules.logs.ZIPValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.address.Address;
@@ -13,11 +16,8 @@ import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.address.AddressDTORequest;
 import com.mahas.exception.ValidationException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 @Component
-public class VerifyCreateAddress implements ICommand {
+public class VerifyCreateAddress implements IPreCommand {
     @Autowired
     private ZIPValidator zipValidator;
 

@@ -1,8 +1,8 @@
-package com.mahas.command;
+package com.mahas.command.pre;
 
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 
-public interface ICommand {
+public interface IPreCommand {
     SQLRequest execute(FacadeRequest request);
 }

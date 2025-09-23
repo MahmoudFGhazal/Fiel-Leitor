@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mahas.dao.IDAO;
+import com.mahas.domain.DataResponse;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.SQLRequest;
@@ -30,7 +31,7 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         IDAO dao = daos.get(nameEntity);
         
-        SQLRequest sqlRequest = runRules(request);
+        SQLRequest sqlRequest = runRulesRequest(request);
 
         if(dao == null) {
             response.setMessage(nameEntity + " não encontrado o dao");
@@ -45,7 +46,9 @@ public class Facade extends FacadeAbstract implements IFacade {
             return response;
         }
 
-        response.setData(result);
+        DataResponse data = runRulesResponse(request, result);
+
+        response.setData(data);
         
         return response;
     }
@@ -64,7 +67,7 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         String nameEntity = entity.getClass().getName();
 
-        SQLRequest sqlRequest = runRules(request);
+        SQLRequest sqlRequest = runRulesRequest(request);
 
         IDAO dao = daos.get(nameEntity);
         if(dao == null) {
@@ -80,7 +83,9 @@ public class Facade extends FacadeAbstract implements IFacade {
             return response;
         }
 
-        response.setData(result);
+        DataResponse data = runRulesResponse(request, result);
+
+        response.setData(data);
         
         return response;
     }
@@ -99,7 +104,7 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         String nameEntity = entity.getClass().getName();
 
-        SQLRequest sqlRequest = runRules(request);
+        SQLRequest sqlRequest = runRulesRequest(request);
 
         IDAO dao = daos.get(nameEntity);
         if(dao == null) {
@@ -115,7 +120,9 @@ public class Facade extends FacadeAbstract implements IFacade {
             return response;
         }
 
-        response.setData(result);
+        DataResponse data = runRulesResponse(request, result);
+
+        response.setData(data);
         
         return response;
     }
@@ -134,7 +141,7 @@ public class Facade extends FacadeAbstract implements IFacade {
 
         String nameEntity = entity.getClass().getName();
 
-        SQLRequest sqlRequest = runRules(request);
+        SQLRequest sqlRequest = runRulesRequest(request);
 
         IDAO dao = daos.get(nameEntity);
         if(dao == null) {
@@ -150,7 +157,9 @@ public class Facade extends FacadeAbstract implements IFacade {
             return response;
         }
 
-        response.setData(result);
+        DataResponse data = runRulesResponse(request, result);
+
+        response.setData(data);
         
         return response;
     }

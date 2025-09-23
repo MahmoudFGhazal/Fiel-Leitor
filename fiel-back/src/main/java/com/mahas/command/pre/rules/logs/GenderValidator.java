@@ -1,13 +1,12 @@
-package com.mahas.command.rules.logs;
-
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.facade.Facade;
+package com.mahas.command.pre.rules.logs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
 import com.mahas.dto.request.user.GenderDTORequest;
+import com.mahas.facade.Facade;
 
 @Component
 public class GenderValidator {

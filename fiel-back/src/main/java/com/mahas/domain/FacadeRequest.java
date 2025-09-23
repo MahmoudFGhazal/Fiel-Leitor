@@ -2,7 +2,8 @@ package com.mahas.domain;
 
 import org.springframework.stereotype.Component;
 
-import com.mahas.command.ICommand;
+import com.mahas.command.post.IPostCommand;
+import com.mahas.command.pre.IPreCommand;
 import com.mahas.dto.request.DTORequest;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +18,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FacadeRequest {
     private DTORequest entity;
-    private ICommand command;
+    
+    private IPreCommand preCommand;
+    private IPostCommand postCommand;
 
     private Integer page;
     private Integer limit;

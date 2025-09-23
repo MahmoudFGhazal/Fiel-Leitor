@@ -1,17 +1,5 @@
 package com.mahas.controller;
 
-import com.mahas.command.rules.VerifyCreateUser;
-import com.mahas.command.rules.VerifyDeleteUser;
-import com.mahas.command.rules.VerifyLogin;
-import com.mahas.command.rules.VerifyPagination;
-import com.mahas.command.rules.VerifyUpdateUser;
-import com.mahas.command.rules.VerifyUserExist;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.TypeResponse;
-import com.mahas.dto.request.user.UserDTORequest;
-import com.mahas.facade.IFacade;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +12,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mahas.command.pre.rules.VerifyCreateUser;
+import com.mahas.command.pre.rules.VerifyDeleteUser;
+import com.mahas.command.pre.rules.VerifyLogin;
+import com.mahas.command.pre.rules.VerifyPagination;
+import com.mahas.command.pre.rules.VerifyUpdateUser;
+import com.mahas.command.pre.rules.VerifyUserExist;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.TypeResponse;
+import com.mahas.dto.request.user.UserDTORequest;
+import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -56,7 +56,7 @@ public class UserController {
 
         request.setEntity(user);
         request.setLimit(1);
-        request.setCommand(verifyLogin);
+        request.setPreCommand(verifyLogin);
         
         FacadeResponse response = facade.query(request);
 
@@ -97,7 +97,7 @@ public class UserController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        request.setCommand(verifyPagination);
+        request.setPreCommand(verifyPagination);
         request.setLimit(limit);
         request.setPage(page);
         request.setEntity(new UserDTORequest());
@@ -111,7 +111,7 @@ public class UserController {
     public ResponseEntity<FacadeResponse> createUser(@RequestBody UserDTORequest user) {
         FacadeRequest request = new FacadeRequest();
        
-        request.setCommand(verifyCreateUser);
+        request.setPreCommand(verifyCreateUser);
         request.setEntity(user);
 
         FacadeResponse response = facade.save(request);
@@ -125,7 +125,7 @@ public class UserController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        request.setCommand(verifyDeleteUser);
+        request.setPreCommand(verifyDeleteUser);
 
         UserDTORequest user = new UserDTORequest();
         user.setId(id);
@@ -140,7 +140,7 @@ public class UserController {
     public ResponseEntity<FacadeResponse> updateProfile(@RequestBody UserDTORequest user) {
         FacadeRequest request = new FacadeRequest();
 
-        request.setCommand(verifyUpdateUser);
+        request.setPreCommand(verifyUpdateUser);
 
         request.setEntity(user);
         
@@ -156,7 +156,7 @@ public class UserController {
     ) {
         FacadeRequest request = new FacadeRequest();
 
-        request.setCommand(verifyUserExist);
+        request.setPreCommand(verifyUserExist);
         
         UserDTORequest user = new UserDTORequest();
         user.setId(userId);

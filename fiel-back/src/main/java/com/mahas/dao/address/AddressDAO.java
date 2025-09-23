@@ -56,7 +56,7 @@ public class AddressDAO implements IDAO {
 
         Integer page = request.getPage() != null ? request.getPage() : 1;
         Integer limit = request.getLimit();
-        int offset = (limit != null) ? (page - 1) * limit : 0;
+        Integer offset = (limit != null) ? (page - 1) * limit : 0;
 
         try {
             Query query = entityManager.createQuery(jpql.toString(), Address.class);

@@ -1,15 +1,5 @@
 package com.mahas.controller;
 
-import com.mahas.command.rules.VerifyCreateAddress;
-import com.mahas.command.rules.VerifyDeleteAddress;
-import com.mahas.command.rules.VerifyGetUserByUser;
-import com.mahas.command.rules.VerifyUpdateAddress;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.TypeResponse;
-import com.mahas.dto.request.address.AddressDTORequest;
-import com.mahas.facade.IFacade;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +12,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mahas.command.pre.rules.VerifyCreateAddress;
+import com.mahas.command.pre.rules.VerifyDeleteAddress;
+import com.mahas.command.pre.rules.VerifyGetUserByUser;
+import com.mahas.command.pre.rules.VerifyUpdateAddress;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.TypeResponse;
+import com.mahas.dto.request.address.AddressDTORequest;
+import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -83,7 +83,7 @@ public class AddressController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        request.setCommand(verifyGetUserByUser);
+        request.setPreCommand(verifyGetUserByUser);
         request.setLimit(limit);
         request.setPage(page);
         AddressDTORequest address = new AddressDTORequest();
@@ -99,7 +99,7 @@ public class AddressController {
     public ResponseEntity<FacadeResponse> createAddress(@RequestBody AddressDTORequest address) {
         FacadeRequest request = new FacadeRequest();
 
-        request.setCommand(verifyCreateAddress);
+        request.setPreCommand(verifyCreateAddress);
         address.setId(null);
         request.setEntity(address);
         FacadeResponse response = facade.save(request);
@@ -116,7 +116,7 @@ public class AddressController {
         AddressDTORequest address = new AddressDTORequest();
         address.setId(id);
         request.setEntity(address);
-        request.setCommand(verifyDeleteAddress);
+        request.setPreCommand(verifyDeleteAddress);
         
         FacadeResponse response = facade.delete(request);
         
@@ -127,7 +127,7 @@ public class AddressController {
     public ResponseEntity<FacadeResponse> updateAddress(@RequestBody AddressDTORequest address) {
         FacadeRequest request = new FacadeRequest();
 
-        request.setCommand(verifyUpdateAddress);
+        request.setPreCommand(verifyUpdateAddress);
         request.setEntity(address);
         
         FacadeResponse response = facade.update(request);

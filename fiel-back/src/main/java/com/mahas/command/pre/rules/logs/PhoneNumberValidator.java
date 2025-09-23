@@ -1,4 +1,4 @@
-package com.mahas.command.rules.logs;
+package com.mahas.command.pre.rules.logs;
 
 import org.springframework.stereotype.Component;
 

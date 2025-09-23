@@ -1,20 +1,20 @@
-package com.mahas.command.rules;
+package com.mahas.command.pre.rules;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mahas.command.ICommand;
-import com.mahas.command.rules.logs.AddressValidator;
-import com.mahas.command.rules.logs.ResidenceTypeValidator;
-import com.mahas.command.rules.logs.StreetTypeValidator;
-import com.mahas.command.rules.logs.ZIPValidator;
+import com.mahas.command.pre.IPreCommand;
+import com.mahas.command.pre.rules.logs.AddressValidator;
+import com.mahas.command.pre.rules.logs.ResidenceTypeValidator;
+import com.mahas.command.pre.rules.logs.StreetTypeValidator;
+import com.mahas.command.pre.rules.logs.ZIPValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.address.Address;
 import com.mahas.exception.ValidationException;
 
 @Component
-public class VerifyUpdateAddress implements ICommand {
+public class VerifyUpdateAddress implements IPreCommand {
     @Autowired
     private AddressValidator addressValidator;
 

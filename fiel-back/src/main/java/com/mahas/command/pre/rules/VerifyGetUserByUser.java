@@ -1,23 +1,25 @@
-package com.mahas.command.rules;
+package com.mahas.command.pre.rules;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mahas.command.ICommand;
-import com.mahas.command.rules.logs.UserValidator;
+import com.mahas.command.pre.IPreCommand;
+import com.mahas.command.pre.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
+import com.mahas.domain.address.Address;
 import com.mahas.domain.user.User;
 import com.mahas.exception.ValidationException;
 
 @Component
-public class VerifyUserExist implements ICommand {
+public class VerifyGetUserByUser implements IPreCommand {
     @Autowired
     private UserValidator userValidator;
 
     @Override
     public SQLRequest execute(FacadeRequest request) {
-        User user = (User) request.getEntity();
+        Address address = (Address) request.getEntity();
+        User user = address.getUser();
 
         // Verificar se ID do usuário foi fornecido
         if (user.getId() == null) {
@@ -30,7 +32,7 @@ public class VerifyUserExist implements ICommand {
         }
 
         SQLRequest sqlRequest = new SQLRequest();
-        sqlRequest.setEntity(user); 
+        sqlRequest.setEntity(user);
         return sqlRequest;
     }
 }

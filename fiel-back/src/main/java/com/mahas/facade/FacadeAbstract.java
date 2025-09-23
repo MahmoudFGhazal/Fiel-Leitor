@@ -5,15 +5,18 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mahas.command.ICommand;
+import com.mahas.command.post.IPostCommand;
+import com.mahas.command.pre.IPreCommand;
 import com.mahas.dao.IDAO;
 import com.mahas.dao.address.AddressDAO;
 import com.mahas.dao.address.ResidenceTypeDAO;
 import com.mahas.dao.address.StreetTypeDAO;
 import com.mahas.dao.user.GenderDAO;
 import com.mahas.dao.user.UserDAO;
+import com.mahas.domain.DataResponse;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
+import com.mahas.domain.SQLResponse;
 import com.mahas.domain.address.Address;
 import com.mahas.domain.address.ResidenceType;
 import com.mahas.domain.address.StreetType;
@@ -52,10 +55,17 @@ public abstract class FacadeAbstract {
         daos.put(StreetType.class.getName(), streetTypeDAO);
     }
 
-    protected SQLRequest runRules(FacadeRequest request){
-        ICommand command = request.getCommand(); 
+    protected SQLRequest runRulesRequest(FacadeRequest request){
+        IPreCommand command = request.getPreCommand(); 
         if(command == null) return null;
         
         return command.execute(request);
+    }
+
+    protected DataResponse runRulesResponse(FacadeRequest request, SQLResponse SQLResponse){
+        IPostCommand command = request.getPostCommand(); 
+        if(command == null) return null;
+        
+        return command.execute(SQLResponse);
     }
 }
