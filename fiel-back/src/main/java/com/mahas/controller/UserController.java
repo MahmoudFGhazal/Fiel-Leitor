@@ -120,15 +120,14 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<FacadeResponse> deleteUser(
-            @RequestParam(value = "userId") Integer id
+            @RequestParam(value = "userId", required = true) Integer id
         ) {
         FacadeRequest request = new FacadeRequest();
-
-        request.setPreCommand(verifyDeleteUser);
 
         UserDTORequest user = new UserDTORequest();
         user.setId(id);
         request.setEntity(user);
+        request.setPreCommand(verifyDeleteUser);
         
         FacadeResponse response = facade.delete(request);
         

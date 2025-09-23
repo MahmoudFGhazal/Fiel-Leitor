@@ -8,6 +8,8 @@ import com.mahas.command.pre.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.user.User;
+import com.mahas.dto.request.DTORequest;
+import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.exception.ValidationException;
 
 @Component
@@ -17,7 +19,15 @@ public class VerifyDeleteUser implements IPreCommand {
 
     @Override
     public SQLRequest execute(FacadeRequest request) {
-        User user = (User) request.getEntity();
+        DTORequest entity = request.getEntity();
+
+        if (!(entity instanceof UserDTORequest)) {
+            throw new ValidationException("Tipo de entidade inválido, esperado UserDTORequest");
+        }
+
+        UserDTORequest userRequest = (UserDTORequest) entity;
+
+        User user = userValidator.toEntity(userRequest);
 
         // Verificar se ID do usuário foi fornecido
         if (user.getId() == null) {
