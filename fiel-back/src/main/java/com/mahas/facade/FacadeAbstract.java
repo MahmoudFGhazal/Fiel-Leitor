@@ -24,6 +24,7 @@ import com.mahas.domain.address.ResidenceType;
 import com.mahas.domain.address.StreetType;
 import com.mahas.domain.user.Gender;
 import com.mahas.domain.user.User;
+import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.address.AddressDTOResponse;
 import com.mahas.dto.response.address.ResidenceTypeDTOResponse;
@@ -80,9 +81,13 @@ public abstract class FacadeAbstract {
 
     protected SQLRequest runRulesRequest(FacadeRequest request){
         IPreCommand command = request.getPreCommand(); 
-        if(command == null) return null;
+        if(command != null) return command.execute(request);
         
-        return command.execute(request);
+        DTORequest dto = request.getEntity();
+        if(dto == null) return null;
+
+        SQLRequest sqlRequest = createSQLRequestFromDTO(dto);
+        return sqlRequest;
     }
 
     protected DataResponse runRulesResponse(FacadeRequest request, SQLResponse sqlResponse){
@@ -118,5 +123,30 @@ public abstract class FacadeAbstract {
             }
         }
         return null;
+    }
+
+    protected SQLRequest createSQLRequestFromDTO(DTORequest dto) {
+        try {
+            String dtoClassName = dto.getClass().getSimpleName().replace("DTORequest", "");
+            Class<?> entityClass = Class.forName("com.mahas.domain." + dtoClassName);
+            DomainEntity entity = (DomainEntity) entityClass.getDeclaredConstructor().newInstance();
+
+            for (var field : dto.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    var entityField = entityClass.getDeclaredField(field.getName());
+                    entityField.setAccessible(true);
+                    entityField.set(entity, field.get(dto));
+                } catch (NoSuchFieldException ignored) {
+                }
+            }
+
+            SQLRequest sqlRequest = new SQLRequest();
+            sqlRequest.setEntity(entity);
+
+            return sqlRequest;
+        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            return null;
+        }
     }
 }
