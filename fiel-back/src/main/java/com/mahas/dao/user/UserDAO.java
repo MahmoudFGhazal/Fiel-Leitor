@@ -25,7 +25,6 @@ public class UserDAO implements IDAO {
 
     @Override
     public SQLResponse query(SQLRequest request) {
-        System.out.println("ofodsfhnsduio");
         SQLResponse response = new SQLResponse();
         DomainEntity entity = request.getEntity();
 
@@ -67,16 +66,9 @@ public class UserDAO implements IDAO {
         jpql.append(whereClause);
         countJpql.append(whereClause);
 
-        System.out.println("JPQL: " + jpql.toString());
-        System.out.println("COUNT JPQL: " + countJpql.toString());
-        System.out.println("PARAMETERS: " + parameters);
-
         int page = request.getPage();
         int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
-
-        System.out.println(page);
-        System.out.println(limit);
 
         try {
             Query query = entityManager.createQuery(jpql.toString(), User.class);
@@ -88,10 +80,6 @@ public class UserDAO implements IDAO {
             }
 
             List<User> resultList = query.getResultList();
-            System.out.println("RESULT LIST SIZE: " + resultList.size());
-            for (User u : resultList) {
-                System.out.println("USER: " + u);
-            }
 
             Query countQuery = entityManager.createQuery(countJpql.toString());
             parameters.forEach(countQuery::setParameter);

@@ -95,7 +95,7 @@ public class UserController {
             @RequestParam(value = "limit", required = false) Integer limit
         ) {
         FacadeRequest request = new FacadeRequest();
-        System.out.println(limit);
+
         request.setLimit(limit);
         request.setPage(page);
         request.setPreCommand(baseUserCommand);
