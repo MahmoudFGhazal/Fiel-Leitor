@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mahas.command.post.IPostCommand;
 import com.mahas.command.pre.IPreCommand;
+import com.mahas.command.pre.base.address.BaseAddressCommand;
+import com.mahas.command.pre.base.address.BaseResidenceTypeCommand;
+import com.mahas.command.pre.base.address.BaseStreetTypeCommand;
+import com.mahas.command.pre.base.user.BaseGenderCommand;
+import com.mahas.command.pre.base.user.BaseUserCommand;
 import com.mahas.dao.IDAO;
 import com.mahas.dao.address.AddressDAO;
 import com.mahas.dao.address.ResidenceTypeDAO;
@@ -25,6 +30,11 @@ import com.mahas.domain.address.StreetType;
 import com.mahas.domain.user.Gender;
 import com.mahas.domain.user.User;
 import com.mahas.dto.request.DTORequest;
+import com.mahas.dto.request.address.AddressDTORequest;
+import com.mahas.dto.request.address.ResidenceTypeDTORequest;
+import com.mahas.dto.request.address.StreetTypeDTORequest;
+import com.mahas.dto.request.user.GenderDTORequest;
+import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.address.AddressDTOResponse;
 import com.mahas.dto.response.address.ResidenceTypeDTOResponse;
@@ -54,12 +64,15 @@ public abstract class FacadeAbstract {
     private StreetTypeDAO streetTypeDAO;
 
     protected final Map<String, IDAO> daos = new HashMap<>();
+
     protected final Map<String, Class<? extends DTOResponse>> dtos = new HashMap<>();
+    protected final Map<String, IPreCommand> baseCommands = new HashMap<>();
 
     @PostConstruct
     public void init() {
         initDaos();
         initDtos();
+        initBaseCommands();
     }
 
     public void initDaos() {
@@ -79,15 +92,22 @@ public abstract class FacadeAbstract {
         dtos.put(StreetType.class.getName(), StreetTypeDTOResponse.class);
     }
 
-    protected SQLRequest runRulesRequest(FacadeRequest request){
-        IPreCommand command = request.getPreCommand(); 
-        if(command != null) return command.execute(request);
-        
-        DTORequest dto = request.getEntity();
-        if(dto == null) return null;
+    public void initBaseCommands() {
+        baseCommands.put(UserDTORequest.class.getName(), new BaseUserCommand());
+        baseCommands.put(GenderDTORequest.class.getName(), new BaseGenderCommand());
+        baseCommands.put(AddressDTORequest.class.getName(), new BaseAddressCommand());
+        baseCommands.put(ResidenceTypeDTORequest.class.getName(), new BaseResidenceTypeCommand());
+        baseCommands.put(StreetTypeDTORequest.class.getName(), new BaseStreetTypeCommand());
+    }
 
-        SQLRequest sqlRequest = createSQLRequestFromDTO(dto);
-        return sqlRequest;
+    protected SQLRequest runRulesRequest(FacadeRequest request){
+        DTORequest dto = request.getEntity();
+        if (dto == null) return null;
+
+        IPreCommand command = request.getPreCommand(); 
+        if(command == null) command = baseCommands.get(dto.getClass().getName());
+
+        return command.execute(request);
     }
 
     protected DataResponse runRulesResponse(FacadeRequest request, SQLResponse sqlResponse){
@@ -123,30 +143,5 @@ public abstract class FacadeAbstract {
             }
         }
         return null;
-    }
-
-    protected SQLRequest createSQLRequestFromDTO(DTORequest dto) {
-        try {
-            String dtoClassName = dto.getClass().getSimpleName().replace("DTORequest", "");
-            Class<?> entityClass = Class.forName("com.mahas.domain." + dtoClassName);
-            DomainEntity entity = (DomainEntity) entityClass.getDeclaredConstructor().newInstance();
-
-            for (var field : dto.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                try {
-                    var entityField = entityClass.getDeclaredField(field.getName());
-                    entityField.setAccessible(true);
-                    entityField.set(entity, field.get(dto));
-                } catch (NoSuchFieldException ignored) {
-                }
-            }
-
-            SQLRequest sqlRequest = new SQLRequest();
-            sqlRequest.setEntity(entity);
-
-            return sqlRequest;
-        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            return null;
-        }
     }
 }

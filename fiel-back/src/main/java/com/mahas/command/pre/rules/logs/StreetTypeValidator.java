@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.address.StreetType;
 import com.mahas.dto.request.address.StreetTypeDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.Facade;
@@ -13,6 +14,16 @@ import com.mahas.facade.Facade;
 public class StreetTypeValidator {
     @Autowired
     Facade facade;
+
+    public StreetType toEntity(StreetTypeDTORequest dto) {
+        if (dto == null) return null;
+
+        StreetType streetType = new StreetType();
+        streetType.setId(dto.getId());
+        streetType.setStreetType(dto.getStreetType());
+
+        return streetType;
+    }
 
     public boolean streetTypeExists(Integer streetTypeId) {
         StreetTypeDTORequest streetType = new StreetTypeDTORequest();

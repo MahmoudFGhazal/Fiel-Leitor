@@ -56,6 +56,7 @@ public class Facade extends FacadeAbstract implements IFacade {
     @Transactional
     @Override
     public FacadeResponse query(FacadeRequest request) {
+        System.out.println("Oi");
         FacadeResponse response = new FacadeResponse();
 
         DTORequest entity = request.getEntity();
@@ -64,29 +65,31 @@ public class Facade extends FacadeAbstract implements IFacade {
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
-
+        System.out.println("Oi0");
         SQLRequest sqlRequest = runRulesRequest(request);
-
+        System.out.println("Oi1");
         String nameEntity = sqlRequest.getEntity().getClass().getName();
-
+        System.out.println("52");
         IDAO dao = daos.get(nameEntity);
+        System.out.println("53");
         if(dao == null) {
+            System.out.println("54");
             response.setMessage(nameEntity + " não encontrado o dao");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
-
+        System.out.println("Oi2");
         SQLResponse result = dao.query(sqlRequest);
         if(result == null) {
             response.setMessage("Erro ao fazer a query no banco");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);
             return response;
         }
-
+        System.out.println("Oi3");
         DataResponse data = runRulesResponse(request, result);
-
+        System.out.println("Oi4");
         response.setData(data);
-        
+        System.out.println("Oi5");
         return response;
     }
 

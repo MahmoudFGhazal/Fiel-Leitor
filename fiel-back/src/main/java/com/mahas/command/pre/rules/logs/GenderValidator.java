@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.user.Gender;
 import com.mahas.dto.request.user.GenderDTORequest;
 import com.mahas.facade.Facade;
 
@@ -12,6 +13,16 @@ import com.mahas.facade.Facade;
 public class GenderValidator {
     @Autowired
     Facade facade;
+
+    public Gender toEntity(GenderDTORequest dto) {
+        if (dto == null) return null;
+
+        Gender gender = new Gender();
+        gender.setId(dto.getId());
+        gender.setGender(dto.getGender());
+
+        return gender;
+    }
 
     public String validateGenderExists(Integer genderId) {
         if (genderId == null) {
