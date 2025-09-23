@@ -2,7 +2,7 @@ package com.mahas.controller;
 
 import com.mahas.command.pre.rules.VerifyCreateAddress;
 import com.mahas.command.pre.rules.VerifyDeleteAddress;
-import com.mahas.command.pre.rules.VerifyGetUserByUser;
+import com.mahas.command.pre.rules.VerifyGetAddressByUser;
 import com.mahas.command.pre.rules.VerifyUpdateAddress;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -40,11 +40,11 @@ public class AddressController {
     private VerifyUpdateAddress verifyUpdateAddress;
 
     @Autowired
-    private VerifyGetUserByUser verifyGetUserByUser;
+    private VerifyGetAddressByUser verifyGetUserByUser;
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getAddress(
-            @RequestParam(value = "addressId", required = false) Integer id
+            @RequestParam(value = "addressId", required = true) Integer id
         ) {
         FacadeRequest request = new FacadeRequest();
         
@@ -77,7 +77,7 @@ public class AddressController {
 
     @GetMapping("/user")
     public ResponseEntity<FacadeResponse> getAddressesByUser(
-            @RequestParam(value = "userId", required = false) Integer userId,
+            @RequestParam(value = "userId", required = true) Integer userId,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit
         ) {

@@ -71,7 +71,7 @@ public class Facade extends FacadeAbstract implements IFacade {
         }
 
         SQLRequest sqlRequest = runRulesRequest(request);
-        
+
         if(sqlRequest == null) {
             response.setMessage("Command não especificado");
             response.setTypeResponse(TypeResponse.SERVER_ERROR);

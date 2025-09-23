@@ -54,8 +54,8 @@ public class AddressDAO implements IDAO {
         jpql.append(whereClause);
         countJpql.append(whereClause);
 
-        int page = request.getPage() > 0 ? request.getPage() : 1;
-        int limit = request.getLimit() > 0 ? request.getLimit() : 0;
+        int page = request.getPage();
+        int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
         try {
@@ -67,7 +67,6 @@ public class AddressDAO implements IDAO {
                 query.setMaxResults(limit);
             }
 
-            @SuppressWarnings("unchecked")
             List<Address> resultList = query.getResultList();
 
             Query countQuery = entityManager.createQuery(countJpql.toString());
@@ -75,7 +74,7 @@ public class AddressDAO implements IDAO {
             Number totalCount = (Number) countQuery.getSingleResult();
             int totalItems = totalCount.intValue();
 
-            int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
+            int totalPage = (int) Math.ceil((double) totalItems / limit);
 
             if (!resultList.isEmpty()) {
                 if (limit == 1) {

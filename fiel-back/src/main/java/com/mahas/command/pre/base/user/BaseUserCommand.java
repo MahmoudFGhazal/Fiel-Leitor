@@ -1,9 +1,5 @@
 package com.mahas.command.pre.base.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
@@ -12,6 +8,10 @@ import com.mahas.domain.user.User;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 @Component
 public class BaseUserCommand implements IPreCommand {
