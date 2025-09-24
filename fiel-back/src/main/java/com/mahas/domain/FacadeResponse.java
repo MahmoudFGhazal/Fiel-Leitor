@@ -15,8 +15,8 @@ import lombok.Setter;
 public class FacadeResponse {
     private DataResponse data;
 
-    private TypeResponse typeResponse = TypeResponse.OK;
     private String message;
+    private TypeResponse typeResponse = TypeResponse.OK;
 
      /* private Map<String, String> errorDetails; // Detalhes de validação/erros específicos
     private LocalDateTime timestamp;          // Quando a resposta foi gerada

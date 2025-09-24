@@ -42,7 +42,6 @@ public class VerifyUpdateUser implements IPreCommand {
         User user = userValidator.toEntity(userRequest);
        
         String error;
-
         // Verificar se ID do usuário foi fornecido
         if (user.getId() == null) {
             throw new ValidationException("Id do usuário não especificado");
