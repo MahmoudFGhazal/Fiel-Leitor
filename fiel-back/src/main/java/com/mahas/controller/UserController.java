@@ -1,6 +1,7 @@
 package com.mahas.controller;
 
 import com.mahas.command.pre.base.user.BaseUserCommand;
+import com.mahas.command.pre.rules.VerifyChangePassword;
 import com.mahas.command.pre.rules.VerifyCreateUser;
 import com.mahas.command.pre.rules.VerifyDeleteUser;
 import com.mahas.command.pre.rules.VerifyLogin;
@@ -49,6 +50,9 @@ public class UserController {
 
     @Autowired
     VerifyUserExist verifyUserExist;
+
+    @Autowired
+    VerifyChangePassword verifyChangePassword;
 
     @PostMapping("/login")
     public ResponseEntity<FacadeResponse> Login(@RequestBody UserDTORequest user) {
@@ -164,6 +168,19 @@ public class UserController {
         
         FacadeResponse response = facade.update(request);
         
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<FacadeResponse> ChangePassword(@RequestBody UserDTORequest user) {
+        FacadeRequest request = new FacadeRequest();
+
+        request.setEntity(user);
+        request.setLimit(1);
+        request.setPreCommand(verifyChangePassword);
+        
+        FacadeResponse response = facade.update(request);
+
         return ResponseEntity.ok(response);
     }
 }
