@@ -1,9 +1,23 @@
 package com.mahas.command.pre.rules.logs;
 
+import com.mahas.command.pre.base.user.BaseUserCommand;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.dto.request.user.UserDTORequest;
+import com.mahas.dto.response.DTOResponse;
+import com.mahas.facade.Facade;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PasswordValidator {
+    @Autowired
+    Facade facade;
+
+    @Autowired
+    BaseUserCommand baseUserCommand;
+
     public String isValidPasswordFormat(String password) {
         if (password == null || password.isBlank()) {
             return "Senha não pode ser vazia";
@@ -26,5 +40,22 @@ public class PasswordValidator {
         }
 
         return null;
+    }
+
+    public boolean checkPassword(Integer id, String password) {
+        UserDTORequest user = new UserDTORequest();
+        user.setId(id);
+        user.setPassword(password);
+
+        FacadeRequest request = new FacadeRequest();
+        request.setEntity(user);
+        request.setLimit(1);
+        request.setPreCommand(baseUserCommand);
+
+        FacadeResponse response = facade.query(request);
+
+        DTOResponse entity = response.getData().getEntity();
+        
+        return entity != null; 
     }
 }
