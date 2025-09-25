@@ -1,11 +1,12 @@
 'use client'
-import { Address, ResidenceType, StreetType } from '@/api/objects';
-import styles from '../signIn.module.css';
-import { TypeResidencesPortuguese, TypeStreetsPortuguese } from '@/translate/portuguses';
-import { useEffect, useState } from 'react';
-import { getResidenceTypes, getStreetTypes } from '@/utils/getTypes';
+import { AddressRequest } from '@/api/dtos/requestDTOs';
+import { ResidenceTypeResponse, StreetTypeResponse } from '@/api/dtos/responseDTOs';
 import InputSelect from '@/components/inputComponents/inputSelect';
 import InputText from '@/components/inputComponents/inputText';
+import { TypeResidencesPortuguese, TypeStreetsPortuguese } from '@/translate/portuguses';
+import { getResidenceTypes, getStreetTypes } from '@/utils/getTypes';
+import { useEffect, useState } from 'react';
+import styles from '../signIn.module.css';
 
 type StepAddressProps = {
     formData: any;
@@ -13,14 +14,14 @@ type StepAddressProps = {
 };
 
 export default function StepAddress({ formData, updateFormData }: StepAddressProps) {
-    const [streetTypes, setStreetTypes] = useState<StreetType[] | null>(null);
-    const [residenceTypes, setResidenceTypes] = useState<ResidenceType[] | null>(null);
+    const [streetTypes, setStreetTypes] = useState<StreetTypeResponse[] | null>(null);
+    const [residenceTypes, setResidenceTypes] = useState<ResidenceTypeResponse[] | null>(null);
     
     useEffect(() => {
         async function fetchData() {
             try {
-                const streets: StreetType[] = await getStreetTypes();
-                const residences: ResidenceType[] = await getResidenceTypes();
+                const streets: StreetTypeResponse[] = await getStreetTypes();
+                const residences: ResidenceTypeResponse[] = await getResidenceTypes();
 
                 setStreetTypes(streets);
                 setResidenceTypes(residences);
@@ -32,9 +33,9 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
         fetchData();
     }, []);
 
-    const currentAddress = formData as Address;
+    const currentAddress = formData as AddressRequest;
 
-    const handleChange = <K extends keyof Address>(field: K, value: Address[K]) => {
+    const handleChange = <K extends keyof AddressRequest>(field: K, value: AddressRequest[K]) => {
         const updatedAddress = { ...currentAddress, [field]: value };
         updateFormData(updatedAddress);
     };
@@ -46,6 +47,7 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
                 text="Apelido do Endereço"
                 value={currentAddress?.nickname || ""}
                 onChange={(val) => handleChange('nickname', val)}
+                dataCy='nickname-text'
             />
             
             <InputText
@@ -53,30 +55,33 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
                 text="CEP"
                 value={currentAddress?.zip || ""}
                 onChange={(val) => handleChange('zip', val)}
+                dataCy='cep-text'
             />
 
             <InputSelect
                 text="Tipo de Residência"
-                value={currentAddress?.residenceType?.id?.toString() || ""}
+                value={currentAddress?.residenceType?.toString() || ""}
                 onChange={(val: string) =>
-                    handleChange("residenceType", residenceTypes?.find(r => r.id?.toString() === val) || null)
+                    handleChange("residenceType", val ? parseInt(val) : null)
                 }
                 options={residenceTypes?.map(res => ({
                     value: res.id?.toString() || "",
                     label: TypeResidencesPortuguese[res.residenceType as keyof typeof TypeResidencesPortuguese],
                 })) || []}
+                dataCy='residence-select'
             />
 
             <InputSelect
                 text="Tipo de Logradouro"
-                value={currentAddress?.streetType?.id?.toString() || ""}
+                value={currentAddress?.streetType?.toString() || ""}
                 onChange={(val: string) =>
-                    handleChange("streetType", streetTypes?.find(s => s.id?.toString() === val) || null)
+                    handleChange("streetType", val ? parseInt(val) : null)
                 }
                 options={streetTypes?.map(street => ({
                     value: street.id?.toString() || "",
                     label: TypeStreetsPortuguese[street.streetType as keyof typeof TypeStreetsPortuguese],
                 })) || []}
+                dataCy='street-select'
             />
             
             <InputText
@@ -84,6 +89,7 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
                 text="Rua"
                 value={currentAddress?.street || ""}
                 onChange={(val) => handleChange('street', val)}
+                dataCy='street-text'
             />
 
             <InputText
@@ -91,6 +97,7 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
                 text="Número"
                 value={currentAddress?.number || ""}
                 onChange={(val) => handleChange('number', val)}
+                dataCy='number-text'
             />
 
             <InputText
@@ -98,6 +105,7 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
                 text="Bairro"
                 value={currentAddress?.neighborhood || ""}
                 onChange={(val) => handleChange('neighborhood', val)}
+                dataCy='neighbor-text'
             />
 
             <InputText
@@ -105,6 +113,7 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
                 text="Cidade"
                 value={currentAddress?.city || ""}
                 onChange={(val) => handleChange('city', val)}
+                dataCy='city-text'
             />
 
             <InputText
@@ -112,6 +121,7 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
                 text="Estado"
                 value={currentAddress?.state || ""}
                 onChange={(val) => handleChange('state', val)}
+                dataCy='state-text'
             />
 
             <InputText
@@ -119,6 +129,7 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
                 text="País"
                 value={currentAddress?.country || ""}
                 onChange={(val) => handleChange('country', val)}
+                dataCy='country-text'
             />
 
             <InputText
@@ -126,6 +137,7 @@ export default function StepAddress({ formData, updateFormData }: StepAddressPro
                 text="Complemento"
                 value={currentAddress?.complement || ""}
                 onChange={(val) => handleChange('complement', val)}
+                dataCy='complement-text'
             />
         </div>
     );

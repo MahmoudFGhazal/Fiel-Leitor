@@ -6,9 +6,10 @@ type InputCheckboxProps = {
     onChange: (value: boolean) => void;
     disabled?: boolean; 
     checked: boolean;
+    dataCy?: string,
 };
 
-export default function InputCheckBox({ text, onChange, disabled, checked }: InputCheckboxProps) {
+export default function InputCheckBox({ text, onChange, disabled, checked, dataCy }: InputCheckboxProps) {
     return (
         <label className={styles.inputContent}>
             <input
@@ -16,6 +17,7 @@ export default function InputCheckBox({ text, onChange, disabled, checked }: Inp
                 checked={checked}
                 onChange={(e) => onChange(e.target.checked)}
                 disabled={disabled}
+                data-cy={dataCy}
             />
             {text && <span className={styles.text}>{text}</span>}
         </label>

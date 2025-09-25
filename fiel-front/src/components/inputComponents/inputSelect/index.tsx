@@ -9,9 +9,10 @@ type InputSelectProps = {
     disabled?: boolean; 
     options: Option[];
     value: string;
+    dataCy?: string;
 };
 
-export default function InputSelect({ text, onChange, disabled, options, value }: InputSelectProps) {
+export default function InputSelect({ text, onChange, disabled, options, value, dataCy }: InputSelectProps) {
     return (
         <div className={styles.inputContent}>
             {text && <p className={styles.text}>{text}:</p>}
@@ -20,6 +21,7 @@ export default function InputSelect({ text, onChange, disabled, options, value }
                 className={styles.input}
                 onChange={(e) => onChange(e.target.value)}
                 disabled={disabled}
+                data-cy={dataCy}
             >
                 <option value="">{`Selecione ${text?.toLowerCase()}`}</option>
                     {options.map((opt) => (

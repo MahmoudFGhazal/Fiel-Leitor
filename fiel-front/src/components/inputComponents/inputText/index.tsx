@@ -7,9 +7,10 @@ type InputTextProps = {
     disabled?: boolean; 
     type: 'text' | 'email' | 'password' | 'number' | 'date';
     value: string;
+    dataCy?: string;
 };
 
-export default function InputText({ text, onChange, disabled, type, value }: InputTextProps) {
+export default function InputText({ text, onChange, disabled, type, value, dataCy }: InputTextProps) {
     return (
         <div className={styles.inputContent}>
             {text && <p className={styles.text}>{text}:</p>}
@@ -20,6 +21,7 @@ export default function InputText({ text, onChange, disabled, type, value }: Inp
                 onChange={(e) => onChange(e.target.value)}
                 disabled={disabled}
                 placeholder={text}
+                data-cy={dataCy}
             />
         </div>
     );

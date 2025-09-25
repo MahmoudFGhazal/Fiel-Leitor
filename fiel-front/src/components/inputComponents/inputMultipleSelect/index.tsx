@@ -1,6 +1,6 @@
 'use client'
+import { useEffect, useRef, useState } from 'react';
 import styles from './inputSelect.module.css';
-import { useState, useRef, useEffect } from 'react';
 
 type Option = { value: string; label: string };
 
@@ -10,9 +10,10 @@ type InputSelectMultipleProps = {
     disabled?: boolean; 
     options: Option[];
     value: string[];
+    dataCy?: string;
 };
 
-export default function InputSelectMultiple({ text, onChange, disabled, options, value }: InputSelectMultipleProps) {
+export default function InputSelectMultiple({ text, onChange, disabled, options, value, dataCy }: InputSelectMultipleProps) {
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -63,6 +64,7 @@ export default function InputSelectMultiple({ text, onChange, disabled, options,
                                 checked={value.includes(opt.value)}
                                 onChange={() => toggleOption(opt.value)}
                                 disabled={disabled}
+                                data-cy={dataCy}
                             />
                             {opt.label}
                         </label>

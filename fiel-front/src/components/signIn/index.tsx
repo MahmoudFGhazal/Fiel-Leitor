@@ -1,19 +1,21 @@
 'use client'
-import styles from './signIn.module.css';
+import { AddressRequest, UserRequest } from '@/api/dtos/requestDTOs';
+import { UserResponse } from '@/api/dtos/responseDTOs';
+import { ApiResponse } from '@/api/objects';
+import api from '@/api/route';
+import showToast from '@/utils/showToast';
+import CreateAccountValidator from '@/utils/validator/createAccountValidator';
 import { useState } from "react";
-import StepUser from "./stepsSign/StepUser";
+import Button from '../buttonComponents/button';
+import BoxInput from '../formBox';
+import styles from './signIn.module.css';
 import StepAddress from "./stepsSign/StepAddress";
 import StepProfile from "./stepsSign/StepProfile";
-import BoxInput from '../formBox';
-import Button from '../buttonComponents/button';
-import { Address, ApiResponse, User } from '@/api/objects';
-import CreateAccountValidator from '@/utils/validator/createAccountValidator';
-import showToast from '@/utils/showToast';
-import api from '@/api/route';
+import StepUser from "./stepsSign/StepUser";
 
 interface formData {
-    user: User,
-    address: Address
+    user: UserRequest,
+    address: AddressRequest
 }
 
 export default function SignInComponent() {
@@ -71,19 +73,18 @@ export default function SignInComponent() {
             alert(res.message);
             return;
         }
-        const user = res.data.entity as User;
+        const user = res.data.entity as UserResponse;
+        console.log(JSON.stringify(user, null, 2))
+        const userId = user.id;
 
+        const updatedAddress = { ...formData.address, user: userId };
         setFormData(prev => ({
             ...prev,
-            address: {
-                ...prev.address,
-                user: user
-            }
+            address: updatedAddress
         }));
-
+        console.log(JSON.stringify(formData.address, null, 2))
         await api.post("/address", {
-            data: { ...formData.address,
-                    user: user }
+            data: updatedAddress
         });
 
         await showToast('Cadastro concluído com sucesso!');
@@ -92,7 +93,7 @@ export default function SignInComponent() {
 
     const prevStep = () => setStep(step - 1);
 
-    const updateUserData = (data: Partial<User>) => {
+    const updateUserData = (data: Partial<UserRequest>) => {
         setFormData(prev => ({
             ...prev,
             user: { ...prev.user, ...data }
@@ -103,7 +104,7 @@ export default function SignInComponent() {
         setConfirmPassword(data);
     };
 
-    const updateAddressData = (data: Partial<Address>) => {
+    const updateAddressData = (data: Partial<AddressRequest>) => {
         setFormData(prev => ({
             ...prev,
             address: { ...prev.address, ...data }
@@ -140,6 +141,7 @@ export default function SignInComponent() {
                                 text="Anterior"
                                 onClick={prevStep}
                                 type='button'
+                                dataCy="back-button"
                             />
                         </div>
                     ) : (
@@ -151,6 +153,7 @@ export default function SignInComponent() {
                             type='button'
                             text={step < 3 ? "Próximo" : "Finalizar"} 
                             onClick={nextStep} 
+                            dataCy="next-button"
                         />
                     </div>
                 </div>

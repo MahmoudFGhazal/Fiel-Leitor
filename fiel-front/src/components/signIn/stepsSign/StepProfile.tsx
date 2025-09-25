@@ -1,12 +1,11 @@
 
-import { GendersPortuguese } from '@/translate/portuguses';
-import styles from '../signIn.module.css';
-import { Genders } from '@/translate/base';
-import InputText from '@/components/inputComponents/inputText';
-import { useEffect, useState } from 'react';
-import { Gender } from '@/api/objects';
-import { getGenders } from '@/utils/getTypes';
+import { GenderResponse } from '@/api/dtos/responseDTOs';
 import InputSelect from '@/components/inputComponents/inputSelect';
+import InputText from '@/components/inputComponents/inputText';
+import { GendersPortuguese } from '@/translate/portuguses';
+import { getGenders } from '@/utils/getTypes';
+import { useEffect, useState } from 'react';
+import styles from '../signIn.module.css';
 
 type StepProfileProps = {
     formData: any;
@@ -14,12 +13,12 @@ type StepProfileProps = {
 };
 
 export default function StepProfile({ formData, updateFormData }: StepProfileProps) {
-    const [genderTypes, setGenderTypes] = useState<Gender[] | null>(null);
+    const [genderTypes, setGenderTypes] = useState<GenderResponse[] | null>(null);
     
     useEffect(() => {
         async function fetchData() {
             try {
-                const genders: Gender[] = await getGenders();
+                const genders: GenderResponse[] = await getGenders();
 
                 setGenderTypes(genders);
             } catch (err) {
@@ -37,14 +36,14 @@ export default function StepProfile({ formData, updateFormData }: StepProfilePro
                 text="Nome"
                 value={formData.name}
                 onChange={(val) => updateFormData({ name: val })}
+                dataCy='name-text'
             />
             
             <InputSelect
                 text="Gênero"
-                value={formData.gender?.id?.toString() || ""}
+                value={formData.gender?.toString() || ""}
                 onChange={(val: string) => {
-                    const selectedGender = genderTypes?.find(g => g.id?.toString() === val) || null;
-                    updateFormData({ gender: selectedGender });
+                    updateFormData({ gender: val ? parseInt(val) : null });
                 }}
                 options={
                     genderTypes?.map(g => ({
@@ -52,6 +51,7 @@ export default function StepProfile({ formData, updateFormData }: StepProfilePro
                         label: GendersPortuguese[g.gender as keyof typeof GendersPortuguese],
                     })) || []
                 }
+                dataCy='gender-select'
             />
             
             <InputText
@@ -63,6 +63,7 @@ export default function StepProfile({ formData, updateFormData }: StepProfilePro
                         : ""
                 }
                 onChange={(val) => updateFormData({ birthday: val as string })}
+                dataCy='birth-date'
             />
 
             <InputText
@@ -70,6 +71,7 @@ export default function StepProfile({ formData, updateFormData }: StepProfilePro
                 text="CPF"
                 value={formData.cpf}
                 onChange={(val) => updateFormData({ cpf: val })}
+                dataCy='cpf-text'
             />
 
             <InputText
@@ -77,6 +79,7 @@ export default function StepProfile({ formData, updateFormData }: StepProfilePro
                 text="Telefone"
                 value={formData.phoneNumber}
                 onChange={(val) => updateFormData({ phoneNumber: val })}
+                dataCy='phone-text'
             />
         </div>
     );

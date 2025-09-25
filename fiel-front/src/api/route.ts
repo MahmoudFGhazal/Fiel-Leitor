@@ -1,9 +1,9 @@
-import { Datas } from "./objects";
+import { DatasRequest } from "./objects";
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 
 interface RequestOptions {
-    data?: Datas;        
+    data?: DatasRequest;        
     params?: Record<string, unknown>;
 }
 

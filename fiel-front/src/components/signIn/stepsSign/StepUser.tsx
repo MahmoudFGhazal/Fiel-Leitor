@@ -1,5 +1,5 @@
-import styles from '../signIn.module.css';
 import InputText from '@/components/inputComponents/inputText';
+import styles from '../signIn.module.css';
 
 type StepUserProps = {
     formData: any;
@@ -18,6 +18,7 @@ export default function StepUser({ formData, confirmPassword, updateFormData, up
                 text="Email"
                 value={formData.email}
                 onChange={(val) => updateFormData({ email: val })}
+                dataCy='email-text'
             />
 
             <InputText
@@ -25,6 +26,7 @@ export default function StepUser({ formData, confirmPassword, updateFormData, up
                 text="Senha"
                 value={formData.password}
                 onChange={(val) => updateFormData({ password: val })}
+                dataCy='password-text'
             />
 
             <InputText
@@ -32,6 +34,7 @@ export default function StepUser({ formData, confirmPassword, updateFormData, up
                 text="Confirmar Senha"
                 value={confirmPassword}
                 onChange={(val) => updateConfirmPassword(val)}
+                dataCy='newPassword-text'
             />
         </div>
     );
