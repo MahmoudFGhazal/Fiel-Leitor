@@ -4,11 +4,15 @@ describe("LoginComponent", () => {
     });
 
     it("deve logar com sucesso", () => {
+        cy.window().then((win) => {
+            cy.stub(win, 'alert').as('alerta');
+        });
+
         cy.get('[data-cy=email-text]').type("teste2@exemplo.com");
         cy.get('[data-cy=password-text]').type("123@Pass");
         cy.get('[data-cy=submit-button]').click();
 
-        cy.contains("Login efetuado com sucesso!", { timeout: 5000 }).should("exist");
+        cy.get('@alerta').should('have.been.calledWith', 'Login efetuado com sucesso!');
     });
 
     it("deve exibir erro com credenciais inválidas", () => {
