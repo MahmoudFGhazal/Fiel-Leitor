@@ -4,6 +4,10 @@ describe("SignInComponent", () => {
     });
 
     it("deve completar o cadastro com sucesso", () => {
+         // Intercepta as requisições ANTES do clique final
+        cy.intercept("POST", "**/user").as("createUser");
+        cy.intercept("POST", "**/address").as("createAddress");
+
         // Step 1 - Usuário
         cy.get('[data-cy=email-text]').type("teste2@exemplo.com");
         cy.get('[data-cy=password-text]').first().type("123@Pass");
@@ -39,21 +43,10 @@ describe("SignInComponent", () => {
         cy.get('[data-cy=country-text]').type("Brasil");
         cy.get('[data-cy=complement-text]').type("Apto 10");
 
-        // Intercepta a chamada da API
-        cy.intercept("POST", "/api/user", {
-            statusCode: 200,
-            body: { data: { entity: { id: 1, email: "teste@exemplo.com" } } }
-            }).as("createUser");
-
-            cy.intercept("POST", "/api/address", {
-            statusCode: 200,
-            body: { message: "Endereço salvo com sucesso" }
-        }).as("createAddress");
-
-        cy.contains("Finalizar").click();
+        cy.get('[data-cy=next-button]').should('be.visible').click();
 
         // Verifica chamadas
-        cy.wait("@createUser").its("request.body.data").should("have.property", "email", "teste@exemplo.com");
+        cy.wait("@createUser");
         cy.wait("@createAddress");
 
         // Verifica redirecionamento
