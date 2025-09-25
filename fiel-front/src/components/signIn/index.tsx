@@ -73,8 +73,8 @@ export default function SignInComponent() {
             alert(res.message);
             return;
         }
+
         const user = res.data.entity as UserResponse;
-        console.log(JSON.stringify(user, null, 2))
         const userId = user.id;
 
         const updatedAddress = { ...formData.address, user: userId };
@@ -82,7 +82,7 @@ export default function SignInComponent() {
             ...prev,
             address: updatedAddress
         }));
-        console.log(JSON.stringify(formData.address, null, 2))
+
         await api.post("/address", {
             data: updatedAddress
         });

@@ -1,15 +1,16 @@
 'use client'
-import { useState } from 'react';
-import styles from './loginComponent.module.css';
+import { UserRequest } from '@/api/dtos/requestDTOs';
+import { UserResponse } from '@/api/dtos/responseDTOs';
+import { ApiResponse } from '@/api/objects';
+import api from '@/api/route';
 import Button from '@/components/buttonComponents/button';
 import FormBox from '@/components/formBox';
-import { ApiResponse, User } from '@/api/objects';
-import InputText from '../inputComponents/inputText';
-import InputCheckBox from '../inputComponents/inputCheckBox';
-import api from '@/api/route';
-import showToast from '@/utils/showToast';
 import { useGlobal } from '@/context/GlobalContext';
+import showToast from '@/utils/showToast';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import InputText from '../inputComponents/inputText';
+import styles from './loginComponent.module.css';
 
 interface LoginData {
     email: string,
@@ -19,7 +20,7 @@ interface LoginData {
 
 export default function LoginComponent() {
     const router = useRouter();
-    const { setCurrentUser, currentUser } = useGlobal();
+    const { setCurrentUser } = useGlobal();
     const [formData, setFormData] = useState<LoginData>({
         email: '',
         password: '',
@@ -33,7 +34,7 @@ export default function LoginComponent() {
     const executeLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const loginData: User = {
+        const loginData: UserRequest = {
             email: formData.email,
             password: formData.password,
             active: null,
@@ -59,7 +60,7 @@ export default function LoginComponent() {
             return;
         }
         
-        const user = (data.entity ?? data) as User | null;
+        const user = (data.entity ?? data) as UserResponse | null;
 
         if (!user || !user.id) {
             alert('Email ou senha incorretos.');
@@ -94,22 +95,25 @@ export default function LoginComponent() {
                                 text="Email"
                                 value={formData.email}
                                 onChange={(val: string) => updateFormData({ email: val })}
+                                dataCy='email-text'
                             />
                             <InputText
                                 type="password"
                                 text="Senha"
                                 value={formData.password}
-                                onChange={(val: string) => updateFormData({ password: val })}                          
+                                onChange={(val: string) => updateFormData({ password: val })} 
+                                dataCy='password-text'                         
                             />
                         </div>
-                        <InputCheckBox 
+                        {/* <InputCheckBox 
                             text='Manter-se Contectado'
                             checked={formData.refresh}
-                            onChange={(val: boolean) => updateFormData({ refresh: val })}                          
-                        />
+                            onChange={(val: boolean) => updateFormData({ refresh: val })} 
+                            dataCy=''                         
+                        /> */}
                     </div>
                     <div className={styles.buttonContent}>
-                        <Button type='submit' text="Entrar" />
+                        <Button type='submit' text="Entrar" dataCy='submit-button' />
                         <a className={styles.signButton} href='/sign'>
                             <Button type='button' text='Cadastre-se' />
                         </a>
