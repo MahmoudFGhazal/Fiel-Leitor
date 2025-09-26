@@ -1,4 +1,5 @@
 'use client';
+import { UserRequest } from "@/api/dtos/requestDTOs";
 import { ApiResponse } from "@/api/objects";
 import api from '@/api/route';
 import Button from "@/components/buttonComponents/button";
@@ -25,13 +26,20 @@ export default function ChangePasswordConfig() {
         }
 
         try {
-            const payload = {
-                userId: currentUser,
-                currentPassword,
-                newPassword
-            };
+            const user: UserRequest = {
+                id: currentUser,
+                email: null,
+                password: currentPassword,
+                newPassword: newPassword,
+                name: null,
+                active: null,
+                gender: null,
+                birthday: null,
+                cpf: null,
+                phoneNumber: null
+            }
 
-            const res = await api.put<ApiResponse>('/user/password', { params: payload });
+            const res = await api.put<ApiResponse>('/user/password', { data: user });
 
             if (res.message) {
                 alert(res.message);
