@@ -25,6 +25,7 @@ export default function SignInComponent() {
             id: null,
             email: "",
             password: "",
+            newPassword: null,
             name: "",
             gender: null,
             birthday: null,

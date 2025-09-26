@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules.logs;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.base.user.BaseUserCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -8,9 +11,6 @@ import com.mahas.domain.user.User;
 import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.Facade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class UserValidator {
@@ -26,7 +26,13 @@ public class UserValidator {
         User user = new User();
         user.setId(dto.getId());
         user.setName(dto.getName());
-        user.setPassword(dto.getPassword());
+
+        if (dto.getNewPassword() != null && !dto.getNewPassword().isEmpty()) {
+            user.setPassword(dto.getNewPassword());
+        } else {
+            user.setPassword(dto.getPassword());
+        }
+        
         user.setEmail(dto.getEmail());
         user.setActive(dto.getActive());
         user.setBirthday(dto.getBirthday());

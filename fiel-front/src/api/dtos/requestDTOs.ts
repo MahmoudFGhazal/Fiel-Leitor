@@ -49,6 +49,7 @@ export interface UserRequest {
     id: number | null,
     email: string | null,
     password: string | null,
+    newPassword: string | null,
     name: string | null,
     active: boolean | null,
     gender: number | null,

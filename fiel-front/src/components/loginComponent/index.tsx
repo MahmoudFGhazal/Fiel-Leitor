@@ -38,6 +38,7 @@ export default function LoginComponent() {
         const loginData: UserRequest = {
             email: formData.email,
             password: formData.password,
+            newPassword: null,
             active: null,
             birthday: null,
             cpf: null,
