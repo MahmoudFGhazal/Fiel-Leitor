@@ -10,6 +10,7 @@ describe("LoginComponent", () => {
 
         cy.get('[data-cy=email-text]').type("teste2@exemplo.com");
         cy.get('[data-cy=password-text]').type("123@Pass");
+        cy.get('[data-cy=refresh-button]').click();
         cy.get('[data-cy=submit-button]').click();
 
         cy.get('@alerta').should('have.been.calledWith', 'Login efetuado com sucesso!');
