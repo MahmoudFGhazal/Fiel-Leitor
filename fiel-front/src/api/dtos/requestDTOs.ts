@@ -56,3 +56,8 @@ export interface UserRequest {
     cpf: string | null,
     phoneNumber: string | null
 }
+
+export interface SignRequest {
+    user: UserRequest,
+    address: AddressRequest
+}

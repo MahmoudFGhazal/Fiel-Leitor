@@ -1,4 +1,4 @@
-import { AddressRequest, CardRequest, GenderRequest, PaymentTypeRequest, ResidenceTypeRequest, StreetTypeRequest, UserRequest } from "./dtos/requestDTOs";
+import { AddressRequest, CardRequest, GenderRequest, PaymentTypeRequest, ResidenceTypeRequest, SignRequest, StreetTypeRequest, UserRequest } from "./dtos/requestDTOs";
 import { AddressResponse, CardResponse, GenderResponse, PaymentTypeResponse, ResidenceTypeResponse, StreetTypeResponse, UserResponse } from "./dtos/responseDTOs";
 
 export interface ApiResponse {
@@ -35,7 +35,8 @@ export type DatasRequest =
   | PaymentTypeRequest[]
   | ResidenceTypeRequest[]
   | StreetTypeRequest[]
-  | UserRequest[];
+  | UserRequest[]
+  | SignRequest;
 
   
 export type DatasResponde =

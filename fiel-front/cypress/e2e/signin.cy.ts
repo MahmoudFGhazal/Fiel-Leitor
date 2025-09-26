@@ -4,19 +4,14 @@ describe("SignInComponent", () => {
     });
 
     it("deve completar o cadastro com sucesso", () => {
-         // Intercepta as requisições ANTES do clique final
-        cy.intercept("POST", "**/user").as("createUser");
-        cy.intercept("POST", "**/address").as("createAddress");
+        // Intercepta a requisição correta
+        cy.intercept("POST", "**/user/sign").as("signUser");
 
         // Step 1 - Usuário
         cy.get('[data-cy=email-text]').type("teste2@exemplo.com");
         cy.get('[data-cy=password-text]').first().type("123@Pass");
         cy.get('[data-cy=newPassword-text]').type("123@Pass");
-
         cy.get('[data-cy=next-button]').should('be.visible').click();
-
-
-
 
         // Step 2 - Perfil
         cy.get('[data-cy=name-text]').type("Usuário Teste");
@@ -24,11 +19,7 @@ describe("SignInComponent", () => {
         cy.get('[data-cy=birth-date]').type("2000-01-01");
         cy.get('[data-cy=cpf-text]').type("79666000172");
         cy.get('[data-cy=phone-text]').type("11999999999");
-
         cy.get('[data-cy=next-button]').should('be.visible').click();
-
-
-
 
         // Step 3 - Endereço
         cy.get('[data-cy=nickname-text]').type("Casa Teste");
@@ -42,12 +33,10 @@ describe("SignInComponent", () => {
         cy.get('[data-cy=state-text]').type("SP");
         cy.get('[data-cy=country-text]').type("Brasil");
         cy.get('[data-cy=complement-text]').type("Apto 10");
-
         cy.get('[data-cy=next-button]').should('be.visible').click();
 
-        // Verifica chamadas
-        cy.wait("@createUser");
-        cy.wait("@createAddress");
+        // Verifica chamada
+        cy.wait("@signUser");
 
         // Verifica redirecionamento
         cy.url().should("include", "/login");

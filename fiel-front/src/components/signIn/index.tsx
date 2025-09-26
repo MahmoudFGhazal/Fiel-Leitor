@@ -1,6 +1,5 @@
 'use client'
 import { AddressRequest, UserRequest } from '@/api/dtos/requestDTOs';
-import { UserResponse } from '@/api/dtos/responseDTOs';
 import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
 import showToast from '@/utils/showToast';
@@ -67,25 +66,12 @@ export default function SignInComponent() {
     };
 
     const saveUser = async () => {
-        const res: ApiResponse = await api.post("/user", { data: formData.user });
+        const res: ApiResponse = await api.post("/user/sign", { data: { user: formData.user, address: formData.address} });
 
         if(res.message) {
             alert(res.message);
             return;
         }
-
-        const user = res.data.entity as UserResponse;
-        const userId = user.id;
-
-        const updatedAddress = { ...formData.address, user: userId };
-        setFormData(prev => ({
-            ...prev,
-            address: updatedAddress
-        }));
-
-        await api.post("/address", {
-            data: updatedAddress
-        });
 
         await showToast('Cadastro concluído com sucesso!');
         window.location.href = "/login";
