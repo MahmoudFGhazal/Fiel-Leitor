@@ -3,7 +3,7 @@ import { AddressRequest, UserRequest } from '@/api/dtos/requestDTOs';
 import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
 import showToast from '@/utils/showToast';
-import CreateAccountValidator from '@/utils/validator/createAccountValidator';
+import { createAccountValidator } from '@/utils/validator/UserValidator';
 import { useState } from "react";
 import Button from '../buttonComponents/button';
 import BoxInput from '../formBox';
@@ -50,7 +50,7 @@ export default function SignInComponent() {
     });
 
     const nextStep = () => {
-        const validator = CreateAccountValidator();
+        const validator = createAccountValidator();
         let error = validator.validateStep(step, formData, { confirmPassword });
 
         if (error) {

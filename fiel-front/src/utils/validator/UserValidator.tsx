@@ -1,12 +1,11 @@
-'use client'
-import { Address, User } from '@/api/objects';
+import { AddressRequest, UserRequest } from "@/api/dtos/requestDTOs";
 
 interface formData {
-    user: User,
-    address: Address
+    user: UserRequest,
+    address: AddressRequest
 }
 
-export default function CreateAccountValidator() {
+export function createAccountValidator() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
     const cpfRegex = /^\d{11}$/;
@@ -49,4 +48,26 @@ export default function CreateAccountValidator() {
     };
 
     return { validateStep, onlyNumbers };
+}
+
+export function changePasswordValidator() {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+
+    const validate = (currentPassword: string, newPassword: string, confirmPassword: string): string | null => {
+        if (!currentPassword || currentPassword.trim().length === 0) {
+            return "Senha atual é obrigatória";
+        }
+
+        if (!newPassword || !passwordRegex.test(newPassword)) {
+            return "Nova senha inválida. Deve ter ao menos 8 caracteres, letras maiúsculas e minúsculas e caracteres especiais.";
+        }
+
+        if (!confirmPassword || confirmPassword !== newPassword) {
+            return "Confirmação da nova senha não confere";
+        }
+
+        return null;
+    };
+
+    return { validate };
 }
