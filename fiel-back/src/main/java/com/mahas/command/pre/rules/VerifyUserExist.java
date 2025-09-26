@@ -33,7 +33,7 @@ public class VerifyUserExist implements IPreCommand {
         if (user.getId() == null) {
             throw new ValidationException("Id do usuário não especificado");
         }
-
+    
         // Verificar se o usuário existe
         if (!userValidator.userExists(user.getId())) {
             throw new ValidationException("Usuário não encontrado");

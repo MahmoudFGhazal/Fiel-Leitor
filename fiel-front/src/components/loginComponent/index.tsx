@@ -9,6 +9,7 @@ import { useGlobal } from '@/context/GlobalContext';
 import showToast from '@/utils/showToast';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import InputCheckBox from '../inputComponents/inputCheckBox';
 import InputText from '../inputComponents/inputText';
 import styles from './loginComponent.module.css';
 
@@ -66,7 +67,7 @@ export default function LoginComponent() {
             alert('Email ou senha incorretos.');
             return;
         }
-
+        console.log(JSON.stringify(user, null, 2))
         if (!user.active) {
             await showToast('Usuario Inativado!');
             return;
@@ -80,8 +81,6 @@ export default function LoginComponent() {
         setCurrentUser(user.id);
 
         router.push("/");
-
-        await showToast("oii")
     }
     
     return (
@@ -105,12 +104,12 @@ export default function LoginComponent() {
                                 dataCy='password-text'                         
                             />
                         </div>
-                        {/* <InputCheckBox 
+                        <InputCheckBox 
                             text='Manter-se Contectado'
                             checked={formData.refresh}
                             onChange={(val: boolean) => updateFormData({ refresh: val })} 
-                            dataCy=''                         
-                        /> */}
+                            dataCy='refresh-button'                         
+                        />
                     </div>
                     <div className={styles.buttonContent}>
                         <Button type='submit' text="Entrar" dataCy='submit-button' />

@@ -22,10 +22,12 @@ public class LoginAdapter implements IPostCommand {
         }
 
         User user = (User) entity;
-
+        
         UserDTOResponse userResponse = new UserDTOResponse();
         userResponse.setId(user.getId());
-        
+        userResponse.setActive(user.getActive());
+        System.out.println(user.getActive());
+
         DataResponse data = new DataResponse();
         data.setEntity(userResponse);
 

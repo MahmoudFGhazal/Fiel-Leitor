@@ -1,16 +1,20 @@
 'use client'
-import { ApiResponse, User } from '@/api/objects';
+import { ApiResponse } from '@/api/objects';
 import styles from './profileConfig.module.css';
 import { useEffect, useState } from "react";
 import api from '@/api/route';
 import { useGlobal } from '@/context/GlobalContext';
 import UserFormEdit from '@/components/forms/userFormEdit';
+import { UserRequest } from '@/api/dtos/requestDTOs';
+import { UserResponse } from '@/api/dtos/responseDTOs';
+import { toRequestUser } from '@/utils/toRequest';
+import ActionButton from '@/components/buttonComponents/actionButton';
 
 export default function ProfileConfig() {
     const { currentUser } = useGlobal();
     const [disable, setDisable] = useState<boolean>(true);
-    const [editedUser, setEditedUser] = useState<User>();
-    const [user, setUser] = useState<User>();
+    const [editedUser, setEditedUser] = useState<UserRequest>();
+    const [user, setUser] = useState<UserResponse>();
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -21,14 +25,17 @@ export default function ProfileConfig() {
                     return;
                 }
 
-                const entity = res.data.entity as User;
+                const entity = res.data.entity as UserResponse;
 
                 if(!entity) {
                     return;
                 }
 
                 setUser(entity);
-                setEditedUser(entity);
+
+                const userReq: UserRequest = toRequestUser(entity);
+
+                setEditedUser(userReq);
             } catch (err) {
                 console.error(err);
                 alert("Erro ao carregar usuário");
@@ -37,8 +44,10 @@ export default function ProfileConfig() {
             }
         };
 
+        if(!currentUser) return;
+
         fetchUser();
-    }, []);
+    }, [currentUser]);
     
     const handleChange = (field: string, value: string) => {
         setEditedUser(prev => {
@@ -47,20 +56,22 @@ export default function ProfileConfig() {
             if (field === "gender") {
                 return {
                     ...prev,
-                    gender: { id: Number(value) } as any,
+                    gender: Number(value),
                 };
             }
 
             return {
                 ...prev,
-                [field as keyof User]: value,
+                [field as keyof UserRequest]: value,
             };
         });
     };
 
     const cancelEdit = () => {
         setDisable(true);
-        setEditedUser(user);
+
+        const userReq = toRequestUser(user ?? null);
+        setEditedUser(userReq);
     };
 
     const toggleEdit = () => {
@@ -70,13 +81,27 @@ export default function ProfileConfig() {
 
     const saveUser = async () => {
         try {
-            await api.put("/user", { data: editedUser });
+            const res = await api.put("/user", { data: editedUser }) as ApiResponse;
 
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
+
+            const entity = res.data.entity as UserResponse;
+
+            if(!entity) {
+                alert("Erro ao atualizar usuario");
+                return;
+            }
+
+            setUser(entity);
             alert("Dados atualizados com sucesso!");
             setDisable(true);
         } catch (err) {
             console.error(err);
             alert("Erro ao salvar usuário");
+            setEditedUser(toRequestUser(user ?? null));
         }
     };
 
@@ -87,17 +112,23 @@ export default function ProfileConfig() {
             <div className={styles.container}>
                 <h1>Configurações da Conta</h1>
                 {disable ? (
-                        <p className={styles.editButton} onClick={toggleEdit}>
-                            Editar
-                        </p> 
+                        <ActionButton 
+                            label="Editar"
+                            color='blue'
+                            onClick={toggleEdit}
+                        />
                     ) : (
                         <div className={styles.cancelContainer}>
-                            <p className={styles.editButton} onClick={toggleEdit}>
-                                Salvar
-                            </p> 
-                            <p className={styles.editButton} onClick={cancelEdit}>
-                                Cancelar
-                            </p> 
+                            <ActionButton 
+                                label='Salvar'
+                                color='green'
+                                onClick={toggleEdit}
+                            />
+                            <ActionButton 
+                                label='Cancelar'
+                                color='red'
+                                onClick={cancelEdit}
+                            />
                         </div>
                     )
                 }

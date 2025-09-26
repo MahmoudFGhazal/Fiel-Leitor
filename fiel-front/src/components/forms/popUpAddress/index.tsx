@@ -1,29 +1,30 @@
 'use client';
-import { Address, ResidenceType, StreetType } from '@/api/objects';
-import styles from './popUpAddress.module.css';
-import InputText from '@/components/inputComponents/inputText';
+import { AddressRequest } from '@/api/dtos/requestDTOs';
+import { ResidenceTypeResponse, StreetTypeResponse } from '@/api/dtos/responseDTOs';
 import InputSelect from '@/components/inputComponents/inputSelect';
+import InputText from '@/components/inputComponents/inputText';
 import { TypeResidencesPortuguese, TypeStreetsPortuguese } from '@/translate/portuguses';
-import { useEffect, useState } from 'react';
 import { getResidenceTypes, getStreetTypes } from '@/utils/getTypes';
+import { useEffect, useState } from 'react';
+import styles from './popUpAddress.module.css';
 
 interface Props {
-    address: Address;
-    onChange: (field: keyof Address, value: any) => void;
+    address: AddressRequest;
+    onChange: (field: keyof AddressRequest, value: any) => void;
     disable: boolean;
-    streetTypes?: StreetType[];
-    residenceTypes?: ResidenceType[];
+    streetTypes?: StreetTypeResponse[];
+    residenceTypes?: ResidenceTypeResponse[];
 }
 
 export default function PopUpAddressCreate({ address, onChange, disable }: Props) {
-    const [streetTypes, setStreetTypes] = useState<StreetType[] | null>(null);
-    const [residenceTypes, setResidenceTypes] = useState<ResidenceType[] | null>(null);
+    const [streetTypes, setStreetTypes] = useState<StreetTypeResponse[] | null>(null);
+    const [residenceTypes, setResidenceTypes] = useState<ResidenceTypeResponse[] | null>(null);
     
     useEffect(() => {
         async function fetchData() {
             try {
-                const streets: StreetType[] = await getStreetTypes();
-                const residences: ResidenceType[] = await getResidenceTypes();
+                const streets: StreetTypeResponse[] = await getStreetTypes();
+                const residences: ResidenceTypeResponse[] = await getResidenceTypes();
 
                 setStreetTypes(streets);
                 setResidenceTypes(residences);
@@ -35,7 +36,7 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
         fetchData();
     }, []);
 
-    const handleChange = <K extends keyof Address>(field: K, value: Address[K]) => {
+    const handleChange = <K extends keyof AddressRequest>(field: K, value: AddressRequest[K]) => {
         onChange(field, value);
     };
 
@@ -48,6 +49,7 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
                     value={address.nickname || ""}
                     onChange={(val) => handleChange('nickname', val)}
                     disabled={disable}
+                    dataCy='nickname-text'
                 />
                 <InputText
                     type="text"
@@ -55,34 +57,37 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
                     value={address.zip || ""}
                     onChange={(val) => handleChange('zip', val)}
                     disabled={disable}
+                    dataCy='cep-text'
                 />
             </div>
 
             <div className={styles.inputsContent}>
                 <InputSelect
                     text="Tipo de Residência"
-                    value={address.residenceType?.id?.toString() || ""}
+                    value={address.residenceType?.toString() || ""}
                     onChange={(val: string) =>
-                        handleChange('residenceType', residenceTypes?.find(r => r.id?.toString() === val) || null)
+                        handleChange('residenceType', val ? Number(val) : null)
                     }
                     options={residenceTypes?.map(r => ({
                         value: r.id?.toString() || "",
                         label: TypeResidencesPortuguese[r.residenceType as keyof typeof TypeResidencesPortuguese],
                     })) || []}
                     disabled={disable}
+                    dataCy='residence-select'
                 />
 
                 <InputSelect
                     text="Tipo de Logradouro"
-                    value={address.streetType?.id?.toString() || ""}
+                    value={address.streetType?.toString() || ""}
                     onChange={(val: string) =>
-                        handleChange('streetType', streetTypes?.find(s => s.id?.toString() === val) || null)
+                        handleChange('streetType', val ? Number(val) : null)
                     }
                     options={streetTypes?.map(s => ({
                         value: s.id?.toString() || "",
                         label: TypeStreetsPortuguese[s.streetType as keyof typeof TypeStreetsPortuguese],
                     })) || []}
                     disabled={disable}
+                    dataCy='street-select'
                 />
             </div>
 
@@ -93,6 +98,7 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
                     value={address.street || ""}
                     onChange={(val) => handleChange('street', val)}
                     disabled={disable}
+                    dataCy='street-text'
                 />
                 <InputText
                     type="text"
@@ -100,6 +106,7 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
                     value={address.number || ""}
                     onChange={(val) => handleChange('number', val)}
                     disabled={disable}
+                    dataCy='number-text'
                 />
             </div>
 
@@ -110,6 +117,7 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
                     value={address.neighborhood || ""}
                     onChange={(val) => handleChange('neighborhood', val)}
                     disabled={disable}
+                    dataCy='neighbor-text'
                 />
                 <InputText
                     type="text"
@@ -117,6 +125,7 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
                     value={address.city || ""}
                     onChange={(val) => handleChange('city', val)}
                     disabled={disable}
+                    dataCy='city-text'
                 />
             </div>
 
@@ -127,6 +136,7 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
                     value={address.state || ""}
                     onChange={(val) => handleChange('state', val)}
                     disabled={disable}
+                    dataCy='state-text'
                 />
                 <InputText
                     type="text"
@@ -134,6 +144,7 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
                     value={address.country || ""}
                     onChange={(val) => handleChange('country', val)}
                     disabled={disable}
+                    dataCy='country-text'
                 />
             </div>
 
@@ -144,6 +155,7 @@ export default function PopUpAddressCreate({ address, onChange, disable }: Props
                     value={address.complement || ""}
                     onChange={(val) => handleChange('complement', val)}
                     disabled={disable}
+                    dataCy='complement-text'
                 />
             </div>
         </div>

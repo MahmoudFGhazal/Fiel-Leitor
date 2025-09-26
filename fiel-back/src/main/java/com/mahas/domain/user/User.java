@@ -43,7 +43,7 @@ public class User extends DomainEntity {
     private String email;
 
     @Column(name = "usr_active", columnDefinition = "TINYINT(1) DEFAULT 1")
-    private Boolean active;
+    private Boolean active = true;
 
     @ManyToOne
     @JoinColumn(name = "usr_gen_id", nullable = false)

@@ -1,24 +1,25 @@
 'use client';
+import { AddressRequest } from '@/api/dtos/requestDTOs';
+import { AddressResponse } from '@/api/dtos/responseDTOs';
+import { ApiResponse } from "@/api/objects";
 import api from '@/api/route';
-import styles from './addressConfig.module.css';
-import { Address, ApiResponse, User } from "@/api/objects";
 import ActionButton from "@/components/buttonComponents/actionButton";
 import Button from "@/components/buttonComponents/button";
-import { useEffect, useState } from "react";
-import { useGlobal } from '@/context/GlobalContext';
 import PopUpAddress from '@/components/forms/popUpAddress';
+import { useGlobal } from '@/context/GlobalContext';
 import showToast from '@/utils/showToast';
+import { toRequestAddress } from '@/utils/toRequest';
+import { useEffect, useState } from "react";
+import styles from './addressConfig.module.css';
 
 export default function AddressConfig() {
     const { currentUser } = useGlobal();
-    const [addresses, setAddresses] = useState<Address[]>([]);
-    const [editedAddress, setEditedAddress] = useState<Address | null>(null);
+    const [addresses, setAddresses] = useState<AddressResponse[]>([]);
+    const [editedAddress, setEditedAddress] = useState<AddressRequest | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFormEditable, setIsFormEditable] = useState(false);
 
     useEffect(() => {
-        if (!currentUser) return; 
-
         async function fetchData() {
             try {
                 const res = await api.get<ApiResponse>('/address/user', { params: { userId: currentUser } });
@@ -29,7 +30,7 @@ export default function AddressConfig() {
                 }
 
                 const data = res.data;
-                const entities = (data.entities ?? data) as Address[] | null;
+                const entities = (data.entities ?? data) as AddressResponse[] | null;
 
                 if (!entities?.length) {
                     alert('Nenhum Endereço Encontrado.');
@@ -42,11 +43,15 @@ export default function AddressConfig() {
             }
         }
 
+        if (!currentUser) return; 
+
         fetchData();
     }, [currentUser]);
 
-    const openEditModal = (address: Address, editable = false) => {
-        setEditedAddress({ ...address });
+    const openEditModal = (address: AddressResponse, editable = false) => {
+        const reqAddress = toRequestAddress(address);
+        
+        setEditedAddress(reqAddress);
         setIsFormEditable(editable);
         setIsModalOpen(true);
     };
@@ -55,35 +60,51 @@ export default function AddressConfig() {
         setEditedAddress(null);
     };
 
-    const handleAddressChange = (field: keyof Address, value: string) => {
+    const handleAddressChange = (field: keyof AddressRequest, value: string) => {
         if (!editedAddress) return;
         setEditedAddress(prev => ({ ...prev!, [field]: value }));
     };
 
     const saveAddress = async () => {
         if (!editedAddress) return;
+    
+        console.log(JSON.stringify(editedAddress, null, 2))
+
+        if (!currentUser) {
+            alert("Usuário não definido");
+            return;
+        }
+
+        const payload = {
+            ...editedAddress,
+            user: currentUser ? Number(currentUser) : null
+        };
+
+        console.log("Payload enviado para o back:", payload);
 
         let res: ApiResponse;
 
-        if (!editedAddress.id || editedAddress.id === 0) {
-            res = await api.post("/address", { data: editedAddress }) as ApiResponse;
-        
-            if (res.message) {
-                alert(res.message);
-                return;
-            }
-
-            await showToast("Endereço Criado com Sucesso");
+        if (!payload.id || payload.id === 0) {
+            res = await api.post("/address", { data: payload }) as ApiResponse;
         } else {
-            res = await api.put(`/address`, { data: editedAddress }) as ApiResponse;
-        
-            if (res.message) {
-                alert(res.message);
-                return;
-            }
-
-            await showToast("Endereço Atualizado com Sucesso");
+            res = await api.put("/address", { data: payload }) as ApiResponse;
         }
+
+        if (res.message) {
+            alert(res.message);
+            return;
+        }
+
+        const entity = res.data.entity as AddressResponse;
+
+        
+        if (!payload.id) {
+            setAddresses(prev => [...prev, entity]);
+        } else {
+            setAddresses(prev => prev.map(addr => addr.id === entity.id ? entity : addr));
+        }
+
+        await showToast(!payload.id ? "Endereço Criado com Sucesso" : "Endereço Atualizado com Sucesso");
 
         setIsFormEditable(false);
         setIsModalOpen(false);
@@ -114,7 +135,7 @@ export default function AddressConfig() {
                     onClick={() => {
                         setEditedAddress({
                             id: null,
-                            user: { id: currentUser } as User,
+                            user: null,
                             nickname: '',
                             street: '',
                             number: '',
@@ -130,6 +151,8 @@ export default function AddressConfig() {
                         setIsFormEditable(true);   
                         setIsModalOpen(true);
                     }} 
+                    color='green'
+                    dataCy='create-button'
                 />
             </div>
             <table className={styles.addressTable}>
@@ -146,19 +169,20 @@ export default function AddressConfig() {
                                 {addr.street}, {addr.number} - {addr.neighborhood}, {addr.city}/{addr.state} - {addr.country}
                             </td>
                             <td>
-                                <div className={styles.actionButtons}>
-                                    <button 
-                                        className={styles.viewButton} 
-                                        onClick={() => openEditModal(addr)}
-                                    >
-                                        Visualizar/Editar
-                                    </button>
-                                    <button 
-                                        className={styles.deleteButton} 
-                                        onClick={() => handleDelete(addr.id!)}
-                                    >
-                                        Apagar
-                                    </button>
+                                <div className={styles.actionButtons}>            
+                                    <ActionButton 
+                                        label="Visualizar/Editar" 
+                                        onClick={() => openEditModal(addr)} 
+                                        color="blue" 
+                                        dataCy="view-edit-button"
+                                    />
+
+                                    <ActionButton 
+                                        label="Apagar" 
+                                        onClick={() => handleDelete(addr.id!)} 
+                                        color="red" 
+                                        dataCy="delete-button"
+                                    />
                                 </div>
                             </td>
                         </tr>
@@ -182,13 +206,13 @@ export default function AddressConfig() {
                         <div className={styles.modalActions}>
                             {isFormEditable ? (
                                 <>
-                                    <Button type="button" onClick={saveAddress} text="Salvar" />
-                                    <Button type="button" onClick={closeModal} text="Cancelar" />
+                                    <Button type="button" onClick={saveAddress} text="Salvar" dataCy='save-button'/>
+                                    <Button type="button" onClick={closeModal} text="Cancelar" dataCy='cancel-button' />
                                 </>
                             ) : (
                                 <>
-                                    <Button type="button" onClick={() => setIsFormEditable(true)} text="Editar" />
-                                    <Button type="button" onClick={closeModal} text="Fechar" />
+                                    <Button type="button" onClick={() => setIsFormEditable(true)} text="Editar" dataCy='edit-button' />
+                                    <Button type="button" onClick={closeModal} text="Fechar" dataCy='close-button' />
                                 </>
                             )}
                         </div>
