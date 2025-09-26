@@ -90,7 +90,7 @@ export default function AddressConfig() {
             alert(res.message);
             return;
         }
-
+        console.log(JSON.stringify(res.data, null, 2))
         const entity = res.data.entity as AddressResponse;
 
         

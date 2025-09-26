@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mahas.command.post.rules.CreateAddressAdapter;
 import com.mahas.command.pre.base.address.BaseAddressCommand;
 import com.mahas.command.pre.rules.VerifyCreateAddress;
 import com.mahas.command.pre.rules.VerifyDeleteAddress;
@@ -45,6 +46,10 @@ public class AddressController {
 
     @Autowired
     private BaseAddressCommand baseAddressCommand;
+
+    //Post
+    @Autowired
+    private CreateAddressAdapter createAddressAdapter;
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getAddress(
@@ -104,6 +109,7 @@ public class AddressController {
         FacadeRequest request = new FacadeRequest();
 
         request.setPreCommand(verifyCreateAddress);
+        request.setPostCommand(createAddressAdapter);
         address.setId(null);
         request.setEntity(address);
         FacadeResponse response = facade.save(request);
@@ -132,6 +138,7 @@ public class AddressController {
         FacadeRequest request = new FacadeRequest();
 
         request.setPreCommand(verifyUpdateAddress);
+        request.setPostCommand(createAddressAdapter);
         request.setEntity(address);
         
         FacadeResponse response = facade.update(request);
