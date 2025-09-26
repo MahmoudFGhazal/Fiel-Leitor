@@ -1,12 +1,13 @@
 'use client'
-import styles from './client.module.css';
-import { useEffect, useState } from "react";
-import ActionButton from '@/components/buttonComponents/actionButton';
-import { ApiResponse, User } from '@/api/objects';
+import { UserResponse } from '@/api/dtos/responseDTOs';
+import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
+import ActionButton from '@/components/buttonComponents/actionButton';
+import { useEffect, useState } from "react";
+import styles from './client.module.css';
 
 export default function CRUDClientComponent() {
-    const [users, setUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<UserResponse[]>([]);
     
     useEffect(() => {
         const fetchUsers = async () => {
@@ -18,7 +19,7 @@ export default function CRUDClientComponent() {
                     return;
                 }
 
-                const users = res.data.entities as User[];
+                const users = res.data.entities as UserResponse[];
                 setUsers(users);
             } catch (err) {
                 console.error(err);
@@ -51,8 +52,10 @@ export default function CRUDClientComponent() {
             return;
         }
 
+        const entity = res.data.entity as UserResponse;
+
         const updatedUsers = users.map(u =>
-            u.id === userId ? { ...u, active: currentActive } : u
+            u.id === entity.id ? { ...u, active: currentActive } : u
         );
         setUsers(updatedUsers);
 
@@ -87,10 +90,14 @@ export default function CRUDClientComponent() {
                                         <ActionButton
                                             label="Excluir"
                                             onClick={() => user.id !== null && deleteUser(user.id)}
+                                            color='red'
+                                            dataCy='delete-button'
                                         />
                                         <ActionButton
                                             label={user.active ? "Desativar" : "Ativar"}
                                             onClick={() => user.id !== null && updateActive(user.id, !user.active)}
+                                            color={user.active ? "blue" : "green"}
+                                            dataCy={user.active ? "desactive-button" : "active-button"}
                                         />
                                     </td>
                                 </tr>

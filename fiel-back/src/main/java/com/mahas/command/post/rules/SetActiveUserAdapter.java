@@ -7,27 +7,28 @@ import com.mahas.domain.DataResponse;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.SQLResponse;
-import com.mahas.domain.address.Address;
-import com.mahas.dto.response.address.AddressDTOResponse;
+import com.mahas.domain.user.User;
+import com.mahas.dto.response.user.UserDTOResponse;
 import com.mahas.exception.ValidationException;
 
 @Component
-public class DeleteAddressAdapter implements IPostCommand {
+public class SetActiveUserAdapter implements IPostCommand {
     @Override
     public FacadeResponse execute(SQLResponse sqlResponse) {
         DomainEntity entity = sqlResponse.getEntity();
 
-        if (!(entity instanceof Address)) {
-            throw new ValidationException("Tipo de entidade inválido, esperado Address");
+        if (!(entity instanceof User)) {
+            throw new ValidationException("Tipo de entidade inválido, esperado User");
         }
 
-        Address address = (Address) entity;
+        User user = (User) entity;
 
-        AddressDTOResponse addressResponse = new AddressDTOResponse();
-        addressResponse.setId(address.getId());
-
+        UserDTOResponse userResponse = new UserDTOResponse();
+        userResponse.setId(user.getId());
+        userResponse.setActive(user.getActive());
+        
         DataResponse data = new DataResponse();
-        data.setEntity(addressResponse);
+        data.setEntity(userResponse);
 
         FacadeResponse response = new FacadeResponse();
         response.setData(data);

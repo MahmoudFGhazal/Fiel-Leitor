@@ -44,10 +44,10 @@ public class AddressController {
     @Autowired
     private VerifyGetAddressByUser verifyGetUserByUser;
 
+    //Post
     @Autowired
     private BaseAddressCommand baseAddressCommand;
-
-    //Post
+    
     @Autowired
     private CreateAddressAdapter createAddressAdapter;
 

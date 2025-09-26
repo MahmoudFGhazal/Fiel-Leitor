@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.post.rules.LoginAdapter;
+import com.mahas.command.post.rules.SetActiveUserAdapter;
 import com.mahas.command.post.rules.SignAddressAdapter;
 import com.mahas.command.post.rules.SignUserAdapter;
 import com.mahas.command.pre.base.user.BaseUserCommand;
@@ -42,9 +43,6 @@ public class UserController {
 
     //Pre
     @Autowired
-    private BaseUserCommand baseUserCommand;
-
-    @Autowired
     private VerifyCreateUser verifyCreateUser;
 
     @Autowired
@@ -67,6 +65,9 @@ public class UserController {
 
     //Post
     @Autowired
+    private BaseUserCommand baseUserCommand;
+
+    @Autowired
     private LoginAdapter loginAdapter;
 
     @Autowired
@@ -74,6 +75,9 @@ public class UserController {
 
     @Autowired
     private SignAddressAdapter signAddressAdapter;
+
+    @Autowired
+    private SetActiveUserAdapter setActiveUserAdapter;
 
     @PostMapping("/login")
     public ResponseEntity<FacadeResponse> Login(@RequestBody UserDTORequest user) {
@@ -215,6 +219,7 @@ public class UserController {
         FacadeRequest request = new FacadeRequest();
 
         request.setPreCommand(verifyUserExist);
+        request.setPostCommand(setActiveUserAdapter);
         
         UserDTORequest user = new UserDTORequest();
         user.setId(userId);
