@@ -92,7 +92,6 @@ export default function AddressConfig() {
         }
 
         const entity = res.data.entity as AddressResponse;
-
         
         if (!payload.id) {
             setAddresses(prev => [...prev, entity]);
@@ -118,7 +117,9 @@ export default function AddressConfig() {
             return;
         }
 
-        setAddresses(prev => prev.filter(addr => addr.id !== id));
+        const entity = res.data.entity as AddressResponse;
+
+        setAddresses(prev => prev.filter(addr => addr.id !== entity.id));
         await showToast("Endereço removido com sucesso");
     };
 
