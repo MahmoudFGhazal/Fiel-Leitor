@@ -60,7 +60,6 @@ public class VerifyCreateAddress implements IPreCommand {
             throw new ValidationException("Tipo de residência não encontrada");
         }
 
-        System.out.println(addressRequest.getUser());
         // Validar formato do email
         if (!userValidator.userExists(addressRequest.getUser())) {
             throw new ValidationException("Usuário não encontrado");

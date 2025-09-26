@@ -67,7 +67,7 @@ export default function LoginComponent() {
             alert('Email ou senha incorretos.');
             return;
         }
-        console.log(JSON.stringify(user, null, 2))
+
         if (!user.active) {
             await showToast('Usuario Inativado!');
             return;

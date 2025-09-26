@@ -101,7 +101,6 @@ public class AddressController {
 
     @PostMapping
     public ResponseEntity<FacadeResponse> createAddress(@RequestBody AddressDTORequest address) {
-        System.out.println(address.getUser());
         FacadeRequest request = new FacadeRequest();
 
         request.setPreCommand(verifyCreateAddress);

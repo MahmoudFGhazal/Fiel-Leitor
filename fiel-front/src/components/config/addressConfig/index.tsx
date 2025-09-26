@@ -68,8 +68,6 @@ export default function AddressConfig() {
     const saveAddress = async () => {
         if (!editedAddress) return;
     
-        console.log(JSON.stringify(editedAddress, null, 2))
-
         if (!currentUser) {
             alert("Usuário não definido");
             return;
@@ -79,8 +77,6 @@ export default function AddressConfig() {
             ...editedAddress,
             user: currentUser ? Number(currentUser) : null
         };
-
-        console.log("Payload enviado para o back:", payload);
 
         let res: ApiResponse;
 
