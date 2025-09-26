@@ -44,7 +44,6 @@ public class CreateAddressAdapter implements IPostCommand {
 
         addressResponse.setResidenceType(residenceTypeResponse);
         addressResponse.setStreetType(streetTypeResponse);
-        System.out.println(addressResponse.getId());
         
         DataResponse data = new DataResponse();
         data.setEntity(addressResponse);
