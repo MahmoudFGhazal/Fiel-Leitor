@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mahas.command.post.rules.LoginAdapter;
+import com.mahas.command.post.rules.SignAddressAdapter;
+import com.mahas.command.post.rules.SignUserAdapter;
 import com.mahas.command.pre.base.user.BaseUserCommand;
 import com.mahas.command.pre.rules.VerifyChangePassword;
+import com.mahas.command.pre.rules.VerifyCreateAddress;
 import com.mahas.command.pre.rules.VerifyCreateUser;
 import com.mahas.command.pre.rules.VerifyDeleteUser;
 import com.mahas.command.pre.rules.VerifyLogin;
@@ -23,7 +27,10 @@ import com.mahas.command.pre.rules.VerifyUserExist;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.TypeResponse;
+import com.mahas.dto.request.sign.SignInRequest;
 import com.mahas.dto.request.user.UserDTORequest;
+import com.mahas.dto.response.DTOResponse;
+import com.mahas.dto.response.user.UserDTOResponse;
 import com.mahas.facade.IFacade;
 
 @Controller
@@ -33,11 +40,15 @@ public class UserController {
     @Autowired
     private IFacade facade;
 
+    //Pre
     @Autowired
     private BaseUserCommand baseUserCommand;
 
     @Autowired
     private VerifyCreateUser verifyCreateUser;
+
+    @Autowired
+    private VerifyCreateAddress verifyCreateAddress;
 
     @Autowired
     private VerifyDeleteUser verifyDeleteUser;
@@ -54,6 +65,16 @@ public class UserController {
     @Autowired
     private VerifyChangePassword verifyChangePassword;
 
+    //Post
+    @Autowired
+    private LoginAdapter loginAdapter;
+
+    @Autowired
+    private SignUserAdapter signUserAdapter;
+
+    @Autowired
+    private SignAddressAdapter signAddressAdapter;
+
     @PostMapping("/login")
     public ResponseEntity<FacadeResponse> Login(@RequestBody UserDTORequest user) {
         FacadeRequest request = new FacadeRequest();
@@ -61,9 +82,10 @@ public class UserController {
         request.setEntity(user);
         request.setLimit(1);
         request.setPreCommand(verifyLogin);
+        request.setPostCommand(loginAdapter);
         
         FacadeResponse response = facade.query(request);
-        System.out.println(response.getData().getEntity());
+
         return ResponseEntity.ok(response);
     }
 
@@ -120,6 +142,40 @@ public class UserController {
         FacadeResponse response = facade.save(request);
         
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/sign")
+    public ResponseEntity<FacadeResponse> signIn(@RequestBody SignInRequest body) {
+        FacadeRequest userRequest = new FacadeRequest();
+       
+        userRequest.setPreCommand(verifyCreateUser);
+        userRequest.setPostCommand(signUserAdapter);
+        userRequest.setEntity(body.getUser());
+
+        FacadeResponse userResponse = facade.save(userRequest);
+
+        DTOResponse dtoResponse = userResponse.getData().getEntity();
+
+        if(dtoResponse == null || !(dtoResponse instanceof UserDTOResponse)) {
+            userResponse.setMessage("Erro ao criar usuario");
+            userResponse.setTypeResponse(TypeResponse.SERVER_ERROR);
+            return ResponseEntity.ok(userResponse);
+        }
+
+        UserDTOResponse responseUser = (UserDTOResponse) dtoResponse;
+        
+        
+        body.getAddress().setUser(responseUser.getId());
+
+        FacadeRequest addressRequest = new FacadeRequest();
+
+        addressRequest.setPreCommand(verifyCreateAddress);
+        addressRequest.setPostCommand(signAddressAdapter);
+        addressRequest.setEntity(body.getAddress());
+
+        FacadeResponse addressResponse = facade.save(addressRequest);
+        
+        return ResponseEntity.ok(addressResponse);
     }
 
     @DeleteMapping

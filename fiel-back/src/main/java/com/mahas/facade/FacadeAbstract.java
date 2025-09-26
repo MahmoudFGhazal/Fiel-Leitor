@@ -19,6 +19,7 @@ import com.mahas.dao.user.UserDAO;
 import com.mahas.domain.DataResponse;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.address.Address;
@@ -88,11 +89,15 @@ public abstract class FacadeAbstract {
         return command.execute(request);
     }
 
-    protected DataResponse runRulesResponse(FacadeRequest request, SQLResponse sqlResponse){
+    protected FacadeResponse prepareResponse(FacadeRequest request, SQLResponse sqlResponse){
         IPostCommand command = request.getPostCommand(); 
         if (command != null) return command.execute(sqlResponse);
 
-        return executeDefault(sqlResponse);
+        FacadeResponse response = new FacadeResponse();
+        DataResponse data = executeDefault(sqlResponse);
+        response.setData(data);
+
+        return response;
     }
 
     private DataResponse executeDefault(SQLResponse sqlResponse) {

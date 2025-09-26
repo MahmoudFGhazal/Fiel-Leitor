@@ -1,6 +1,6 @@
 package com.mahas.command.post;
 
-import com.mahas.domain.DataResponse;
+import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.SQLResponse;
 
 public class PostCommand {
@@ -10,7 +10,7 @@ public class PostCommand {
         this.command = command;
     }
     
-    public DataResponse execute(SQLResponse request){
+    public FacadeResponse execute(SQLResponse request){
         return command.execute(request);
     }
 }
