@@ -1,14 +1,14 @@
 'use client'
-import { ApiResponse } from '@/api/objects';
-import styles from './profileConfig.module.css';
-import { useEffect, useState } from "react";
-import api from '@/api/route';
-import { useGlobal } from '@/context/GlobalContext';
-import UserFormEdit from '@/components/forms/userFormEdit';
 import { UserRequest } from '@/api/dtos/requestDTOs';
 import { UserResponse } from '@/api/dtos/responseDTOs';
-import { toRequestUser } from '@/utils/toRequest';
+import { ApiResponse } from '@/api/objects';
+import api from '@/api/route';
 import ActionButton from '@/components/buttonComponents/actionButton';
+import UserFormEdit from '@/components/forms/userFormEdit';
+import { useGlobal } from '@/context/GlobalContext';
+import { toRequestUser } from '@/utils/toRequest';
+import { useEffect, useState } from "react";
+import styles from './profileConfig.module.css';
 
 export default function ProfileConfig() {
     const { currentUser } = useGlobal();
@@ -20,7 +20,7 @@ export default function ProfileConfig() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await api.get<ApiResponse>(`/user?id=${currentUser}`);
+                const res = await api.get<ApiResponse>(`/user`, { params: { userId: currentUser }});
                 if(!res.data) {
                     return;
                 }
@@ -116,6 +116,7 @@ export default function ProfileConfig() {
                             label="Editar"
                             color='blue'
                             onClick={toggleEdit}
+                            dataCy='edit-button'
                         />
                     ) : (
                         <div className={styles.cancelContainer}>
@@ -123,11 +124,13 @@ export default function ProfileConfig() {
                                 label='Salvar'
                                 color='green'
                                 onClick={toggleEdit}
+                                dataCy='save-button'
                             />
                             <ActionButton 
                                 label='Cancelar'
                                 color='red'
                                 onClick={cancelEdit}
+                                dataCy='cancel-button'
                             />
                         </div>
                     )

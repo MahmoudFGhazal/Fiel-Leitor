@@ -1,26 +1,26 @@
 'use client'
+import { UserRequest } from '@/api/dtos/requestDTOs';
+import { GenderResponse } from '@/api/dtos/responseDTOs';
 import { GendersPortuguese } from '@/translate/portuguses';
-import styles from './userFormEdit.module.css';
-import { Genders } from '@/translate/base';
-import { Gender, User } from '@/api/objects';
-import InputText from '../../inputComponents/inputText';
-import InputSelect from '../../inputComponents/inputSelect';
-import { useEffect, useState } from 'react';
 import { getGenders } from '@/utils/getTypes';
+import { useEffect, useState } from 'react';
+import InputSelect from '../../inputComponents/inputSelect';
+import InputText from '../../inputComponents/inputText';
+import styles from './userFormEdit.module.css';
 
 interface UserFormProps {
-    user: User;
+    user: UserRequest;
     disable: boolean;
     onChange: (field: string, value: string) => void;
 }
 
 export default function UserForm({ user, disable, onChange }: UserFormProps) {
-    const [genderTypes, setGenderTypes] = useState<Gender[] | null>(null);
+    const [genderTypes, setGenderTypes] = useState<GenderResponse[] | null>(null);
     
     useEffect(() => {
         async function fetchData() {
             try {
-                const genders: Gender[] = await getGenders();
+                const genders: GenderResponse[] = await getGenders();
 
                 setGenderTypes(genders);
             } catch (err) {
@@ -41,20 +41,9 @@ export default function UserForm({ user, disable, onChange }: UserFormProps) {
                         disabled={disable}
                         value={user.email ?? ""}
                         onChange={(value) => onChange("email", value)}
+                        dataCy='email-text'
                     />
                 </div>
-                <div className={styles.inputContent}>
-                    <InputText
-                        type="password"
-                        text="Senha"
-                        disabled={disable}
-                        value={user.password ?? ""}
-                        onChange={(value) => onChange("password", value)}
-                    />
-                </div>
-            </div>
-
-            <div className={styles.content}>
                 <div className={styles.inputContent}>
                     <InputText
                         type="text"
@@ -62,13 +51,17 @@ export default function UserForm({ user, disable, onChange }: UserFormProps) {
                         disabled={disable}
                         value={user.name ?? ""}
                         onChange={(value) => onChange("name", value)}
+                        dataCy='name-text'
                     />
                 </div>
+            </div>
+
+            <div className={styles.content}>
                 <div className={styles.inputContent}>
                     <InputSelect
                         text="Gênero"
                         disabled={disable}
-                        value={user.gender?.id?.toString() ?? ""}
+                        value={user.gender?.toString() ?? ""}
                         onChange={(value) => onChange("gender", value)}
                         options={
                             genderTypes?.map(gender => ({
@@ -76,6 +69,17 @@ export default function UserForm({ user, disable, onChange }: UserFormProps) {
                                 label: GendersPortuguese[gender.gender as keyof typeof GendersPortuguese],
                             })) || []
                         }
+                        dataCy='gender-select'
+                    />
+                </div>
+                <div className={styles.inputContent}>
+                    <InputText
+                        type="text"
+                        text="Número de Telefone"
+                        disabled={disable}
+                        value={user.phoneNumber ?? ""}
+                        onChange={(value) => onChange("phoneNumber", value)}
+                        dataCy='phonuNumber-text'
                     />
                 </div>
             </div>
@@ -92,6 +96,7 @@ export default function UserForm({ user, disable, onChange }: UserFormProps) {
                                 : ""
                         }
                         onChange={(value) => onChange("birthday", value)}
+                        dataCy='birth-date'
                     />
                 </div>
                 <div className={styles.inputContent}>
@@ -101,18 +106,9 @@ export default function UserForm({ user, disable, onChange }: UserFormProps) {
                         disabled={disable}
                         value={user.cpf ?? ""}
                         onChange={(value) => onChange("cpf", value)}
+                        dataCy='cpf-text'
                     />
                 </div>
-            </div>
-
-            <div className={styles.inputContent}>
-                <InputText
-                    type="text"
-                    text="Número de Telefone"
-                    disabled={disable}
-                    value={user.phoneNumber ?? ""}
-                    onChange={(value) => onChange("phoneNumber", value)}
-                />
             </div>
         </div>
     );
