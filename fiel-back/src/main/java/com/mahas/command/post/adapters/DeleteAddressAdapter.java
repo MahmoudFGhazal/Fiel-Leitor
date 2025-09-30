@@ -1,4 +1,4 @@
-package com.mahas.command.post.rules;
+package com.mahas.command.post.adapters;
 
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import com.mahas.dto.response.address.AddressDTOResponse;
 import com.mahas.exception.ValidationException;
 
 @Component
-public class SignAddressAdapter implements IPostCommand {
+public class DeleteAddressAdapter implements IPostCommand {
     @Override
     public FacadeResponse execute(SQLResponse sqlResponse) {
         DomainEntity entity = sqlResponse.getEntity();
@@ -25,11 +25,12 @@ public class SignAddressAdapter implements IPostCommand {
 
         AddressDTOResponse addressResponse = new AddressDTOResponse();
         addressResponse.setId(address.getId());
-        
+
         DataResponse data = new DataResponse();
         data.setEntity(addressResponse);
 
         FacadeResponse response = new FacadeResponse();
+        response.setData(data);
 
         return response;
     }

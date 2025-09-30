@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mahas.command.post.rules.DeleteUserAdapter;
-import com.mahas.command.post.rules.LoginAdapter;
-import com.mahas.command.post.rules.SetActiveUserAdapter;
-import com.mahas.command.post.rules.SignAddressAdapter;
-import com.mahas.command.post.rules.SignUserAdapter;
+import com.mahas.command.post.adapters.DeleteUserAdapter;
+import com.mahas.command.post.adapters.LoginAdapter;
+import com.mahas.command.post.adapters.SetActiveUserAdapter;
+import com.mahas.command.post.adapters.SignAddressAdapter;
+import com.mahas.command.post.adapters.SignUserAdapter;
 import com.mahas.command.pre.base.user.BaseUserCommand;
 import com.mahas.command.pre.rules.VerifyChangePassword;
 import com.mahas.command.pre.rules.VerifyCreateAddress;

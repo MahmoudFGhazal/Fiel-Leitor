@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mahas.command.post.rules.CreateAddressAdapter;
+import com.mahas.command.post.adapters.CreateAddressAdapter;
 import com.mahas.command.pre.base.address.BaseAddressCommand;
 import com.mahas.command.pre.rules.VerifyCreateAddress;
 import com.mahas.command.pre.rules.VerifyDeleteAddress;

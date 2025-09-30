@@ -1,4 +1,4 @@
-package com.mahas.command.post.rules;
+package com.mahas.command.post.adapters;
 
 import org.springframework.stereotype.Component;
 
