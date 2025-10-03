@@ -65,7 +65,7 @@ public abstract class FacadeAbstract {
         initDtos();
     }
 
-    public void initDaos() {
+    private void initDaos() {
         daos.put(User.class.getName(), userDAO);
         daos.put(Gender.class.getName(), genderDAO);
         daos.put(Address.class.getName(), addressDAO);
@@ -74,7 +74,7 @@ public abstract class FacadeAbstract {
     }
 
     
-    public void initDtos() {
+    private void initDtos() {
         dtos.put(User.class.getName(), UserDTOResponse.class);
         dtos.put(Gender.class.getName(), GenderDTOResponse.class);
         dtos.put(Address.class.getName(), AddressDTOResponse.class);
