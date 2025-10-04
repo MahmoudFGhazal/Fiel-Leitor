@@ -1,39 +1,13 @@
 -- Gerado por Oracle SQL Developer Data Modeler 24.3.1.351.0831
---   em:        2025-09-06 15:59:04 BRT
---   site:      Oracle Database 11g
---   tipo:      Oracle Database 11g
+--   em:        2025-10-03 21:19:26 BRT
+--   site:      Oracle Database 21c
+--   tipo:      Oracle Database 21c
 
 
 
 -- predefined type, no DDL - MDSYS.SDO_GEOMETRY
 
 -- predefined type, no DDL - XMLTYPE
-
-CREATE TABLE Address_Name 
-    ( 
-     ana_id          UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     ana_name        UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     ana_add_id      UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     ana_createdAt   UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     ana_updatedAt   UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     ana_publishedAt UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL 
-    ) 
-;
-
-ALTER TABLE Address_Name 
-    ADD CONSTRAINT Address_Name_PK PRIMARY KEY ( ana_id ) ;
 
 CREATE TABLE Addresses 
     ( 
@@ -46,15 +20,6 @@ CREATE TABLE Addresses
      add_complement  UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                     , 
-     add_createdAt   UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     add_updatedAt   UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     add_publishedAt UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
      add_rty_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
@@ -63,8 +28,21 @@ CREATE TABLE Addresses
                      NOT NULL , 
      add_str_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     add_sty_id      UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     add_createdAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     add_updatedAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     add_publishedAt UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Addresses 
@@ -91,6 +69,7 @@ CREATE TABLE Administrator
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Administrator 
@@ -107,6 +86,9 @@ CREATE TABLE Books
      bok_stock   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
+     bok_cat_id  UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
      createdAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
@@ -117,10 +99,38 @@ CREATE TABLE Books
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Books 
     ADD CONSTRAINT Books_PK PRIMARY KEY ( bok_id ) ;
+
+CREATE TABLE Card_Banners 
+    ( 
+     cba_id          UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     cba_name        UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     cba_active      UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                    , 
+     cba_createdAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     cba_updatedAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     cba_publishedAt UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL 
+    ) 
+    LOGGING 
+;
+
+ALTER TABLE Card_Banners 
+    ADD CONSTRAINT Card_Banners_PK PRIMARY KEY ( cba_id ) ;
 
 CREATE TABLE Cards 
     ( 
@@ -156,8 +166,12 @@ CREATE TABLE Cards
                      NOT NULL , 
      car_pty_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     car_cba_id      UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Cards 
@@ -184,69 +198,61 @@ CREATE TABLE Carts
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Carts 
     ADD CONSTRAINT Carts_PK PRIMARY KEY ( cat_cli_id, cat_bok_id ) ;
 
-CREATE TABLE Cities 
+CREATE TABLE Categories 
     ( 
-     cit_id          UNKNOWN 
+     cat_id          UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     cit_city        UNKNOWN 
+     cat_name        UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     cit_createdAt   UNKNOWN 
+     cat_active      UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                    , 
+     cat_createdAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     cit_updatedAt   UNKNOWN 
+     cat_updatedAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     cit_publishedAt UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     cit_sta_id      UNKNOWN 
+     cat_publishedAt UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
-ALTER TABLE Cities 
-    ADD CONSTRAINT Cities_PK PRIMARY KEY ( cit_id ) ;
-
-CREATE TABLE Countries 
-    ( 
-     cou_id          UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     cou_country     UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                    , 
-     cou_createdAt   UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     cou_updatedAt   UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                    , 
-     cou_publishedAt UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL 
-    ) 
-;
-
-ALTER TABLE Countries 
-    ADD CONSTRAINT Countries_PK PRIMARY KEY ( cou_id ) ;
+ALTER TABLE Categories 
+    ADD CONSTRAINT Categories_PK PRIMARY KEY ( cat_id ) ;
 
 CREATE TABLE Genders 
     ( 
-     gen_id   UNKNOWN 
+     gen_id          UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     gen_name UNKNOWN 
+     gen_name        UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     gen_active      UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                    , 
+     gen_createdAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     gen_updatedAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     gen_publishedAt UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Genders 
@@ -260,6 +266,9 @@ CREATE TABLE Payment_Types
      pty_payment_type UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
+     pty_active       UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                    , 
      pty_createdAt    UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
@@ -270,10 +279,35 @@ CREATE TABLE Payment_Types
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Payment_Types 
     ADD CONSTRAINT Payment_Types_PK PRIMARY KEY ( pty_id ) ;
+
+CREATE TABLE Promotional_Coupons 
+    ( 
+     pco_id          UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     pco_value       UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     pco_createdAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     pco_updatedAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     pco_publishedAt UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL 
+    ) 
+    LOGGING 
+;
+
+ALTER TABLE Promotional_Coupons 
+    ADD CONSTRAINT Promotional_Coupons_PK PRIMARY KEY ( pco_id ) ;
 
 CREATE TABLE Residence_Types 
     ( 
@@ -283,6 +317,9 @@ CREATE TABLE Residence_Types
      rty_residence_type UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
+     rty_active         UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                    , 
      rty_createdAt      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
@@ -293,6 +330,7 @@ CREATE TABLE Residence_Types
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Residence_Types 
@@ -300,31 +338,41 @@ ALTER TABLE Residence_Types
 
 CREATE TABLE Sales 
     ( 
-     sal_id          UNKNOWN 
+     sal_id           UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sal_createdAt   UNKNOWN 
+     sal_cli_id       UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sal_updatedAt   UNKNOWN 
+     sal_freight      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sal_publishedAt UNKNOWN 
+     sal_deliveryDate UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                    , 
+     sal_ssa_id       UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sal_cli_id      UNKNOWN 
+     sal_cou_id       UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sal_ana_id      UNKNOWN 
+     sal_pco_id       UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sal_car_id      UNKNOWN 
+     sal_add_id       UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sal_ssa_id      UNKNOWN 
+     sal_createdAt    UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     sal_updatedAt    UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     sal_publishedAt  UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Sales 
@@ -332,49 +380,57 @@ ALTER TABLE Sales
 
 CREATE TABLE Sales_Books 
     ( 
-     sbo_sal_id   UNKNOWN 
+     sbo_sal_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sbo_bok_id   UNKNOWN 
+     sbo_bok_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sbo_quantity UNKNOWN 
+     sbo_quantity    UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     sbo_price       UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     sbo_createdAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     sbo_updatedAt   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     sbo_publishedAt UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Sales_Books 
     ADD CONSTRAINT Sales_Books_PK PRIMARY KEY ( sbo_bok_id, sbo_sal_id ) ;
 
-CREATE TABLE States 
+CREATE TABLE Sales_Cards 
     ( 
-     sta_id          UNKNOWN 
+     sca_sal_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sta_state       UNKNOWN 
+     sca_car_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sta_uf          UNKNOWN 
+     sca_percent     UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sta_createdAt   UNKNOWN 
+     sca_createdAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sta_updateAt    UNKNOWN 
+     sca_updatedAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sta_publishedAt UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     sta_cou_id      UNKNOWN 
+     sca_publishedAt UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
-
-ALTER TABLE States 
-    ADD CONSTRAINT States_PK PRIMARY KEY ( sta_id ) ;
 
 CREATE TABLE Status_Sale 
     ( 
@@ -394,6 +450,7 @@ CREATE TABLE Status_Sale
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Status_Sale 
@@ -407,6 +464,9 @@ CREATE TABLE Street_Types
      sty_street_type UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
+     sty_active      UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                    , 
      sty_createdAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
@@ -417,42 +477,35 @@ CREATE TABLE Street_Types
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE Street_Types 
     ADD CONSTRAINT Street_Types_PK PRIMARY KEY ( sty_id ) ;
 
-CREATE TABLE Streets 
+CREATE TABLE Trade_Coupons 
     ( 
-     str_id           UNKNOWN 
+     tco_id          UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     str_street       UNKNOWN 
+     tco_sal_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     str_neighborhood UNKNOWN 
+     tco_createdAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     str_zip          UNKNOWN 
+     tco_updatedAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     str_createdAt    UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     str_updatedAt    UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     str_publishedAt  UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     str_sty_id       UNKNOWN 
+     tco_publishedAt UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
-ALTER TABLE Streets 
-    ADD CONSTRAINT Streets_PK PRIMARY KEY ( str_id ) ;
+ALTER TABLE Trade_Coupons 
+    ADD CONSTRAINT Coupons_PK PRIMARY KEY ( tco_id ) ;
 
 CREATE TABLE "User" 
     ( 
@@ -490,6 +543,7 @@ CREATE TABLE "User"
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE "User" 
@@ -500,34 +554,24 @@ CREATE TABLE User_Address
      uad_usr_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     uad_ana_id      UNKNOWN 
+     uad_add_id      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     udd_publishedAt UNKNOWN 
+     uad_publishedAt UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     udd_createdAt   UNKNOWN 
+     uad_createdAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     udd_updatedAt   UNKNOWN 
+     uad_updatedAt   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL 
     ) 
+    LOGGING 
 ;
 
 ALTER TABLE User_Address 
-    ADD CONSTRAINT User_Address_PK PRIMARY KEY ( uad_ana_id, uad_usr_id ) ;
-
-ALTER TABLE Addresses 
-    ADD CONSTRAINT add_cit_FK FOREIGN KEY 
-    ( 
-     add_cit_id
-    ) 
-    REFERENCES Cities 
-    ( 
-     cit_id
-    ) 
-;
+    ADD CONSTRAINT User_Address_PK PRIMARY KEY ( uad_usr_id ) ;
 
 ALTER TABLE Addresses 
     ADD CONSTRAINT add_rty_FK FOREIGN KEY 
@@ -538,28 +582,43 @@ ALTER TABLE Addresses
     ( 
      rty_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Addresses 
-    ADD CONSTRAINT add_str_FK FOREIGN KEY 
+    ADD CONSTRAINT add_sty_FK FOREIGN KEY 
     ( 
-     add_str_id
+     add_sty_id
     ) 
-    REFERENCES Streets 
+    REFERENCES Street_Types 
     ( 
-     str_id
+     sty_id
     ) 
+    NOT DEFERRABLE 
 ;
 
-ALTER TABLE Address_Name 
-    ADD CONSTRAINT ana_add_FK FOREIGN KEY 
+ALTER TABLE Books 
+    ADD CONSTRAINT bok_cat_FK FOREIGN KEY 
     ( 
-     ana_add_id
+     bok_cat_id
     ) 
-    REFERENCES Addresses 
+    REFERENCES Categories 
     ( 
-     add_id
+     cat_id
     ) 
+    NOT DEFERRABLE 
+;
+
+ALTER TABLE Cards 
+    ADD CONSTRAINT car_cba_FK FOREIGN KEY 
+    ( 
+     car_cba_id
+    ) 
+    REFERENCES Card_Banners 
+    ( 
+     cba_id
+    ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Cards 
@@ -571,6 +630,7 @@ ALTER TABLE Cards
     ( 
      pty_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Carts 
@@ -582,6 +642,7 @@ ALTER TABLE Carts
     ( 
      bok_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Carts 
@@ -593,17 +654,7 @@ ALTER TABLE Carts
     ( 
      usr_id
     ) 
-;
-
-ALTER TABLE Cities 
-    ADD CONSTRAINT cit_sta_FK FOREIGN KEY 
-    ( 
-     cit_sta_id
-    ) 
-    REFERENCES States 
-    ( 
-     sta_id
-    ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Cards 
@@ -615,28 +666,55 @@ ALTER TABLE Cards
     ( 
      usr_id
     ) 
+    NOT DEFERRABLE 
+;
+
+ALTER TABLE Trade_Coupons 
+    ADD CONSTRAINT cou_sal_FK FOREIGN KEY 
+    ( 
+     tco_sal_id
+    ) 
+    REFERENCES Sales 
+    ( 
+     sal_id
+    ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Sales 
-    ADD CONSTRAINT sal_ana_FK FOREIGN KEY 
+    ADD CONSTRAINT sal_add_FK FOREIGN KEY 
     ( 
-     sal_ana_id
+     sal_add_id
     ) 
-    REFERENCES Address_Name 
+    REFERENCES Addresses 
     ( 
-     ana_id
+     add_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Sales 
-    ADD CONSTRAINT sal_car_FK FOREIGN KEY 
+    ADD CONSTRAINT sal_cou_FK FOREIGN KEY 
     ( 
-     sal_car_id
+     sal_cou_id
     ) 
-    REFERENCES Cards 
+    REFERENCES Trade_Coupons 
     ( 
-     car_id
+     tco_id
     ) 
+    NOT DEFERRABLE 
+;
+
+ALTER TABLE Sales 
+    ADD CONSTRAINT sal_pco_FK FOREIGN KEY 
+    ( 
+     sal_pco_id
+    ) 
+    REFERENCES Promotional_Coupons 
+    ( 
+     pco_id
+    ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Sales 
@@ -648,6 +726,7 @@ ALTER TABLE Sales
     ( 
      ssa_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Sales 
@@ -659,6 +738,7 @@ ALTER TABLE Sales
     ( 
      usr_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Sales_Books 
@@ -670,6 +750,7 @@ ALTER TABLE Sales_Books
     ( 
      bok_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE Sales_Books 
@@ -681,39 +762,43 @@ ALTER TABLE Sales_Books
     ( 
      sal_id
     ) 
+    NOT DEFERRABLE 
 ;
 
-ALTER TABLE States 
-    ADD CONSTRAINT sta_cou_FK FOREIGN KEY 
+ALTER TABLE Sales_Cards 
+    ADD CONSTRAINT sca_car_FK FOREIGN KEY 
     ( 
-     sta_cou_id
+     sca_car_id
     ) 
-    REFERENCES Countries 
+    REFERENCES Cards 
     ( 
-     cou_id
+     car_id
     ) 
+    NOT DEFERRABLE 
 ;
 
-ALTER TABLE Streets 
-    ADD CONSTRAINT str_sty_FK FOREIGN KEY 
+ALTER TABLE Sales_Cards 
+    ADD CONSTRAINT sca_sal_FK FOREIGN KEY 
     ( 
-     str_sty_id
+     sca_sal_id
     ) 
-    REFERENCES Street_Types 
+    REFERENCES Sales 
     ( 
-     sty_id
+     sal_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE User_Address 
-    ADD CONSTRAINT udd_ana_FK FOREIGN KEY 
+    ADD CONSTRAINT uad_add_FK FOREIGN KEY 
     ( 
-     uad_ana_id
+     uad_add_id
     ) 
-    REFERENCES Address_Name 
+    REFERENCES Addresses 
     ( 
-     ana_id
+     add_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE User_Address 
@@ -725,6 +810,7 @@ ALTER TABLE User_Address
     ( 
      usr_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 ALTER TABLE "User" 
@@ -736,6 +822,7 @@ ALTER TABLE "User"
     ( 
      gen_id
     ) 
+    NOT DEFERRABLE 
 ;
 
 
@@ -780,5 +867,5 @@ ALTER TABLE "User"
 -- ORDS ENABLE SCHEMA                       0
 -- ORDS ENABLE OBJECT                       0
 -- 
--- ERRORS                                 119
+-- ERRORS                                 132
 -- WARNINGS                                 0
