@@ -1,5 +1,5 @@
 -- Gerado por Oracle SQL Developer Data Modeler 24.3.1.351.0831
---   em:        2025-10-03 21:19:26 BRT
+--   em:        2025-10-03 22:45:51 BRT
 --   site:      Oracle Database 21c
 --   tipo:      Oracle Database 21c
 
@@ -14,6 +14,9 @@ CREATE TABLE Addresses
      add_id          UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
+     add_principal   UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                    , 
      add_number      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
@@ -142,7 +145,7 @@ CREATE TABLE Cards
                      NOT NULL , 
      car_principal   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
+                    , 
      car_number      UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
@@ -571,7 +574,7 @@ CREATE TABLE User_Address
 ;
 
 ALTER TABLE User_Address 
-    ADD CONSTRAINT User_Address_PK PRIMARY KEY ( uad_usr_id ) ;
+    ADD CONSTRAINT User_Address_PK PRIMARY KEY ( uad_usr_id, uad_add_id ) ;
 
 ALTER TABLE Addresses 
     ADD CONSTRAINT add_rty_FK FOREIGN KEY 
@@ -867,5 +870,5 @@ ALTER TABLE "User"
 -- ORDS ENABLE SCHEMA                       0
 -- ORDS ENABLE OBJECT                       0
 -- 
--- ERRORS                                 132
+-- ERRORS                                 133
 -- WARNINGS                                 0
