@@ -133,6 +133,7 @@ export default function AddressConfig() {
                         setEditedAddress({
                             id: null,
                             user: null,
+                            principal: null,
                             nickname: '',
                             street: '',
                             number: '',
@@ -144,7 +145,7 @@ export default function AddressConfig() {
                             complement: '',
                             residenceType: null,
                             streetType: null
-                        });
+                        } as AddressRequest);
                         setIsFormEditable(true);   
                         setIsModalOpen(true);
                     }} 
@@ -162,9 +163,7 @@ export default function AddressConfig() {
                 <tbody>
                     {addresses.map((addr) => (
                         <tr key={addr.id}>
-                            <td>
-                                {addr.street}, {addr.number} - {addr.neighborhood}, {addr.city}/{addr.state} - {addr.country}
-                            </td>
+                            <td>{addr.nickname}</td>
                             <td>
                                 <div className={styles.actionButtons}>            
                                     <ActionButton 

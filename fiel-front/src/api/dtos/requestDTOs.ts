@@ -1,6 +1,7 @@
 export interface AddressRequest {
     id: number | null,
     user: number | null,
+    principal: boolean | null,
     nickname: string | null,
     number: string | null,
     complement: string | null,
@@ -18,21 +19,16 @@ export interface CardRequest {
     id: number | null,
     user: number | null,
     principal: boolean | null,
-    number: string | null,
-    ccv: string | null,
+    bin: string | null,
+    last4: string | null,
     holder: string | null,
-    valid: string | null,
-    paymentType: number | null
+    expMonth: string | null,
+    expYear: string | null
 }
 
 export interface GenderRequest {
     id: number | null,
     gender: string | null
-}
-
-export interface PaymentTypeRequest {
-    id: number | null,
-    paymentType: string | null
 }
 
 export interface ResidenceTypeRequest {

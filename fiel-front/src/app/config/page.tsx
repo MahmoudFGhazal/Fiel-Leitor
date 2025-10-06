@@ -1,6 +1,7 @@
 'use server'
 import ButtonLink from '@/components/buttonComponents/buttonLink';
 import AddressConfig from '@/components/config/addressConfig';
+import CardConfig from '@/components/config/cardConfig';
 import ChangePasswordConfig from '@/components/config/changePasswordConfig';
 import ProfileConfig from '@/components/config/profileConfig';
 import styles from './page.module.css';
@@ -28,7 +29,7 @@ export default async function Config({
                 {activeTab === 'profile' && <ProfileConfig />}
                 {activeTab === 'password' && <ChangePasswordConfig />}
                 {activeTab === 'addresses' && <AddressConfig />}
-                {/* {activeTab === 'cards' && <CardConfig />} */}
+                {activeTab === 'cards' && <CardConfig />}
             </div>
         </div>
     );

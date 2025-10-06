@@ -1,149 +1,190 @@
-/* 'use client';
+'use client';
+import { CardRequest } from '@/api/dtos/requestDTOs';
+import { CardResponse } from '@/api/dtos/responseDTOs';
+import { ApiResponse } from "@/api/objects";
+import api from '@/api/route';
+import ActionButton from "@/components/buttonComponents/actionButton";
+import Button from "@/components/buttonComponents/button";
+import { useGlobal } from '@/context/GlobalContext';
+import showToast from '@/utils/showToast';
+import { toRequestCard } from '@/utils/toRequest';
 import { useEffect, useState } from "react";
-import { CardData } from "@/modal/cardModal";
+import PopUpCard from '../../forms/popUpCard';
 import styles from './cardConfig.module.css';
-import PopUpCard from "./popUpCard";
-import Button from "@/components/button";
-import ActionButton from "@/components/actionButton";
-
-export interface UserDataWithCards { 
-    id: number; 
-    name: string; 
-    cards?: CardData[]; 
-}
 
 export default function CardConfig() {
-    const [user, setUser] = useState<UserDataWithCards | null>(null);
-    const [editedCard, setEditedCard] = useState<CardData | null>(null);
+    const { currentUser } = useGlobal();
+    const [cards, setCards] = useState<CardResponse[]>([]);
+    const [editedCard, setEditedCard] = useState<CardRequest | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFormEditable, setIsFormEditable] = useState(false);
 
     useEffect(() => {
-        const localUser = localStorage.getItem('currentUser');
-        const sessionUser = sessionStorage.getItem('currentUser');
+        async function fetchData() {
+            try {
+                const res = await api.get<ApiResponse>('/card/user', { params: { userId: currentUser } });
 
-        const currentUser = localUser
-            ? JSON.parse(localUser)
-            : sessionUser
-            ? JSON.parse(sessionUser)
-            : null;
+                if (res.message) {
+                    alert(res.message);
+                    return;
+                }
 
-        if (currentUser) setUser(currentUser);
-    }, []);
+                const data = res.data;
+                const entities = (data.entities ?? data) as CardResponse[] | null;
 
-    const openEditModal = (card: CardData) => {
-        setEditedCard({ ...card });
-        setIsFormEditable(false);
+                if (!entities?.length) {
+                    alert('Nenhum cartão encontrado.');
+                    return;
+                }
+
+                setCards(entities);
+            } catch (err) {
+                console.error("Erro ao carregar cartões", err);
+            }
+        }
+
+        if (!currentUser) return; 
+        fetchData();
+    }, [currentUser]);
+
+    const openEditModal = (card: CardResponse, editable = false) => {
+        const reqCard = toRequestCard(card);
+        
+        setEditedCard(reqCard);
+        setIsFormEditable(editable);
         setIsModalOpen(true);
     };
 
-    const closeModal = () => setEditedCard(null);
+    const closeModal = () => {
+        setEditedCard(null);
+        setIsModalOpen(false);
+    };
 
-    const handleCardChange = (field: keyof CardData, value: string) => {
+    const handleCardChange = (field: keyof CardRequest, value: string | boolean | null) => {
         if (!editedCard) return;
         setEditedCard(prev => ({ ...prev!, [field]: value }));
     };
 
-    const saveCard = () => {
-        if (!user || !editedCard) return;
-
-        const confirmed = confirm("Deseja realmente salvar este cartão?");
-        if (!confirmed) return;
-
-        let updatedCards = user.cards || [];
-        const exists = updatedCards.some(c => c.id === editedCard.id);
-
-        if (exists) {
-            updatedCards = updatedCards.map(c =>
-                c.id === editedCard.id ? editedCard : c
-            );
-        } else {
-            updatedCards = [...updatedCards, editedCard];
+    const saveCard = async () => {
+        if (!editedCard) return;
+    
+        if (!currentUser) {
+            alert("Usuário não definido");
+            return;
         }
 
-        const updatedUser = { ...user, cards: updatedCards };
-        setUser(updatedUser);
+        const payload = {
+            ...editedCard,
+            user: Number(currentUser)
+        };
 
-        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-        sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
+        let res: ApiResponse;
+
+        if (!payload.id || payload.id === 0) {
+            res = await api.post("/card", { data: payload }) as ApiResponse;
+        } else {
+            res = await api.put("/card", { data: payload }) as ApiResponse;
+        }
+
+        if (res.message) {
+            alert(res.message);
+            return;
+        }
+
+        const entity = res.data.entity as CardResponse;
+        
+        if (!payload.id) {
+            setCards(prev => [...prev, entity]);
+        } else {
+            setCards(prev => prev.map(card => card.id === entity.id ? entity : card));
+        }
+
+        await showToast(!payload.id ? "Cartão criado com sucesso" : "Cartão atualizado com sucesso");
 
         setIsFormEditable(false);
         setIsModalOpen(false);
     };
 
-    const handleDelete = (id: number) => {
-        if (!user || !user.cards) return;
+    const handleDelete = async (id: number) => {
         const confirmed = confirm("Tem certeza que deseja apagar este cartão?");
         if (!confirmed) return;
 
-        const updatedCards = user.cards.filter(c => c.id !== id);
-        const updatedUser = { ...user, cards: updatedCards };
-        setUser(updatedUser);
-
-        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-        sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
-    };
+        const res = await api.delete("/card", { params: { cardId: id } }) as ApiResponse;
     
+        if (res.message) {
+            alert(res.message);
+            return;
+        }
+
+        const entity = res.data.entity as CardResponse;
+
+        setCards(prev => prev.filter(card => card.id !== entity.id));
+        await showToast("Cartão removido com sucesso");
+    };
+
     return (
-        <div className={styles.container}>
+        <div className={styles.container} >
             <div className={styles.headerContent}>
                 <h2>Cartões</h2>
-                <ActionButton
-                    label="Adicionar Cartão"
+                <ActionButton 
+                    label="Criar Cartão" 
                     onClick={() => {
                         setEditedCard({
-                            id: Date.now(),
-                            nickname: '',
-                            number: '',
-                            holderName: '',
-                            expiration: '',
-                            cvv: ''
-                        });
-                        setIsFormEditable(true);
+                            id: null,
+                            user: null,
+                            principal: false,
+                            bin: '',
+                            last4: '',
+                            holder: '',
+                            expMonth: '',
+                            expYear: ''
+                        } as CardRequest);
+                        setIsFormEditable(true);   
                         setIsModalOpen(true);
-                    }}
+                    }} 
+                    color='green'
+                    dataCy='create-button'
                 />
             </div>
+            <table className={styles.addressTable}>
+                <thead>
+                    <tr>
+                        <th>Cartão</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {cards.map((card) => (
+                        <tr key={card.id}>
+                            <td>**** **** **** {card.last4}</td>
+                            <td>
+                                <div className={styles.actionButtons}>            
+                                    <ActionButton 
+                                        label="Visualizar" 
+                                        onClick={() => openEditModal(card, false)} 
+                                        color="gray" 
+                                        dataCy="view-button"
+                                    />
 
-            {user?.cards && user.cards.length > 0 ? (
-                <table className={styles.cardTable}>
-                    <thead>
-                        <tr>
-                            <th>Apelido</th>
-                            <th>Número</th>
-                            <th>Validade</th>
-                            <th>Ações</th>
+                                    <ActionButton 
+                                        label="Editar" 
+                                        onClick={() => openEditModal(card, true)} 
+                                        color="blue" 
+                                        dataCy="edit-button"
+                                    />
+
+                                    <ActionButton 
+                                        label="Apagar" 
+                                        onClick={() => handleDelete(card.id!)} 
+                                        color="red" 
+                                        dataCy="delete-button"
+                                    />
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {user.cards.map(card => (
-                            <tr key={card.id}>
-                                <td>{card.nickname}</td>
-                                <td>**** **** **** {card.number.slice(-4)}</td>
-                                <td>{card.expiration}</td>
-                                <td>
-                                    <div className={styles.actionButtons}>
-                                        <button
-                                            className={styles.viewButton}
-                                            onClick={() => openEditModal(card)}
-                                        >
-                                            Visualizar/Editar
-                                        </button>
-                                        <button
-                                            className={styles.deleteButton}
-                                            onClick={() => handleDelete(card.id)}
-                                        >
-                                            Apagar
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            ) : (
-                <p>Sem cartões cadastrados.</p>
-            )}
+                    ))}
+                </tbody>
+            </table>
 
             {isModalOpen && editedCard && (
                 <div className={styles.modalBackdrop}>
@@ -153,7 +194,7 @@ export default function CardConfig() {
                         </div>
 
                         <PopUpCard
-                            card={editedCard}
+                            card={editedCard}  
                             onChange={handleCardChange}
                             disable={!isFormEditable}
                         />
@@ -161,13 +202,13 @@ export default function CardConfig() {
                         <div className={styles.modalActions}>
                             {isFormEditable ? (
                                 <>
-                                    <Button type="button" onClick={saveCard} text="Salvar" />
-                                    <Button type="button" onClick={closeModal} text="Cancelar" />
+                                    <Button type="button" onClick={saveCard} text="Salvar" dataCy='save-button'/>
+                                    <Button type="button" onClick={closeModal} text="Cancelar" dataCy='cancel-button' />
                                 </>
                             ) : (
                                 <>
-                                    <Button type="button" onClick={() => setIsFormEditable(true)} text="Editar" />
-                                    <Button type="button" onClick={closeModal} text="Fechar" />
+                                    <Button type="button" onClick={() => setIsFormEditable(true)} text="Editar" dataCy='edit-button' />
+                                    <Button type="button" onClick={closeModal} text="Fechar" dataCy='close-button' />
                                 </>
                             )}
                         </div>
@@ -177,4 +218,3 @@ export default function CardConfig() {
         </div>
     );
 }
- */
