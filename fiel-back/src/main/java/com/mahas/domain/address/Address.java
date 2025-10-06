@@ -36,6 +36,9 @@ public class Address extends DomainEntity {
     @ManyToOne
     @JoinColumn(name = "add_usr_id", nullable = false)
     private User user;
+
+    @Column(name = "add_principal", columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean principal = false;
     
     @Column(name = "add_nickname", nullable = false)
     private String nickname;

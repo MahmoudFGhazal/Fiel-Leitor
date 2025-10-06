@@ -1,4 +1,4 @@
-package com.mahas.domain.address;
+package com.mahas.domain.product;
 
 import java.time.LocalDateTime;
 
@@ -18,31 +18,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "street_types")
+@Table(name = "books")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StreetType extends DomainEntity {
+public class Book extends DomainEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sty_id")
+    @Column(name = "bok_id")
     private Integer id;
 
-    @Column(name = "sty_street_type", nullable = false)
-    private String streetType;
+    @Column(name = "bok_name", nullable = false)
+    private String name;
 
-    @Column(name = "sty_active", columnDefinition = "TINYINT(1) DEFAULT 1")
-    private Boolean active = true;
+    @Column(name = "bok_active", columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean active = false;
 
-    @Column(name = "sty_created_at", nullable = false)
+    @Column(name = "cat_created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "sty_updated_at", nullable = false)
+    @Column(name = "cat_updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "sty_published_at", nullable = false)
+    @Column(name = "cat_published_at", nullable = false)
     private LocalDateTime publishedAt;
 
     @PrePersist
@@ -53,6 +53,5 @@ public class StreetType extends DomainEntity {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-        publishedAt = LocalDateTime.now();
     }
 }

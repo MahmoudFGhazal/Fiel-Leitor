@@ -33,6 +33,9 @@ public class ResidenceType extends DomainEntity {
     @Column(name = "rty_residence_type", nullable = false)
     private String residenceType;
 
+    @Column(name = "rty_active", columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean active = true;
+
     @Column(name = "rty_created_at", nullable = false)
     private LocalDateTime createdAt;
 

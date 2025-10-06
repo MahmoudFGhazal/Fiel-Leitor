@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "Gender")
+@Entity
 @Table(name = "genders")
 @Getter
 @Setter
@@ -32,6 +32,9 @@ public class Gender extends DomainEntity {
 
     @Column(name = "gen_gender", nullable = false)
     private String gender;
+
+    @Column(name = "gen_active", columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean active = true;
 
     @Column(name = "gen_created_at", nullable = false)
     private LocalDateTime createdAt;
