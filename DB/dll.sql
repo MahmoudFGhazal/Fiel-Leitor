@@ -17,15 +17,6 @@ CREATE TABLE genders (
     gen_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE payment_types (
-    pty_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    pty_payment_type VARCHAR(100) NOT NULL,
-    pty_active TINYINT(1) DEFAULT 1,
-    pty_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    pty_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    pty_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE residence_types (
     rty_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     rty_residence_type VARCHAR(100) NOT NULL,
@@ -79,6 +70,8 @@ CREATE TABLE addresses (
     add_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     add_usr_id BIGINT NOT NULL,
     add_nickname VARCHAR(255) NOT NULL,
+    add_principal TINYINT(1) DEFAULT 1,
+    add_active TINYINT(1) DEFAULT 1,
     add_number INT NOT NULL,
     add_complement VARCHAR(255),
     add_street VARCHAR(255) NOT NULL,
@@ -97,24 +90,14 @@ CREATE TABLE addresses (
     CONSTRAINT fk_addresses_residence_types FOREIGN KEY (add_rty_id) REFERENCES residence_types (rty_id)
 );
 
-CREATE TABLE user_address (
-    uad_usr_id BIGINT NOT NULL,
-    uad_add_id BIGINT NOT NULL,
-    uad_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    uad_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    uad_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (uad_add_id, uad_usr_id),
-    CONSTRAINT fk_user_address_users FOREIGN KEY (uad_usr_id) REFERENCES users (usr_id),
-    CONSTRAINT fk_user_address_address FOREIGN KEY (uad_add_id) REFERENCES address_names (add_id)
-);
-
 -- =============================
 -- Catálogos e livros
 -- =============================
 CREATE TABLE books (
     bok_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    bok_name VARCHAR(100) NOT NULL,
     bok_active TINYINT(1) DEFAULT 1,
-    bok_stock INT NOT NULL,
+    bok_stock INT DEFAULT 0,
     bok_cat_id BIGINT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -125,31 +108,20 @@ CREATE TABLE books (
 -- =============================
 -- Pagamentos
 -- =============================
-CREATE TABLE card_banners (
-    cba_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    cba_name VARCHAR(100) NOT NULL,
-    cba_active TINYINT(1) DEFAULT 1,
-    cba_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    cba_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    cba_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE cards (
     car_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     car_usr_id BIGINT NOT NULL,
     car_principal TINYINT(1) NOT NULL,
-    car_number VARCHAR(20) NOT NULL,
-    car_ccv VARCHAR(10) NOT NULL,
+    car_bin VARCHAR(6) NOT NULL,
+    car_last4 VARCHAR(5) NOT NULL,
     car_holder VARCHAR(255) NOT NULL,
-    car_valid VARCHAR(8) NOT NULL,
-    car_pty_id BIGINT NOT NULL,
-    car_cba_id BIGINT NOT NULL,
+    car_exp_month VARCHAR(8) NOT NULL,
+    car_exp_year VARCHAR(8) NOT NULL,
+    car_brand VARCHAR(20) NOT NULL,
     car_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     car_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     car_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_cards_users FOREIGN KEY (car_usr_id) REFERENCES users (usr_id) ON DELETE CASCADE,
-    CONSTRAINT fk_cards_payment_types FOREIGN KEY (car_pty_id) REFERENCES payment_types (pty_id),
-    CONSTRAINT fk_cards_card_banners FOREIGN KEY (car_cba_id) REFERENCES card_banners (cba_id)
+    CONSTRAINT fk_cards_users FOREIGN KEY (car_usr_id) REFERENCES users (usr_id) ON DELETE CASCADE
 );
 
 
@@ -159,18 +131,20 @@ CREATE TABLE cards (
 CREATE TABLE promotional_coupons (
     pco_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     pco_value DECIMAL(10,2) NOT NULL,
+    pco_used TINYINT(1) DEFAULT 0,
     pco_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     pco_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     pco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE trade_coupons (
+CREATE TABLE trader_coupons (
     tco_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    tco_value DECIMAL(10,2) NOT NULL,
+    tco_used TINYINT(1) DEFAULT 0,
     tco_sal_id BIGINT NOT NULL,
     tco_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     tco_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_trade_coupons_sales FOREIGN KEY (tco_sal_id) REFERENCES sales (sal_id)
+    tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =============================
@@ -198,21 +172,19 @@ CREATE TABLE status_sale (
 
 CREATE TABLE sales (
     sal_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    sal_cli_id BIGINT NOT NULL,
-    sal_freight DECIMAL(10,2) NOT NULL,
+    sal_usr_id BIGINT NOT NULL,
+    sal_freight DECIMAL(10,2),
     sal_delivery_date DATE,
-    sal_ana_id BIGINT NOT NULL,
     sal_ssa_id BIGINT NOT NULL,
+    sal_add_id BIGINT NOT NULL,
     sal_cou_id BIGINT,
     sal_pco_id BIGINT,
     sal_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     sal_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     sal_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_sales_users FOREIGN KEY (sal_cli_id) REFERENCES users (usr_id),
-    CONSTRAINT fk_sales_address_names FOREIGN KEY (sal_ana_id) REFERENCES address_names (ana_id),
-    CONSTRAINT fk_sales_status FOREIGN KEY (sal_ssa_id) REFERENCES status_sale (ssa_id),
-    CONSTRAINT fk_sales_trade_coupon FOREIGN KEY (sal_cou_id) REFERENCES trade_coupons (tco_id),
-    CONSTRAINT fk_sales_promotional_coupon FOREIGN KEY (sal_pco_id) REFERENCES promotional_coupons (pco_id)
+    CONSTRAINT fk_sales_users FOREIGN KEY (sal_usr_id) REFERENCES users (usr_id),
+    CONSTRAINT fk_sales_addresses FOREIGN KEY (sal_add_id) REFERENCES addresses (add_id),
+    CONSTRAINT fk_sales_status FOREIGN KEY (sal_ssa_id) REFERENCES status_sale (ssa_id)
 );
 
 CREATE TABLE sales_books (
@@ -238,3 +210,10 @@ CREATE TABLE sales_cards (
     CONSTRAINT fk_sales_cards_sales FOREIGN KEY (sca_sal_id) REFERENCES sales (sal_id),
     CONSTRAINT fk_sales_cards_cards FOREIGN KEY (sca_car_id) REFERENCES cards (car_id)
 );
+
+ALTER TABLE sales
+    ADD CONSTRAINT fk_sales_trade_coupon FOREIGN KEY (sal_cou_id) REFERENCES trader_coupons (tco_id),
+    ADD CONSTRAINT fk_sales_promotional_coupon FOREIGN KEY (sal_pco_id) REFERENCES promotional_coupons (pco_id);
+
+ALTER TABLE trader_coupons
+    ADD CONSTRAINT fk_trade_coupons_sales FOREIGN KEY (tco_sal_id) REFERENCES sales (sal_id);
