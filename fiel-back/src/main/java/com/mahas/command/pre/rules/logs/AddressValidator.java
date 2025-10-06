@@ -27,6 +27,8 @@ public class AddressValidator {
 
         Address address = new Address();
         address.setId(dto.getId());
+        address.setPrincipal(dto.getPrincipal());
+        address.setActive(dto.getActive());
         address.setNickname(dto.getNickname());
         address.setNumber(dto.getNumber());
         address.setComplement(dto.getComplement());

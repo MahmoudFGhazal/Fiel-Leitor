@@ -151,15 +151,15 @@ CREATE TABLE trader_coupons (
 -- Carrinho e vendas
 -- =============================
 CREATE TABLE carts (
-    cat_cli_id BIGINT NOT NULL,
-    cat_bok_id BIGINT NOT NULL,
-    cat_quantity INT NOT NULL,
-    cat_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    cat_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    cat_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (cat_cli_id, cat_bok_id),
-    CONSTRAINT fk_carts_users FOREIGN KEY (cat_cli_id) REFERENCES users (usr_id),
-    CONSTRAINT fk_carts_books FOREIGN KEY (cat_bok_id) REFERENCES books (bok_id)
+    crt_usr_id BIGINT NOT NULL,
+    crt_bok_id BIGINT NOT NULL,
+    crt_quantity INT NOT NULL,
+    crt_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    crt_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    crt_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (crt_usr_id, crt_bok_id),
+    CONSTRAINT fk_carts_users FOREIGN KEY (crt_usr_id) REFERENCES users (usr_id),
+    CONSTRAINT fk_carts_books FOREIGN KEY (crt_bok_id) REFERENCES books (bok_id)
 );
 
 CREATE TABLE status_sale (
@@ -177,7 +177,7 @@ CREATE TABLE sales (
     sal_delivery_date DATE,
     sal_ssa_id BIGINT NOT NULL,
     sal_add_id BIGINT NOT NULL,
-    sal_cou_id BIGINT,
+    sal_tco_id BIGINT,
     sal_pco_id BIGINT,
     sal_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     sal_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

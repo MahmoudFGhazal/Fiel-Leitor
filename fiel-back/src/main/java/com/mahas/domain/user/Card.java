@@ -37,7 +37,7 @@ public class Card extends DomainEntity {
     private User user;
 
     @Column(name = "car_principal", columnDefinition = "TINYINT(1) DEFAULT 1")
-    private Boolean active = false;
+    private Boolean principal = false;
 
     @Column(name = "car_bin", nullable = false, length = 20)
     private String bin;

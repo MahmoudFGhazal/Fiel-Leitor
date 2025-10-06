@@ -1,11 +1,11 @@
-package com.mahas.domain.sale;
+package com.mahas.domain.product;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 import com.mahas.domain.DomainEntity;
-import com.mahas.domain.product.Book;
+import com.mahas.domain.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,37 +22,34 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "sales_books")
+@Table(name = "carts")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(SaleBookId.class)
-public class SaleBook extends DomainEntity {
-    
+@IdClass(CartId.class)
+public class Cart extends DomainEntity {
+   
     @Id
     @ManyToOne
-    @JoinColumn(name = "sbo_sal_id", nullable = false)
-    private Sale sale;
+    @JoinColumn(name = "crt_usr_id", nullable = false)
+    private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "sbo_bok_id", nullable = false)
+    @JoinColumn(name = "crt_bok_id", nullable = false)
     private Book book;
 
-    @Column(name = "sbo_quantity", nullable = false)
+    @Column(name = "crt_quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "sbo_price", nullable = false)
-    private Double price;
-
-    @Column(name = "sbo_created_at", nullable = false)
+    @Column(name = "crt_created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "sbo_updated_at", nullable = false)
+    @Column(name = "crt_updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "sbo_published_at", nullable = false)
+    @Column(name = "crt_published_at", nullable = false)
     private LocalDateTime publishedAt;
 
     @PrePersist
@@ -62,7 +59,7 @@ public class SaleBook extends DomainEntity {
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedAt = publishedAt = LocalDateTime.now();
     }
 }
 
@@ -71,20 +68,21 @@ public class SaleBook extends DomainEntity {
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-class SaleBookId implements Serializable {
-    private Integer sale;
-    private Integer book;
+class CartId implements Serializable {
+    private Integer user;
+    private Integer book; 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SaleBookId)) return false;
-        SaleBookId that = (SaleBookId) o;
-        return Objects.equals(sale, that.sale) && Objects.equals(book, that.book);
+        if (!(o instanceof CartId)) return false;
+        CartId that = (CartId) o;
+        return Objects.equals(user, that.user) &&
+               Objects.equals(book, that.book);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sale, book);
+        return Objects.hash(user, book);
     }
 }

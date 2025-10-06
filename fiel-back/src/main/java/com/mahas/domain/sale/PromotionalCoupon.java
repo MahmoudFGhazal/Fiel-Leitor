@@ -33,6 +33,9 @@ public class PromotionalCoupon extends DomainEntity {
     @Column(name = "pco_value", nullable = false)
     private Double value;
 
+    @Column(name = "pco_used", columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean used = false;
+
     @Column(name = "pco_created_at", nullable = false)
     private LocalDateTime createdAt;
 

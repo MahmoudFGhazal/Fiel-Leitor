@@ -14,4 +14,5 @@ import lombok.Setter;
 public class ResidenceTypeDTORequest implements DTORequest {
     private Integer id;
     private String residenceType;
+    private Boolean active;
 }

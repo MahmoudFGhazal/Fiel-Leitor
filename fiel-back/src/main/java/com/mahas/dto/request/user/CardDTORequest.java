@@ -11,8 +11,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenderDTORequest implements DTORequest {
+public class CardDTORequest implements DTORequest {
     private Integer id;
-    private String gender;
-    private Boolean active;
+    private Integer user;
+    private Boolean principal;
+    private String bin;
+    private String last4;
+    private String holder;
+    private String expMonth;
+    private String expYear;
+    private String brand;
 }

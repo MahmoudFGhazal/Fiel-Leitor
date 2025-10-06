@@ -1,4 +1,4 @@
-package com.mahas.dto.request.address;
+package com.mahas.dto.request.product;
 
 import com.mahas.dto.request.DTORequest;
 
@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StreetTypeDTORequest implements DTORequest {
-    private Integer id;
-    private String streetType;
-    private Boolean active;
+public class CartDTORequest implements DTORequest {
+    private Integer user;
+    private Integer book;
+    private Integer quatity;
 }

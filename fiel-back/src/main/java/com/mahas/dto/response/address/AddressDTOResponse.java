@@ -16,6 +16,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AddressDTOResponse implements DTOResponse {
     private Integer id;
+    private Boolean active;
+    private Boolean principal;
     private String nickname;
     private Integer number;
     private String complement;
@@ -33,6 +35,8 @@ public class AddressDTOResponse implements DTOResponse {
     public void mapFromEntity(DomainEntity entity) {
         if (entity instanceof Address a) {
             this.id = a.getId();
+            this.principal = a.getPrincipal();
+            this.active = a.getActive();
             this.nickname = a.getNickname();
             this.number = a.getNumber();
             this.complement = a.getComplement();

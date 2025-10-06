@@ -42,7 +42,7 @@ public class Sale extends DomainEntity {
     @Column(name = "sal_freight")
     private Double freight;
 
-    @Column(name = "sal_deliveryDate")
+    @Column(name = "sal_delivery_date")
     private LocalDate deliveryDate;
 
     @ManyToOne
@@ -50,11 +50,11 @@ public class Sale extends DomainEntity {
     private StatusSale statusSale;
 
     @ManyToOne
-    @JoinColumn(name = "sal_cou_id", nullable = false)
-    private TraderCoupon tradeCoupon;
+    @JoinColumn(name = "sal_tco_id")
+    private TraderCoupon traderCoupon;
 
     @ManyToOne
-    @JoinColumn(name = "sal_pco_id", nullable = false)
+    @JoinColumn(name = "sal_pco_id")
     private PromotionalCoupon promotionalCoupon;
 
     @ManyToOne

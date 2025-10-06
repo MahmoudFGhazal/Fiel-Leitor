@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -35,6 +37,13 @@ public class Book extends DomainEntity {
 
     @Column(name = "bok_active", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean active = false;
+
+    @Column(name = "bok_stock")
+    private Integer stock = 0;
+
+    @ManyToOne
+    @JoinColumn(name = "bok_cat_id", nullable = false)
+    private Category category;
 
     @Column(name = "cat_created_at", nullable = false)
     private LocalDateTime createdAt;

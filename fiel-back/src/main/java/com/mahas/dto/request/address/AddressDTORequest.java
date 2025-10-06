@@ -13,6 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AddressDTORequest implements DTORequest {
     private Integer id;
+    private Boolean principal;
+    private Boolean active;
     private String nickname;
     private Integer number;
     private String complement;

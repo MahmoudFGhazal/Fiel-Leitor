@@ -39,6 +39,9 @@ public class TraderCoupon extends DomainEntity {
     @Column(name = "tco_value", nullable = false)
     private Double value;
 
+    @Column(name = "tco_used", columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean used = false;
+
     @Column(name = "tco_created_at", nullable = false)
     private LocalDateTime createdAt;
 
