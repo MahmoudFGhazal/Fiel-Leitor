@@ -1,5 +1,5 @@
 -- Gerado por Oracle SQL Developer Data Modeler 24.3.1.351.0831
---   em:        2025-10-06 08:57:29 BRT
+--   em:        2025-10-06 14:41:08 BRT
 --   site:      Oracle Database 21c
 --   tipo:      Oracle Database 21c
 
@@ -53,6 +53,12 @@ CREATE TABLE books
      bok_id       UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
+     bok_name     UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     bok_price    UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
      bok_active   UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                     DEFAULT 1 , 
@@ -100,7 +106,7 @@ ALTER TABLE cards
 
 CREATE TABLE carts 
     ( 
-     cat_cli_id       UNKNOWN 
+     cat_usr_id       UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
      cat_bok_id       UNKNOWN 
@@ -115,7 +121,7 @@ CREATE TABLE carts
 ;
 
 ALTER TABLE carts 
-    ADD CONSTRAINT carts_PK PRIMARY KEY ( cat_cli_id, cat_bok_id ) ;
+    ADD CONSTRAINT carts_PK PRIMARY KEY ( cat_usr_id, cat_bok_id ) ;
 
 CREATE TABLE categories 
     ( 
@@ -206,7 +212,7 @@ CREATE TABLE sales
      sal_ssa_id        UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sal_cou_id        UNKNOWN 
+     sal_tco_id        UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                     , 
      sal_pco_id        UNKNOWN 
@@ -269,13 +275,7 @@ CREATE TABLE status_sale
      ssa_id           UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     ssa_name         VARCHAR2 (100)  NOT NULL , 
-     ssa_value        UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                     NOT NULL , 
-     ssa_used         UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                    , 
+     ssa_status       VARCHAR2 (100)  NOT NULL , 
      ssa_created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP , 
      ssa_updated_at   TIMESTAMP , 
      ssa_published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
@@ -436,7 +436,7 @@ ALTER TABLE carts
 ALTER TABLE carts 
     ADD CONSTRAINT fk_carts_users FOREIGN KEY 
     ( 
-     cat_cli_id
+     cat_usr_id
     ) 
     REFERENCES users 
     ( 
@@ -520,7 +520,7 @@ ALTER TABLE sales
 ALTER TABLE sales 
     ADD CONSTRAINT fk_sales_trade_coupon FOREIGN KEY 
     ( 
-     sal_cou_id
+     sal_tco_id
     ) 
     REFERENCES trade_coupons 
     ( 
