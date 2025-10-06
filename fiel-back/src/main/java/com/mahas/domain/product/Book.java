@@ -35,6 +35,9 @@ public class Book extends DomainEntity {
     @Column(name = "bok_name", nullable = false)
     private String name;
 
+    @Column(name = "bok_price", nullable = false)
+    private Double price;
+
     @Column(name = "bok_active", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean active = false;
 

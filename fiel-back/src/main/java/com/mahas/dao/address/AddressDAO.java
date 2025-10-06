@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.address.Address;
 import com.mahas.domain.user.User;
-
-import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -49,6 +49,11 @@ public class AddressDAO implements IDAO {
         if (address.getUser() != null && address.getUser().getId() != null) {
             whereClause.append(" AND a.user.id = :userId");
             parameters.put("userId", address.getUser().getId());
+        }
+
+        if (address.getPrincipal() != null) {
+            whereClause.append(" AND a.principal = :principal");
+            parameters.put("principal", address.getPrincipal());
         }
 
         jpql.append(whereClause);

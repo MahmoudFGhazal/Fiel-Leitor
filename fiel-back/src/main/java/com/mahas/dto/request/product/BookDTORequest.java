@@ -14,6 +14,7 @@ import lombok.Setter;
 public class BookDTORequest implements DTORequest {
     private Integer id;
     private String name;
+    private Double price;
     private Boolean active;
     private Integer stock;
     private Integer category;

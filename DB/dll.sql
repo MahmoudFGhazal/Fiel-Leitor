@@ -96,6 +96,7 @@ CREATE TABLE addresses (
 CREATE TABLE books (
     bok_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     bok_name VARCHAR(100) NOT NULL,
+    bok_price DECIMAL(10, 2) NOT NULL,
     bok_active TINYINT(1) DEFAULT 1,
     bok_stock INT DEFAULT 0,
     bok_cat_id BIGINT NOT NULL,

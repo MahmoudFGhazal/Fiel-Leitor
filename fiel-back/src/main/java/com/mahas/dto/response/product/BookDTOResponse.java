@@ -16,6 +16,7 @@ import lombok.Setter;
 public class BookDTOResponse implements DTOResponse {
     private Integer id;
     private String name;
+    private Double price;
     private Integer stock;
     private Boolean active;
     private CategoryDTOResponse category;
@@ -25,6 +26,7 @@ public class BookDTOResponse implements DTOResponse {
         if (entity instanceof Book b) {
             this.id = b.getId();
             this.name = b.getName();
+            this.price = b.getPrice();
             this.stock = b.getStock();
             this.active = b.getActive();
 
