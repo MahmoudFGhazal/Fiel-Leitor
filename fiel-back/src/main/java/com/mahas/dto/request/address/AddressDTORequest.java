@@ -16,7 +16,7 @@ public class AddressDTORequest implements DTORequest {
     private Boolean principal;
     private Boolean active;
     private String nickname;
-    private Integer number;
+    private String number;
     private String complement;
     private String street;
     private String neighborhood;

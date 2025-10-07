@@ -1,5 +1,5 @@
-import { AddressRequest, CardRequest, GenderRequest, PaymentTypeRequest, ResidenceTypeRequest, SignRequest, StreetTypeRequest, UserRequest } from "./dtos/requestDTOs";
-import { AddressResponse, CardResponse, GenderResponse, PaymentTypeResponse, ResidenceTypeResponse, StreetTypeResponse, UserResponse } from "./dtos/responseDTOs";
+import { AddressRequest, CardRequest, GenderRequest, ResidenceTypeRequest, SignRequest, StreetTypeRequest, UserRequest } from "./dtos/requestDTOs";
+import { AddressResponse, CardResponse, GenderResponse, ResidenceTypeResponse, StreetTypeResponse, UserResponse } from "./dtos/responseDTOs";
 
 export interface ApiResponse {
     data: {
@@ -25,14 +25,12 @@ export type DatasRequest =
   | AddressRequest
   | CardRequest
   | GenderRequest
-  | PaymentTypeRequest
   | ResidenceTypeRequest
   | StreetTypeRequest
   | UserRequest
   | AddressRequest[]
   | CardRequest[]
   | GenderRequest[]
-  | PaymentTypeRequest[]
   | ResidenceTypeRequest[]
   | StreetTypeRequest[]
   | UserRequest[]
@@ -43,14 +41,12 @@ export type DatasResponde =
   | AddressResponse
   | CardResponse
   | GenderResponse
-  | PaymentTypeResponse
   | ResidenceTypeResponse
   | StreetTypeResponse
   | UserResponse
   | AddressResponse[]
   | CardResponse[]
   | GenderResponse[]
-  | PaymentTypeResponse[]
   | ResidenceTypeResponse[]
   | StreetTypeResponse[]
   | UserResponse[];

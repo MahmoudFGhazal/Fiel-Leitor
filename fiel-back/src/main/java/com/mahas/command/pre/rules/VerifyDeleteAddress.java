@@ -2,6 +2,7 @@ package com.mahas.command.pre.rules;
 
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.AddressValidator;
+import com.mahas.command.pre.rules.logs.CommunValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.address.Address;
@@ -17,6 +18,9 @@ public class VerifyDeleteAddress implements IPreCommand {
     @Autowired
     AddressValidator addressValidator;
 
+    @Autowired
+    CommunValidator communValidator;
+
     @Override
     public SQLRequest execute(FacadeRequest request) {
         DTORequest entity = request.getEntity();
@@ -27,17 +31,16 @@ public class VerifyDeleteAddress implements IPreCommand {
 
         AddressDTORequest addressRequest = (AddressDTORequest) entity;
 
-        Address address = addressValidator.toEntity(addressRequest);
-
-        // Verificar se ID do endereço foi fornecido
-        if (address.getId() == null) {
-            throw new ValidationException("Id do endereço não especificado");
-        }
+        communValidator.validateNotBlack(addressRequest.getId().toString(), "Id");
 
         // Verificar se o endereço existe
-        if (!addressValidator.addressExists(address.getId())) {
+        if (!addressValidator.addressExists(addressRequest.getId())) {
             throw new ValidationException("Endereço não encontrado");
         }
+
+        Address address = new Address();
+
+        address.setId(addressRequest.getId());
 
         SQLRequest sqlRequest = new SQLRequest();
         sqlRequest.setEntity(address);

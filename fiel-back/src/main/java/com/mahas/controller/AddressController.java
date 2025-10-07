@@ -42,7 +42,7 @@ public class AddressController {
     private VerifyUpdateAddress verifyUpdateAddress;
 
     @Autowired
-    private VerifyGetAddressByUser verifyGetUserByUser;
+    private VerifyGetAddressByUser verifyGetAddressByUser;
 
     //Post
     @Autowired
@@ -92,7 +92,7 @@ public class AddressController {
         ) {
         FacadeRequest request = new FacadeRequest();
 
-        request.setPreCommand(verifyGetUserByUser);
+        request.setPreCommand(verifyGetAddressByUser);
         request.setLimit(limit);
         request.setPage(page);
         AddressDTORequest address = new AddressDTORequest();

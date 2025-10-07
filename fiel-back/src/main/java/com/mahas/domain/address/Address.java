@@ -47,7 +47,7 @@ public class Address extends DomainEntity {
     private String nickname;
 
     @Column(name = "add_number", nullable = false)
-    private Integer number;
+    private String number;
 
     @Column(name = "add_complement")
     private String complement;

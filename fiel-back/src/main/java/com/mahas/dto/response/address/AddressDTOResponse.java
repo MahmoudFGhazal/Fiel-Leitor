@@ -19,7 +19,7 @@ public class AddressDTOResponse implements DTOResponse {
     private Boolean active;
     private Boolean principal;
     private String nickname;
-    private Integer number;
+    private String number;
     private String complement;
     private String street;
     private String neighborhood;

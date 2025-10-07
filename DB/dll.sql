@@ -72,7 +72,7 @@ CREATE TABLE addresses (
     add_nickname VARCHAR(255) NOT NULL,
     add_principal TINYINT(1) DEFAULT 1,
     add_active TINYINT(1) DEFAULT 1,
-    add_number INT NOT NULL,
+    add_number VARCHAR(10) NOT NULL,
     add_complement VARCHAR(255),
     add_street VARCHAR(255) NOT NULL,
     add_neighborhood VARCHAR(255) NOT NULL,

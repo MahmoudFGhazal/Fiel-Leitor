@@ -1,10 +1,6 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
-import com.mahas.command.pre.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.user.User;
@@ -12,11 +8,10 @@ import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.exception.ValidationException;
 
+import org.springframework.stereotype.Component;
+
 @Component
 public class VerifyLogin implements IPreCommand {
-    @Autowired
-    UserValidator userValidator;
-
     @Override
     public SQLRequest execute(FacadeRequest request) {
         DTORequest entity = request.getEntity();
@@ -37,7 +32,11 @@ public class VerifyLogin implements IPreCommand {
             throw new ValidationException("Senha não especificada");
         }
 
-        User user = userValidator.toEntity(userRequest);
+        User user = new User();
+
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(userRequest.getPassword());
+        user.setActive(true);
 
         SQLRequest sqlRequest = new SQLRequest();
         sqlRequest.setEntity(user);

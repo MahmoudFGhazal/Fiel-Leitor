@@ -14,6 +14,16 @@ import com.mahas.dao.IDAO;
 import com.mahas.dao.address.AddressDAO;
 import com.mahas.dao.address.ResidenceTypeDAO;
 import com.mahas.dao.address.StreetTypeDAO;
+import com.mahas.dao.product.BookDAO;
+import com.mahas.dao.product.CartDAO;
+import com.mahas.dao.product.CategoryDAO;
+import com.mahas.dao.sale.PromotionalCouponDAO;
+import com.mahas.dao.sale.SaleBookDAO;
+import com.mahas.dao.sale.SaleCardDAO;
+import com.mahas.dao.sale.SaleDAO;
+import com.mahas.dao.sale.StatusSaleDAO;
+import com.mahas.dao.sale.TraderCouponDAO;
+import com.mahas.dao.user.CardDAO;
 import com.mahas.dao.user.GenderDAO;
 import com.mahas.dao.user.UserDAO;
 import com.mahas.domain.DataResponse;
@@ -65,6 +75,9 @@ public abstract class FacadeAbstract {
     @Autowired
     private GenderDAO genderDAO;
 
+    @Autowired
+    private CardDAO cardDAO;
+
     //Address
     @Autowired
     private AddressDAO addressDAO;
@@ -74,6 +87,35 @@ public abstract class FacadeAbstract {
 
     @Autowired
     private StreetTypeDAO streetTypeDAO;
+
+    //Sale
+    @Autowired
+    private SaleDAO saleDAO;
+
+    @Autowired
+    private SaleBookDAO saleBookDAO;
+
+    @Autowired
+    private SaleCardDAO saleCardDAO;
+
+    @Autowired
+    private PromotionalCouponDAO promotionalCouponDAO;
+
+    @Autowired
+    private TraderCouponDAO traderCouponDAO;
+
+    @Autowired
+    private StatusSaleDAO statusSaleDAO;
+
+    //User
+    @Autowired
+    private CartDAO cartDAO;
+
+    @Autowired
+    private BookDAO bookDAO;
+
+    @Autowired
+    private CategoryDAO categoryDAO;
 
     protected final Map<String, IDAO> daos = new HashMap<>();
 
@@ -91,6 +133,16 @@ public abstract class FacadeAbstract {
         daos.put(Address.class.getName(), addressDAO);
         daos.put(ResidenceType.class.getName(), residenceTypeDAO);
         daos.put(StreetType.class.getName(), streetTypeDAO);
+        daos.put(Card.class.getName(), cardDAO);
+        daos.put(Book.class.getName(), bookDAO);
+        daos.put(Cart.class.getName(), cartDAO);
+        daos.put(Category.class.getName(), categoryDAO);
+        daos.put(PromotionalCoupon.class.getName(), promotionalCouponDAO);
+        daos.put(Sale.class.getName(), saleDAO);
+        daos.put(SaleBook.class.getName(), saleBookDAO);
+        daos.put(SaleCard.class.getName(), saleCardDAO);
+        daos.put(StatusSale.class.getName(), statusSaleDAO);
+        daos.put(TraderCoupon.class.getName(), traderCouponDAO);
     }
 
     

@@ -1,9 +1,11 @@
 package com.mahas.command.pre.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
-import com.mahas.command.pre.rules.logs.BirthdayValidator;
+import com.mahas.command.pre.rules.logs.CommunValidator;
 import com.mahas.command.pre.rules.logs.GenderValidator;
-import com.mahas.command.pre.rules.logs.PhoneNumberValidator;
 import com.mahas.command.pre.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
@@ -12,22 +14,16 @@ import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.exception.ValidationException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 @Component
 public class VerifyUpdateUser implements IPreCommand {
-    @Autowired
-    private BirthdayValidator birthdayValidator;
-
     @Autowired
     private GenderValidator genderValidator;
 
     @Autowired
-    private PhoneNumberValidator phoneNumberValidator;
+    private UserValidator userValidator;
 
     @Autowired
-    private UserValidator userValidator;
+    private CommunValidator communValidator;
 
     @Override
     public SQLRequest execute(FacadeRequest request) {
@@ -38,40 +34,38 @@ public class VerifyUpdateUser implements IPreCommand {
         }
 
         UserDTORequest userRequest = (UserDTORequest) entity;
-
-        User user = userValidator.toEntity(userRequest);
        
-        String error;
         // Verificar se ID do usuário foi fornecido
-        if (user.getId() == null) {
+        if (userRequest.getId() == null) {
             throw new ValidationException("Id do usuário não especificado");
         }
 
         // Verificar se o usuário existe
-        if (!userValidator.userExists(user.getId())) {
+        if (!userValidator.userExists(userRequest.getId())) {
             throw new ValidationException("Usuário não encontrado");
         }
 
-        // Validar número de telefone
-        error = phoneNumberValidator.isValidPhoneNumberFormat(user.getPhoneNumber());
-        if (error != null) {
-            throw new ValidationException(error);
-        }
-
         // Validar data de nascimento (anterior a hoje)
-        error = birthdayValidator.verifyBirthdayDate(user.getBirthday());
-        if (error != null) {
-            throw new ValidationException(error);
+        if(userRequest.getBirthday() != null) {
+            userValidator.verifyBirthdayDate(userRequest.getBirthday());
         }
 
         // Validar gênero
-        if (user.getGender() == null || user.getGender().getId() == null) {
-            throw new ValidationException("Gênero não informado");
+        if (userRequest.getGender() != null) {
+            if (!genderValidator.genderExists(userRequest.getGender())) {
+                throw new ValidationException("Genero não encontrado");
+            }
         }
 
-        error = genderValidator.validateGenderExists(user.getGender().getId());
-        if (error != null) {
-            throw new ValidationException(error);
+        User user = userValidator.toEntity(userRequest);
+        user.setPassword(null);
+        user.setCpf(null);
+        user.setEmail(null);
+
+        if(userRequest.getPhoneNumber() != null) {
+            String phoneNumber = communValidator.toNumeric(userRequest.getPhoneNumber());
+            userValidator.isValidPhoneNumberFormat(phoneNumber);
+            user.setPhoneNumber(phoneNumber);
         }
 
         SQLRequest sqlRequest = new SQLRequest();

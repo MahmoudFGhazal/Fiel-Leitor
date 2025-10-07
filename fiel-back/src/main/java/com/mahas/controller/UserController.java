@@ -25,7 +25,6 @@ import com.mahas.command.pre.rules.VerifyCreateUser;
 import com.mahas.command.pre.rules.VerifyDeleteUser;
 import com.mahas.command.pre.rules.VerifyLogin;
 import com.mahas.command.pre.rules.VerifyUpdateUser;
-import com.mahas.command.pre.rules.VerifyUserExist;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.TypeResponse;
@@ -57,9 +56,6 @@ public class UserController {
 
     @Autowired
     private VerifyLogin verifyLogin;
-
-    @Autowired
-    private VerifyUserExist verifyUserExist;
 
     @Autowired
     private VerifyChangePassword verifyChangePassword;
@@ -223,7 +219,7 @@ public class UserController {
     ) {
         FacadeRequest request = new FacadeRequest();
 
-        request.setPreCommand(verifyUserExist);
+        request.setPreCommand(verifyUpdateUser);
         request.setPostCommand(setActiveUserAdapter);
         
         UserDTORequest user = new UserDTORequest();
