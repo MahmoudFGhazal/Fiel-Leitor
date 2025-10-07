@@ -28,15 +28,11 @@ public class GenderValidator {
         return gender;
     }
 
-    public String validateGenderExists(Integer genderId) {
-        if (genderId == null) {
-            return "Id do genero não pode ser vazio";
-        }
-
+    public boolean genderExists(Integer id) {
         FacadeRequest request = new FacadeRequest();
 
         GenderDTORequest gender = new GenderDTORequest();
-        gender.setId(genderId);
+        gender.setId(id);
 
         request.setEntity(gender);
         request.setLimit(1);
@@ -44,11 +40,6 @@ public class GenderValidator {
 
         FacadeResponse response = facade.query(request);
 
-        if (response.getData() == null || 
-            response.getData().getEntity() == null) {
-            return "Gênero não existente";
-        }
-
-        return null;
+        return !(response.getData() == null || response.getData().getEntity() == null);
     }
 }

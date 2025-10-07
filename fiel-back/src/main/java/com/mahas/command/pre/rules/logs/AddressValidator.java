@@ -9,6 +9,7 @@ import com.mahas.domain.address.StreetType;
 import com.mahas.domain.user.User;
 import com.mahas.dto.request.address.AddressDTORequest;
 import com.mahas.dto.response.DTOResponse;
+import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +76,11 @@ public class AddressValidator {
         DTOResponse entity = response.getData().getEntity();
         
         return entity != null; 
+    }
+
+    public void isValidZIPFormat(String zip) {
+        if (zip.length() != 8) {
+            throw new ValidationException("CEP inválido, deve conter 8 dígitos");
+        }
     }
 }
