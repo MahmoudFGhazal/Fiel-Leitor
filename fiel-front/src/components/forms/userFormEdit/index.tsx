@@ -37,21 +37,25 @@ export default function UserForm({ user, disable, onChange }: UserFormProps) {
                 <div className={styles.inputContent}>
                     <InputText
                         type="text"
-                        text="E-mail"
-                        disabled={disable}
-                        value={user.email ?? ""}
-                        onChange={(value) => onChange("email", value)}
-                        dataCy='email-text'
-                    />
-                </div>
-                <div className={styles.inputContent}>
-                    <InputText
-                        type="text"
                         text="Nome"
                         disabled={disable}
                         value={user.name ?? ""}
                         onChange={(value) => onChange("name", value)}
                         dataCy='name-text'
+                    />
+                </div>
+                <div className={styles.inputContent}>
+                    <InputText
+                        type="date"
+                        text="Data de Nascimento"
+                        disabled={disable}
+                        value={
+                            user.birthday
+                                ? new Date(user.birthday).toISOString().split("T")[0]
+                                : ""
+                        }
+                        onChange={(value) => onChange("birthday", value)}
+                        dataCy='birth-date'
                     />
                 </div>
             </div>
@@ -80,33 +84,6 @@ export default function UserForm({ user, disable, onChange }: UserFormProps) {
                         value={user.phoneNumber ?? ""}
                         onChange={(value) => onChange("phoneNumber", value)}
                         dataCy='phonuNumber-text'
-                    />
-                </div>
-            </div>
-
-            <div className={styles.content}>
-                <div className={styles.inputContent}>
-                    <InputText
-                        type="date"
-                        text="Data de Nascimento"
-                        disabled={disable}
-                        value={
-                            user.birthday
-                                ? new Date(user.birthday).toISOString().split("T")[0]
-                                : ""
-                        }
-                        onChange={(value) => onChange("birthday", value)}
-                        dataCy='birth-date'
-                    />
-                </div>
-                <div className={styles.inputContent}>
-                    <InputText
-                        type="text"
-                        text="CPF"
-                        disabled={disable}
-                        value={user.cpf ?? ""}
-                        onChange={(value) => onChange("cpf", value)}
-                        dataCy='cpf-text'
                     />
                 </div>
             </div>

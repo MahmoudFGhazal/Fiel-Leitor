@@ -16,10 +16,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class VerifyDeleteAddress implements IPreCommand {
     @Autowired
-    AddressValidator addressValidator;
+    private AddressValidator addressValidator;
 
     @Autowired
-    CommunValidator communValidator;
+    private CommunValidator communValidator;
 
     @Override
     public SQLRequest execute(FacadeRequest request) {

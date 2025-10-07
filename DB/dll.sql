@@ -213,8 +213,12 @@ CREATE TABLE sales_cards (
 );
 
 ALTER TABLE sales
-    ADD CONSTRAINT fk_sales_trade_coupon FOREIGN KEY (sal_cou_id) REFERENCES trader_coupons (tco_id),
-    ADD CONSTRAINT fk_sales_promotional_coupon FOREIGN KEY (sal_pco_id) REFERENCES promotional_coupons (pco_id);
+    ADD CONSTRAINT fk_sales_trade_coupon
+        FOREIGN KEY (sal_tco_id) REFERENCES trader_coupons (tco_id),
+    ADD CONSTRAINT fk_sales_promotional_coupon
+        FOREIGN KEY (sal_pco_id) REFERENCES promotional_coupons (pco_id);
 
 ALTER TABLE trader_coupons
-    ADD CONSTRAINT fk_trade_coupons_sales FOREIGN KEY (tco_sal_id) REFERENCES sales (sal_id);
+    ADD CONSTRAINT fk_trade_coupons_sales
+        FOREIGN KEY (tco_sal_id) REFERENCES sales (sal_id);
+        

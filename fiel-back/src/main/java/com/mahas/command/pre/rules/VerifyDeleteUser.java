@@ -16,10 +16,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class VerifyDeleteUser implements IPreCommand {
     @Autowired
-    UserValidator userValidator;
+    private UserValidator userValidator;
 
     @Autowired
-    CommunValidator communValidator;
+    private CommunValidator communValidator;
 
     @Override
     public SQLRequest execute(FacadeRequest request) {

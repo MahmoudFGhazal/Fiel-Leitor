@@ -24,7 +24,7 @@ public class VerifyGetAddressByUser implements IPreCommand {
     private AddressValidator addressValidator;
 
     @Autowired
-    CommunValidator communValidator;
+    private CommunValidator communValidator;
 
     @Override
     public SQLRequest execute(FacadeRequest request) {

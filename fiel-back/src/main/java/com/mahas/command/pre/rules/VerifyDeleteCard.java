@@ -19,7 +19,7 @@ public class VerifyDeleteCard implements IPreCommand {
     private CardValidator cardValidator;
 
     @Autowired
-    CommunValidator communValidator;
+    private CommunValidator communValidator;
 
     @Override
     public SQLRequest execute(FacadeRequest request) {

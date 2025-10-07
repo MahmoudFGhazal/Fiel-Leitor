@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
 
 @Component
@@ -67,4 +68,58 @@ public class CardDAO implements IDAO {
         response.setPage(page); response.setLimit(limit); response.setTotalItem(totalItems); response.setTotalPage(totalPage);
         return response;
     }
+
+    @Override
+    public SQLResponse save(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof Card)){
+            return null;
+        }
+
+        Card card = (Card) entity;
+
+        try {
+            entityManager.persist(card);
+
+            entityManager.flush();
+
+            response.setEntity(card);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
+    @Override
+    public SQLResponse delete(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if (!(entity instanceof Card)) {
+            return null;
+        }
+
+        Card card = (Card) entity;
+
+        String jpql = "DELETE FROM Card c WHERE c.id = :id";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("id", card.getId());
+
+        try {
+            int result = query.executeUpdate();
+            if (result > 0) {
+                response.setEntity(card); 
+            }else {
+                response.setEntity(null);
+            }
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
 }

@@ -79,6 +79,12 @@ public class VerifyCreateAddress implements IPreCommand {
 
         Address address = addressValidator.toEntity(addressRequest);
 
+        if (!addressValidator.userHasAddress(addressRequest.getUser())) {
+            address.setPrincipal(true);
+        }else {
+            address.setPrincipal(false);
+        }
+
         sqlRequest.setEntity(address);
         
         return sqlRequest;

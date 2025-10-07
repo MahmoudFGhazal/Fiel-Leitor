@@ -19,6 +19,7 @@ public class CardNumberValidator {
     @Autowired
     BaseCardCommand baseCardCommand;
 
+    
     public void isValidNumberFormat(String bin, String last4) {
         if (bin.length() != 6) {
             throw new ValidationException("Bin inválido");

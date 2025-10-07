@@ -78,6 +78,22 @@ public class AddressValidator {
         return entity != null; 
     }
 
+    public boolean userHasAddress(Integer id) {
+        AddressDTORequest address = new AddressDTORequest();
+        address.setUser(id);
+
+        FacadeRequest request = new FacadeRequest();
+        request.setEntity(address);
+        request.setLimit(1);
+        request.setPreCommand(baseAddressCommand);
+
+        FacadeResponse response = facade.query(request);
+
+        DTOResponse entity = response.getData().getEntity();
+        
+        return entity != null; 
+    }
+
     public void isValidZIPFormat(String zip) {
         if (zip.length() != 8) {
             throw new ValidationException("CEP inválido, deve conter 8 dígitos");

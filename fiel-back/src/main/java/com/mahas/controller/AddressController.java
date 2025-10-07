@@ -1,5 +1,18 @@
 package com.mahas.controller;
 
+import com.mahas.command.post.adapters.CreateAddressAdapter;
+import com.mahas.command.post.adapters.DeleteAddressAdapter;
+import com.mahas.command.pre.base.address.BaseAddressCommand;
+import com.mahas.command.pre.rules.VerifyCreateAddress;
+import com.mahas.command.pre.rules.VerifyDeleteAddress;
+import com.mahas.command.pre.rules.VerifyGetAddressByUser;
+import com.mahas.command.pre.rules.VerifyUpdateAddress;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.TypeResponse;
+import com.mahas.dto.request.address.AddressDTORequest;
+import com.mahas.facade.IFacade;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +25,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.mahas.command.post.adapters.CreateAddressAdapter;
-import com.mahas.command.pre.base.address.BaseAddressCommand;
-import com.mahas.command.pre.rules.VerifyCreateAddress;
-import com.mahas.command.pre.rules.VerifyDeleteAddress;
-import com.mahas.command.pre.rules.VerifyGetAddressByUser;
-import com.mahas.command.pre.rules.VerifyUpdateAddress;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.domain.TypeResponse;
-import com.mahas.dto.request.address.AddressDTORequest;
-import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -50,6 +51,9 @@ public class AddressController {
     
     @Autowired
     private CreateAddressAdapter createAddressAdapter;
+
+    @Autowired
+    private DeleteAddressAdapter deleteAddressAdapter;
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getAddress(
@@ -127,6 +131,7 @@ public class AddressController {
         address.setId(id);
         request.setEntity(address);
         request.setPreCommand(verifyDeleteAddress);
+        request.setPostCommand(deleteAddressAdapter);
         
         FacadeResponse response = facade.delete(request);
         

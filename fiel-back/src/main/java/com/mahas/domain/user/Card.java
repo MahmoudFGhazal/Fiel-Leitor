@@ -39,22 +39,22 @@ public class Card extends DomainEntity {
     @Column(name = "car_principal", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean principal = false;
 
-    @Column(name = "car_bin", nullable = false, length = 20)
+    @Column(name = "car_bin", nullable = false)
     private String bin;
 
-    @Column(name = "car_last4", length = 4)
+    @Column(name = "car_last4", nullable = false)
     private String last4;
 
     @Column(name = "car_holder", nullable = false)
     private String holder;
 
-    @Column(name = "car_exp_month", length = 2)
+    @Column(name = "car_exp_month", nullable = false)
     private String expMonth;
 
-    @Column(name = "car_exp_year", length = 4)
+    @Column(name = "car_exp_year", nullable = false)
     private String expYear;
 
-    @Column(name = "car_brand", nullable = false, length = 8)
+    @Column(name = "car_brand")
     private String brand;
 
     @Column(name = "car_created_at", nullable = false)

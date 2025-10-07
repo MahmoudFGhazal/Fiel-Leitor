@@ -7,6 +7,7 @@ import com.mahas.domain.user.Card;
 import com.mahas.domain.user.User;
 import com.mahas.dto.request.user.CardDTORequest;
 import com.mahas.dto.response.DTOResponse;
+import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,5 +57,87 @@ public class CardValidator {
         DTOResponse entity = response.getData().getEntity();
         
         return entity != null; 
+    }
+
+    public boolean userHasCard(Integer id) {
+        CardDTORequest card = new CardDTORequest();
+        card.setUser(id);
+
+        FacadeRequest request = new FacadeRequest();
+        request.setEntity(card);
+        request.setLimit(1);
+        request.setPreCommand(baseCardCommand);
+
+        FacadeResponse response = facade.query(request);
+
+        DTOResponse entity = response.getData().getEntity();
+        
+        return entity != null; 
+    }
+
+    public void isValidNumberFormat(String bin, String last4) {
+        if (bin.length() != 6) {
+            throw new ValidationException("Bin inválido");
+        }
+
+        if (last4.length() != 6) {
+            throw new ValidationException("Last4 inválido");
+        }
+    }
+
+    public boolean cardNumberExists(String bin, String last4) {
+        FacadeRequest request = new FacadeRequest();
+
+        request.setPreCommand(baseCardCommand);
+        CardDTORequest card = new CardDTORequest();
+        card.setBin(bin);
+        card.setLast4(last4);
+        request.setEntity(card); 
+
+        FacadeResponse response = facade.query(request);
+
+        DTOResponse entity = response.getData().getEntity();
+
+        return entity != null;
+    }
+
+    public void isValidBin(String bin) {
+        if (!bin.matches("\\d{6}")) {
+            throw new ValidationException("BIN deve conter exatamente 6 dígitos numéricos");
+        }
+    }
+
+    public void isValidLast4(String last4) {
+        if (!last4.matches("\\d{4}")) {
+            throw new ValidationException("Últimos 4 dígitos devem conter exatamente 4 números");
+        }
+    }
+
+    public void isValidExp(String expMonth, String expYear) {
+        if (!expMonth.matches("\\d{2}")) {
+            throw new ValidationException("Mês de expiração deve conter 2 dígitos");
+        }
+
+        int month = Integer.parseInt(expMonth);
+        if (month < 1 || month > 12) {
+            throw new ValidationException("Mês de expiração inválido (deve estar entre 01 e 12)");
+        }
+
+        if (!expYear.matches("\\d{4}")) {
+            throw new ValidationException("Ano de expiração deve conter 4 dígitos");
+        }
+        int year = Integer.parseInt(expYear);
+
+        int currentYear = java.time.Year.now().getValue();
+        int currentMonth = java.time.LocalDate.now().getMonthValue();
+
+        // Verifica se já expirou
+        if (year < currentYear || (year == currentYear && month < currentMonth)) {
+            throw new ValidationException("Cartão expirado");
+        }
+
+        if (year > currentYear + 15) {
+            throw new ValidationException("Ano de expiração muito distante no futuro");
+        }
     }
 }

@@ -1,8 +1,5 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CardValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -15,6 +12,9 @@ import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.user.CardDTORequest;
 import com.mahas.exception.ValidationException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 @Component
 public class VerifyGetCardByUser implements IPreCommand {
     @Autowired
@@ -24,7 +24,7 @@ public class VerifyGetCardByUser implements IPreCommand {
     private CardValidator cardValidator;
 
     @Autowired
-    CommunValidator communValidator;
+    private CommunValidator communValidator;
 
     @Override
     public SQLRequest execute(FacadeRequest request) {

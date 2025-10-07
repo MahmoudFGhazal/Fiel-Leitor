@@ -33,6 +33,13 @@ public class CardDTOResponse implements DTOResponse {
             this.last4 = c.getLast4();
             this.brand = c.getBrand();
             this.principal = c.getPrincipal();
+            this.expMonth = c.getExpMonth();
+            this.expYear = c.getExpYear();
+            
+            if (c.getUser() != null) {
+                this.user = new UserDTOResponse();
+                this.user.mapFromEntity(c.getUser());
+            }
         }
     }
 }

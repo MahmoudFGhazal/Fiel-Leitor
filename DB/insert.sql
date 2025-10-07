@@ -6,13 +6,6 @@ INSERT INTO genders (gen_gender) VALUES
 ('Other'),
 ('Prefer not to say');
 
-INSERT INTO payment_types (pty_payment_type) VALUES
-('Credit Card'),
-('Debit Card'),
-('Bank Slip'),
-('Pix'),
-('Bank Transfer');
-
 INSERT INTO residence_types (rty_residence_type) VALUES
 ('House'),
 ('Apartment'),
