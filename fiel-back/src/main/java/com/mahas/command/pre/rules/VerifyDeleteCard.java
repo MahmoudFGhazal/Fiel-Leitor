@@ -31,7 +31,7 @@ public class VerifyDeleteCard implements IPreCommand {
 
         CardDTORequest cardRequest = (CardDTORequest) entity;
 
-        communValidator.validateNotBlack(cardRequest.getId().toString(), "Id");
+        communValidator.validateNotBlack(cardRequest.getId() == null ? null : cardRequest.getId().toString(), "Id");
 
         // Verificar se o usuário existe
         if (!cardValidator.cardExists(cardRequest.getId())) {

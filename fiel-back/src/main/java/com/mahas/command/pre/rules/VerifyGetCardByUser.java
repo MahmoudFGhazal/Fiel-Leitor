@@ -36,7 +36,7 @@ public class VerifyGetCardByUser implements IPreCommand {
 
         CardDTORequest cardRequest = (CardDTORequest) entity;
 
-        communValidator.validateNotBlack(cardRequest.getUser().toString(), "Id");
+        communValidator.validateNotBlack(cardRequest.getUser() == null ? null : cardRequest.getUser().toString(), "Id");
 
         Card card = cardValidator.toEntity(cardRequest);
        

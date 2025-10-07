@@ -31,7 +31,7 @@ public class VerifyDeleteUser implements IPreCommand {
 
         UserDTORequest userRequest = (UserDTORequest) entity;
 
-        communValidator.validateNotBlack(userRequest.getId().toString(), "Id");
+        communValidator.validateNotBlack(userRequest.getId() == null ? null : userRequest.getId().toString(), "Id");
 
         // Verificar se o usuário existe
         if (!userValidator.userExists(userRequest.getId())) {

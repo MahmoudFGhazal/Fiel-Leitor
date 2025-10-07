@@ -25,6 +25,7 @@ public class GetCardAdapter implements IPostCommand {
         Card card = (Card) entity;
 
         CardDTOResponse cardResponse = new CardDTOResponse();
+        cardResponse.setId(card.getId());
         cardResponse.setLast4(card.getLast4());
 
         UserDTOResponse userResponse = new UserDTOResponse();

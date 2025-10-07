@@ -78,13 +78,7 @@ export default function CardConfig() {
             user: Number(currentUser)
         };
 
-        let res: ApiResponse;
-
-        if (!payload.id || payload.id === 0) {
-            res = await api.post("/card", { data: payload }) as ApiResponse;
-        } else {
-            res = await api.put("/card", { data: payload }) as ApiResponse;
-        }
+        const res = await api.post("/card", { data: payload }) as ApiResponse;
 
         if (res.message) {
             alert(res.message);

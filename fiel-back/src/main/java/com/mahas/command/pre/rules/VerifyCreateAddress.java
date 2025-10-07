@@ -43,7 +43,7 @@ public class VerifyCreateAddress implements IPreCommand {
 
         AddressDTORequest addressRequest = (AddressDTORequest) entity;
         
-        communValidator.validateNotBlack(addressRequest.getUser().toString(), "Usuario");
+        communValidator.validateNotBlack(addressRequest.getUser() == null ? null : addressRequest.getUser().toString(), "Usuario");
         communValidator.validateNotBlack(addressRequest.getNickname(), "Apelido");
         communValidator.validateNotBlack(addressRequest.getNumber(), "Número");
         communValidator.validateNotBlack(addressRequest.getStreet(), "Rua");
@@ -53,8 +53,8 @@ public class VerifyCreateAddress implements IPreCommand {
         communValidator.validateNotBlack(addressRequest.getState(), "Estado");
         communValidator.validateNotBlack(addressRequest.getCountry(), "País");
         communValidator.validateNotBlack(addressRequest.getNeighborhood(), "Bairro");
-        communValidator.validateNotBlack(addressRequest.getStreetType().toString(), "Tipo de rua");
-        communValidator.validateNotBlack(addressRequest.getResidenceType().toString(), "Tipo de residencia");
+        communValidator.validateNotBlack(addressRequest.getStreetType() == null ? null : addressRequest.getStreetType().toString(), "Tipo de rua");
+        communValidator.validateNotBlack(addressRequest.getResidenceType() == null ? null : addressRequest.getResidenceType().toString(), "Tipo de residencia");
 
         // Validar Tipo de Rua existe
         if (!streetTypeValidator.streetTypeExists(addressRequest.getStreetType())) {

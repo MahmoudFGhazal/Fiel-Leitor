@@ -31,7 +31,7 @@ public class VerifyChangePassword implements IPreCommand {
 
         UserDTORequest userRequest = (UserDTORequest) entity;
 
-        communValidator.validateNotBlack(userRequest.getId().toString(), "Id");
+        communValidator.validateNotBlack(userRequest.getId() == null ? null : userRequest.getId().toString(), "Id");
         communValidator.validateNotBlack(userRequest.getPassword(), "Senha");
         communValidator.validateNotBlack(userRequest.getNewPassword(), "Nova senha");
 

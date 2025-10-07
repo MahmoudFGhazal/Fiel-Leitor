@@ -36,7 +36,7 @@ public class VerifyGetAddressByUser implements IPreCommand {
 
         AddressDTORequest addressRequest = (AddressDTORequest) entity;
 
-        communValidator.validateNotBlack(addressRequest.getId().toString(), "Id");
+        communValidator.validateNotBlack(addressRequest.getUser() == null ? null : addressRequest.getUser().toString(), "Usuario");
 
         Address address = addressValidator.toEntity(addressRequest);
        

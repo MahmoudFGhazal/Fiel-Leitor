@@ -1,8 +1,5 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CommunValidator;
 import com.mahas.command.pre.rules.logs.GenderValidator;
@@ -13,6 +10,9 @@ import com.mahas.domain.user.User;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyCreateUser implements IPreCommand {
@@ -37,10 +37,10 @@ public class VerifyCreateUser implements IPreCommand {
 
         communValidator.validateNotBlack(userRequest.getEmail(), "E-mail");
         communValidator.validateNotBlack(userRequest.getCpf(), "CPF");
-        communValidator.validateNotBlack(userRequest.getBirthday().toString(), "Data de Nascimento");
+        communValidator.validateNotBlack(userRequest.getBirthday() == null ? null : userRequest.getBirthday().toString(), "Data de Nascimento");
         communValidator.validateNotBlack(userRequest.getPassword(), "Senha");
         communValidator.validateNotBlack(userRequest.getPhoneNumber(), "Telefone");
-        communValidator.validateNotBlack(userRequest.getGender().toString(), "Gênero");
+        communValidator.validateNotBlack(userRequest.getGender() == null ? null : userRequest.getGender().toString(), "Gênero");
 
         SQLRequest sqlRequest = new SQLRequest();
 

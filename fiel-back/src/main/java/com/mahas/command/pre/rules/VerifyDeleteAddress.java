@@ -31,7 +31,7 @@ public class VerifyDeleteAddress implements IPreCommand {
 
         AddressDTORequest addressRequest = (AddressDTORequest) entity;
 
-        communValidator.validateNotBlack(addressRequest.getId().toString(), "Id");
+        communValidator.validateNotBlack(addressRequest.getId() == null ? null : addressRequest.getId().toString(), "Id");
 
         // Verificar se o endereço existe
         if (!addressValidator.addressExists(addressRequest.getId())) {
