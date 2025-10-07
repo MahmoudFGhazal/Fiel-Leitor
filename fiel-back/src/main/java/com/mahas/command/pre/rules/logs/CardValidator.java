@@ -131,7 +131,6 @@ public class CardValidator {
         int currentYear = java.time.Year.now().getValue();
         int currentMonth = java.time.LocalDate.now().getMonthValue();
 
-        // Verifica se já expirou
         if (year < currentYear || (year == currentYear && month < currentMonth)) {
             throw new ValidationException("Cartão expirado");
         }

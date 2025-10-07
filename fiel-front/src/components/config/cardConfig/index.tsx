@@ -1,3 +1,4 @@
+// src/components/cards/CardConfig.tsx
 'use client';
 import { CardRequest } from '@/api/dtos/requestDTOs';
 import { CardResponse } from '@/api/dtos/responseDTOs';
@@ -7,7 +8,7 @@ import ActionButton from "@/components/buttonComponents/actionButton";
 import Button from "@/components/buttonComponents/button";
 import { useGlobal } from '@/context/GlobalContext';
 import showToast from '@/utils/showToast';
-import { toRequestCard } from '@/utils/toRequest';
+import { parseCardData } from '@/utils/validator/CardValidator';
 import { useEffect, useState } from "react";
 import PopUpCard from '../../forms/popUpCard';
 import styles from './cardConfig.module.css';
@@ -23,51 +24,89 @@ export default function CardConfig() {
         async function fetchData() {
             try {
                 const res = await api.get<ApiResponse>('/card/user', { params: { userId: currentUser } });
-
                 if (res.message) {
                     alert(res.message);
                     return;
                 }
-
                 const data = res.data;
                 const entities = (data.entities ?? data) as CardResponse[] | null;
 
                 if (!entities?.length) {
-                    alert('Nenhum cartão encontrado.');
+                    setCards([]);
                     return;
                 }
-
                 setCards(entities);
             } catch (err) {
                 console.error("Erro ao carregar cartões", err);
             }
         }
 
-        if (!currentUser) return; 
+        if (!currentUser) return;
         fetchData();
     }, [currentUser]);
 
-    const openEditModal = (card: CardResponse, editable = false) => {
-        const reqCard = toRequestCard(card);
-        
-        setEditedCard(reqCard);
-        setIsFormEditable(editable);
+    const openEditModal = (card?: CardResponse, editable = false) => {
+        if (!card) {
+            setEditedCard({
+                id: null,
+                user: null,
+                principal: false,
+                bin: '',
+                last4: '',
+                holder: '',
+                expMonth: '',
+                expYear: '',
+                pan: '',
+                expInput: ''
+            } as unknown as CardRequest);
+            setIsFormEditable(true);
+            setIsModalOpen(true);
+            return;
+        }
+
+        const req: CardRequest = {
+            id: card.id ?? null,
+            user: card?.user?.id ?? null,
+            principal: card.principal ?? false,
+            bin: card.bin ?? '',
+            last4: card.last4 ?? '',
+            holder: card.holder ?? '',
+            expMonth: card.expMonth ?? '',
+            expYear: card.expYear ?? '',
+            pan: `${card.bin ?? ''}${card.last4 ?? ''}`, 
+            expInput: (card.expMonth && card.expYear) ? `${card.expMonth}${card.expYear.slice(-2)}` : ''
+        } as unknown as CardRequest;
+
+        setEditedCard(req);
+        setIsFormEditable(editable && !req.id);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setEditedCard(null);
         setIsModalOpen(false);
+        setIsFormEditable(false);
     };
 
     const handleCardChange = (field: keyof CardRequest, value: string | boolean | null) => {
         if (!editedCard) return;
-        setEditedCard(prev => ({ ...prev!, [field]: value }));
+
+        const newCard: any = { ...editedCard };
+
+        if (field === 'bin' && typeof value === 'string') {
+            newCard.pan = value;
+        } else if (field === 'expMonth' && typeof value === 'string') {
+            newCard.expInput = value;
+        } else if (typeof value === 'string' || typeof value === 'boolean' || value === null) {
+            (newCard as any)[field] = value;
+        }
+
+        setEditedCard(newCard);
     };
 
     const saveCard = async () => {
         if (!editedCard) return;
-    
+
         if (editedCard.id) {
             alert("Edição de cartão não é permitida. Exclua e crie um novo.");
             return;
@@ -78,25 +117,38 @@ export default function CardConfig() {
             return;
         }
 
-        const payload = {
-            ...editedCard,
-            user: Number(currentUser)
-        };
+        const pan = (editedCard as any).pan ?? '';
+        const expInput = (editedCard as any).expInput ?? '';
 
-        const res = await api.post("/card", { data: payload }) as ApiResponse;
+        const parsed = parseCardData(pan, expInput);
 
-        if (res.message) {
-            alert(res.message);
-            return;
+        const payload: CardRequest = {
+            id: null,
+            user: Number(currentUser) as unknown as number,
+            principal: editedCard.principal ?? false,
+            bin: parsed.bin,
+            last4: parsed.last4,
+            holder: editedCard.holder ?? '',
+            expMonth: parsed.expMonth,
+            expYear: parsed.expYear
+        } as unknown as CardRequest;
+
+        try {
+            const res = await api.post("/card", { data: payload }) as ApiResponse;
+
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
+
+            const entity = res.data.entity as CardResponse;
+            setCards(prev => [...prev, entity]);
+            await showToast("Cartão criado com sucesso");
+            closeModal();
+        } catch (err) {
+            console.error("Erro ao salvar cartão", err);
+            alert("Erro ao salvar cartão");
         }
-
-        const entity = res.data.entity as CardResponse;
-        setCards(prev => [...prev, entity]);
-
-        await showToast(!payload.id ? "Cartão criado com sucesso" : "Cartão atualizado com sucesso");
-
-        setIsFormEditable(false);
-        setIsModalOpen(false);
     };
 
     const handleDelete = async (id: number) => {
@@ -104,14 +156,13 @@ export default function CardConfig() {
         if (!confirmed) return;
 
         const res = await api.delete("/card", { params: { cardId: id } }) as ApiResponse;
-    
+
         if (res.message) {
             alert(res.message);
             return;
         }
 
         const entity = res.data.entity as CardResponse;
-
         setCards(prev => prev.filter(card => card.id !== entity.id));
         await showToast("Cartão removido com sucesso");
     };
@@ -122,22 +173,8 @@ export default function CardConfig() {
                 <h2>Cartões</h2>
                 <ActionButton 
                     label="Criar Cartão" 
-                    onClick={() => {
-                        setEditedCard({
-                            id: null,
-                            user: null,
-                            principal: false,
-                            bin: '',
-                            last4: '',
-                            holder: '',
-                            expMonth: '',
-                            expYear: ''
-                        } as CardRequest);
-                        setIsFormEditable(true);   
-                        setIsModalOpen(true);
-                    }} 
+                    onClick={() => openEditModal(undefined, true)}
                     color='green'
-                    dataCy='create-button'
                 />
             </div>
             <table className={styles.cardTable}>
@@ -157,14 +194,12 @@ export default function CardConfig() {
                                         label="Visualizar" 
                                         onClick={() => openEditModal(card, false)} 
                                         color="gray" 
-                                        dataCy="view-button"
                                     />
 
                                     <ActionButton 
                                         label="Apagar" 
                                         onClick={() => handleDelete(card.id!)} 
                                         color="red" 
-                                        dataCy="delete-button"
                                     />
                                 </div>
                             </td>
@@ -183,16 +218,18 @@ export default function CardConfig() {
                         <PopUpCard
                             card={editedCard}
                             onChange={handleCardChange}
-                            disable={!!editedCard.id || !isFormEditable} // bloqueia edição se já existir id
+                            disable={!!editedCard.id || !isFormEditable}
                         />
 
                         <div className={styles.modalActions}>
                             {editedCard.id ? (
-                                <Button type="button" onClick={closeModal} text="Fechar" dataCy='close-button' />
+                                <>
+                                    <Button type="button" onClick={closeModal} text="Fechar" />
+                                </>
                             ) : (
                                 <>
-                                    <Button type="button" onClick={saveCard} text="Salvar" dataCy='save-button'/>
-                                    <Button type="button" onClick={closeModal} text="Cancelar" dataCy='cancel-button' />
+                                    <Button type="button" onClick={saveCard} text="Salvar" />
+                                    <Button type="button" onClick={closeModal} text="Cancelar" />
                                 </>
                             )}
                         </div>

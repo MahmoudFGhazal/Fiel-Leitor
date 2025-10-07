@@ -33,10 +33,6 @@ async function request<T>(method: Method, url: string, options?: RequestOptions)
         const res = await fetch(fullUrl, fetchOptions);
         const json = await res.json();
 
-        if (!res.ok) {
-            throw new Error(json.message ?? "Erro no Back");
-        }
-
         if (json.typeResponse === "SERVER_ERROR") {
             throw new Error(json.message || "Erro no Back");
         }

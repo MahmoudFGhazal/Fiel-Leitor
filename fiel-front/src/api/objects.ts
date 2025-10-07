@@ -10,7 +10,7 @@ export interface ApiResponse {
         totalItem: number | null,
         totalPage: number | null
     },
-    typeResponse: TypeResponse | null,
+    typeResponse: TypeResponse,
     message: string | null
 }
 
