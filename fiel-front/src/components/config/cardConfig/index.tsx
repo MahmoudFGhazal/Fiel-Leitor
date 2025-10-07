@@ -68,6 +68,11 @@ export default function CardConfig() {
     const saveCard = async () => {
         if (!editedCard) return;
     
+        if (editedCard.id) {
+            alert("Edição de cartão não é permitida. Exclua e crie um novo.");
+            return;
+        }
+
         if (!currentUser) {
             alert("Usuário não definido");
             return;
@@ -86,12 +91,7 @@ export default function CardConfig() {
         }
 
         const entity = res.data.entity as CardResponse;
-        
-        if (!payload.id) {
-            setCards(prev => [...prev, entity]);
-        } else {
-            setCards(prev => prev.map(card => card.id === entity.id ? entity : card));
-        }
+        setCards(prev => [...prev, entity]);
 
         await showToast(!payload.id ? "Cartão criado com sucesso" : "Cartão atualizado com sucesso");
 
@@ -140,7 +140,7 @@ export default function CardConfig() {
                     dataCy='create-button'
                 />
             </div>
-            <table className={styles.addressTable}>
+            <table className={styles.cardTable}>
                 <thead>
                     <tr>
                         <th>Cartão</th>
@@ -161,13 +161,6 @@ export default function CardConfig() {
                                     />
 
                                     <ActionButton 
-                                        label="Editar" 
-                                        onClick={() => openEditModal(card, true)} 
-                                        color="blue" 
-                                        dataCy="edit-button"
-                                    />
-
-                                    <ActionButton 
                                         label="Apagar" 
                                         onClick={() => handleDelete(card.id!)} 
                                         color="red" 
@@ -184,25 +177,22 @@ export default function CardConfig() {
                 <div className={styles.modalBackdrop}>
                     <div className={styles.modal}>
                         <div className={styles.titleContent}>
-                            <h3>{isFormEditable ? 'Editar Cartão' : 'Visualizar Cartão'}</h3>
+                            <h3>{editedCard.id ? 'Visualizar Cartão' : (isFormEditable ? 'Criar Cartão' : 'Visualizar Cartão')}</h3>
                         </div>
 
                         <PopUpCard
-                            card={editedCard}  
+                            card={editedCard}
                             onChange={handleCardChange}
-                            disable={!isFormEditable}
+                            disable={!!editedCard.id || !isFormEditable} // bloqueia edição se já existir id
                         />
 
                         <div className={styles.modalActions}>
-                            {isFormEditable ? (
+                            {editedCard.id ? (
+                                <Button type="button" onClick={closeModal} text="Fechar" dataCy='close-button' />
+                            ) : (
                                 <>
                                     <Button type="button" onClick={saveCard} text="Salvar" dataCy='save-button'/>
                                     <Button type="button" onClick={closeModal} text="Cancelar" dataCy='cancel-button' />
-                                </>
-                            ) : (
-                                <>
-                                    <Button type="button" onClick={() => setIsFormEditable(true)} text="Editar" dataCy='edit-button' />
-                                    <Button type="button" onClick={closeModal} text="Fechar" dataCy='close-button' />
                                 </>
                             )}
                         </div>
