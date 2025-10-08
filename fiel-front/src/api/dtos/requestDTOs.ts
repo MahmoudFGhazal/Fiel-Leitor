@@ -15,6 +15,15 @@ export interface AddressRequest {
     residenceType: number | null
 }
 
+export interface BookRequest {
+    id: number | null,
+    name: string | null,
+    price: number | null,
+    active: boolean | null,
+    stock: number | null,
+    category: CategoryRequest | null
+}
+
 export interface CardRequest {
     id: number | null,
     user: number | null,
@@ -24,6 +33,12 @@ export interface CardRequest {
     holder: string | null,
     expMonth: string | null,
     expYear: string | null
+}
+
+export interface CategoryRequest {
+    id: number | null,
+    name: string | null,
+    active: boolean | null
 }
 
 export interface GenderRequest {

@@ -15,6 +15,15 @@ export interface AddressResponse {
     residenceType: ResidenceTypeResponse | null
 }
 
+export interface BookResponse {
+    id: number | null,
+    name: string | null,
+    price: number | null,
+    active: boolean | null,
+    stock: number | null,
+    category: CategoryResponse | null
+}
+
 export interface CardResponse {
     id: number | null,
     user: UserResponse | null,
@@ -24,6 +33,12 @@ export interface CardResponse {
     holder: string | null,
     expMonth: string | null,
     expYear: string | null,
+}
+
+export interface CategoryResponse {
+    id: number | null,
+    name: string | null,
+    active: boolean | null
 }
 
 export interface GenderResponse {

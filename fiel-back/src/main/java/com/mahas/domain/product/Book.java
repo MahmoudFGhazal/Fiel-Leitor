@@ -48,13 +48,13 @@ public class Book extends DomainEntity {
     @JoinColumn(name = "bok_cat_id", nullable = false)
     private Category category;
 
-    @Column(name = "cat_created_at", nullable = false)
+    @Column(name = "bok_created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "cat_updated_at", nullable = false)
+    @Column(name = "bok_updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "cat_published_at", nullable = false)
+    @Column(name = "bok_published_at", nullable = false)
     private LocalDateTime publishedAt;
 
     @PrePersist
