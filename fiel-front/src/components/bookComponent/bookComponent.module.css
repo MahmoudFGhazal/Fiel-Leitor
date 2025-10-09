@@ -1,0 +1,47 @@
+.container {
+    padding: 0 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}  
+
+.headerContent {
+    display: flex;
+    justify-content: space-between;
+}
+
+.centerInformations {
+    padding-left: calc(20px + 5vw);
+    display: flex;
+    gap: 25px;
+}
+
+.saleContainer {
+    padding-right: 3vw;
+    display: flex;
+    width: 25vw;
+    flex-direction: column;
+    gap: 5px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.image {
+    width: 30vw;
+    height: auto;
+    max-width: 250px;
+}
+
+.buttonContent {
+    display: flex;
+    gap: 10px; 
+}
+
+.descrition {
+    padding: 20px 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+}

@@ -14,7 +14,7 @@ export default function HomeComponent() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await api.get<ApiResponse>('/book');
+                const res = await api.get<ApiResponse>('/book/all');
                 
                 if (res.message) {
                     alert(res.message);
@@ -39,7 +39,7 @@ export default function HomeComponent() {
     return (
         <div className={styles.container}>
             {fields.map((f) => (
-                <Link key={f.id} href={`/book?bookid=${f.id}`} className={styles.link}>
+                <Link key={f.id} href={`/book?bookId=${f.id}`} className={styles.link}>
                     <Field 
                         name={f.name ?? 'Sem título'}
                         price={f.price ?? 0}
