@@ -10,14 +10,14 @@ import com.mahas.domain.DataResponse;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.SQLResponse;
-import com.mahas.domain.user.Card;
+import com.mahas.domain.product.Book;
 import com.mahas.dto.response.DTOResponse;
-import com.mahas.dto.response.user.CardDTOResponse;
-import com.mahas.dto.response.user.UserDTOResponse;
+import com.mahas.dto.response.product.BookDTOResponse;
+import com.mahas.dto.response.product.CategoryDTOResponse;
 import com.mahas.exception.ValidationException;
 
 @Component
-public class GetCardAdapter implements IPostCommand {
+public class GetBookAdapter implements IPostCommand {
     @Override
     public FacadeResponse execute(SQLResponse sqlResponse) {
         List<DomainEntity> entities = sqlResponse.getEntities();
@@ -25,14 +25,14 @@ public class GetCardAdapter implements IPostCommand {
             List<DTOResponse> dtoList = new ArrayList<>(entities.size());
 
             for (DomainEntity e : entities) {
-                if (!(e instanceof Card)) {
-                    throw new ValidationException("Tipo de entidade inválido, esperado Card");
+                if (!(e instanceof Book)) {
+                    throw new ValidationException("Tipo de entidade inválido, esperado Book");
                 }
 
-                CardDTOResponse cardResponse = new CardDTOResponse();
-                cardResponse.mapFromEntity(e);
+                BookDTOResponse bookResponse = new BookDTOResponse();
+                bookResponse.mapFromEntity(e);
                 
-                dtoList.add(cardResponse);
+                dtoList.add(bookResponse);
             }
 
             DataResponse data = new DataResponse();
@@ -44,25 +44,27 @@ public class GetCardAdapter implements IPostCommand {
             return response;
         }
 
-
         DomainEntity entity = sqlResponse.getEntity();
 
-        if (!(entity instanceof Card)) {
-            throw new ValidationException("Tipo de entidade inválido, esperado Card");
+        if (!(entity instanceof Book)) {
+            throw new ValidationException("Tipo de entidade inválido, esperado Book");
         }
 
-        Card card = (Card) entity;
+        Book book = (Book) entity;
 
-        CardDTOResponse cardResponse = new CardDTOResponse();
-        cardResponse.setId(card.getId());
-        cardResponse.setLast4(card.getLast4());
+        BookDTOResponse bookResponse = new BookDTOResponse();
+        bookResponse.setId(book.getId());
+        bookResponse.setName(book.getName());
+        bookResponse.setPrice(book.getPrice());
+        bookResponse.setStock(book.getStock());
 
-        UserDTOResponse userResponse = new UserDTOResponse();
-        userResponse.setId(card.getUser().getId());
-        cardResponse.setUser(userResponse);
-        
+        CategoryDTOResponse categoryResponse = new CategoryDTOResponse();
+        categoryResponse.setId(book.getCategory().getId());
+        categoryResponse.setName(book.getCategory().getName());
+        bookResponse.setCategory(categoryResponse);
+        System.out.println("iu");
         DataResponse data = new DataResponse();
-        data.setEntity(cardResponse);
+        data.setEntity(bookResponse);
 
         FacadeResponse response = new FacadeResponse();
         response.setData(data);

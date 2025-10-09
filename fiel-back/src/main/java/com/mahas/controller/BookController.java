@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mahas.command.post.adapters.GetBookAdapter;
 import com.mahas.command.pre.base.product.BaseBookCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -28,19 +29,22 @@ public class BookController {
     private BaseBookCommand baseBookCommand;
 
     //Post
+    @Autowired
+    private GetBookAdapter getBookCommand;
 
     @GetMapping
     public ResponseEntity<FacadeResponse> getBook(
             @RequestParam(value = "bookId", required = true) Integer id
         ) {
         FacadeRequest request = new FacadeRequest();
-        System.out.println(id);
+
         BookDTORequest book = new BookDTORequest();
         book.setId(id);
 
         request.setEntity(book);
         request.setLimit(1);
         request.setPreCommand(baseBookCommand);
+        request.setPostCommand(getBookCommand);
 
         FacadeResponse response = facade.query(request);
         
@@ -55,11 +59,12 @@ public class BookController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/active")
     public ResponseEntity<FacadeResponse> getBooks() {
         FacadeRequest request = new FacadeRequest();
 
         request.setPreCommand(baseBookCommand);
+        request.setPostCommand(getBookCommand);
         BookDTORequest book = new BookDTORequest();
         request.setEntity(book); 
 
