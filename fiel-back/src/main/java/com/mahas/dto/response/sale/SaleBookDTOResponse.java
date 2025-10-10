@@ -1,5 +1,7 @@
 package com.mahas.dto.response.sale;
 
+import java.math.BigDecimal;
+
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.sale.SaleBook;
 import com.mahas.dto.response.DTOResponse;
@@ -18,7 +20,7 @@ public class SaleBookDTOResponse implements DTOResponse {
     private SaleDTOResponse sale;
     private BookDTOResponse book;
     private Integer quantity;
-    private Double price;
+    private BigDecimal price;
 
     @Override
     public void mapFromEntity(DomainEntity entity) {

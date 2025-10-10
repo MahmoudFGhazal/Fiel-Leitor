@@ -1,13 +1,27 @@
 package com.mahas.command.pre.rules.logs;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.mahas.command.pre.base.product.BaseBookCommand;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.product.Book;
 import com.mahas.domain.product.Category;
 import com.mahas.dto.request.product.BookDTORequest;
-
-import org.springframework.stereotype.Component;
+import com.mahas.dto.response.DTOResponse;
+import com.mahas.dto.response.product.BookDTOResponse;
+import com.mahas.exception.ValidationException;
+import com.mahas.facade.Facade;
 
 @Component
 public class BookValidator {
+    @Autowired
+    Facade facade;
+
+    @Autowired
+    BaseBookCommand baseBookCommand;
+   
     public Book toEntity(BookDTORequest dto) {
         if (dto == null) return null;
 
@@ -25,5 +39,46 @@ public class BookValidator {
         }
 
         return book;
+    }
+
+    public boolean bookExists(Integer id) {
+        BookDTORequest book = new BookDTORequest();
+        book.setId(id);
+
+        FacadeRequest request = new FacadeRequest();
+        request.setEntity(book);
+        request.setLimit(1);
+        request.setPreCommand(baseBookCommand);
+
+        FacadeResponse response = facade.query(request);
+
+        DTOResponse entity = response.getData().getEntity();
+        
+        return entity != null; 
+    }
+
+    public void checkBookStock(Integer id, Integer quantity) {
+        BookDTORequest book = new BookDTORequest();
+        book.setId(id);
+
+        FacadeRequest request = new FacadeRequest();
+        request.setEntity(book);
+        request.setLimit(1);
+        request.setPreCommand(baseBookCommand);
+
+        FacadeResponse response = facade.query(request);
+
+        DTOResponse entity = response.getData().getEntity();
+
+        if(entity == null) {
+            throw new ValidationException("Livro não encontrado");
+        }
+
+        BookDTOResponse bookResponse = (BookDTOResponse) entity;
+        System.out.println(bookResponse.getId());
+        System.out.println(bookResponse.getStock());
+        if(bookResponse.getStock() < quantity) {
+            throw new ValidationException("Quantidade maior que o estoque");
+        }
     }
 }

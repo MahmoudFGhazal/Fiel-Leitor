@@ -1,5 +1,7 @@
 package com.mahas.dto.response.sale;
 
+import java.math.BigDecimal;
+
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.sale.TraderCoupon;
 import com.mahas.dto.response.DTOResponse;
@@ -15,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TraderCouponDTOResponse implements DTOResponse {
     private Integer id;
-    private Double value;
+    private BigDecimal value;
     private Boolean used;
     private SaleDTOResponse sale;
 

@@ -1,5 +1,6 @@
 package com.mahas.domain.sale;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -40,7 +41,7 @@ public class Sale extends DomainEntity {
     private User user;
 
     @Column(name = "sal_freight")
-    private Double freight;
+    private BigDecimal freight;
 
     @Column(name = "sal_delivery_date")
     private LocalDate deliveryDate;

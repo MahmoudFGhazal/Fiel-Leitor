@@ -1,11 +1,11 @@
 package com.mahas.command.pre.rules.logs;
 
+import org.springframework.stereotype.Component;
+
 import com.mahas.domain.product.Book;
 import com.mahas.domain.sale.Sale;
 import com.mahas.domain.sale.SaleBook;
 import com.mahas.dto.request.sale.SaleBookDTORequest;
-
-import org.springframework.stereotype.Component;
 
 @Component
 public class SaleBookValidator {

@@ -1,18 +1,17 @@
 package com.mahas.domain.sale;
 
-import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.product.Book;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -23,28 +22,30 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "sales_books")
-@Getter
+@Getter 
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor 
 @AllArgsConstructor
-@IdClass(SaleBookId.class)
 public class SaleBook extends DomainEntity {
-    
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "sbo_sal_id", nullable = false)
+
+    @EmbeddedId
+    private SaleBookId id;
+
+    @MapsId("saleId")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sbo_sal_id", referencedColumnName = "sal_id", nullable = false)
     private Sale sale;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "sbo_bok_id", nullable = false)
+    @MapsId("bookId")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sbo_bok_id", referencedColumnName = "bok_id", nullable = false)
     private Book book;
 
     @Column(name = "sbo_quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "sbo_price", nullable = false)
-    private Double price;
+    @Column(name = "sbo_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
     @Column(name = "sbo_created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -63,28 +64,5 @@ public class SaleBook extends DomainEntity {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-}
-
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-class SaleBookId implements Serializable {
-    private Integer sale;
-    private Integer book;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SaleBookId)) return false;
-        SaleBookId that = (SaleBookId) o;
-        return Objects.equals(sale, that.sale) && Objects.equals(book, that.book);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(sale, book);
     }
 }

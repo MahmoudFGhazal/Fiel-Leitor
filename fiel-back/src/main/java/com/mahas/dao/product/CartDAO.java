@@ -11,11 +11,15 @@ import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
+import com.mahas.domain.product.Book;
 import com.mahas.domain.product.Cart;
+import com.mahas.domain.product.CartId;
 import com.mahas.domain.product.Category;
+import com.mahas.domain.user.User;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
 
 @Component
@@ -42,6 +46,11 @@ public class CartDAO implements IDAO {
             params.put("user", cart.getUser()); 
         }
 
+        if (cart.getBook() != null) { 
+            where.append(" AND c.book = :book"); 
+            params.put("book", cart.getBook()); 
+        }
+
         jpql.append(where); countJpql.append(where);
 
         int page = request.getPage(); int limit = request.getLimit();
@@ -65,5 +74,150 @@ public class CartDAO implements IDAO {
         response.setPage(page); response.setLimit(limit);
         response.setTotalItem(totalItems); response.setTotalPage(totalPage);
         return response;
+    }
+
+    @Override
+    public SQLResponse save(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if (!(entity instanceof Cart)) {
+            return null;
+        }
+
+        Cart cart = (Cart) entity;
+
+        try {
+            ensureEmbeddedId(cart);
+
+            if (cart.getUser() != null && cart.getUser().getId() != null) {
+                cart.setUser(entityManager.getReference(User.class, cart.getUser().getId()));
+            }
+            if (cart.getBook() != null && cart.getBook().getId() != null) {
+                cart.setBook(entityManager.getReference(Book.class, cart.getBook().getId()));
+            }
+
+            entityManager.persist(cart);
+            entityManager.flush();
+
+            response.setEntity(cart);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
+    @Override
+    public SQLResponse delete(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if (!(entity instanceof Cart)) {
+            return null;
+        }
+
+        Cart cart = (Cart) entity;
+
+        CartId id = resolveId(cart);
+        if (id == null || id.getUserId() == null || id.getBookId() == null) {
+            response.setEntity(null);
+            return response;
+        }
+
+        Cart managed = entityManager.find(Cart.class, id);
+        if (managed == null) {
+            response.setEntity(null);
+            return response;
+        }
+
+        entityManager.remove(managed);
+        entityManager.flush();
+
+        response.setEntity(managed);
+        return response;
+    }
+    
+    @Override
+    public SQLResponse update(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof Cart)){
+            return null;
+        }
+
+        Cart cart = (Cart) entity;
+
+        try {
+            CartId id = resolveId(cart);
+            if (id == null || id.getUserId() == null || id.getBookId() == null) {
+                response.setEntity(null);
+                return response;
+            }
+
+            Cart existingCart = entityManager.find(Cart.class, id);
+            if (existingCart == null) {
+                response.setEntity(null);
+                return response;
+            }
+
+            if (cart.getQuantity() != null) {
+                existingCart.setQuantity(cart.getQuantity());
+            }
+
+            entityManager.flush();
+
+            response.setEntity(existingCart);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
+    private void ensureEmbeddedId(Cart cart) {
+        if (cart.getId() == null) {
+            cart.setId(new CartId());
+        }
+
+        if (cart.getUser() != null && cart.getUser().getId() != null) {
+            cart.getId().setUserId(cart.getUser().getId());
+        }
+        
+        if (cart.getBook() != null && cart.getBook().getId() != null) {
+            cart.getId().setBookId(cart.getBook().getId());
+        }
+    }
+
+    private CartId resolveId(Cart cart) {
+        if (cart.getId() != null && cart.getId().getUserId() != null && cart.getId().getBookId() != null) {
+            return cart.getId();
+        }
+        CartId derived = new CartId();
+        boolean hasAny = false;
+
+        if (cart.getId() != null) {
+            if (cart.getId().getUserId() != null) {
+                derived.setUserId(cart.getId().getUserId());
+                hasAny = true;
+            }
+            if (cart.getId().getBookId() != null) {
+                derived.setBookId(cart.getId().getBookId());
+                hasAny = true;
+            }
+        }
+
+        if (cart.getUser() != null && cart.getUser().getId() != null) {
+            derived.setUserId(cart.getUser().getId());
+            hasAny = true;
+        }
+
+        if (cart.getBook() != null && cart.getBook().getId() != null) {
+            derived.setBookId(cart.getBook().getId());
+            hasAny = true;
+        }
+
+        return hasAny ? derived : null;
     }
 }

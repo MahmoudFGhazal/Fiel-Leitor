@@ -1,5 +1,7 @@
 package com.mahas.dto.request.sale;
 
+import java.math.BigDecimal;
+
 import com.mahas.dto.request.DTORequest;
 
 import lombok.AllArgsConstructor;
@@ -13,6 +15,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PromotionalCouponDTORequest implements DTORequest {
     private Integer id;
-    private Double value;
+    private BigDecimal value;
     private Boolean used;
 }

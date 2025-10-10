@@ -1,5 +1,7 @@
 package com.mahas.dto.response.product;
 
+import java.math.BigDecimal;
+
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.product.Book;
 import com.mahas.dto.response.DTOResponse;
@@ -16,7 +18,7 @@ import lombok.Setter;
 public class BookDTOResponse implements DTOResponse {
     private Integer id;
     private String name;
-    private Double price;
+    private BigDecimal price;
     private Integer stock;
     private Boolean active;
     private CategoryDTOResponse category;

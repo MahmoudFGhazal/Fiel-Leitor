@@ -1,5 +1,6 @@
 package com.mahas.domain.sale;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.mahas.domain.DomainEntity;
@@ -37,7 +38,7 @@ public class TraderCoupon extends DomainEntity {
     private Sale sale;
 
     @Column(name = "tco_value", nullable = false)
-    private Double value;
+    private BigDecimal value;
 
     @Column(name = "tco_used", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean used = false;

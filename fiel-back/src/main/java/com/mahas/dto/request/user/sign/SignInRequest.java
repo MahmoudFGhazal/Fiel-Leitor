@@ -1,4 +1,4 @@
-package com.mahas.dto.request.sign;
+package com.mahas.dto.request.user.sign;
 
 import com.mahas.dto.request.address.AddressDTORequest;
 import com.mahas.dto.request.user.UserDTORequest;

@@ -1,5 +1,6 @@
 package com.mahas.dto.response.sale;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.mahas.domain.DomainEntity;
@@ -20,7 +21,7 @@ import lombok.Setter;
 public class SaleDTOResponse implements DTOResponse {
     private Integer id;
     private UserDTOResponse user;
-    private Double freight;
+    private BigDecimal freight;
     private LocalDate deliveryDate;
     private StatusSaleDTOResponse statusSale;
     private PromotionalCouponDTOResponse promotionalCoupon;

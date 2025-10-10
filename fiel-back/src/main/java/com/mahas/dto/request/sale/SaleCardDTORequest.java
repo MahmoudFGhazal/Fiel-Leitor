@@ -1,5 +1,7 @@
 package com.mahas.dto.request.sale;
 
+import java.math.BigDecimal;
+
 import com.mahas.dto.request.DTORequest;
 
 import lombok.AllArgsConstructor;
@@ -14,5 +16,5 @@ import lombok.Setter;
 public class SaleCardDTORequest implements DTORequest {
     private Integer sale;
     private Integer card;
-    private Double percent;
+    private BigDecimal percent;
 }

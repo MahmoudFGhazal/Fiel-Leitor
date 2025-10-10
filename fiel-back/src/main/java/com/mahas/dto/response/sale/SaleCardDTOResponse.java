@@ -1,5 +1,7 @@
 package com.mahas.dto.response.sale;
 
+import java.math.BigDecimal;
+
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.sale.SaleCard;
 import com.mahas.dto.response.DTOResponse;
@@ -17,7 +19,7 @@ import lombok.Setter;
 public class SaleCardDTOResponse implements DTOResponse {
     private SaleDTOResponse sale;
     private CardDTOResponse card;
-    private Double percent;
+    private BigDecimal percent;
 
     @Override
     public void mapFromEntity(DomainEntity entity) {

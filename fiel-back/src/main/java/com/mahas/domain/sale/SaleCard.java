@@ -1,17 +1,17 @@
 package com.mahas.domain.sale;
 
-import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.user.Card;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -22,24 +22,27 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "sales_cards")
-@Getter
+@Getter 
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor 
 @AllArgsConstructor
 public class SaleCard extends DomainEntity {
-    
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "sca_sal_id", nullable = false)
+
+    @EmbeddedId
+    private SaleCardId id;
+
+    @MapsId("saleId")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sca_sal_id", referencedColumnName = "sal_id", nullable = false)
     private Sale sale;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "sca_car_id", nullable = false)
+    @MapsId("cardId")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sca_car_id", referencedColumnName = "car_id", nullable = false)
     private Card card;
 
-    @Column(name = "sca_percent", nullable = false)
-    private Double percent;
+    @Column(name = "sca_percent", nullable = false, precision = 5, scale = 2)
+    private BigDecimal percent;
 
     @Column(name = "sca_created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -58,28 +61,5 @@ public class SaleCard extends DomainEntity {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-}
-
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-class SalesCardId implements Serializable {
-    private Integer sale;
-    private Integer card;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SalesCardId)) return false;
-        SalesCardId that = (SalesCardId) o;
-        return Objects.equals(sale, that.sale) && Objects.equals(card, that.card);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(sale, card);
     }
 }

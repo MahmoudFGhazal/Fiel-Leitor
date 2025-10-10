@@ -1,5 +1,6 @@
 package com.mahas.domain.product;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.mahas.domain.DomainEntity;
@@ -36,7 +37,7 @@ public class Book extends DomainEntity {
     private String name;
 
     @Column(name = "bok_price", nullable = false)
-    private Double price;
+    private BigDecimal price;
 
     @Column(name = "bok_active", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean active = false;

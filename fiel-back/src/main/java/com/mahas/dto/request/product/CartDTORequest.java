@@ -14,5 +14,5 @@ import lombok.Setter;
 public class CartDTORequest implements DTORequest {
     private Integer user;
     private Integer book;
-    private Integer quatity;
+    private Integer quantity;
 }

@@ -1,5 +1,6 @@
 package com.mahas.domain.sale;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.mahas.domain.DomainEntity;
@@ -31,7 +32,7 @@ public class PromotionalCoupon extends DomainEntity {
     private Integer id;
 
     @Column(name = "pco_value", nullable = false)
-    private Double value;
+    private BigDecimal value;
 
     @Column(name = "pco_used", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean used = false;

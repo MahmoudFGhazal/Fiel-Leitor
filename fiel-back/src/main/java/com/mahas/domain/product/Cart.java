@@ -1,18 +1,16 @@
 package com.mahas.domain.product;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.user.User;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -27,16 +25,18 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(CartId.class)
 public class Cart extends DomainEntity {
    
-    @Id
-    @ManyToOne
+    @EmbeddedId
+    private CartId id;
+
+    @MapsId("userId")
+    @ManyToOne(optional = false)
     @JoinColumn(name = "crt_usr_id", nullable = false)
     private User user;
 
-    @Id
-    @ManyToOne
+    @MapsId("bookId")
+    @ManyToOne(optional = false)
     @JoinColumn(name = "crt_bok_id", nullable = false)
     private Book book;
 
@@ -60,29 +60,5 @@ public class Cart extends DomainEntity {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = publishedAt = LocalDateTime.now();
-    }
-}
-
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-class CartId implements Serializable {
-    private Integer user;
-    private Integer book; 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CartId)) return false;
-        CartId that = (CartId) o;
-        return Objects.equals(user, that.user) &&
-               Objects.equals(book, that.book);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(user, book);
     }
 }
