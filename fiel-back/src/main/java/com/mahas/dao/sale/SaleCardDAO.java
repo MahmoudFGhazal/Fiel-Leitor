@@ -15,7 +15,7 @@ import com.mahas.domain.sale.SaleCard;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 @Component
 public class SaleCardDAO implements IDAO {
@@ -36,22 +36,39 @@ public class SaleCardDAO implements IDAO {
         Map<String, Object> params = new HashMap<>();
         StringBuilder where = new StringBuilder();
 
-        if (sc.getSale() != null && sc.getSale().getId() != null) { where.append(" AND sc.sale.id = :saleId"); params.put("saleId", sc.getSale().getId()); }
-        if (sc.getCard() != null && sc.getCard().getId() != null) { where.append(" AND sc.card.id = :cardId"); params.put("cardId", sc.getCard().getId()); }
+        if (sc.getSale() != null && sc.getSale().getId() != null) { 
+            where.append(" AND sc.sale.id = :saleId"); 
+            params.put("saleId", sc.getSale().getId()); 
+        }
+        if (sc.getCard() != null && sc.getCard().getId() != null) { 
+            where.append(" AND sc.card.id = :cardId"); 
+            params.put("cardId", sc.getCard().getId()); 
+        }
 
-        jpql.append(where); countJpql.append(where);
+        jpql.append(where); 
+        countJpql.append(where);
 
-        int page = request.getPage(); int limit = request.getLimit();
+        int page = request.getPage(); 
+        int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
-        Query query = entityManager.createQuery(jpql.toString(), SaleCard.class);
-        params.forEach(query::setParameter);
-        if (limit > 0) { query.setFirstResult(offset); query.setMaxResults(limit); }
+        TypedQuery<SaleCard> query = entityManager.createQuery(jpql.toString(), SaleCard.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            query.setParameter(e.getKey(), e.getValue());
+        }
+        if (limit > 0) {
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
+        }
 
         List<SaleCard> resultList = query.getResultList();
-        Query countQuery = entityManager.createQuery(countJpql.toString());
-        params.forEach(countQuery::setParameter);
-        int totalItems = ((Number) countQuery.getSingleResult()).intValue();
+
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql.toString(), Long.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            countQuery.setParameter(e.getKey(), e.getValue());
+        }
+
+        long totalItems = countQuery.getSingleResult();
         int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
 
         if (!resultList.isEmpty()) {
@@ -59,8 +76,11 @@ public class SaleCardDAO implements IDAO {
             else response.setEntities(new ArrayList<>(resultList));
         }
 
-        response.setPage(page); response.setLimit(limit);
-        response.setTotalItem(totalItems); response.setTotalPage(totalPage);
+        response.setPage(page); 
+        response.setLimit(limit);
+        response.setTotalItem((int) totalItems); 
+        response.setTotalPage(totalPage);
+        
         return response;
     }
 }

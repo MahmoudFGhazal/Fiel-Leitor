@@ -5,18 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.address.ResidenceType;
 
-import org.springframework.stereotype.Component;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 @Component
 public class ResidenceTypeDAO implements IDAO {
@@ -37,60 +36,54 @@ public class ResidenceTypeDAO implements IDAO {
         StringBuilder jpql = new StringBuilder("SELECT r FROM ResidenceType r WHERE 1=1");
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(r) FROM ResidenceType r WHERE 1=1");
 
-        Map<String, Object> parameters = new HashMap<>();
-        StringBuilder whereClause = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+        StringBuilder where = new StringBuilder();
 
         if (residenceType.getId() != null) {
-            whereClause.append(" AND r.id = :id");
-            parameters.put("id", residenceType.getId());
+            where.append(" AND r.id = :id");
+            params.put("id", residenceType.getId());
         }
         if (residenceType.getResidenceType() != null && !residenceType.getResidenceType().isBlank()) {
-            whereClause.append(" AND LOWER(r.typeResidence) LIKE LOWER(:typeResidence)");
-            parameters.put("typeResidence", "%" + residenceType.getResidenceType() + "%");
+            where.append(" AND LOWER(r.typeResidence) LIKE LOWER(:typeResidence)");
+            params.put("typeResidence", "%" + residenceType.getResidenceType() + "%");
         }
 
-        jpql.append(whereClause);
-        countJpql.append(whereClause);
+        jpql.append(where); 
+        countJpql.append(where);
 
-        int page = request.getPage();
+        int page = request.getPage(); 
         int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
-        try {
-            Query query = entityManager.createQuery(jpql.toString(), ResidenceType.class);
-            parameters.forEach(query::setParameter);
-
-            if (limit > 0) {
-                query.setFirstResult(offset);
-                query.setMaxResults(limit);
-            }
-
-            List<ResidenceType> resultList = query.getResultList();
-
-            Query countQuery = entityManager.createQuery(countJpql.toString());
-            parameters.forEach(countQuery::setParameter);
-            Number totalCount = (Number) countQuery.getSingleResult();
-            int totalItems = totalCount.intValue();
-
-            int totalPage = (int) Math.ceil((double) totalItems / limit);
-
-            if (!resultList.isEmpty()) {
-                if (limit == 1) {
-                    response.setEntity(resultList.get(0));
-                } else {
-                    response.setEntities(new ArrayList<>(resultList));
-                }
-            }
-
-            response.setPage(page);
-            response.setLimit(limit);
-            response.setTotalItem(totalItems);
-            response.setTotalPage(totalPage);
-
-        } catch (PersistenceException e) {
-            throw e;
+        TypedQuery<ResidenceType> query = entityManager.createQuery(jpql.toString(), ResidenceType.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            query.setParameter(e.getKey(), e.getValue());
+        }
+        if (limit > 0) {
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
         }
 
+        List<ResidenceType> resultList = query.getResultList();
+
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql.toString(), Long.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            countQuery.setParameter(e.getKey(), e.getValue());
+        }
+
+        long totalItems = countQuery.getSingleResult();
+        int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
+
+        if (!resultList.isEmpty()) {
+            if (limit == 1) response.setEntity(resultList.get(0));
+            else response.setEntities(new ArrayList<>(resultList));
+        }
+
+        response.setPage(page); 
+        response.setLimit(limit);
+        response.setTotalItem((int) totalItems); 
+        response.setTotalPage(totalPage);
+        
         return response;
     }
 }

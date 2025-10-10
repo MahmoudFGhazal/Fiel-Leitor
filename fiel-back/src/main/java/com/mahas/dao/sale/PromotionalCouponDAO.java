@@ -15,7 +15,7 @@ import com.mahas.domain.sale.PromotionalCoupon;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 @Component
 public class PromotionalCouponDAO implements IDAO {
@@ -45,19 +45,30 @@ public class PromotionalCouponDAO implements IDAO {
             params.put("used", coupon.getUsed()); 
         }
 
-        jpql.append(where); countJpql.append(where);
+        jpql.append(where); 
+        countJpql.append(where);
 
-        int page = request.getPage(); int limit = request.getLimit();
+        int page = request.getPage(); 
+        int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
-        Query query = entityManager.createQuery(jpql.toString(), PromotionalCoupon.class);
-        params.forEach(query::setParameter);
-        if (limit > 0) { query.setFirstResult(offset); query.setMaxResults(limit); }
+        TypedQuery<PromotionalCoupon> query = entityManager.createQuery(jpql.toString(), PromotionalCoupon.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            query.setParameter(e.getKey(), e.getValue());
+        }
+        if (limit > 0) {
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
+        }
 
         List<PromotionalCoupon> resultList = query.getResultList();
-        Query countQuery = entityManager.createQuery(countJpql.toString());
-        params.forEach(countQuery::setParameter);
-        int totalItems = ((Number) countQuery.getSingleResult()).intValue();
+
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql.toString(), Long.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            countQuery.setParameter(e.getKey(), e.getValue());
+        }
+
+        long totalItems = countQuery.getSingleResult();
         int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
 
         if (!resultList.isEmpty()) {
@@ -65,8 +76,11 @@ public class PromotionalCouponDAO implements IDAO {
             else response.setEntities(new ArrayList<>(resultList));
         }
 
-        response.setPage(page); response.setLimit(limit);
-        response.setTotalItem(totalItems); response.setTotalPage(totalPage);
+        response.setPage(page); 
+        response.setLimit(limit);
+        response.setTotalItem((int) totalItems); 
+        response.setTotalPage(totalPage);
+        
         return response;
     }
 }

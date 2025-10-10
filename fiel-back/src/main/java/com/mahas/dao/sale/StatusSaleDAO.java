@@ -15,7 +15,7 @@ import com.mahas.domain.sale.StatusSale;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 @Component
 public class StatusSaleDAO implements IDAO {
@@ -45,18 +45,30 @@ public class StatusSaleDAO implements IDAO {
             params.put("name", "%" + status.getName() + "%"); 
         }
 
-        jpql.append(where); countJpql.append(where);
+        jpql.append(where); 
+        countJpql.append(where);
 
-        int page = request.getPage(); int limit = request.getLimit(); int offset = (limit > 0) ? (page - 1) * limit : 0;
+        int page = request.getPage(); 
+        int limit = request.getLimit();
+        int offset = (limit > 0) ? (page - 1) * limit : 0;
 
-        Query query = entityManager.createQuery(jpql.toString(), StatusSale.class);
-        params.forEach(query::setParameter);
-        if (limit > 0) { query.setFirstResult(offset); query.setMaxResults(limit); }
+        TypedQuery<StatusSale> query = entityManager.createQuery(jpql.toString(), StatusSale.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            query.setParameter(e.getKey(), e.getValue());
+        }
+        if (limit > 0) {
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
+        }
 
         List<StatusSale> resultList = query.getResultList();
-        Query countQuery = entityManager.createQuery(countJpql.toString());
-        params.forEach(countQuery::setParameter);
-        int totalItems = ((Number) countQuery.getSingleResult()).intValue();
+
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql.toString(), Long.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            countQuery.setParameter(e.getKey(), e.getValue());
+        }
+
+        long totalItems = countQuery.getSingleResult();
         int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
 
         if (!resultList.isEmpty()) {
@@ -64,7 +76,11 @@ public class StatusSaleDAO implements IDAO {
             else response.setEntities(new ArrayList<>(resultList));
         }
 
-        response.setPage(page); response.setLimit(limit); response.setTotalItem(totalItems); response.setTotalPage(totalPage);
+        response.setPage(page); 
+        response.setLimit(limit);
+        response.setTotalItem((int) totalItems); 
+        response.setTotalPage(totalPage);
+        
         return response;
     }
 }

@@ -11,12 +11,14 @@ import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
+import com.mahas.domain.user.Card;
 import com.mahas.domain.user.User;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 @Component
 public class UserDAO implements IDAO {
@@ -36,75 +38,70 @@ public class UserDAO implements IDAO {
         StringBuilder jpql = new StringBuilder("SELECT u FROM User u WHERE 1=1");
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(u) FROM User u WHERE 1=1");
 
-        Map<String, Object> parameters = new HashMap<>();
-        StringBuilder whereClause = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+        StringBuilder where = new StringBuilder();
 
         if (user.getId() != null) {
-            whereClause.append(" AND u.id = :id");
-            parameters.put("id", user.getId());
+            where.append(" AND u.id = :id");
+            params.put("id", user.getId());
         }
         if (user.getName() != null && !user.getName().isEmpty()) {
-            whereClause.append(" AND LOWER(u.name) LIKE LOWER(:name)");
-            parameters.put("name", "%" + user.getName() + "%");
+            where.append(" AND LOWER(u.name) LIKE LOWER(:name)");
+            params.put("name", "%" + user.getName() + "%");
         }
         if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-            whereClause.append(" AND LOWER(u.email) = LOWER(:email)");
-            parameters.put("email", user.getEmail());
+            where.append(" AND LOWER(u.email) = LOWER(:email)");
+            params.put("email", user.getEmail());
         }
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            whereClause.append(" AND LOWER(u.password) = LOWER(:password)");
-            parameters.put("password", user.getPassword());
+            where.append(" AND LOWER(u.password) = LOWER(:password)");
+            params.put("password", user.getPassword());
         }
         if (user.getCpf() != null && !user.getCpf().isEmpty()) {
-            whereClause.append(" AND LOWER(u.cpf) = LOWER(:cpf)");
-            parameters.put("cpf", user.getCpf());
+            where.append(" AND LOWER(u.cpf) = LOWER(:cpf)");
+            params.put("cpf", user.getCpf());
         }
         if (user.getActive() != null) {
-            whereClause.append(" AND u.active = :active");
-            parameters.put("active", user.getActive());
+            where.append(" AND u.active = :active");
+            params.put("active", user.getActive());
         }
-        jpql.append(whereClause);
-        countJpql.append(whereClause);
 
-        int page = request.getPage();
+        jpql.append(where); 
+        countJpql.append(where);
+
+        int page = request.getPage(); 
         int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
-        try {
-            Query query = entityManager.createQuery(jpql.toString(), User.class);
-            parameters.forEach(query::setParameter);
-            
-            if (limit > 0) {
-                query.setFirstResult(offset);
-                query.setMaxResults(limit);
-            }
-
-            List<User> resultList = query.getResultList();
-
-            Query countQuery = entityManager.createQuery(countJpql.toString());
-            parameters.forEach(countQuery::setParameter);
-            Number totalCount = (Number) countQuery.getSingleResult();
-            int totalItems = totalCount.intValue();
-            
-            int totalPage = (int) Math.ceil((double) totalItems / limit);
-
-            if (!resultList.isEmpty()) {
-                if (limit == 1) {
-                    response.setEntity(resultList.get(0));
-                } else {
-                    response.setEntities(new ArrayList<>(resultList));
-                }
-            }
-
-            response.setPage(page);
-            response.setLimit(limit);
-            response.setTotalItem(totalItems);
-            response.setTotalPage(totalPage);
-
-        } catch (PersistenceException e) {
-            throw e;
+        TypedQuery<Card> query = entityManager.createQuery(jpql.toString(), Card.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            query.setParameter(e.getKey(), e.getValue());
+        }
+        if (limit > 0) {
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
         }
 
+        List<Card> resultList = query.getResultList();
+
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql.toString(), Long.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            countQuery.setParameter(e.getKey(), e.getValue());
+        }
+
+        long totalItems = countQuery.getSingleResult();
+        int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
+
+        if (!resultList.isEmpty()) {
+            if (limit == 1) response.setEntity(resultList.get(0));
+            else response.setEntities(new ArrayList<>(resultList));
+        }
+
+        response.setPage(page); 
+        response.setLimit(limit);
+        response.setTotalItem((int) totalItems); 
+        response.setTotalPage(totalPage);
+        
         return response;
     }
 

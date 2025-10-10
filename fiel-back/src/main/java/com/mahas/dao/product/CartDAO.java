@@ -14,13 +14,12 @@ import com.mahas.domain.SQLResponse;
 import com.mahas.domain.product.Book;
 import com.mahas.domain.product.Cart;
 import com.mahas.domain.product.CartId;
-import com.mahas.domain.product.Category;
 import com.mahas.domain.user.User;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 @Component
 public class CartDAO implements IDAO {
@@ -45,25 +44,36 @@ public class CartDAO implements IDAO {
             where.append(" AND c.user = :user"); 
             params.put("user", cart.getUser()); 
         }
-
         if (cart.getBook() != null) { 
             where.append(" AND c.book = :book"); 
             params.put("book", cart.getBook()); 
         }
 
-        jpql.append(where); countJpql.append(where);
+        jpql.append(where); 
+        countJpql.append(where);
 
-        int page = request.getPage(); int limit = request.getLimit();
+        int page = request.getPage(); 
+        int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
-        Query query = entityManager.createQuery(jpql.toString(), Cart.class);
-        params.forEach(query::setParameter);
-        if (limit > 0) { query.setFirstResult(offset); query.setMaxResults(limit); }
+        TypedQuery<Cart> query = entityManager.createQuery(jpql.toString(), Cart.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            query.setParameter(e.getKey(), e.getValue());
+        }
 
-        List<Category> resultList = query.getResultList();
-        Query countQuery = entityManager.createQuery(countJpql.toString());
-        params.forEach(countQuery::setParameter);
-        int totalItems = ((Number) countQuery.getSingleResult()).intValue();
+        if (limit > 0) {
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
+        }
+
+        List<Cart> resultList = query.getResultList();
+
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql.toString(), Long.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            countQuery.setParameter(e.getKey(), e.getValue());
+        }
+
+        long totalItems = countQuery.getSingleResult();
         int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
 
         if (!resultList.isEmpty()) {
@@ -71,8 +81,11 @@ public class CartDAO implements IDAO {
             else response.setEntities(new ArrayList<>(resultList));
         }
 
-        response.setPage(page); response.setLimit(limit);
-        response.setTotalItem(totalItems); response.setTotalPage(totalPage);
+        response.setPage(page); 
+        response.setLimit(limit);
+        response.setTotalItem((int) totalItems); 
+        response.setTotalPage(totalPage);
+
         return response;
     }
 

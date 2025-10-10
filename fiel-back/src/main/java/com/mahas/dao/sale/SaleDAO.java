@@ -15,7 +15,7 @@ import com.mahas.domain.sale.Sale;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 @Component
 public class SaleDAO implements IDAO {
@@ -36,32 +36,33 @@ public class SaleDAO implements IDAO {
         StringBuilder jpql = new StringBuilder("SELECT s FROM Sale s WHERE 1=1");
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(s) FROM Sale s WHERE 1=1");
 
-        Map<String, Object> parameters = new HashMap<>();
-        StringBuilder whereClause = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+        StringBuilder where = new StringBuilder();
 
         if (sale.getId() != null) {
-            whereClause.append(" AND s.id = :id");
-            parameters.put("id", sale.getId());
+            where.append(" AND s.id = :id");
+            params.put("id", sale.getId());
         }
         if (sale.getUser() != null && sale.getUser().getId() != null) {
-            whereClause.append(" AND s.user.id = :userId");
-            parameters.put("userId", sale.getUser().getId());
+            where.append(" AND s.user.id = :userId");
+            params.put("userId", sale.getUser().getId());
         }
         if (sale.getStatusSale() != null && sale.getStatusSale().getId() != null) {
-            whereClause.append(" AND s.statusSale.id = :statusId");
-            parameters.put("statusId", sale.getStatusSale().getId());
+            where.append(" AND s.statusSale.id = :statusId");
+            params.put("statusId", sale.getStatusSale().getId());
         }
 
-        jpql.append(whereClause);
-        countJpql.append(whereClause);
+        jpql.append(where); 
+        countJpql.append(where);
 
-        int page = request.getPage();
+        int page = request.getPage(); 
         int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
-        Query query = entityManager.createQuery(jpql.toString(), Sale.class);
-        parameters.forEach(query::setParameter);
-
+        TypedQuery<Sale> query = entityManager.createQuery(jpql.toString(), Sale.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            query.setParameter(e.getKey(), e.getValue());
+        }
         if (limit > 0) {
             query.setFirstResult(offset);
             query.setMaxResults(limit);
@@ -69,26 +70,24 @@ public class SaleDAO implements IDAO {
 
         List<Sale> resultList = query.getResultList();
 
-        Query countQuery = entityManager.createQuery(countJpql.toString());
-        parameters.forEach(countQuery::setParameter);
-        Number totalCount = (Number) countQuery.getSingleResult();
-        int totalItems = totalCount.intValue();
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql.toString(), Long.class);
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            countQuery.setParameter(e.getKey(), e.getValue());
+        }
 
+        long totalItems = countQuery.getSingleResult();
         int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
 
         if (!resultList.isEmpty()) {
-            if (limit == 1) {
-                response.setEntity(resultList.get(0));
-            } else {
-                response.setEntities(new ArrayList<>(resultList));
-            }
+            if (limit == 1) response.setEntity(resultList.get(0));
+            else response.setEntities(new ArrayList<>(resultList));
         }
 
-        response.setPage(page);
+        response.setPage(page); 
         response.setLimit(limit);
-        response.setTotalItem(totalItems);
+        response.setTotalItem((int) totalItems); 
         response.setTotalPage(totalPage);
-
+        
         return response;
     }
 }

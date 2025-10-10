@@ -15,7 +15,7 @@ import com.mahas.domain.product.Book;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 @Component
 public class BookDAO implements IDAO {
@@ -63,7 +63,7 @@ public class BookDAO implements IDAO {
         int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
-        Query query = entityManager.createQuery(jpql.toString(), Book.class);
+        TypedQuery<Book> query = entityManager.createQuery(jpql.toString(), Book.class);
         parameters.forEach(query::setParameter);
 
         if (limit > 0) {
@@ -73,10 +73,9 @@ public class BookDAO implements IDAO {
 
         List<Book> resultList = query.getResultList();
 
-        Query countQuery = entityManager.createQuery(countJpql.toString());
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql.toString(), Long.class);
         parameters.forEach(countQuery::setParameter);
-        Number totalCount = (Number) countQuery.getSingleResult();
-        int totalItems = totalCount.intValue();
+        long totalItems = countQuery.getSingleResult();
 
         int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
 
@@ -90,7 +89,7 @@ public class BookDAO implements IDAO {
 
         response.setPage(page);
         response.setLimit(limit);
-        response.setTotalItem(totalItems);
+        response.setTotalItem((int) totalItems);
         response.setTotalPage(totalPage);
 
         return response;
