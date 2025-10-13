@@ -6,6 +6,8 @@ import com.mahas.domain.DomainEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,8 +32,9 @@ public class StatusSale extends DomainEntity {
     @Column(name = "ssa_id")
     private Integer id;
 
-    @Column(name = "ssa_name", nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ssa_name", nullable = false, unique = true)
+    private StatusSaleName name;
 
     @Column(name = "ssa_created_at", nullable = false)
     private LocalDateTime createdAt;

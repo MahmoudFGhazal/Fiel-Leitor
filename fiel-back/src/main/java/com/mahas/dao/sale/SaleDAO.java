@@ -5,16 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.sale.Sale;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 @Component
@@ -90,4 +91,29 @@ public class SaleDAO implements IDAO {
         
         return response;
     }
+
+    @Override
+    public SQLResponse save(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof Sale)){
+            return null;
+        }
+
+        Sale sale = (Sale) entity;
+
+        try {
+            entityManager.persist(sale);
+
+            entityManager.flush();
+
+            response.setEntity(sale);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
 }

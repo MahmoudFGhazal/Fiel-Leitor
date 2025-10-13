@@ -34,7 +34,7 @@ INSERT INTO categories (cat_name, cat_active) VALUES
 ('Psiquiatria', 1);
 
 INSERT INTO books 
-(bok_name, bok_price, bok_active, bok_stock, bok_cat_id, published_at) 
+(bok_name, bok_price, bok_active, bok_stock, bok_cat_id) 
 VALUES
 ('Introdução à Medicina', 89.90, 1, 15, 1),
 ('Farmacologia Básica', 129.50, 1, 10, 2),
@@ -46,3 +46,13 @@ VALUES
 ('Ginecologia e Obstetrícia', 199.90, 1, 6, 8),
 ('Cirurgia Geral: Princípios e Prática', 249.00, 1, 4, 9),
 ('Psiquiatria Clínica', 169.00, 1, 10, 10);
+
+INSERT INTO status_sale (ssa_name) VALUES
+('PROCESSING'),
+('APPROVED'),
+('DECLINED'),
+('IN_TRANSIT'),
+('DELIVERED'),
+('EXCHANGE_REQUESTED'),
+('EXCHANGE_AUTHORIZED'),
+('EXCHANGED');

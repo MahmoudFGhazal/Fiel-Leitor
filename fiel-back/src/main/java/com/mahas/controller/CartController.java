@@ -1,15 +1,5 @@
 package com.mahas.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.mahas.command.pre.base.product.BaseCartCommand;
 import com.mahas.command.pre.rules.VerifyCreateCart;
 import com.mahas.command.pre.rules.VerifyDeleteCart;
@@ -19,6 +9,16 @@ import com.mahas.domain.FacadeResponse;
 import com.mahas.dto.request.product.CartDTORequest;
 import com.mahas.dto.request.product.cart.UpdateCartRequest;
 import com.mahas.facade.IFacade;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -62,7 +62,7 @@ public class CartController {
     @PostMapping
     public ResponseEntity<FacadeResponse> updateCart(@RequestBody UpdateCartRequest body) {
         FacadeResponse lastResponse = new FacadeResponse();
-        System.out.println(body.getAddIds().length);
+
         if (body.getAddIds() != null) {
             for (CartDTORequest piece : body.getAddIds()) {
                 if (piece == null) continue;
@@ -99,7 +99,6 @@ public class CartController {
 
         if (body.getDeleteIds() != null) {
             for (CartDTORequest piece : body.getDeleteIds()) {
-                System.out.println("tch");
                 if (piece == null) continue;
 
                 CartDTORequest dto = new CartDTORequest();

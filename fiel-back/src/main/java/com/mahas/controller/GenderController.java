@@ -1,18 +1,17 @@
 package com.mahas.controller;
 
-import com.mahas.command.pre.base.user.BaseGenderCommand;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.dto.request.user.GenderDTORequest;
-import com.mahas.facade.IFacade;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mahas.command.pre.base.user.BaseGenderCommand;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.dto.request.user.GenderDTORequest;
+import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -25,15 +24,10 @@ public class GenderController {
     private BaseGenderCommand baseGenderCommand;
 
     @GetMapping("/all")
-    public ResponseEntity<FacadeResponse> getGenders(
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "limit", required = false) Integer limit
-        ) {
+    public ResponseEntity<FacadeResponse> getGenders() {
         FacadeRequest request = new FacadeRequest();
 
         request.setEntity(new GenderDTORequest());
-        request.setLimit(limit);
-        request.setPage(page);
         request.setPreCommand(baseGenderCommand);
 
         FacadeResponse response = facade.query(request);

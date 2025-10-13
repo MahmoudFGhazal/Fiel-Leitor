@@ -5,16 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
+import com.mahas.domain.product.Book;
+import com.mahas.domain.sale.Sale;
 import com.mahas.domain.sale.SaleBook;
+import com.mahas.domain.sale.SaleBookId;
+
+import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 @Component
@@ -82,5 +86,51 @@ public class SaleBookDAO implements IDAO {
         response.setTotalPage(totalPage);
         
         return response;
+    }
+
+    @Override
+    public SQLResponse save(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if (!(entity instanceof SaleBook)) {
+            return null;
+        }
+
+        SaleBook saleBook = (SaleBook) entity;
+
+        try {
+            ensureEmbeddedId(saleBook);
+
+            if (saleBook.getSale() != null && saleBook.getSale().getId() != null) {
+                saleBook.setSale(entityManager.getReference(Sale.class, saleBook.getSale().getId()));
+            }
+            if (saleBook.getBook() != null && saleBook.getBook().getId() != null) {
+                saleBook.setBook(entityManager.getReference(Book.class, saleBook.getBook().getId()));
+            }
+
+            entityManager.persist(saleBook);
+            entityManager.flush();
+
+            response.setEntity(saleBook);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
+    private void ensureEmbeddedId(SaleBook saleCard) {
+        if (saleCard.getId() == null) {
+            saleCard.setId(new SaleBookId());
+        }
+
+        if (saleCard.getSale() != null && saleCard.getSale().getId() != null) {
+            saleCard.getId().setSaleId(saleCard.getSale().getId());
+        }
+        
+        if (saleCard.getBook() != null && saleCard.getBook().getId() != null) {
+            saleCard.getId().setBookId(saleCard.getBook().getId());
+        }
     }
 }

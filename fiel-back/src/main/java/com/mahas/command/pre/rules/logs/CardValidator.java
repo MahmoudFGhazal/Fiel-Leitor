@@ -1,5 +1,10 @@
 package com.mahas.command.pre.rules.logs;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.mahas.command.pre.base.user.BaseCardCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -7,6 +12,7 @@ import com.mahas.domain.user.Card;
 import com.mahas.domain.user.User;
 import com.mahas.dto.request.user.CardDTORequest;
 import com.mahas.dto.response.DTOResponse;
+import com.mahas.dto.response.user.CardDTOResponse;
 import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
 
@@ -137,6 +143,46 @@ public class CardValidator {
 
         if (year > currentYear + 15) {
             throw new ValidationException("Ano de expiração muito distante no futuro");
+        }
+    }
+
+    public void isUser(Integer user, Integer card) {
+        isUser(user, new Integer[]{ card });
+    }
+
+    public void isUser(Integer user, Integer... cards) {
+        CardDTORequest cardReq = new CardDTORequest();
+        cardReq.setUser(user);
+
+        FacadeRequest request = new FacadeRequest();
+        request.setEntity(cardReq);
+        request.setPreCommand(baseCardCommand);
+
+        FacadeResponse response = facade.query(request);
+
+        if(response.getData().getEntities() == null) {
+            throw new ValidationException("Cartão não existe");
+        }
+
+        List<DTOResponse> dtoList = response.getData().getEntities();
+        if (dtoList == null) dtoList = Collections.emptyList();
+
+        if (dtoList.isEmpty()) {
+            throw new ValidationException("Usuário não possui cartões cadastrados");
+        }
+
+        List<CardDTOResponse> cardsRes = dtoList.stream()
+            .map(dto -> (CardDTOResponse) dto)
+            .toList();
+
+        Set<Integer> userCardIds = cardsRes.stream()
+            .map(CardDTOResponse::getId)
+            .collect(Collectors.toSet());
+
+        for (Integer cardId : cards) {
+            if (!userCardIds.contains(cardId)) {
+                throw new ValidationException("O cartão de ID " + cardId + " não pertence ao usuário");
+            }
         }
     }
 }

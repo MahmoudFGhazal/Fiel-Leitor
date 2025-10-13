@@ -21,6 +21,8 @@ public class SaleDTORequest implements DTORequest {
     private LocalDate deliveryDate;
     private Integer status;
     private Integer address;
+    private SaleCardDTORequest[] cards;
+    private SaleBookDTORequest[] books;
     private Integer traderCoupon;
-    private Integer promotionalCoupon;   
+    private Integer[] promotionalCoupons;   
 }

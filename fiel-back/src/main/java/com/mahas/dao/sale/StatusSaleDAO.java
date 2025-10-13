@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.sale.StatusSale;
+
+import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -41,7 +41,7 @@ public class StatusSaleDAO implements IDAO {
             params.put("id", status.getId()); 
         }
         if (status.getName() != null) { 
-            where.append(" AND LOWER(s.name) LIKE LOWER(:name)"); 
+            where.append(" AND UPPER(s.name) LIKE UPPER(:name)"); 
             params.put("name", "%" + status.getName() + "%"); 
         }
 

@@ -21,7 +21,7 @@ public class StatusSaleDTOResponse implements DTOResponse {
     public void mapFromEntity(DomainEntity entity) {
         if (entity instanceof StatusSale s) {
             this.id = s.getId();
-            this.name = s.getName();
+            this.name = s.getName() != null ? s.getName().getValue() : null;
         }
     }
 }

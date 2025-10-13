@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
-import com.mahas.domain.user.Card;
 import com.mahas.domain.user.User;
+
+import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -73,7 +72,7 @@ public class UserDAO implements IDAO {
         int limit = request.getLimit();
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
-        TypedQuery<Card> query = entityManager.createQuery(jpql.toString(), Card.class);
+        TypedQuery<User> query = entityManager.createQuery(jpql.toString(), User.class);
         for (Map.Entry<String, Object> e : params.entrySet()) {
             query.setParameter(e.getKey(), e.getValue());
         }
@@ -82,7 +81,7 @@ public class UserDAO implements IDAO {
             query.setMaxResults(limit);
         }
 
-        List<Card> resultList = query.getResultList();
+        List<User> resultList = query.getResultList();
 
         TypedQuery<Long> countQuery = entityManager.createQuery(countJpql.toString(), Long.class);
         for (Map.Entry<String, Object> e : params.entrySet()) {

@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules.logs;
 
+import com.mahas.command.pre.base.sale.BaseSaleCommand;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.address.Address;
 import com.mahas.domain.sale.PromotionalCoupon;
 import com.mahas.domain.sale.Sale;
@@ -7,11 +10,20 @@ import com.mahas.domain.sale.StatusSale;
 import com.mahas.domain.sale.TraderCoupon;
 import com.mahas.domain.user.User;
 import com.mahas.dto.request.sale.SaleDTORequest;
+import com.mahas.dto.response.DTOResponse;
+import com.mahas.facade.Facade;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SaleValidator {
+    @Autowired
+    Facade facade;
+
+    @Autowired
+    BaseSaleCommand baseSaleCommand;
+   
     public Sale toEntity(SaleDTORequest dto) {
         if (dto == null) return null;
 
@@ -44,12 +56,31 @@ public class SaleValidator {
             sale.setTraderCoupon(t);
         }
 
-        if (dto.getPromotionalCoupon() != null) {
-            PromotionalCoupon p = new PromotionalCoupon();
-            p.setId(dto.getPromotionalCoupon());
-            sale.setPromotionalCoupon(p);
+        if (dto.getPromotionalCoupons() != null) {
+            for(Integer promotionalCoupon : dto.getPromotionalCoupons()) {
+                PromotionalCoupon p = new PromotionalCoupon();
+                p.setId(promotionalCoupon);
+                sale.setPromotionalCoupon(p);
+            }
         }
 
         return sale;
     }
+
+    public boolean saleExists(Integer id) {
+        SaleDTORequest sale = new SaleDTORequest();
+        sale.setId(id);
+
+        FacadeRequest request = new FacadeRequest();
+        request.setEntity(sale);
+        request.setLimit(1);
+        request.setPreCommand(baseSaleCommand);
+
+        FacadeResponse response = facade.query(request);
+
+        DTOResponse entity = response.getData().getEntity();
+        
+        return entity != null; 
+    }
+
 }

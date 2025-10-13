@@ -11,10 +11,14 @@ import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
+import com.mahas.domain.sale.Sale;
 import com.mahas.domain.sale.SaleCard;
+import com.mahas.domain.sale.SaleCardId;
+import com.mahas.domain.user.Card;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 @Component
@@ -82,5 +86,53 @@ public class SaleCardDAO implements IDAO {
         response.setTotalPage(totalPage);
         
         return response;
+    }
+
+    @Override
+    public SQLResponse save(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if (!(entity instanceof SaleCard)) {
+            return null;
+        }
+
+        SaleCard saleCard = (SaleCard) entity;
+
+        try {
+            System.out.println(saleCard.getCard());
+            System.out.println(saleCard.getSale());
+            ensureEmbeddedId(saleCard);
+
+            if (saleCard.getSale() != null && saleCard.getSale().getId() != null) {
+                saleCard.setSale(entityManager.getReference(Sale.class, saleCard.getSale().getId()));
+            }
+            if (saleCard.getCard() != null && saleCard.getCard().getId() != null) {
+                saleCard.setCard(entityManager.getReference(Card.class, saleCard.getCard().getId()));
+            }
+
+            entityManager.persist(saleCard);
+            entityManager.flush();
+
+            response.setEntity(saleCard);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
+    private void ensureEmbeddedId(SaleCard saleCard) {
+        if (saleCard.getId() == null) {
+            saleCard.setId(new SaleCardId());
+        }
+
+        if (saleCard.getSale() != null && saleCard.getSale().getId() != null) {
+            saleCard.getId().setSaleId(saleCard.getSale().getId());
+        }
+        
+        if (saleCard.getCard() != null && saleCard.getCard().getId() != null) {
+            saleCard.getId().setCardId(saleCard.getCard().getId());
+        }
     }
 }

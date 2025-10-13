@@ -1,8 +1,5 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CartValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -12,6 +9,9 @@ import com.mahas.domain.product.Cart;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.product.CartDTORequest;
 import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyDeleteCart implements IPreCommand {
@@ -30,7 +30,7 @@ public class VerifyDeleteCart implements IPreCommand {
         }
 
         CartDTORequest cartRequest = (CartDTORequest) entity;
-        System.out.println(cartRequest.getBook());
+
         communValidator.validateNotBlack(cartRequest.getUser() == null ? null : cartRequest.getUser().toString(), "Usuario");
         communValidator.validateNotBlack(cartRequest.getBook() == null ? null : cartRequest.getBook().toString(), "Livro");
 

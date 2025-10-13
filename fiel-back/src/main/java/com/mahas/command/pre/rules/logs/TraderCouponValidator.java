@@ -1,13 +1,27 @@
 package com.mahas.command.pre.rules.logs;
 
+import com.mahas.command.pre.base.sale.BaseTraderCouponCommand;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.sale.Sale;
 import com.mahas.domain.sale.TraderCoupon;
 import com.mahas.dto.request.sale.TraderCouponDTORequest;
+import com.mahas.dto.response.DTOResponse;
+import com.mahas.dto.response.sale.TraderCouponDTOResponse;
+import com.mahas.exception.ValidationException;
+import com.mahas.facade.Facade;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TraderCouponValidator {
+    @Autowired
+    Facade facade;
+
+    @Autowired
+    BaseTraderCouponCommand baseTraderCouponCommand;
+   
     public TraderCoupon toEntity(TraderCouponDTORequest dto) {
         if (dto == null) return null;
 
@@ -23,5 +37,29 @@ public class TraderCouponValidator {
         }
 
         return tc;
+    }
+
+    public void isUsed(Integer id) {
+        FacadeRequest req = new FacadeRequest();
+
+        TraderCouponDTORequest traderCouponReq = new TraderCouponDTORequest();
+        traderCouponReq.setId(id);
+
+        req.setEntity(traderCouponReq);
+        req.setPreCommand(baseTraderCouponCommand);
+        req.setLimit(1);
+
+        FacadeResponse res = facade.query(req);
+
+        if(res.getData().getEntity() == null) {
+            throw new ValidationException("Cupom de troca não encontrado");
+        }
+
+        DTOResponse entity = res.getData().getEntity();
+        TraderCouponDTOResponse traderCouponRes = (TraderCouponDTOResponse) entity;
+
+        if(traderCouponRes.getUsed() == true) {
+            throw new ValidationException("Cupom de troca já utilizado");
+        }
     }
 }

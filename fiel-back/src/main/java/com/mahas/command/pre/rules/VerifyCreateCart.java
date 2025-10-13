@@ -38,7 +38,7 @@ public class VerifyCreateCart implements IPreCommand {
         }
 
         CartDTORequest cartRequest = (CartDTORequest) entity;
-        System.out.println("oi");
+
         communValidator.validateNotBlack(cartRequest.getUser() == null ? null : cartRequest.getUser().toString(), "Usuario");
         communValidator.validateNotBlack(cartRequest.getBook() == null ? null : cartRequest.getBook().toString(), "Livro");
         communValidator.validateNotBlack(cartRequest.getQuantity().toString(), "Quantidade");        
