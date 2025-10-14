@@ -35,6 +35,12 @@ export interface CardResponse {
     expYear: string | null,
 }
 
+export interface CartResponse {
+    user: UserResponse | null,   
+    book: BookResponse | null,   
+    quantity: number | null
+}
+
 export interface CategoryResponse {
     id: number | null,
     name: string | null,
@@ -46,14 +52,59 @@ export interface GenderResponse {
     gender: string | null
 }
 
+export interface PromotionalCouponResponse {
+    id: number | null,
+    value: number | null,
+    used: boolean | null      
+}
+
 export interface ResidenceTypeResponse {
     id: number | null,
     residenceType: string | null
 }
 
+export interface SaleBookResponse {
+    sale: SaleResponse | null,    
+    book: BookResponse | null,   
+    freight: number | null,
+    percent: number | null
+}
+
+export interface SaleCardResponse {
+    sale: SaleResponse | null,   
+    card: number | null, 
+    percent: number | null,
+    price: number | null
+}
+
+export interface SaleResponse {
+  id: number | null,
+  user: UserResponse | null,                   
+  freight: number | null,
+  deliveryDate: Date | null,
+  status: StatusSaleResponse | null,           
+  address: AddressResponse | null,           
+  cards: SaleCardResponse[] | null,            
+  books: SaleBookResponse | null,            
+  traderCoupon: TraderCouponResponse | null,    
+  promotinalCoupons: PromotionalCouponResponse[] | null 
+}
+
+export interface StatusSaleResponse {
+    id: number | null,
+    name: string | null  
+}
+
 export interface StreetTypeResponse {
     id: number | null,
     streetType: string | null
+}
+
+export interface TraderCouponResponse {
+    id: number | null,
+    sale: SaleResponse | null,    
+    value: number | null,
+    user: boolean | null      
 }
 
 export interface UserResponse {

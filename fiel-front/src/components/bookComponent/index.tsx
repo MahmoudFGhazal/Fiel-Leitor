@@ -1,4 +1,5 @@
 'use client'
+import { AddCartRequest } from '@/api/dtos/requestDTOs';
 import { BookResponse } from '@/api/dtos/responseDTOs';
 import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
@@ -18,7 +19,6 @@ interface Props {
 export default function BookComponent({ bookId }: Props) {
     const { currentUser } = useGlobal();
     const searchParams = useSearchParams();
-    const bookIdParam = searchParams.get('bookId');
     
     const [book, setBook] = useState<BookResponse | null>(null);
     const [quantity, setQuantity] = useState(1);
@@ -43,7 +43,7 @@ export default function BookComponent({ bookId }: Props) {
                     return;
                 }
             } catch (err) {
-                console.error("Erro ao carregar cartões", err);
+                console.error("Erro ao carregar livros", err);
             }
         }
 
@@ -58,8 +58,33 @@ export default function BookComponent({ bookId }: Props) {
         setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
     };
 
-    const handleAddToCart = () => {
-        
+    const handleAddToCart = async () => {
+        if (!book || !currentUser) return;
+
+        try {
+            const payload: AddCartRequest = {
+                userId: currentUser,
+                addIds: [
+                    {
+                        user: null,
+                        book: book.id,
+                        quantity: quantity
+                    }
+                ]
+            };
+
+            const res = await api.post<ApiResponse>('/cart/add', { data: payload });
+
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
+
+            alert("Livro adicionado ao carrinho!");
+        } catch (err) {
+            console.error("Erro ao adicionar ao carrinho", err);
+            alert("Erro ao adicionar livro ao carrinho.");
+        }
     };
 
     const handlePurchase = () => {

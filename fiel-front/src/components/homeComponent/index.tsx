@@ -14,7 +14,7 @@ export default function HomeComponent() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await api.get<ApiResponse>('/book/all');
+                const res = await api.get<ApiResponse>('/book/active');
                 
                 if (res.message) {
                     alert(res.message);

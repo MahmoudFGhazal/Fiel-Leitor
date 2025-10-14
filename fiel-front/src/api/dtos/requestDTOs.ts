@@ -35,6 +35,12 @@ export interface CardRequest {
     expYear: string | null
 }
 
+export interface CartRequest {
+    user: number | null,
+    book: number | null,
+    quantity: number | null
+}
+
 export interface CategoryRequest {
     id: number | null,
     name: string | null,
@@ -46,14 +52,59 @@ export interface GenderRequest {
     gender: string | null
 }
 
+export interface PromotionalCouponRequest {
+    id: number | null,
+    value: number | null,
+    used: boolean | null
+}
+
 export interface ResidenceTypeRequest {
     id: number | null,
     residenceType: string | null
 }
 
+export interface SaleBookRequest {
+    sale: number | null,
+    book: number | null,
+    freight: number | null,
+    percent: Date | null,
+}
+
+export interface SaleCardRequest {
+    sale: number | null,
+    card: number | null,
+    percent: number | null,
+    price: number | null,
+}
+
+export interface SaleRequest {
+    id: number | null,
+    user: number | null,
+    freight: number | null,
+    deliveryDate: Date | null,
+    status: number | null,
+    address: number | null,
+    cards: SaleCardRequest[] | null,
+    books: SaleBookRequest | null,
+    traderCoupon: number | null,
+    promotinalCoupons: number[] | null
+}
+
+export interface StatusSaleRequest {
+    id: number | null,
+    name: string | null
+}
+
 export interface StreetTypeRequest {
     id: number | null,
     streetType: string | null
+}
+
+export interface TraderCouponRequest {
+    id: number | null,
+    sale: number | null,
+    value: number | null,
+    user: boolean | null
 }
 
 export interface UserRequest {
@@ -72,4 +123,16 @@ export interface UserRequest {
 export interface SignRequest {
     user: UserRequest,
     address: AddressRequest
+}
+
+export interface UpdateCartRequest {
+    userId: number,
+    addIds: CartRequest[],
+    updateIds: CartRequest[],
+    deleteIds: CartRequest[],
+}
+
+export interface AddCartRequest {
+    userId: number,
+    addIds: CartRequest[]
 }

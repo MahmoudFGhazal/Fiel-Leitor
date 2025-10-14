@@ -1,5 +1,5 @@
-import { AddressRequest, CardRequest, UserRequest } from "@/api/dtos/requestDTOs";
-import { AddressResponse, CardResponse, UserResponse } from "@/api/dtos/responseDTOs";
+import { AddressRequest, CardRequest, CartRequest, UserRequest } from "@/api/dtos/requestDTOs";
+import { AddressResponse, CardResponse, CartResponse, UserResponse } from "@/api/dtos/responseDTOs";
 
 
 export function toRequestUser(user: UserResponse | null): UserRequest {
@@ -93,5 +93,21 @@ export function toRequestCard(card: CardResponse | null): CardRequest {
         holder: card.holder,
         expMonth: card.expMonth,
         expYear: card.expYear
+    }
+}
+
+export function toRequestCart(cart: CartResponse | null): CartRequest {
+    if(!cart) {
+        return {
+            user: null,
+            book: null,
+            quantity: null
+        };
+    }
+    
+    return {
+        user: cart.user?.id ?? null,
+        book: cart.book?.id ?? null,
+        quantity: cart.quantity ?? null
     }
 }
