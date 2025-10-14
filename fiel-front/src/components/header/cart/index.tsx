@@ -18,6 +18,7 @@ export default function CartSidebar({ onClose }: Props) {
     const [items, setItems] = useState<CartResponse[]>([]);
     const [itemsChanges, setItemsChanges] = useState<CartResponse[]>([]);
     const [diffState, setDiffState] = useState<any>(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -131,7 +132,36 @@ export default function CartSidebar({ onClose }: Props) {
         }
     }, [items]);
 
-    const handlePurchase = () => {
+    const saveCartChanges = async () => {
+        const diff = getDifferences();
+        if (!diff) return;
+
+        try {
+            setIsSaving(true);
+            const res = await api.post<ApiResponse>('/cart', { data: diff });
+
+            if (res.message) {
+                alert(res.message);
+            } else {
+                console.log("Carrinho atualizado com sucesso!");
+                setItemsChanges([...items]); 
+            }
+        } catch (err) {
+            console.error("Erro ao atualizar carrinho:", err);
+            alert("Erro ao salvar alterações do carrinho.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleClose = async () => {
+        await saveCartChanges();
+        onClose();
+    };
+
+    const handlePurchase = async () => {
+        await saveCartChanges();
+
         const queryString = new URLSearchParams({
             items: JSON.stringify(items)
         }).toString();
@@ -140,11 +170,11 @@ export default function CartSidebar({ onClose }: Props) {
     };
 
     return (
-        <div className={styles.overlay} onClick={onClose}>
-            <div className={styles.cartSidebar}>
+        <div className={styles.overlay} onClick={handleClose}>
+            <div className={styles.cartSidebar} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.cartHeader}>
                     <h3>Seu Carrinho</h3>
-                    <button onClick={onClose} className={styles.closeButton}>×</button>
+                    <button onClick={handleClose} className={styles.closeButton}>x</button>
                 </div>
                 <div className={styles.cartItems}>
                     {items.length === 0 && <p>Seu carrinho está vazio.</p>}
