@@ -17,7 +17,6 @@ export default function CartSidebar({ onClose }: Props) {
     const { currentUser } = useGlobal();
     const [items, setItems] = useState<CartResponse[]>([]);
     const [itemsChanges, setItemsChanges] = useState<CartResponse[]>([]);
-    const [diffState, setDiffState] = useState<any>(null);
     const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
@@ -120,8 +119,6 @@ export default function CartSidebar({ onClose }: Props) {
             deleteIds
         };
 
-        setDiffState(diff);
-
         return diff;
     };
 
@@ -162,8 +159,14 @@ export default function CartSidebar({ onClose }: Props) {
     const handlePurchase = async () => {
         await saveCartChanges();
 
+        const saleItems = items.map(item => ({
+            bookId: item.book?.id ?? 0,
+            quantity: item.quantity ?? 1,
+            fromCart: true 
+        }));
+
         const queryString = new URLSearchParams({
-            items: JSON.stringify(items)
+            items: JSON.stringify(saleItems)
         }).toString();
 
         window.location.href = `/sale?${queryString}`;

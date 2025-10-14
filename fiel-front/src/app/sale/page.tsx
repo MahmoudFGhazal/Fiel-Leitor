@@ -32,7 +32,7 @@ export default function Sale() {
         async function fetchBooks(parsedItems: SaleItemParam[]) {
             try {
                 const bookIds = parsedItems.map(i => i.bookId);
-                const res = await api.get<ApiResponse>('/book/list', { params: { ids: bookIds } });
+                const res = await api.get<ApiResponse>('/book/list', { params: { bookIds: bookIds } });
 
                 if (res.message) {
                     alert(res.message);

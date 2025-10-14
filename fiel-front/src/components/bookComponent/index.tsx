@@ -5,7 +5,6 @@ import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
 import { useGlobal } from '@/context/GlobalContext';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import bookImage from '../../../public/book.png';
 import Button from '../buttonComponents/button';
@@ -18,7 +17,6 @@ interface Props {
 
 export default function BookComponent({ bookId }: Props) {
     const { currentUser } = useGlobal();
-    const searchParams = useSearchParams();
     
     const [book, setBook] = useState<BookResponse | null>(null);
     const [quantity, setQuantity] = useState(1);
@@ -90,17 +88,16 @@ export default function BookComponent({ bookId }: Props) {
     const handlePurchase = () => {
         if (!book) return;
 
-        const cartItems = [
+        const saleItems = [
             {
-                id: book.id,
-                name: book.name,
+                bookId: book.id ?? 0,
                 quantity: quantity,
-                price: book.price
+                fromCart: false 
             }
         ];
 
         const queryString = new URLSearchParams({
-            items: JSON.stringify(cartItems)
+            items: JSON.stringify(saleItems)
         }).toString();
 
         window.location.href = `/sale?${queryString}`;

@@ -1,9 +1,9 @@
 'use client';
+import Button from '@/components/buttonComponents/button';
+import QuantityButtons from '@/components/quantityButton';
+import { useMemo, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import styles from './cartItemsList.module.css';
-import QuantityButtons from '@/components/quantityButton';
-import Button from '@/components/buttonComponents/button';
-import { useMemo, useState } from 'react';
 
 type CartItem = {
   id: number;
@@ -21,14 +21,11 @@ interface CartItemsListProps {
 
 export default function CartItemsList({ items, onIncrease, onDecrease, onRemove }: CartItemsListProps) {
     const [couponCode, setCouponCode] = useState('');
-    const [couponValue, setCouponValue] = useState(0);
 
     const totalPrice = useMemo(
         () => items.reduce((total, item) => total + (item.price ?? 0) * item.quantity, 0),
         [items]
     );
-
-    const finalPrice = Math.max(totalPrice - couponValue, 0); // evita negativo
 
     if (items.length === 0) {
         return <p>Seu carrinho está vazio.</p>;
