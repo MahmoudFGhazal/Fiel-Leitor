@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
@@ -15,6 +13,8 @@ import com.mahas.domain.sale.Sale;
 import com.mahas.domain.sale.SaleCard;
 import com.mahas.domain.sale.SaleCardId;
 import com.mahas.domain.user.Card;
+
+import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -100,8 +100,6 @@ public class SaleCardDAO implements IDAO {
         SaleCard saleCard = (SaleCard) entity;
 
         try {
-            System.out.println(saleCard.getCard());
-            System.out.println(saleCard.getSale());
             ensureEmbeddedId(saleCard);
 
             if (saleCard.getSale() != null && saleCard.getSale().getId() != null) {

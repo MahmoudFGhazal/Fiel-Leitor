@@ -55,7 +55,7 @@ public class CartValidator {
         FacadeResponse response = facade.query(request);
 
         DTOResponse entity = response.getData().getEntity();
-        
+
         return entity != null; 
     }
 }

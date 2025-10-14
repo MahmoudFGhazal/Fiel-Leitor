@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.sale.SaleCard;
 import com.mahas.dto.response.DTOResponse;
-import com.mahas.dto.response.user.CardDTOResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SaleCardDTOResponse implements DTOResponse {
     private SaleDTOResponse sale;
-    private CardDTOResponse card;
+    private Integer card;
     private BigDecimal percent;
 
     @Override
@@ -30,8 +29,7 @@ public class SaleCardDTOResponse implements DTOResponse {
             }
 
             if (sc.getCard() != null) {
-                this.card = new CardDTOResponse();
-                this.card.mapFromEntity(sc.getCard());
+                this.card = sc.getCard().getId();
             }
 
             this.percent = sc.getPercent();
