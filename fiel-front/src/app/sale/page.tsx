@@ -1,4 +1,5 @@
 'use client'
+import { SaleRequest } from '@/api/dtos/requestDTOs';
 import { BookResponse } from '@/api/dtos/responseDTOs';
 import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
@@ -6,6 +7,8 @@ import Button from '@/components/buttonComponents/button';
 import CartItemsList from '@/components/cartItemsList';
 import SelectAddressMethod from '@/components/selectAddressMethod';
 import SelectPaymentMethod from '@/components/selectPaymentMethod';
+import { useGlobal } from '@/context/GlobalContext';
+import showToast from '@/utils/showToast';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import styles from './page.module.css';
@@ -27,6 +30,9 @@ export default function Sale() {
     const itemsParam = searchParams.get('items');
     const [items, setItems] = useState<SaleItemDetail[]>([]);
     const [total, setTotal] = useState(0);
+    const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
+    const [selectedCards, setSelectedCards] = useState<{ card: number; percent: number }[]>([]);
+    const { currentUser } = useGlobal();
 
     useEffect(() => {
         async function fetchBooks(parsedItems: SaleItemParam[]) {
@@ -85,12 +91,58 @@ export default function Sale() {
         setItems(prev => prev.filter(item => item.book.id !== bookId));
     };
 
+    const sendSale = async() => {
+        if(!currentUser) { 
+            alert("Nenhum usuario logado");
+            return;
+        }
+
+        try {
+            const req: SaleRequest = {
+                id: null,
+                user: currentUser,
+                address: selectedAddressId,
+                cards: selectedCards.map(c => ({
+                    sale: null,
+                    card: c.card,
+                    percent: c.percent/100,
+                    price: null 
+                })),
+                books: items.map(i => ({
+                    sale: null,
+                    book: i.book.id,
+                    freight: null,
+                    percent: null,
+                    quantity: i.quantity
+                })),
+                freight: null,
+                deliveryDate: null,
+                status: null,
+                traderCoupon: null,
+                promotinalCoupons: null
+            };
+
+            const res = await api.post<ApiResponse>('/sale', { data: req });
+            
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
+
+            showToast("Pedido Enviado com Sucesso");
+
+
+        } catch (err) {
+            console.error("Erro ao carregar carrinho", err);
+        }
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.content}>
                 <div>
-                    <SelectAddressMethod />
-                    <SelectPaymentMethod purchaseTotal={total} />
+                    <SelectAddressMethod onSelect={setSelectedAddressId} />
+                    <SelectPaymentMethod purchaseTotal={total} onSelect={setSelectedCards} />
                 </div>
 
                 <CartItemsList
@@ -110,7 +162,7 @@ export default function Sale() {
                 <Button
                     type='button'
                     text='Finalizar Compra'
-
+                    onClick={() => sendSale()}
                 />
             </div>
         </div>

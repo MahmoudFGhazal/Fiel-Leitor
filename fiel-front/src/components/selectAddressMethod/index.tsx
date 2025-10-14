@@ -1,43 +1,64 @@
 'use client'
-import { useEffect, useState } from 'react';
-import styles from './selectAddressMethod.module.css';
-import { AddressData } from '@/modal/addressModal';
+import { AddressRequest } from '@/api/dtos/requestDTOs';
+import { AddressResponse } from '@/api/dtos/responseDTOs';
+import { ApiResponse } from '@/api/objects';
+import api from '@/api/route';
 import Button from '@/components/buttonComponents/button';
+import { useGlobal } from '@/context/GlobalContext';
+import { useEffect, useState } from 'react';
 import PopUpAddress from '../forms/popUpAddress';
+import styles from './selectAddressMethod.module.css';
 
-export default function SelectAddressMethod() {
+export default function SelectAddressMethod({ onSelect }: { onSelect?: (addressId: number) => void }) {
     const [showPopup, setShowPopup] = useState(false);
-    const [selectedAddress, setSelectedAddress] = useState<AddressData | null>(null);
-    const [addresses, setAddresses] = useState<AddressData[]>([]);
-    const [editedAddress, setEditedAddress] = useState<AddressData | null>(null);
+    const [selectedAddress, setSelectedAddress] = useState<AddressResponse | null>(null);
+    const [addresses, setAddresses] = useState<AddressResponse[]>([]);
+    const [editedAddress, setEditedAddress] = useState<AddressRequest  | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFormEditable, setIsFormEditable] = useState(false);
+    const { currentUser } = useGlobal();
 
-    // Carrega endereços do usuário
     useEffect(() => {
-        const localUser = localStorage.getItem('currentUser');
-        const sessionUser = sessionStorage.getItem('currentUser');
+        if(!currentUser) return;
 
-        const currentUser = localUser
-            ? JSON.parse(localUser)
-            : sessionUser
-            ? JSON.parse(sessionUser)
-            : null;
+        async function fetchData() {
+            try {
+                const res = await api.get<ApiResponse>('/address/user', { params: { userId: currentUser } });
+                
+                if (res.message) {
+                    alert(res.message);
+                    return;
+                }
 
-        if (currentUser && currentUser.addresses) {
-            setAddresses(currentUser.addresses);
-            if (currentUser.addresses.length > 0) setSelectedAddress(currentUser.addresses[0]);
+                const data = res.data;
+                const entities = (data.entities ?? data.entities) as AddressResponse[] | null;
+
+                if(!entities || entities.length === 0) return;
+
+                setAddresses(entities);
+
+                const mainAddress = entities.find(addr => addr.principal === true);
+
+                setSelectedAddress(mainAddress ?? entities[0]);
+                if (mainAddress?.id && onSelect) onSelect(mainAddress.id);
+            } catch (err) {
+                console.error("Erro ao carregar endereços", err);
+            }
         }
-    }, []);
+        
+        fetchData();
+    }, [currentUser]);
 
-    const handleSelectAddress = (address: AddressData) => {
+    const handleSelectAddress = (address: AddressResponse) => {
         setSelectedAddress(address);
         setShowPopup(false);
+        if (onSelect && address.id) onSelect(address.id);
     };
 
     const openCreateAddressModal = () => {
-        const newAddress: AddressData = {
+        const newAddress: AddressRequest = {
             id: Date.now(),
+            nickname: '',
             street: '',
             number: '',
             neighborhood: '',
@@ -46,45 +67,48 @@ export default function SelectAddressMethod() {
             country: '',
             zip: '',
             complement: '',
-            typeResidence: null,
-            typeStreet: null
+            residenceType: null,
+            streetType: null,
+            user: null,
+            principal: null
         };
+
         setEditedAddress(newAddress);
         setIsFormEditable(true);
         setIsModalOpen(true);
     };
 
-    const saveAddress = () => {
+    const saveAddress = async () => {
         if (!editedAddress) return;
 
-        const confirmed = confirm("Deseja salvar este endereço?");
-        if (!confirmed) return;
+        if (!confirm("Deseja salvar este endereço?")) return;
 
-        const exists = addresses.some(addr => addr.id === editedAddress.id);
-        let updatedAddresses;
-        if (exists) {
-            updatedAddresses = addresses.map(addr =>
-                addr.id === editedAddress.id ? editedAddress : addr
-            );
-        } else {
-            updatedAddresses = [...addresses, editedAddress];
+        try {
+            const res = await api.post<ApiResponse>('/address', { data: editedAddress });
+            
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
+
+            const dataCreate = res.data;
+            const entityCreate = (dataCreate.entity ?? dataCreate.entity) as AddressResponse | null;
+
+            if(!entityCreate) return;
+
+            const updatedAddresses = addresses.some(addr => addr.id === entityCreate.id)
+                ? addresses.map(addr => (addr.id === entityCreate.id ? entityCreate : addr))
+                : [...addresses, entityCreate];
+
+            setAddresses(updatedAddresses);
+            setSelectedAddress(entityCreate);
+
+            setIsModalOpen(false);
+            setIsFormEditable(false);
+            setShowPopup(false);
+        } catch (err) {
+            console.error("Erro ao salvar endereço", err);
         }
-
-        setAddresses(updatedAddresses);
-
-        const localUser = localStorage.getItem('currentUser');
-        const sessionUser = sessionStorage.getItem('currentUser');
-        const currentUser = localUser ? JSON.parse(localUser) : sessionUser ? JSON.parse(sessionUser) : null;
-        if (currentUser) {
-            currentUser.addresses = updatedAddresses;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
-        }
-
-        setIsFormEditable(false);
-        setIsModalOpen(false);
-        setSelectedAddress(editedAddress);
-        setShowPopup(false);
     };
 
     return (
@@ -92,8 +116,9 @@ export default function SelectAddressMethod() {
             <div className={styles.addressCard}>
                 <h3>
                     {selectedAddress
-                        ? `${selectedAddress.street}, ${selectedAddress.number} - ${selectedAddress.neighborhood}, ${selectedAddress.city}/${selectedAddress.state} - ${selectedAddress.country}`
-                        : "Nenhum endereço selecionado"}
+                        ? selectedAddress.nickname
+                        : 'Nenhum endereço selecionado'
+                    }
                 </h3>
                 <button onClick={() => setShowPopup(true)} className={styles.changeButton}>
                     Escolher outro
@@ -111,7 +136,7 @@ export default function SelectAddressMethod() {
                                         onClick={() => handleSelectAddress(address)}
                                         className={styles.addressOption}
                                     >
-                                        {`${address.street}, ${address.number} - ${address.neighborhood}, ${address.city}/${address.state} - ${address.country}`}
+                                        {address.nickname}
                                     </button>
                                 </li>
                             ))}
@@ -133,21 +158,23 @@ export default function SelectAddressMethod() {
 
                         <PopUpAddress
                             address={editedAddress}
-                            onChange={(field, value) => setEditedAddress(prev => prev ? { ...prev, [field]: value } : null)}
+                            onChange={(field, value) =>
+                                setEditedAddress(prev => prev ? { ...prev, [field]: value } : null)
+                            }
                             disable={!isFormEditable}
                         />
 
                         <div className={styles.modalActions}>
                             {isFormEditable ? (
-                                <>
+                                <div className={styles.actionButtonsCreate}>
                                     <Button type="button" onClick={saveAddress} text="Salvar" />
                                     <Button type="button" onClick={() => setIsModalOpen(false)} text="Cancelar" />
-                                </>
+                                </div>
                             ) : (
-                                <>
+                                <div className={styles.actionButtonsCreate}>
                                     <Button type="button" onClick={() => setIsFormEditable(true)} text="Editar" />
                                     <Button type="button" onClick={() => setIsModalOpen(false)} text="Fechar" />
-                                </>
+                                </div>
                             )}
                         </div>
                     </div>

@@ -43,6 +43,9 @@
 }
 
 .popup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -121,4 +124,17 @@
 .actionButtons {
     display: flex;
     gap: 10px;
+}
+
+.popupActions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.actionButtonsCreate {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 10px
 }

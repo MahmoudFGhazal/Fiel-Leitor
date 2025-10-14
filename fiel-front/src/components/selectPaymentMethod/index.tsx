@@ -1,100 +1,153 @@
 'use client'
+import { CardResponse } from '@/api/dtos/responseDTOs';
+import { ApiResponse } from '@/api/objects';
+import api from '@/api/route';
 import Button from '@/components/buttonComponents/button';
-import { CardData } from '@/modal/cardModal';
+import { useGlobal } from '@/context/GlobalContext';
+import { toRequestCard } from '@/utils/convertDTOs';
 import { useEffect, useState } from 'react';
 import PopUpCard from '../forms/popUpCard';
 import styles from './selectPaymentMethod.module.css';
 
 interface SelectedCard {
-    card: CardData;
-    amount: number;
+    card: number | null;
+    last4: string | null;
+    percent: number;
 }
 
-export default function SelectPaymentMethod({ purchaseTotal = 100 }: { purchaseTotal: number }) {
+export default function SelectPaymentMethod({
+        purchaseTotal = 100,
+        onSelect
+    }: {
+        purchaseTotal: number;
+        onSelect?: (cards: { card: number; percent: number }[]) => void;
+    }) {
     const [showPopup, setShowPopup] = useState(false);
-    const [cards, setCards] = useState<CardData[]>([]);
+    const [cards, setCards] = useState<CardResponse[]>([]);
     const [selectedCards, setSelectedCards] = useState<SelectedCard[]>([]);
-    const [editedCard, setEditedCard] = useState<CardData | null>(null);
+    const [editedCard, setEditedCard] = useState<CardResponse | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isFormEditable, setIsFormEditable] = useState(false);
+    const { currentUser } = useGlobal();
 
-    // Carrega cartões do usuário
     useEffect(() => {
-        const localUser = localStorage.getItem('currentUser');
-        const sessionUser = sessionStorage.getItem('currentUser');
-        const currentUser = localUser ? JSON.parse(localUser) : sessionUser ? JSON.parse(sessionUser) : null;
+        if(!currentUser) return;
 
-        if (currentUser && currentUser.cards) {
-            setCards(currentUser.cards);
-        }
-    }, []);
+        async function fetchData() {
+            try {
+                const res = await api.get<ApiResponse>('/card/user', { params: { userId: currentUser } });
+                
+                if (res.message) {
+                    alert(res.message);
+                    return;
+                }
 
-    const toggleCardSelection = (card: CardData) => {
-        setSelectedCards(prev => {
-            const exists = prev.find(sc => sc.card.id === card.id);
-            if (exists) {
-                return prev.filter(sc => sc.card.id !== card.id);
+                const data = res.data;
+                const entities = (data.entities ?? data.entities) as CardResponse[] | null;
+
+                if(!entities || entities.length === 0) return;
+
+                setCards(entities);
+
+                const mainCard = entities.find(card => card.principal === true);
+                
+                const initial: SelectedCard[] = [
+                    {
+                        card: mainCard?.id ?? 0,
+                        last4: mainCard?.last4 ?? '',
+                        percent: 100
+                    }
+                ];
+                
+                setSelectedCards(initial);
+            } catch (err) {
+                console.error("Erro ao carregar endereços", err);
             }
-            return [...prev, { card, amount: 0 }];
+        }
+        
+        fetchData();
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (onSelect) {
+            const validCards = selectedCards
+                .filter(sc => sc.card !== null)
+                .map(sc => ({ card: sc.card as number, percent: sc.percent }));
+            onSelect(validCards);
+        }
+    }, [selectedCards]);
+
+    const toggleCardSelection = (card: CardResponse) => {
+        if (!card.id) return;
+
+        setSelectedCards(prev => {
+            const exists = prev.find(sc => sc.card === card.id);
+
+            if (exists) {
+                return prev.filter(sc => sc.card !== card.id);
+            }
+
+            return [...prev, { card: card.id, last4: card.last4, percent: 0 }];
         });
     };
 
-    const updateCardAmount = (cardId: number, amount: number) => {
+    const updateCardPercent = (cardId: number | null, percent: number) => {
+        if (!cardId) return;
         setSelectedCards(prev =>
             prev.map(sc =>
-                sc.card.id === cardId ? { ...sc, amount } : sc
+                sc.card === cardId ? { ...sc, percent } : sc
             )
         );
     };
 
     const validatePayments = () => {
-        const sum = selectedCards.reduce((acc, sc) => acc + sc.amount, 0);
-        const allAbove10 = selectedCards.every(sc => sc.amount >= 10);
-        return sum === purchaseTotal && allAbove10;
+        const sum = selectedCards.reduce((acc, sc) => acc + sc.percent, 0);
+        const allAbove10 = selectedCards.every(sc => sc.percent >= 10);
+        return sum === 100 && allAbove10;
     };
 
     const openCreateCardModal = () => {
-        const newCard: CardData = {
-            id: Date.now(),
-            nickname: '',
-            number: '',
-            holderName: '',
-            expiration: '',
-            cvv: ''
+        const newCard: CardResponse = {
+            id: null,
+            user: null,
+            principal: false,
+            bin: '',
+            last4: '',
+            holder: '',
+            expMonth: '',
+            expYear: ''
         };
+
         setEditedCard(newCard);
-        setIsFormEditable(true);
         setIsModalOpen(true);
     };
 
-    const saveCard = () => {
+    const saveCard = async () => {
         if (!editedCard) return;
+        if (!confirm('Deseja salvar este cartão?')) return;
 
-        const confirmed = confirm("Deseja salvar este cartão?");
-        if (!confirmed) return;
+        try {
+            const cardReq = toRequestCard(editedCard);
+            const res = await api.post<ApiResponse>('/card', { data: cardReq });
 
-        const exists = cards.some(c => c.id === editedCard.id);
-        let updatedCards;
-        if (exists) {
-            updatedCards = cards.map(c => c.id === editedCard.id ? editedCard : c);
-        } else {
-            updatedCards = [...cards, editedCard];
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
+
+            const entity = (res.data.entity ?? null) as CardResponse | null;
+            if (!entity) return;
+
+            const updatedCards = cards.some(c => c.id === entity.id)
+                ? cards.map(c => (c.id === entity.id ? entity : c))
+                : [...cards, entity];
+
+            setCards(updatedCards);
+            setIsModalOpen(false);
+            setShowPopup(false);
+        } catch (err) {
+            console.error('Erro ao salvar cartão', err);
+            alert('Erro ao salvar cartão.');
         }
-
-        setCards(updatedCards);
-
-        const localUser = localStorage.getItem('currentUser');
-        const sessionUser = sessionStorage.getItem('currentUser');
-        const currentUser = localUser ? JSON.parse(localUser) : sessionUser ? JSON.parse(sessionUser) : null;
-        if (currentUser) {
-            currentUser.cards = updatedCards;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
-        }
-
-        setIsFormEditable(false);
-        setIsModalOpen(false);
-        setShowPopup(false);
     };
 
     return (
@@ -102,10 +155,21 @@ export default function SelectPaymentMethod({ purchaseTotal = 100 }: { purchaseT
             <div className={styles.paymentCard}>
                 <h3>
                     {selectedCards.length > 0
-                        ? selectedCards.map(sc => `${sc.card.nickname} - **** ${sc.card.number.slice(-4)} (R$${sc.amount})`).join(', ')
-                        : "Nenhum cartão selecionado"}
+                        ? selectedCards.map(sc =>
+                              `Cartão **** ${sc.last4 ?? ''} - ${sc.percent}% (${(
+                                  (sc.percent / 100) *
+                                  purchaseTotal
+                              ).toLocaleString('pt-BR', {
+                                  style: 'currency',
+                                  currency: 'BRL'
+                              })})`
+                          ).join(', ')
+                        : 'Nenhum cartão selecionado'}
                 </h3>
-                <button onClick={() => setShowPopup(true)} className={styles.changeButton}>
+                <button
+                    onClick={() => setShowPopup(true)}
+                    className={styles.changeButton}
+                >
                     Selecionar Cartões
                 </button>
             </div>
@@ -116,40 +180,84 @@ export default function SelectPaymentMethod({ purchaseTotal = 100 }: { purchaseT
                         <h4>Escolha os cartões e valores</h4>
                         <ul className={styles.paymentList}>
                             {cards.map(card => {
-                                const selected = selectedCards.find(sc => sc.card.id === card.id);
+                                const selected = selectedCards.find(
+                                    sc => sc.card === card.id
+                                );
+                                const value =
+                                    selected && purchaseTotal
+                                        ? (selected.percent / 100) *
+                                          purchaseTotal
+                                        : 0;
                                 return (
-                                    <li key={card.id}>
-                                        <label className={styles.paymentOption}>
+                                    <li key={card.id} className={styles.paymentOption}>
+                                        <label className={styles.nameCard}>
                                             <input
                                                 type="checkbox"
                                                 checked={!!selected}
-                                                onChange={() => toggleCardSelection(card)}
+                                                onChange={() =>
+                                                    toggleCardSelection(card)
+                                                }
                                             />
-                                            {`${card.nickname} - **** **** **** ${card.number.slice(-4)}`}
-                                        
-                                            {selected && (
+                                            {`**** ${card.last4}`}
+                                        </label>
+
+                                        {selected && (
+                                            <div className={styles.valueRow}>
                                                 <input
                                                     type="number"
                                                     min={10}
-                                                    placeholder="Valor"
-                                                    value={selected.amount}
-                                                    onChange={(e) => updateCardAmount(card.id, Number(e.target.value))}
+                                                    max={100}
+                                                    placeholder="%"
+                                                    value={selected.percent}
+                                                    onChange={e =>
+                                                        updateCardPercent(
+                                                            card.id,
+                                                            Number(
+                                                                e.target.value
+                                                            )
+                                                        )
+                                                    }
                                                     className={styles.amountInput}
                                                 />
-                                            )}
-                                        </label>
+                                                <span className={styles.valueDisplay}>
+                                                    {(value).toLocaleString(
+                                                        'pt-BR',
+                                                        {
+                                                            style: 'currency',
+                                                            currency: 'BRL'
+                                                        }
+                                                    )}
+                                                </span>
+                                            </div>
+                                        )}
                                     </li>
                                 );
                             })}
                         </ul>
+
                         <div className={styles.popupActions}>
                             <p>Total da compra: R${purchaseTotal}</p>
                             <p>
-                                Soma atual: R${selectedCards.reduce((acc, sc) => acc + sc.amount, 0)}
-                                {validatePayments() ? " ✅ válido" : " ❌ inválido"}
+                                Soma atual:{' '}
+                                {selectedCards.reduce(
+                                    (acc, sc) => acc + sc.percent,
+                                    0
+                                )}
+                                %{' '}
+                                {validatePayments()
+                                    ? '✅ válido'
+                                    : '❌ inválido'}
                             </p>
-                            <Button type="button" onClick={openCreateCardModal} text="Adicionar Novo Cartão" />
-                            <Button type="button" onClick={() => setShowPopup(false)} text="Fechar" />
+                            <Button
+                                type="button"
+                                onClick={openCreateCardModal}
+                                text="Adicionar Novo Cartão"
+                            />
+                            <Button
+                                type="button"
+                                onClick={() => setShowPopup(false)}
+                                text="Fechar"
+                            />
                         </div>
                     </div>
                 </div>
@@ -158,28 +266,21 @@ export default function SelectPaymentMethod({ purchaseTotal = 100 }: { purchaseT
             {isModalOpen && editedCard && (
                 <div className={styles.modalBackdrop}>
                     <div className={styles.modal}>
-                        <div className={styles.titleContent}>
-                            <h3>{isFormEditable ? 'Criar/Editar Cartão' : 'Visualizar Cartão'}</h3>
-                        </div>
-
-                        <PopUpCard
-                            card={editedCard}
-                            onChange={(field, value) => setEditedCard(prev => prev ? { ...prev, [field]: value } : null)}
-                            disable={!isFormEditable}
-                        />
+                        <PopUpCard card={toRequestCard(editedCard)} onChange={saveCard} disable={false} />
 
                         <div className={styles.modalActions}>
-                            {isFormEditable ? (
-                                <>
-                                    <Button type="button" onClick={saveCard} text="Salvar" />
-                                    <Button type="button" onClick={() => setIsModalOpen(false)} text="Cancelar" />
-                                </>
-                            ) : (
-                                <>
-                                    <Button type="button" onClick={() => setIsFormEditable(true)} text="Editar" />
-                                    <Button type="button" onClick={() => setIsModalOpen(false)} text="Fechar" />
-                                </>
-                            )}
+                            <div className={styles.actionButtonsCreate}>
+                                <Button
+                                    type="button"
+                                    onClick={saveCard}
+                                    text="Salvar"
+                                />
+                                <Button
+                                    type="button"
+                                    onClick={() => setIsModalOpen(false)}
+                                    text="Cancelar"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
