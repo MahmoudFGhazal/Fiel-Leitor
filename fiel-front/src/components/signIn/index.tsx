@@ -46,7 +46,8 @@ export default function SignInComponent() {
             state: "",
             country: "",
             streetType: null,
-            residenceType: null
+            residenceType: null,
+            principal: null
         }
     });
 

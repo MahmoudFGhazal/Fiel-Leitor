@@ -130,8 +130,7 @@ export default function Sale() {
             }
 
             showToast("Pedido Enviado com Sucesso");
-
-
+            window.location.href = "/";
         } catch (err) {
             console.error("Erro ao carregar carrinho", err);
         }

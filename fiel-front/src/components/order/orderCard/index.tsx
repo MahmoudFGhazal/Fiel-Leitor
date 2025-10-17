@@ -1,37 +1,36 @@
 'use client'
+import { SaleBookResponse, SaleResponse } from '@/api/dtos/responseDTOs';
+import { useEffect, useState } from 'react';
 import OrderItem from '../orderItem';
 import styles from './orderCard.module.css';
 
-type Item = {
-  name: string;
-  quantity: number;
-  image: string;
-};
 
-type OrderCardProps = {
-  orderNumber: string;
-  date: string;
-  total: string;
-  items: Item[];
-};
+export default function OrderCard({ sale }: { sale: SaleResponse }) {
+    const [total, setTotal] = useState<number>(0);
+    const [books, setBooks] = useState<SaleBookResponse[]>(sale.books ?? []);
+    
+    useEffect(() => {
+        if (!sale?.books?.length) return;
 
-export default function OrderCard({ orderNumber, date, total, items }: OrderCardProps) {
+        const sum = sale.books.reduce((acc, book) => acc + (book.price ?? 0), 0);
+        setTotal(sum);
+    }, [sale]);
+
     return (
         <div className={styles.orderCard}>
             <div className={styles.orderHeader}>
                 <div>
-                    <p><strong>Pedido realizado:</strong> {date}</p>
-                    <p><strong>Total:</strong> {total}</p>
+                    <p><strong>Pedido realizado:</strong> 14/10/2025</p>
+                    <p><strong>Total:</strong> R$ {total.toFixed(2)}</p>
                 </div>
                 <div>
-                    <p><strong>Pedido nº</strong> {orderNumber}</p>
-                    <button>Fatura</button>
+                    <p><strong>Pedido nº</strong> {sale.id}</p>
                 </div>
             </div>
 
             <div className={styles.itemsList}>
-                {items.map((item, index) => (
-                    <OrderItem key={index} {...item} />
+                {sale.books?.map((book, index) => (
+                    <OrderItem key={index} book={book} />
                 ))}
             </div>
         </div>

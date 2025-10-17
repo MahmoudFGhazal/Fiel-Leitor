@@ -8,9 +8,9 @@ import Button from "@/components/buttonComponents/button";
 import PopUpAddress from '@/components/forms/popUpAddress';
 import { useGlobal } from '@/context/GlobalContext';
 import showToast from '@/utils/showToast';
-import { toRequestAddress } from '@/utils/toRequest';
 import { useEffect, useState } from "react";
 import styles from './addressConfig.module.css';
+import { toRequestAddress } from '@/utils/convertDTOs';
 
 export default function AddressConfig() {
     const { currentUser } = useGlobal();

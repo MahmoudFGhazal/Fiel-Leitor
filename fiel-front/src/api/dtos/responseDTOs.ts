@@ -66,15 +66,14 @@ export interface ResidenceTypeResponse {
 export interface SaleBookResponse {
     sale: SaleResponse | null,    
     book: BookResponse | null,   
-    freight: number | null,
-    percent: number | null
+    price: number | null,
+    quantity: number | null
 }
 
 export interface SaleCardResponse {
     sale: SaleResponse | null,   
     card: number | null, 
     percent: number | null,
-    price: number | null
 }
 
 export interface SaleResponse {
@@ -85,7 +84,7 @@ export interface SaleResponse {
   status: StatusSaleResponse | null,           
   address: AddressResponse | null,           
   cards: SaleCardResponse[] | null,            
-  books: SaleBookResponse | null,            
+  books: SaleBookResponse[] | null,            
   traderCoupon: TraderCouponResponse | null,    
   promotinalCoupons: PromotionalCouponResponse[] | null 
 }

@@ -35,8 +35,8 @@ public class VerifyCreateCard implements IPreCommand {
 
         CardDTORequest cardRequest = (CardDTORequest) entity;
 
-        communValidator.validateNotBlack(cardRequest.getBin(), "Número do cartão incompleto");
-        communValidator.validateNotBlack(cardRequest.getLast4(), "Número do cartão incompleto");
+        communValidator.validateNotBlack(cardRequest.getBin(), "Número do cartão");
+        communValidator.validateNotBlack(cardRequest.getLast4(), "Número do cartão");
         communValidator.validateNotBlack(cardRequest.getHolder(), "Titular");
         communValidator.validateNotBlack(cardRequest.getExpMonth(), "Mês de expiração");
         communValidator.validateNotBlack(cardRequest.getExpYear(), "Ano de expiração");

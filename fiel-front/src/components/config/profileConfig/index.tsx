@@ -6,9 +6,9 @@ import api from '@/api/route';
 import ActionButton from '@/components/buttonComponents/actionButton';
 import UserFormEdit from '@/components/forms/userFormEdit';
 import { useGlobal } from '@/context/GlobalContext';
-import { toRequestUser } from '@/utils/toRequest';
 import { useEffect, useState } from "react";
 import styles from './profileConfig.module.css';
+import { toRequestUser } from '@/utils/convertDTOs';
 
 export default function ProfileConfig() {
     const { currentUser } = useGlobal();
