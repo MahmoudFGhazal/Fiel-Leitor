@@ -14,6 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -50,9 +52,13 @@ public class Sale extends DomainEntity {
     @JoinColumn(name = "sal_ssa_id", nullable = false)
     private StatusSale statusSale;
 
-    @ManyToOne
-    @JoinColumn(name = "sal_tco_id")
-    private TraderCoupon traderCoupon;
+    @ManyToMany
+    @JoinTable(
+        name = "sales_trader_coupons",
+        joinColumns = @JoinColumn(name = "sac_sal_id"),
+        inverseJoinColumns = @JoinColumn(name = "sac_tco_id")
+    )
+    private java.util.Set<TraderCoupon> traderCoupons = new java.util.HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "sal_pco_id")
