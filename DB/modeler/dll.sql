@@ -128,7 +128,7 @@ CREATE TABLE categories
      cat_id           UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     cat_name         VARCHAR2 (255)  NOT NULL , 
+     cat_category         VARCHAR2 (255)  NOT NULL , 
      cat_active       UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                     DEFAULT 1 , 

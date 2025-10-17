@@ -37,7 +37,7 @@ CREATE TABLE street_types (
 
 CREATE TABLE categories (
     cat_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    cat_name VARCHAR(255) NOT NULL,
+    cat_category VARCHAR(255) NOT NULL,
     cat_active TINYINT(1) DEFAULT 1,
     cat_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     cat_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -118,7 +118,7 @@ CREATE TABLE cards (
     car_holder VARCHAR(255) NOT NULL,
     car_exp_month VARCHAR(8) NOT NULL,
     car_exp_year VARCHAR(8) NOT NULL,
-    car_brand VARCHAR(20) NOT NULL,
+    car_brand VARCHAR(20),
     car_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     car_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     car_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -165,7 +165,7 @@ CREATE TABLE carts (
 
 CREATE TABLE status_sale (
     ssa_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    ssa_name VARCHAR(100) NOT NULL,
+    ssa_status VARCHAR(100) NOT NULL,
     ssa_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ssa_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     ssa_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -212,13 +212,15 @@ CREATE TABLE sales_cards (
     CONSTRAINT fk_sales_cards_cards FOREIGN KEY (sca_car_id) REFERENCES cards (car_id)
 );
 
-ALTER TABLE sales
-    ADD CONSTRAINT fk_sales_trade_coupon
-        FOREIGN KEY (sal_tco_id) REFERENCES trader_coupons (tco_id),
-    ADD CONSTRAINT fk_sales_promotional_coupon
-        FOREIGN KEY (sal_pco_id) REFERENCES promotional_coupons (pco_id);
+CREATE TABLE sales_trader_coupons (
+  sat_sal_id BIGINT NOT NULL,
+  sat_tco_id BIGINT NOT NULL,
+  PRIMARY KEY (sat_sal_id, sat_tco_id),
+  CONSTRAINT sat_sal_FK FOREIGN KEY (sat_sal_id) REFERENCES sales (sal_id),
+  CONSTRAINT sat_pco_FK FOREIGN KEY (sat_tco_id) REFERENCES trader_coupons (tco_id)
+);
 
 ALTER TABLE trader_coupons
-    ADD CONSTRAINT fk_trade_coupons_sales
+    ADD CONSTRAINT fk_trader_coupons_sales
         FOREIGN KEY (tco_sal_id) REFERENCES sales (sal_id);
         
