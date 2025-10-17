@@ -1,5 +1,14 @@
 package com.mahas.command.pre.rules.logs;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.base.sale.BaseSaleCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -12,9 +21,6 @@ import com.mahas.domain.user.User;
 import com.mahas.dto.request.sale.SaleDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.Facade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SaleValidator {
@@ -50,18 +56,27 @@ public class SaleValidator {
             sale.setAddress(a);
         }
 
-        if (dto.getTraderCoupon() != null) {
-            TraderCoupon t = new TraderCoupon();
-            t.setId(dto.getTraderCoupon());
-            sale.setTraderCoupon(t);
+        if (dto.getPromotionalCoupon() != null) {
+            PromotionalCoupon p = new PromotionalCoupon();
+            p.setId(dto.getPromotionalCoupon());
+            sale.setPromotionalCoupon(p);
         }
 
-        if (dto.getPromotionalCoupons() != null) {
-            for(Integer promotionalCoupon : dto.getPromotionalCoupons()) {
-                PromotionalCoupon p = new PromotionalCoupon();
-                p.setId(promotionalCoupon);
-                sale.setPromotionalCoupon(p);
-            }
+        Integer[] ids = dto.getTraderCoupons();
+
+        if (ids != null && ids.length > 0) {
+            Set<TraderCoupon> coupons = Arrays.stream(ids)
+                .filter(Objects::nonNull)
+                .map(id -> {
+                    TraderCoupon t = new TraderCoupon();
+                    t.setId(id);
+                    return t;
+                })
+                .collect(Collectors.toCollection(LinkedHashSet::new)); // evita duplicados e mantém ordem de inserção
+
+            sale.setTraderCoupons(coupons);
+        } else {
+            sale.getTraderCoupons().clear();
         }
 
         return sale;

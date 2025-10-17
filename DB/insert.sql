@@ -275,13 +275,13 @@ INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
 SELECT s.sal_id, b.bok_id, 1, b.bok_price
 FROM sales s
 JOIN books b ON b.bok_name='Pediatria Essencial'
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
+WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
 ORDER BY s.sal_id DESC LIMIT 1;
 
 INSERT INTO sales_cards (sca_sal_id, sca_car_id, sca_percent)
 SELECT s.sal_id, c.car_id, 100.00
 FROM sales s
-JOIN cards c ON c.car_usr_id = s.sal_cli_id AND c.car_principal=1
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
+JOIN cards c ON c.car_usr_id = s.sal_usr_id AND c.car_principal=1
+WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
 ORDER BY s.sal_id DESC LIMIT 1;
 

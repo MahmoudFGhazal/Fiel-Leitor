@@ -2,6 +2,9 @@ package com.mahas.dto.response.sale;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.sale.Sale;
@@ -25,7 +28,7 @@ public class SaleDTOResponse implements DTOResponse {
     private LocalDate deliveryDate;
     private StatusSaleDTOResponse statusSale;
     private PromotionalCouponDTOResponse promotionalCoupon;
-    private TraderCouponDTOResponse traderCoupon;
+    private List<TraderCouponDTOResponse> traderCoupons;
     private AddressDTOResponse address;
 
     @Override
@@ -50,9 +53,18 @@ public class SaleDTOResponse implements DTOResponse {
                 this.promotionalCoupon.mapFromEntity(s.getPromotionalCoupon());
             }
 
-            if (s.getTraderCoupon() != null) {
-                this.traderCoupon = new TraderCouponDTOResponse();
-                this.traderCoupon.mapFromEntity(s.getTraderCoupon());
+            if (s.getTraderCoupons() != null && !s.getTraderCoupons().isEmpty()) {
+                this.traderCoupons = s.getTraderCoupons()
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .map(tc -> {
+                        TraderCouponDTOResponse dto = new TraderCouponDTOResponse();
+                        dto.mapFromEntity(tc);
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+            } else {
+                this.traderCoupons = List.of();
             }
 
             if (s.getAddress() != null) {

@@ -90,16 +90,16 @@ public class VerifyNewSale implements IPreCommand {
         //ValidarEndereço
         addressValidator.isUser(saleRequest.getUser(), saleRequest.getAddress());
 
-        //Validar Cupom Promocional
-        if(saleRequest.getPromotionalCoupons() != null) {
-            for(Integer couponId : saleRequest.getPromotionalCoupons()) {
-                promotionalCouponValidator.isUsed(couponId);
+        //Validar Cupom Troca
+        if(saleRequest.getTraderCoupons() != null) {
+            for(Integer couponId : saleRequest.getTraderCoupons()) {
+                traderCouponValidator.isUsed(couponId);
             }
         }
 
-        //Validar Cupom de Troca
-        if(saleRequest.getTraderCoupon() != null) {
-            traderCouponValidator.isUsed(saleRequest.getTraderCoupon());
+        //Validar Cupom de Promoção
+        if(saleRequest.getPromotionalCoupon() != null) {
+            promotionalCouponValidator.isUsed(saleRequest.getPromotionalCoupon());
         }
 
         //Validar Cartões

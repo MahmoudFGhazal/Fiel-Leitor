@@ -23,6 +23,6 @@ public class SaleDTORequest implements DTORequest {
     private Integer address;
     private SaleCardDTORequest[] cards;
     private SaleBookDTORequest[] books;
-    private Integer traderCoupon;
-    private Integer[] promotionalCoupons;   
+    private Integer[] traderCoupons;
+    private Integer promotionalCoupon;   
 }
