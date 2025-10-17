@@ -1,5 +1,5 @@
 -- Gerado por Oracle SQL Developer Data Modeler 24.3.1.351.0831
---   em:        2025-10-06 14:41:08 BRT
+--   em:        2025-10-17 17:35:01 BRT
 --   site:      Oracle Database 21c
 --   tipo:      Oracle Database 21c
 
@@ -212,9 +212,6 @@ CREATE TABLE sales
      sal_ssa_id        UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                      NOT NULL , 
-     sal_tco_id        UNKNOWN 
---  ERROR: Datatype UNKNOWN is not allowed 
-                    , 
      sal_pco_id        UNKNOWN 
 --  ERROR: Datatype UNKNOWN is not allowed 
                     , 
@@ -269,6 +266,21 @@ CREATE TABLE sales_cards
 
 ALTER TABLE sales_cards 
     ADD CONSTRAINT sales_cards_PK PRIMARY KEY ( sca_sal_id, sca_car_id ) ;
+
+CREATE TABLE sales_promotional_coupons 
+    ( 
+     sac_sal_id UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL , 
+     sac_tco_id UNKNOWN 
+--  ERROR: Datatype UNKNOWN is not allowed 
+                     NOT NULL 
+    ) 
+    LOGGING 
+;
+
+ALTER TABLE sales_promotional_coupons 
+    ADD CONSTRAINT sales_promotional_coupons_PK PRIMARY KEY ( sac_sal_id, sac_tco_id ) ;
 
 CREATE TABLE status_sale 
     ( 
@@ -518,18 +530,6 @@ ALTER TABLE sales
 ;
 
 ALTER TABLE sales 
-    ADD CONSTRAINT fk_sales_trade_coupon FOREIGN KEY 
-    ( 
-     sal_tco_id
-    ) 
-    REFERENCES trade_coupons 
-    ( 
-     tco_id
-    ) 
-    NOT DEFERRABLE 
-;
-
-ALTER TABLE sales 
     ADD CONSTRAINT fk_sales_users FOREIGN KEY 
     ( 
      sal_cli_id
@@ -565,6 +565,30 @@ ALTER TABLE users
     NOT DEFERRABLE 
 ;
 
+ALTER TABLE sales_promotional_coupons 
+    ADD CONSTRAINT sac_pco_FK FOREIGN KEY 
+    ( 
+     sac_tco_id
+    ) 
+    REFERENCES trade_coupons 
+    ( 
+     tco_id
+    ) 
+    NOT DEFERRABLE 
+;
+
+ALTER TABLE sales_promotional_coupons 
+    ADD CONSTRAINT sac_sal_FK FOREIGN KEY 
+    ( 
+     sac_sal_id
+    ) 
+    REFERENCES sales 
+    ( 
+     sal_id
+    ) 
+    NOT DEFERRABLE 
+;
+
 ALTER TABLE sales 
     ADD CONSTRAINT sal_add_FK FOREIGN KEY 
     ( 
@@ -581,9 +605,9 @@ ALTER TABLE sales
 
 -- Relatório do Resumo do Oracle SQL Developer Data Modeler: 
 -- 
--- CREATE TABLE                            15
+-- CREATE TABLE                            16
 -- CREATE INDEX                             0
--- ALTER TABLE                             34
+-- ALTER TABLE                             36
 -- CREATE VIEW                              0
 -- ALTER VIEW                               0
 -- CREATE PACKAGE                           0
@@ -619,5 +643,5 @@ ALTER TABLE sales
 -- ORDS ENABLE SCHEMA                       0
 -- ORDS ENABLE OBJECT                       0
 -- 
--- ERRORS                                  45
+-- ERRORS                                  46
 -- WARNINGS                                 0
