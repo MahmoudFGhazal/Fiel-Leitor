@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mahas.command.pre.IPreCommand;
-import com.mahas.command.pre.rules.logs.AddressValidator;
-import com.mahas.command.pre.rules.logs.BookValidator;
 import com.mahas.command.pre.rules.logs.CardValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
 import com.mahas.command.pre.rules.logs.PromotionalCouponValidator;
@@ -15,27 +13,20 @@ import com.mahas.command.pre.rules.logs.SaleCardValidator;
 import com.mahas.command.pre.rules.logs.SaleValidator;
 import com.mahas.command.pre.rules.logs.StatusSaleValidator;
 import com.mahas.command.pre.rules.logs.TraderCouponValidator;
-import com.mahas.command.pre.rules.logs.UserValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.sale.Sale;
 import com.mahas.domain.sale.StatusSale;
+import com.mahas.domain.sale.StatusSaleName;
 import com.mahas.dto.request.DTORequest;
-import com.mahas.dto.request.sale.SaleBookDTORequest;
 import com.mahas.dto.request.sale.SaleCardDTORequest;
 import com.mahas.dto.request.sale.SaleDTORequest;
 import com.mahas.exception.ValidationException;
 
 @Component
-public class VerifyNewSale implements IPreCommand {
+public class VerifyConfirmPayment implements IPreCommand {
     @Autowired
     private SaleValidator saleValidator;
-
-    @Autowired
-    private UserValidator userValidator;
-
-    @Autowired
-    private AddressValidator addressValidator;
 
     @Autowired
     private StatusSaleValidator statusSaleValidator;
@@ -53,9 +44,6 @@ public class VerifyNewSale implements IPreCommand {
     private CardValidator cardValidator;
 
     @Autowired
-    private BookValidator bookValidator;
-
-    @Autowired
     private CommunValidator communValidator;
 
     @Override
@@ -68,13 +56,7 @@ public class VerifyNewSale implements IPreCommand {
 
         SaleDTORequest saleRequest = (SaleDTORequest) entity;
 
-        communValidator.validateNotBlack(saleRequest.getUser().toString(), "Usuario");
-        communValidator.validateNotBlack(saleRequest.getAddress().toString(), "Endereço");
-
-        for(SaleBookDTORequest saleBook : saleRequest.getBooks()) {
-            communValidator.validateNotBlack(saleBook.getBook().toString(), "Livro");
-            communValidator.validateNotBlack(saleBook.getQuantity().toString(), "Quantidade de livros");
-        }
+        communValidator.validateNotBlack(saleRequest.getId().toString(), "Id não especificado");
 
         for(SaleCardDTORequest saleCard : saleRequest.getCards()) {
             communValidator.validateNotBlack(saleCard.getCard().toString(), "Cartão");
@@ -82,12 +64,6 @@ public class VerifyNewSale implements IPreCommand {
         }
 
         SQLRequest sqlRequest = new SQLRequest();
-
-        //Validar Usuario
-        userValidator.userExists(saleRequest.getUser());
-
-        //ValidarEndereço
-        addressValidator.isUser(saleRequest.getUser(), saleRequest.getAddress());
 
         //Validar Cupom Troca
         if(saleRequest.getTraderCoupons() != null) {
@@ -109,20 +85,11 @@ public class VerifyNewSale implements IPreCommand {
             .toArray(Integer[]::new);
 
         cardValidator.isUser(saleRequest.getUser(), cardIds);
-
-        //Validar Livros
-        for(SaleBookDTORequest saleBook : saleRequest.getBooks()) {
-            if(!bookValidator.bookExists(saleBook.getBook())) {
-                throw new ValidationException(saleBook.getBook().toString() + ": Livro não encontrado");
-            }
-
-            bookValidator.checkBookStock(saleBook.getBook(), saleBook.getQuantity());
-        }
     
         Sale sale = saleValidator.toEntity(saleRequest);
         sale.setId(null);
 
-        Integer statusSaleId = statusSaleValidator.getStatusSaleDefault();
+        Integer statusSaleId = statusSaleValidator.getStatusSale(StatusSaleName.APPROVED);
         StatusSale statusSale = new StatusSale();
         statusSale.setId(statusSaleId);
         sale.setStatusSale(statusSale);

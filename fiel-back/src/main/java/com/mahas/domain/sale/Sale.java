@@ -3,11 +3,14 @@ package com.mahas.domain.sale;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.address.Address;
 import com.mahas.domain.user.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +20,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -52,13 +56,16 @@ public class Sale extends DomainEntity {
     @JoinColumn(name = "sal_ssa_id", nullable = false)
     private StatusSale statusSale;
 
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SaleBook> saleBooks = new HashSet<>();
+
     @ManyToMany
     @JoinTable(
         name = "sales_trader_coupons",
-        joinColumns = @JoinColumn(name = "sac_sal_id"),
-        inverseJoinColumns = @JoinColumn(name = "sac_tco_id")
+        joinColumns = @JoinColumn(name = "sat_sal_id"),
+        inverseJoinColumns = @JoinColumn(name = "sat_tco_id")
     )
-    private java.util.Set<TraderCoupon> traderCoupons = new java.util.HashSet<>();
+    private Set<TraderCoupon> traderCoupons = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "sal_pco_id")

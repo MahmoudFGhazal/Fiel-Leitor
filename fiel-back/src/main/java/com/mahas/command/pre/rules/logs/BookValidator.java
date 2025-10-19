@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules.logs;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.base.product.BaseBookCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -10,9 +13,6 @@ import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.product.BookDTOResponse;
 import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class BookValidator {
@@ -57,7 +57,7 @@ public class BookValidator {
         return entity != null; 
     }
 
-    public void checkBookStock(Integer id, Integer quantity) {
+    public Integer checkBookStock(Integer id, Integer quantity) {
         BookDTORequest book = new BookDTORequest();
         book.setId(id);
 
@@ -79,5 +79,7 @@ public class BookValidator {
         if(bookResponse.getStock() < quantity) {
             throw new ValidationException("Quantidade maior que o estoque");
         }
+
+        return bookResponse.getStock();
     }
 }

@@ -39,4 +39,23 @@ public class SaleBookDTOResponse implements DTOResponse {
             this.price = sb.getPrice();
         }
     }
+
+    public void mapFromEntity(DomainEntity entity, boolean sale) {
+        if (entity instanceof SaleBook sb) {
+            if(sale) {
+                if (sb.getSale() != null) {
+                    this.sale = new SaleDTOResponse();
+                    this.sale.mapFromEntity(sb.getSale());
+                }
+            }
+
+            if (sb.getBook() != null) {
+                this.book = new BookDTOResponse();
+                this.book.mapFromEntity(sb.getBook());
+            }
+
+            this.quantity = sb.getQuantity();
+            this.price = sb.getPrice();
+        }
+    }
 }

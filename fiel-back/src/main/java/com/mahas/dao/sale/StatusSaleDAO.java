@@ -40,9 +40,9 @@ public class StatusSaleDAO implements IDAO {
             where.append(" AND s.id = :id"); 
             params.put("id", status.getId()); 
         }
-        if (status.getName() != null) { 
-            where.append(" AND UPPER(s.name) LIKE UPPER(:name)"); 
-            params.put("name", "%" + status.getName() + "%"); 
+        if (status.getStatus() != null) { 
+            where.append(" AND UPPER(s.status) LIKE UPPER(:status)"); 
+            params.put("status", "%" + status.getStatus() + "%"); 
         }
 
         jpql.append(where); 

@@ -30,20 +30,20 @@ public class StatusSaleValidator {
         
         StatusSaleName name = null;
 
-        if (dto.getName() != null) {
+        if (dto.getStatus() != null) {
             for (StatusSaleName statusName : StatusSaleName.values()) {
-                if (statusName.getValue().equalsIgnoreCase(dto.getName())) {
+                if (statusName.getValue().equalsIgnoreCase(dto.getStatus())) {
                     name = statusName;
                     break;
                 }
             }
 
             if (name == null) {
-                throw new ValidationException("StatusSale inválido: " + dto.getName());
+                throw new ValidationException("StatusSale inválido: " + dto.getStatus());
             }
         }
 
-        s.setName(name);
+        s.setStatus(name);
 
         return s;
     }
@@ -54,7 +54,31 @@ public class StatusSaleValidator {
         FacadeRequest req = new FacadeRequest();
 
         StatusSaleDTORequest statusSaleReq = new StatusSaleDTORequest();
-        statusSaleReq.setName(statusDefaultName);
+        statusSaleReq.setStatus(statusDefaultName);
+
+        req.setEntity(statusSaleReq);
+        req.setPreCommand(baseStatusSaleCommand);
+        req.setLimit(1);
+
+        FacadeResponse res = facade.query(req);
+
+        if(res.getData().getEntity() == null) {
+            throw new ValidationException("Status da venda padrão não encontrada");
+        }
+
+        DTOResponse entity = res.getData().getEntity();
+        StatusSaleDTOResponse statusSaleRes = (StatusSaleDTOResponse) entity;
+
+        return statusSaleRes.getId();
+    }
+
+    public Integer getStatusSale(StatusSaleName status) {
+        String statusName = status.getValue();
+
+        FacadeRequest req = new FacadeRequest();
+
+        StatusSaleDTORequest statusSaleReq = new StatusSaleDTORequest();
+        statusSaleReq.setStatus(statusName);
 
         req.setEntity(statusSaleReq);
         req.setPreCommand(baseStatusSaleCommand);

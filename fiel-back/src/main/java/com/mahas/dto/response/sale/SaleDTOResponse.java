@@ -26,6 +26,7 @@ public class SaleDTOResponse implements DTOResponse {
     private UserDTOResponse user;
     private BigDecimal freight;
     private LocalDate deliveryDate;
+    private List<SaleBookDTOResponse> saleBooks;
     private StatusSaleDTOResponse statusSale;
     private PromotionalCouponDTOResponse promotionalCoupon;
     private List<TraderCouponDTOResponse> traderCoupons;
@@ -51,6 +52,20 @@ public class SaleDTOResponse implements DTOResponse {
             if (s.getPromotionalCoupon() != null) {
                 this.promotionalCoupon = new PromotionalCouponDTOResponse();
                 this.promotionalCoupon.mapFromEntity(s.getPromotionalCoupon());
+            }
+
+            if (s.getSaleBooks() != null && !s.getSaleBooks().isEmpty()) {
+                this.saleBooks = s.getSaleBooks()
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .map(sb -> {
+                        SaleBookDTOResponse dto = new SaleBookDTOResponse();
+                        dto.mapFromEntity(sb, false);
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+            } else {
+                this.traderCoupons = List.of();
             }
 
             if (s.getTraderCoupons() != null && !s.getTraderCoupons().isEmpty()) {

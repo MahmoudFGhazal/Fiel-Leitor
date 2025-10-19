@@ -13,5 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StatusSaleDTORequest implements DTORequest {
     private Integer id;
-    private String name;
+    private String status;
 }

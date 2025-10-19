@@ -34,7 +34,15 @@ public class SaleDAO implements IDAO {
 
         Sale sale = (Sale) entity;
 
-        StringBuilder jpql = new StringBuilder("SELECT s FROM Sale s WHERE 1=1");
+        int page  = request.getPage();
+        int limit = request.getLimit();
+        boolean fetch = (limit == 1);
+
+        StringBuilder jpql = new StringBuilder(
+            fetch
+            ? "SELECT DISTINCT s FROM Sale s LEFT JOIN FETCH s.saleBooks sb LEFT JOIN FETCH sb.book WHERE 1=1"
+            : "SELECT s FROM Sale s WHERE 1=1"
+        );
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(s) FROM Sale s WHERE 1=1");
 
         Map<String, Object> params = new HashMap<>();
@@ -53,18 +61,21 @@ public class SaleDAO implements IDAO {
             params.put("statusId", sale.getStatusSale().getId());
         }
 
-        jpql.append(where); 
+        jpql.append(where);
         countJpql.append(where);
 
-        int page = request.getPage(); 
-        int limit = request.getLimit();
-        int offset = (limit > 0) ? (page - 1) * limit : 0;
+        if (!fetch) {
+            jpql.append(" ORDER BY s.id DESC");
+        }
 
         TypedQuery<Sale> query = entityManager.createQuery(jpql.toString(), Sale.class);
         for (Map.Entry<String, Object> e : params.entrySet()) {
             query.setParameter(e.getKey(), e.getValue());
         }
-        if (limit > 0) {
+
+        // ✅ Agora o offset só é calculado e usado quando realmente aplicamos paginação
+        if (!fetch && limit > 0) {
+            int offset = (page > 0) ? (page - 1) * limit : 0;
             query.setFirstResult(offset);
             query.setMaxResults(limit);
         }
@@ -80,15 +91,15 @@ public class SaleDAO implements IDAO {
         int totalPage = (limit > 0) ? (int) Math.ceil((double) totalItems / limit) : 1;
 
         if (!resultList.isEmpty()) {
-            if (limit == 1) response.setEntity(resultList.get(0));
+            if (fetch) response.setEntity(resultList.get(0));
             else response.setEntities(new ArrayList<>(resultList));
         }
 
-        response.setPage(page); 
+        response.setPage(page);
         response.setLimit(limit);
-        response.setTotalItem((int) totalItems); 
+        response.setTotalItem((int) totalItems);
         response.setTotalPage(totalPage);
-        
+
         return response;
     }
 

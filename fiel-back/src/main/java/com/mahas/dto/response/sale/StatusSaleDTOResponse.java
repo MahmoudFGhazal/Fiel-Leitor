@@ -15,13 +15,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StatusSaleDTOResponse implements DTOResponse {
     private Integer id;
-    private String name;
+    private String status;
 
     @Override
     public void mapFromEntity(DomainEntity entity) {
         if (entity instanceof StatusSale s) {
             this.id = s.getId();
-            this.name = s.getName() != null ? s.getName().getValue() : null;
+            this.status = s.getStatus() != null ? s.getStatus().getValue() : null;
         }
     }
 }

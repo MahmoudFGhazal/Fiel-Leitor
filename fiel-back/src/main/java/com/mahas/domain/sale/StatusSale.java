@@ -33,8 +33,8 @@ public class StatusSale extends DomainEntity {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ssa_name", nullable = false, unique = true)
-    private StatusSaleName name;
+    @Column(name = "ssa_status", nullable = false, unique = true)
+    private StatusSaleName status;
 
     @Column(name = "ssa_created_at", nullable = false)
     private LocalDateTime createdAt;
