@@ -72,7 +72,7 @@ public class Sale extends DomainEntity {
     private PromotionalCoupon promotionalCoupon;
 
     @ManyToOne
-    @JoinColumn(name = "sal_add_id", nullable = false)
+    @JoinColumn(name = "sal_add_id")
     private Address address;
 
     @Column(name = "sal_created_at", nullable = false)

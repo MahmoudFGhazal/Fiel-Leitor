@@ -151,7 +151,7 @@ INSERT INTO promotional_coupons (pco_value, pco_used) VALUES
 -- SALE #1 (Renata) – PROCESSING, sem cupom ainda
 -- =============================
 INSERT INTO sales (
-  sal_cli_id, sal_freight, sal_delivery_date, sal_ssa_id, sal_pco_id, sal_add_id
+  sal_usr_id, sal_freight, sal_delivery_date, sal_ssa_id, sal_pco_id, sal_add_id
 )
 VALUES (
   (SELECT usr_id FROM users WHERE usr_email='renata@example.com'),
@@ -159,54 +159,64 @@ VALUES (
   DATE_ADD(CURDATE(), INTERVAL 5 DAY),
   (SELECT ssa_id FROM status_sale WHERE ssa_status='PROCESSING'),
   NULL,
-  (SELECT add_id FROM addresses WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com') AND add_nickname='Casa' LIMIT 1)
+  (SELECT add_id
+     FROM addresses
+    WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+      AND add_nickname='Casa'
+    LIMIT 1)
 );
 
 -- itens da venda #1 (usa preços do catálogo no momento do pedido)
 INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
 SELECT s.sal_id, b.bok_id, 1, b.bok_price
-FROM sales s
-JOIN books b ON b.bok_name='Introdução à Medicina'
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
+  FROM sales s
+  JOIN books b ON b.bok_name='Introdução à Medicina'
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
 
 INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
 SELECT s.sal_id, b.bok_id, 2, b.bok_price
-FROM sales s
-JOIN books b ON b.bok_name='Ginecologia e Obstetrícia'
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
+  FROM sales s
+  JOIN books b ON b.bok_name='Ginecologia e Obstetrícia'
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
 
 -- pagamento da venda #1: 70% no cartão principal, 30% no secundário
 INSERT INTO sales_cards (sca_sal_id, sca_car_id, sca_percent)
 SELECT s.sal_id, c.car_id, 70.00
-FROM sales s
-JOIN cards c ON c.car_usr_id = s.sal_cli_id AND c.car_principal=1
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
+  FROM sales s
+  JOIN cards c ON c.car_usr_id = s.sal_usr_id AND c.car_principal=1
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
 
 INSERT INTO sales_cards (sca_sal_id, sca_car_id, sca_percent)
 SELECT s.sal_id, c.car_id, 30.00
-FROM sales s
-JOIN cards c ON c.car_usr_id = s.sal_cli_id AND c.car_principal=0
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
+  FROM sales s
+  JOIN cards c ON c.car_usr_id = s.sal_usr_id AND c.car_principal=0
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
 
 -- =============================
--- TRADE COUPON gerado a partir da SALE #1 (tco_sal_id referencia a venda origem)
+-- TRADER COUPON gerado a partir da SALE #1
+-- (tco_sal_id referencia a venda origem)
+-- Ex.: devolução parcial de R$ 50,00
 -- =============================
--- Ex.: houve devolução parcial de R$ 50,00
-INSERT INTO trade_coupons (tco_sal_id, tco_value, tco_used)
+INSERT INTO trader_coupons (tco_sal_id, tco_value, tco_used)
 SELECT s.sal_id, 50.00, 0
-FROM sales s
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
+  FROM sales s
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
 
 -- =============================
--- SALE #2 (Renata) – usa um promotional_coupon direto e UM trade_coupon via tabela de ligação
+-- SALE #2 (Renata) – usa 1 promotional_coupon direto e 1 trader_coupon via tabela de ligação
 -- =============================
 INSERT INTO sales (
-  sal_cli_id, sal_freight, sal_delivery_date, sal_ssa_id, sal_pco_id, sal_add_id
+  sal_usr_id, sal_freight, sal_delivery_date, sal_ssa_id, sal_pco_id, sal_add_id
 )
 VALUES (
   (SELECT usr_id FROM users WHERE usr_email='renata@example.com'),
@@ -214,47 +224,78 @@ VALUES (
   DATE_ADD(CURDATE(), INTERVAL 7 DAY),
   (SELECT ssa_id FROM status_sale WHERE ssa_status='APPROVED'),
   (SELECT pco_id FROM promotional_coupons WHERE pco_used=0 ORDER BY pco_id LIMIT 1),
-  (SELECT add_id FROM addresses WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com') AND add_nickname='Casa' LIMIT 1)
+  (SELECT add_id
+     FROM addresses
+    WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+      AND add_nickname='Casa'
+    LIMIT 1)
 );
 
 -- itens da venda #2
 INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
 SELECT s.sal_id, b.bok_id, 1, b.bok_price
-FROM sales s
-JOIN books b ON b.bok_name='Pediatria Essencial'
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
+  FROM sales s
+  JOIN books b ON b.bok_name='Pediatria Essencial'
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
 
 -- pagamento da venda #2: 100% no cartão principal
 INSERT INTO sales_cards (sca_sal_id, sca_car_id, sca_percent)
 SELECT s.sal_id, c.car_id, 100.00
-FROM sales s
-JOIN cards c ON c.car_usr_id = s.sal_cli_id AND c.car_principal=1
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
+  FROM sales s
+  JOIN cards c ON c.car_usr_id = s.sal_usr_id AND c.car_principal=1
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
 
--- vincula o trade_coupon gerado na venda #1 para ser usado na venda #2
-INSERT INTO sales_promotional_coupons (sac_sal_id, sac_tco_id)
+-- vincula o trader_coupon (gerado na venda #1) para ser usado na venda #2
+INSERT INTO sales_trader_coupons (sat_sal_id, sat_tco_id)
 SELECT
-  (SELECT s2.sal_id FROM sales s2 WHERE s2.sal_cli_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com') ORDER BY s2.sal_id DESC LIMIT 1),
-  (SELECT t.tco_id FROM trade_coupons t WHERE t.tco_used=0 ORDER BY t.tco_id DESC LIMIT 1);
+  (SELECT s2.sal_id
+     FROM sales s2
+    WHERE s2.sal_usr_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+    ORDER BY s2.sal_id DESC
+    LIMIT 1), -- última venda (SALE #2)
+  (SELECT t.tco_id
+     FROM trader_coupons t
+    WHERE t.tco_used=0
+      AND t.tco_sal_id = (
+          SELECT s1.sal_id
+            FROM sales s1
+           WHERE s1.sal_usr_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+           ORDER BY s1.sal_id DESC
+           LIMIT 1 OFFSET 1  -- penúltima venda (SALE #1)
+      )
+    ORDER BY t.tco_id DESC
+    LIMIT 1
+  );
 
 -- marca o promotional_coupon usado na SALE #2 como utilizado
 UPDATE promotional_coupons p
-JOIN sales s ON s.sal_pco_id = p.pco_id
-SET p.pco_used = 1
-WHERE s.sal_cli_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
+   SET p.pco_used = 1
+ WHERE p.pco_id = (
+   SELECT sal_pco_id
+     FROM sales
+    WHERE sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+    ORDER BY sal_id DESC
+    LIMIT 1
+ );
 
--- marca o trade_coupon como usado (aplicado na SALE #2)
-UPDATE trade_coupons t
-JOIN sales_promotional_coupons spc ON spc.sac_tco_id = t.tco_id
-SET t.tco_used = 1
-WHERE spc.sac_sal_id = (
-  SELECT s2.sal_id FROM sales s2
-  WHERE s2.sal_cli_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')
-  ORDER BY s2.sal_id DESC LIMIT 1
-);
+-- marca o trader_coupon como usado (aplicado na SALE #2)
+UPDATE trader_coupons t
+   SET t.tco_used = 1
+ WHERE t.tco_id = (
+   SELECT sat_tco_id
+     FROM sales_trader_coupons
+    WHERE sat_sal_id = (
+      SELECT s2.sal_id
+        FROM sales s2
+       WHERE s2.sal_usr_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+       ORDER BY s2.sal_id DESC
+       LIMIT 1
+    )
+ );
 
 -- =============================
 -- SALE #3 (Mahmoud) – sem cupons
@@ -268,20 +309,25 @@ VALUES (
   DATE_ADD(CURDATE(), INTERVAL 6 DAY),
   (SELECT ssa_id FROM status_sale WHERE ssa_status='PROCESSING'),
   NULL,
-  (SELECT add_id FROM addresses WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com') AND add_nickname='Trabalho' LIMIT 1)
+  (SELECT add_id
+     FROM addresses
+    WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
+      AND add_nickname='Trabalho'
+    LIMIT 1)
 );
 
 INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
 SELECT s.sal_id, b.bok_id, 1, b.bok_price
-FROM sales s
-JOIN books b ON b.bok_name='Pediatria Essencial'
-WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
+  FROM sales s
+  JOIN books b ON b.bok_name='Pediatria Essencial'
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
 
 INSERT INTO sales_cards (sca_sal_id, sca_car_id, sca_percent)
 SELECT s.sal_id, c.car_id, 100.00
-FROM sales s
-JOIN cards c ON c.car_usr_id = s.sal_usr_id AND c.car_principal=1
-WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
-ORDER BY s.sal_id DESC LIMIT 1;
-
+  FROM sales s
+  JOIN cards c ON c.car_usr_id = s.sal_usr_id AND c.car_principal=1
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;

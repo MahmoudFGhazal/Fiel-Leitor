@@ -33,7 +33,7 @@ public class Category extends DomainEntity {
     @Column(name = "cat_name", nullable = false)
     private String name;
 
-    @Column(name = "cat_principal", columnDefinition = "TINYINT(1) DEFAULT 1")
+    @Column(name = "cat_active", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean active = false;
 
     @Column(name = "cat_created_at", nullable = false)
