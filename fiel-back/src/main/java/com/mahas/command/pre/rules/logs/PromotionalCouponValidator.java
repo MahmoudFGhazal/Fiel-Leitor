@@ -32,7 +32,7 @@ public class PromotionalCouponValidator {
         return pc;
     }
 
-    public void isUsed(Integer id) {
+    public PromotionalCouponDTOResponse isUsed(Integer id) {
         FacadeRequest req = new FacadeRequest();
 
         PromotionalCouponDTORequest promotionCouponReq = new PromotionalCouponDTORequest();
@@ -54,5 +54,7 @@ public class PromotionalCouponValidator {
         if(promotionalCouponRes.getUsed() == true) {
             throw new ValidationException("Cupom promocional já utilizado");
         }
+
+        return promotionalCouponRes;
     }
 }

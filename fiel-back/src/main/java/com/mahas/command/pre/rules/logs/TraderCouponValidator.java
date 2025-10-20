@@ -39,7 +39,7 @@ public class TraderCouponValidator {
         return tc;
     }
 
-    public void isUsed(Integer id) {
+    public TraderCouponDTOResponse isUsed(Integer id) {
         FacadeRequest req = new FacadeRequest();
 
         TraderCouponDTORequest traderCouponReq = new TraderCouponDTORequest();
@@ -61,5 +61,7 @@ public class TraderCouponValidator {
         if(traderCouponRes.getUsed() == true) {
             throw new ValidationException("Cupom de troca já utilizado");
         }
+
+        return traderCouponRes;
     }
 }

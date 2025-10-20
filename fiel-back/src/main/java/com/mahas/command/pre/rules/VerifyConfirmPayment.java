@@ -1,6 +1,8 @@
 package com.mahas.command.pre.rules;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CardValidator;
@@ -18,7 +20,10 @@ import com.mahas.domain.sale.StatusSaleName;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.sale.SaleCardDTORequest;
 import com.mahas.dto.request.sale.SaleDTORequest;
+import com.mahas.dto.response.sale.PromotionalCouponDTOResponse;
+import com.mahas.dto.response.sale.SaleBookDTOResponse;
 import com.mahas.dto.response.sale.SaleDTOResponse;
+import com.mahas.dto.response.sale.TraderCouponDTOResponse;
 import com.mahas.exception.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,20 +73,43 @@ public class VerifyConfirmPayment implements IPreCommand {
 
         SaleDTOResponse res = saleValidator.saleExists(saleRequest.getId());
 
-        if(res.getStatusSale().getStatus() != StatusSaleName.PROCESSING.getValue()) {
+        if(res.getStatusSale().getStatus() == null ? StatusSaleName.PROCESSING.getValue() != null : !res.getStatusSale().getStatus().equals(StatusSaleName.PROCESSING.getValue())) {
             throw new ValidationException("Status não permite essa alteração");
         }
+
+        BigDecimal discount = BigDecimal.ZERO;
 
         //Validar Cupom Troca
         if(saleRequest.getTraderCoupons() != null) {
             for(Integer couponId : saleRequest.getTraderCoupons()) {
-                traderCouponValidator.isUsed(couponId);
+                TraderCouponDTOResponse tc = traderCouponValidator.isUsed(couponId);
+
+                BigDecimal price = tc.getValue() != null ? tc.getValue() : BigDecimal.ZERO;
+
+                discount = discount.add(price.multiply(BigDecimal.valueOf(1)));
             }
         }
 
         //Validar Cupom de Promoção
         if(saleRequest.getPromotionalCoupon() != null) {
-            promotionalCouponValidator.isUsed(saleRequest.getPromotionalCoupon());
+            PromotionalCouponDTOResponse pc = promotionalCouponValidator.isUsed(saleRequest.getPromotionalCoupon());
+
+            BigDecimal price = pc.getValue() != null ? pc.getValue() : BigDecimal.ZERO;
+
+            discount = discount.add(price.multiply(BigDecimal.valueOf(1)));
+        }
+
+        BigDecimal totalValue = BigDecimal.ZERO;
+
+        List<SaleBookDTOResponse> items = res.getSaleBooks() != null ? res.getSaleBooks() : List.of();
+
+        for (SaleBookDTOResponse sb : items) {
+            if (sb == null) continue;
+
+            BigDecimal price = sb.getPrice() != null ? sb.getPrice() : BigDecimal.ZERO;
+            int qty = java.util.Objects.requireNonNullElse(sb.getQuantity(), 1);
+
+            totalValue = totalValue.add(price.multiply(BigDecimal.valueOf(qty)));
         }
 
         //Validar Cartões
@@ -93,6 +121,30 @@ public class VerifyConfirmPayment implements IPreCommand {
 
         cardValidator.isUser(saleRequest.getUser(), cardIds);
     
+        BigDecimal payable = totalValue.subtract(discount);
+        if (payable.signum() < 0) {
+            payable = BigDecimal.ZERO;
+        }
+
+        final BigDecimal MIN_SPLIT = new BigDecimal("10.00");
+
+        if (payable.compareTo(MIN_SPLIT) < 0) {
+            if (saleRequest.getCards() == null || saleRequest.getCards().length != 1) {
+                throw new ValidationException(
+                    "Para compras com valor final menor que 10, é permitido apenas um cartão (100%)."
+                );
+            }
+
+            SaleCardDTORequest only = saleRequest.getCards()[0];
+            if (only.getPercent() == null || only.getPercent().compareTo(new BigDecimal("100")) != 0) {
+                throw new ValidationException(
+                    "Para compras com valor final menor que 10, o único cartão deve ter 100%."
+                );
+            }
+        } else {
+            saleCardValidator.checkPercent(saleRequest.getCards());
+        }
+
         Sale sale = saleValidator.toEntity(saleRequest);
         sale.setUser(null);
         sale.setSaleBooks(null);
