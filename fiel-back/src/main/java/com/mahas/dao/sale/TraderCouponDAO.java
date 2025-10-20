@@ -38,8 +38,11 @@ public class TraderCouponDAO implements IDAO {
 
         if (coupon.getId() != null) { where.append(" AND t.id = :id"); params.put("id", coupon.getId()); }
         if (coupon.getUsed() != null) { where.append(" AND t.used = :used"); params.put("used", coupon.getUsed()); }
-        if (coupon.getSale() != null && coupon.getSale().getId() != null) {
-            where.append(" AND t.sale.id = :saleId"); params.put("saleId", coupon.getSale().getId());
+        if (coupon.getAppliedSale() != null && coupon.getAppliedSale().getId() != null) {
+            where.append(" AND t.appliedSale.id = :saleId"); params.put("saleId", coupon.getAppliedSale().getId());
+        }
+        if (coupon.getOriginSale() != null && coupon.getOriginSale().getId() != null) {
+            where.append(" AND t.originSale.id = :saleId"); params.put("saleId", coupon.getOriginSale().getId());
         }
 
         jpql.append(where); 
@@ -51,7 +54,7 @@ public class TraderCouponDAO implements IDAO {
 
         TypedQuery<TraderCoupon> query = entityManager.createQuery(jpql.toString(), TraderCoupon.class);
         for (Map.Entry<String, Object> e : params.entrySet()) {
-            query.setParameter(e.getKey(), e.getValue());
+            query.setParameter((String) e.getKey(), e.getValue()); // <-- cast resolve a ambiguidade
         }
         if (limit > 0) {
             query.setFirstResult(offset);

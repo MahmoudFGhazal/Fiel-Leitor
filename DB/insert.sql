@@ -142,10 +142,10 @@ WHERE u.usr_email='mahmoud@example.com';
 -- =============================
 -- PROMOTIONAL COUPONS (pco_*)
 -- =============================
-INSERT INTO promotional_coupons (pco_value, pco_used) VALUES
-(20.00, 0),
-(35.00, 0),
-(50.00, 0);
+INSERT INTO promotional_coupons (pco_code, pco_value, pco_used) VALUES
+("abvffdf", 20.00, 0),
+("abvfdsagrsfff", 35.00, 0),
+("abvffhgfhfg", 50.00, 0);
 
 -- =============================
 -- SALE #1 (Renata) – PROCESSING, sem cupom ainda
@@ -205,12 +205,17 @@ SELECT s.sal_id, c.car_id, 30.00
 -- (tco_sal_id referencia a venda origem)
 -- Ex.: devolução parcial de R$ 50,00
 -- =============================
-INSERT INTO trader_coupons (tco_sal_id, tco_value, tco_used)
-SELECT s.sal_id, 50.00, 0
+INSERT INTO trader_coupons (tco_code, tco_value, tco_used, tco_origin_sal_id, tco_applied_sal_id)
+  SELECT 
+      CONCAT('TCO', LPAD(s.sal_id, 8, '0')) AS tco_code,  -- gere um código
+      50.00                                  AS tco_value,
+      0                                      AS tco_used,
+      s.sal_id                                AS tco_origin_sal_id,
+      NULL                                    AS tco_applied_sal_id
   FROM sales s
- WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
- ORDER BY s.sal_id DESC
- LIMIT 1;
+  WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+  ORDER BY s.sal_id DESC
+LIMIT 1;
 
 -- =============================
 -- SALE #2 (Renata) – usa 1 promotional_coupon direto e 1 trader_coupon via tabela de ligação

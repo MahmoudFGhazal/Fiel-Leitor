@@ -17,20 +17,28 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TraderCouponDTOResponse implements DTOResponse {
     private Integer id;
+    private SaleDTOResponse originSale;
+    private SaleDTOResponse appliedSale;
+    private String code;
     private BigDecimal value;
     private Boolean used;
-    private SaleDTOResponse sale;
 
     @Override
     public void mapFromEntity(DomainEntity entity) {
         if (entity instanceof TraderCoupon t) {
             this.id = t.getId();
+            this.code = t.getCode();
             this.value = t.getValue();
             this.used = t.getUsed();
             
-            if (t.getSale() != null) {
-                this.sale = new SaleDTOResponse();
-                this.sale.mapFromEntity(t.getSale());
+            if (t.getAppliedSale() != null) {
+                this.appliedSale = new SaleDTOResponse();
+                this.appliedSale.mapFromEntity(t.getAppliedSale());
+            }
+
+            if (t.getOriginSale() != null) {
+                this.originSale = new SaleDTOResponse();
+                this.originSale.mapFromEntity(t.getOriginSale());
             }
         }
     }

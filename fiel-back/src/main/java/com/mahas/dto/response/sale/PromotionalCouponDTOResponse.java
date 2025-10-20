@@ -17,6 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PromotionalCouponDTOResponse implements DTOResponse {
     private Integer id;
+    private String code;
     private BigDecimal value;
     private Boolean used;
 
@@ -24,6 +25,7 @@ public class PromotionalCouponDTOResponse implements DTOResponse {
     public void mapFromEntity(DomainEntity entity) {
         if (entity instanceof PromotionalCoupon p) {
             this.id = p.getId();
+            this.code = p.getCode();
             this.value = p.getValue();
             this.used = p.getUsed();
         }

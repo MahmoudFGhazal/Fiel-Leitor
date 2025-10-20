@@ -131,6 +131,7 @@ CREATE TABLE cards (
 -- =============================
 CREATE TABLE promotional_coupons (
     pco_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    pco_code VARCHAR(20) NOT NULL,
     pco_value DECIMAL(10,2) NOT NULL,
     pco_used TINYINT(1) DEFAULT 0,
     pco_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -140,12 +141,18 @@ CREATE TABLE promotional_coupons (
 
 CREATE TABLE trader_coupons (
     tco_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    tco_code VARCHAR(20) NOT NULL,
     tco_value DECIMAL(10,2) NOT NULL,
     tco_used TINYINT(1) DEFAULT 0,
-    tco_sal_id BIGINT NOT NULL,
+    tco_origin_sal_id BIGINT NOT NULL,
+    tco_applied_sal_id BIGINT NULL,
     tco_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     tco_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uq_trader_coupons_origin UNIQUE (tco_origin_sal_id),
+    CONSTRAINT fk_trader_coupons_origin  FOREIGN KEY (tco_origin_sal_id)  REFERENCES sales (sal_id),
+    CONSTRAINT fk_trader_coupons_applied FOREIGN KEY (tco_applied_sal_id) REFERENCES sales (sal_id)
 );
 
 -- =============================

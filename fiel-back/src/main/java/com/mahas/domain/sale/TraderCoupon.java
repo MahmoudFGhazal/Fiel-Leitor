@@ -7,11 +7,13 @@ import com.mahas.domain.DomainEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -33,9 +35,16 @@ public class TraderCoupon extends DomainEntity {
     @Column(name = "tco_id")
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "tco_sal_id", nullable = false)
-    private Sale sale;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tco_origin_sal_id", nullable = false, unique = true)
+    private Sale originSale;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "tco_applied_sal_id", nullable = true)
+    private Sale appliedSale;
+
+    @Column(name = "tco_code", nullable = false)
+    private String code;
 
     @Column(name = "tco_value", nullable = false)
     private BigDecimal value;

@@ -15,6 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PromotionalCouponDTORequest implements DTORequest {
     private Integer id;
+    private String code;
     private BigDecimal value;
     private Boolean used;
 }

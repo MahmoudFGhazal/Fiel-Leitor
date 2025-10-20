@@ -31,6 +31,9 @@ public class PromotionalCoupon extends DomainEntity {
     @Column(name = "pco_id")
     private Integer id;
 
+    @Column(name = "pco_code", nullable = false)
+    private String code;
+
     @Column(name = "pco_value", nullable = false)
     private BigDecimal value;
 

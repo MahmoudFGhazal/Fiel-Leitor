@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules.logs;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.base.sale.BasePromotionalCouponCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -9,9 +12,6 @@ import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.sale.PromotionalCouponDTOResponse;
 import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class PromotionalCouponValidator {
@@ -26,6 +26,7 @@ public class PromotionalCouponValidator {
 
         PromotionalCoupon pc = new PromotionalCoupon();
         pc.setId(dto.getId() != null ? dto.getId().intValue() : null);
+        pc.setCode(dto.getCode());
         pc.setValue(dto.getValue());
         pc.setUsed(dto.getUsed());
 

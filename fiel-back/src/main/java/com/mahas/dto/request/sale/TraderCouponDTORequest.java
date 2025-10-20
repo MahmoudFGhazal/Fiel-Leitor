@@ -15,7 +15,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TraderCouponDTORequest implements DTORequest {
     private Integer id;
-    private Integer sale;
+    private Integer originSale;
+    private Integer appliedSale;
+    private String code;
     private BigDecimal value;
     private Boolean used;
 }
