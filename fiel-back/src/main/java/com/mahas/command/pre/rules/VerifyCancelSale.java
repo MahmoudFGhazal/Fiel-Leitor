@@ -1,10 +1,8 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CommunValidator;
+import com.mahas.command.pre.rules.logs.SaleValidator;
 import com.mahas.command.pre.rules.logs.StatusSaleValidator;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
@@ -13,13 +11,19 @@ import com.mahas.domain.sale.StatusSale;
 import com.mahas.domain.sale.StatusSaleName;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.sale.SaleDTORequest;
+import com.mahas.dto.response.sale.SaleDTOResponse;
 import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyCancelSale implements IPreCommand {
-
     @Autowired
     private StatusSaleValidator statusSaleValidator;
+
+    @Autowired
+    private SaleValidator saleValidator;
 
     @Autowired
     private CommunValidator communValidator;
@@ -37,6 +41,14 @@ public class VerifyCancelSale implements IPreCommand {
         communValidator.validateNotBlack(saleRequest.getId().toString(), "Id não especificado");
 
         SQLRequest sqlRequest = new SQLRequest();
+
+        saleValidator.saleExists(saleRequest.getId());
+
+        SaleDTOResponse res = saleValidator.saleExists(saleRequest.getId());
+
+        if(res.getStatusSale().getStatus() != StatusSaleName.PROCESSING.getValue()) {
+            throw new ValidationException("Status não permite essa alteração");
+        }
 
         Sale sale = new Sale();
         sale.setId(saleRequest.getId());

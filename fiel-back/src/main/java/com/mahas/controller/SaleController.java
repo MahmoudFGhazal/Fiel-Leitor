@@ -155,7 +155,7 @@ public class SaleController {
         saleReq.setEntity(sale);
         saleReq.setPreCommand(verifyConfirmPayment);
 
-        FacadeResponse facadeSaleRes = facade.save(saleReq);
+        FacadeResponse facadeSaleRes = facade.update(saleReq);
         
         DTOResponse entity = facadeSaleRes.getData().getEntity();
         SaleDTOResponse saleRes = (SaleDTOResponse) entity;

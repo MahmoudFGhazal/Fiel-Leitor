@@ -6,9 +6,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.base.sale.BaseSaleCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -20,7 +17,12 @@ import com.mahas.domain.sale.TraderCoupon;
 import com.mahas.domain.user.User;
 import com.mahas.dto.request.sale.SaleDTORequest;
 import com.mahas.dto.response.DTOResponse;
+import com.mahas.dto.response.sale.SaleDTOResponse;
+import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SaleValidator {
@@ -82,7 +84,7 @@ public class SaleValidator {
         return sale;
     }
 
-    public boolean saleExists(Integer id) {
+    public SaleDTOResponse saleExists(Integer id) {
         SaleDTORequest sale = new SaleDTORequest();
         sale.setId(id);
 
@@ -92,10 +94,11 @@ public class SaleValidator {
         request.setPreCommand(baseSaleCommand);
 
         FacadeResponse response = facade.query(request);
+        DTOResponse entity = response.getData() != null ? response.getData().getEntity() : null;
 
-        DTOResponse entity = response.getData().getEntity();
-        
-        return entity != null; 
+        if (!(entity instanceof SaleDTOResponse s)) {
+            throw new ValidationException("Venda não encontrada");
+        }
+        return s;
     }
-
 }

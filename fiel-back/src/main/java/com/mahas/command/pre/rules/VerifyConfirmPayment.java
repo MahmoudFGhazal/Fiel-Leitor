@@ -2,9 +2,6 @@ package com.mahas.command.pre.rules;
 
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CardValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -21,7 +18,11 @@ import com.mahas.domain.sale.StatusSaleName;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.sale.SaleCardDTORequest;
 import com.mahas.dto.request.sale.SaleDTORequest;
+import com.mahas.dto.response.sale.SaleDTOResponse;
 import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyConfirmPayment implements IPreCommand {
@@ -65,6 +66,12 @@ public class VerifyConfirmPayment implements IPreCommand {
 
         SQLRequest sqlRequest = new SQLRequest();
 
+        SaleDTOResponse res = saleValidator.saleExists(saleRequest.getId());
+
+        if(res.getStatusSale().getStatus() != StatusSaleName.PROCESSING.getValue()) {
+            throw new ValidationException("Status não permite essa alteração");
+        }
+
         //Validar Cupom Troca
         if(saleRequest.getTraderCoupons() != null) {
             for(Integer couponId : saleRequest.getTraderCoupons()) {
@@ -87,7 +94,8 @@ public class VerifyConfirmPayment implements IPreCommand {
         cardValidator.isUser(saleRequest.getUser(), cardIds);
     
         Sale sale = saleValidator.toEntity(saleRequest);
-        sale.setId(null);
+        sale.setUser(null);
+        sale.setSaleBooks(null);
 
         Integer statusSaleId = statusSaleValidator.getStatusSale(StatusSaleName.APPROVED);
         StatusSale statusSale = new StatusSale();

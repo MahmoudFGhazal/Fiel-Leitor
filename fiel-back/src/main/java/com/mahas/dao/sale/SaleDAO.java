@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 @Component
@@ -127,4 +128,76 @@ public class SaleDAO implements IDAO {
         return response;
     }
 
+    @Override
+    public SQLResponse delete(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if (!(entity instanceof Sale)) {
+            return null;
+        }
+
+        Sale sale = (Sale) entity;
+
+        String jpql = "DELETE FROM Sale s WHERE s.id = :id";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("id", sale.getId());
+
+        try {
+            int result = query.executeUpdate();
+            if (result > 0) {
+                response.setEntity(sale); 
+            }else {
+                response.setEntity(null);
+            }
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
+    @Override
+    public SQLResponse update(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof Sale)){
+            return null;
+        }
+
+        Sale sale = (Sale) entity;
+
+        try {
+            Sale existingSale = entityManager.find(Sale.class, sale.getId());
+            if (existingSale == null) {
+                response.setEntity(null);
+                return response;
+            }
+            
+            if (sale.getAddress() != null) {
+                existingSale.setAddress(sale.getAddress());
+            }
+            if (sale.getDeliveryDate() != null) {
+                existingSale.setDeliveryDate(sale.getDeliveryDate());
+            }
+            if (sale.getPromotionalCoupon() != null) {
+                existingSale.setPromotionalCoupon(sale.getPromotionalCoupon());
+            }
+            if (sale.getTraderCoupons() != null) {
+                existingSale.setTraderCoupons(sale.getTraderCoupons());
+            }
+            if (sale.getStatusSale() != null) {
+                existingSale.setStatusSale(sale.getStatusSale());
+            }
+           
+            entityManager.flush();
+
+            response.setEntity(existingSale);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
 }
