@@ -35,9 +35,9 @@ public class VerifyUpdateCart implements IPreCommand {
 
         CartDTORequest cartRequest = (CartDTORequest) entity;
         
-        communValidator.validateNotBlack(cartRequest.getUser() == null ? null : cartRequest.getUser().toString(), "Usuario");
-        communValidator.validateNotBlack(cartRequest.getBook() == null ? null : cartRequest.getBook().toString(), "Livro");
-        communValidator.validateNotBlack(cartRequest.getQuantity().toString(), "Quantidade");        
+        communValidator.validateNotBlanck(cartRequest.getUser(), "Usuario");
+        communValidator.validateNotBlanck(cartRequest.getBook(), "Livro");
+        communValidator.validateNotBlanck(cartRequest.getQuantity(), "Quantidade");        
 
         if(!cartValidator.cartExists(cartRequest.getBook(), cartRequest.getUser())) {
             throw new ValidationException(cartRequest.getBook() + " não está no carrinho");

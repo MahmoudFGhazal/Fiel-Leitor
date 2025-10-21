@@ -32,8 +32,8 @@ public class VerifyDecreaseStock implements IPreCommand {
 
         BookDTORequest bookRequest = (BookDTORequest) entity;
 
-        communValidator.validateNotBlack(bookRequest.getId().toString(), "Id não especificado");
-        communValidator.validateNotBlack(bookRequest.getStock().toString(), "Id não especificado");
+        communValidator.validateNotBlanck(bookRequest.getId(), "Id não especificado");
+        communValidator.validateNotBlanck(bookRequest.getStock(), "Id não especificado");
  
         SQLRequest sqlRequest = new SQLRequest();
 

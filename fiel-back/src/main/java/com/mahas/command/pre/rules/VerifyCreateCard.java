@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CardValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -10,9 +13,6 @@ import com.mahas.domain.user.Card;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.user.CardDTORequest;
 import com.mahas.exception.ValidationException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyCreateCard implements IPreCommand {
@@ -35,12 +35,12 @@ public class VerifyCreateCard implements IPreCommand {
 
         CardDTORequest cardRequest = (CardDTORequest) entity;
 
-        communValidator.validateNotBlack(cardRequest.getBin(), "Número do cartão");
-        communValidator.validateNotBlack(cardRequest.getLast4(), "Número do cartão");
-        communValidator.validateNotBlack(cardRequest.getHolder(), "Titular");
-        communValidator.validateNotBlack(cardRequest.getExpMonth(), "Mês de expiração");
-        communValidator.validateNotBlack(cardRequest.getExpYear(), "Ano de expiração");
-        communValidator.validateNotBlack(cardRequest.getUser() == null ? null : cardRequest.getUser().toString(), "Usuario");
+        communValidator.validateNotBlanck(cardRequest.getBin(), "Número do cartão");
+        communValidator.validateNotBlanck(cardRequest.getLast4(), "Número do cartão");
+        communValidator.validateNotBlanck(cardRequest.getHolder(), "Titular");
+        communValidator.validateNotBlanck(cardRequest.getExpMonth(), "Mês de expiração");
+        communValidator.validateNotBlanck(cardRequest.getExpYear(), "Ano de expiração");
+        communValidator.validateNotBlanck(cardRequest.getUser(), "Usuario");
 
         Card card = cardValidator.toEntity(cardRequest);
 

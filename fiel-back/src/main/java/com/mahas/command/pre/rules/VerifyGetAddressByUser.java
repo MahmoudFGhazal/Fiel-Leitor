@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.AddressValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -11,9 +14,6 @@ import com.mahas.domain.user.User;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.address.AddressDTORequest;
 import com.mahas.exception.ValidationException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyGetAddressByUser implements IPreCommand {
@@ -36,7 +36,7 @@ public class VerifyGetAddressByUser implements IPreCommand {
 
         AddressDTORequest addressRequest = (AddressDTORequest) entity;
 
-        communValidator.validateNotBlack(addressRequest.getUser() == null ? null : addressRequest.getUser().toString(), "Usuario");
+        communValidator.validateNotBlanck(addressRequest.getUser(), "Usuario");
 
         Address address = addressValidator.toEntity(addressRequest);
        

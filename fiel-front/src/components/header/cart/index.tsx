@@ -4,6 +4,7 @@ import { ApiResponse } from "@/api/objects";
 import api from "@/api/route";
 import Button from "@/components/buttonComponents/button";
 import QuantityButtons from "@/components/quantityButton";
+import { SaleParam } from "@/components/saleComponent";
 import { useGlobal } from "@/context/GlobalContext";
 import { useEffect, useState } from 'react';
 import { FaTrash } from "react-icons/fa";
@@ -17,7 +18,6 @@ export default function CartSidebar({ onClose }: Props) {
     const { currentUser } = useGlobal();
     const [items, setItems] = useState<CartResponse[]>([]);
     const [itemsChanges, setItemsChanges] = useState<CartResponse[]>([]);
-    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -134,7 +134,6 @@ export default function CartSidebar({ onClose }: Props) {
         if (!diff) return;
 
         try {
-            setIsSaving(true);
             const res = await api.post<ApiResponse>('/cart', { data: diff });
 
             if (res.message) {
@@ -146,9 +145,7 @@ export default function CartSidebar({ onClose }: Props) {
         } catch (err) {
             console.error("Erro ao atualizar carrinho:", err);
             alert("Erro ao salvar alterações do carrinho.");
-        } finally {
-            setIsSaving(false);
-        }
+        } 
     };
 
     const handleClose = async () => {
@@ -159,11 +156,13 @@ export default function CartSidebar({ onClose }: Props) {
     const handlePurchase = async () => {
         await saveCartChanges();
 
-        const saleItems = items.map(item => ({
-            bookId: item.book?.id ?? 0,
-            quantity: item.quantity ?? 1,
-            fromCart: true 
-        }));
+        const saleItems: SaleParam = {
+            items: items.map(item => ({
+                bookId: item.book?.id ?? 0,
+                quantity: item.quantity ?? 1, 
+            })),
+            fromCart: true
+        };
 
         const queryString = new URLSearchParams({
             items: JSON.stringify(saleItems)

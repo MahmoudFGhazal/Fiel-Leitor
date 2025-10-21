@@ -41,9 +41,9 @@ public class VerifyCreateSaleCard implements IPreCommand {
 
         SaleCardDTORequest saleCardRequest = (SaleCardDTORequest) entity;
 
-        communValidator.validateNotBlack(saleCardRequest.getSale().toString(), "Venda");
-        communValidator.validateNotBlack(saleCardRequest.getCard().toString(), "Cartão");
-        communValidator.validateNotBlack(saleCardRequest.getPercent().toString(), "Porcentagem");
+        communValidator.validateNotBlanck(saleCardRequest.getSale(), "Venda");
+        communValidator.validateNotBlanck(saleCardRequest.getCard(), "Cartão");
+        communValidator.validateNotBlanck(saleCardRequest.getPercent(), "Porcentagem");
 
         //Validar Cartão
         cardValidator.cardExists(saleCardRequest.getCard());

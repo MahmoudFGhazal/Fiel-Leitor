@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.AddressValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -9,9 +12,6 @@ import com.mahas.domain.address.Address;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.address.AddressDTORequest;
 import com.mahas.exception.ValidationException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyDeleteAddress implements IPreCommand {
@@ -31,7 +31,7 @@ public class VerifyDeleteAddress implements IPreCommand {
 
         AddressDTORequest addressRequest = (AddressDTORequest) entity;
 
-        communValidator.validateNotBlack(addressRequest.getId() == null ? null : addressRequest.getId().toString(), "Id");
+        communValidator.validateNotBlanck(addressRequest.getId(), "Id");
 
         // Verificar se o endereço existe
         if (!addressValidator.addressExists(addressRequest.getId())) {

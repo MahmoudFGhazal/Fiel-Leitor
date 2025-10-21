@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.AddressValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -12,9 +15,6 @@ import com.mahas.domain.address.Address;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.address.AddressDTORequest;
 import com.mahas.exception.ValidationException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyCreateAddress implements IPreCommand {
@@ -43,18 +43,18 @@ public class VerifyCreateAddress implements IPreCommand {
 
         AddressDTORequest addressRequest = (AddressDTORequest) entity;
         
-        communValidator.validateNotBlack(addressRequest.getUser() == null ? null : addressRequest.getUser().toString(), "Usuario");
-        communValidator.validateNotBlack(addressRequest.getNickname(), "Apelido");
-        communValidator.validateNotBlack(addressRequest.getNumber(), "Número");
-        communValidator.validateNotBlack(addressRequest.getStreet(), "Rua");
-        communValidator.validateNotBlack(addressRequest.getNeighborhood(), "Bairro");
-        communValidator.validateNotBlack(addressRequest.getZip(), "CEP");
-        communValidator.validateNotBlack(addressRequest.getCity(), "Cidade");
-        communValidator.validateNotBlack(addressRequest.getState(), "Estado");
-        communValidator.validateNotBlack(addressRequest.getCountry(), "País");
-        communValidator.validateNotBlack(addressRequest.getNeighborhood(), "Bairro");
-        communValidator.validateNotBlack(addressRequest.getStreetType() == null ? null : addressRequest.getStreetType().toString(), "Tipo de rua");
-        communValidator.validateNotBlack(addressRequest.getResidenceType() == null ? null : addressRequest.getResidenceType().toString(), "Tipo de residencia");
+        communValidator.validateNotBlanck(addressRequest.getUser(), "Usuario");
+        communValidator.validateNotBlanck(addressRequest.getNickname(), "Apelido");
+        communValidator.validateNotBlanck(addressRequest.getNumber(), "Número");
+        communValidator.validateNotBlanck(addressRequest.getStreet(), "Rua");
+        communValidator.validateNotBlanck(addressRequest.getNeighborhood(), "Bairro");
+        communValidator.validateNotBlanck(addressRequest.getZip(), "CEP");
+        communValidator.validateNotBlanck(addressRequest.getCity(), "Cidade");
+        communValidator.validateNotBlanck(addressRequest.getState(), "Estado");
+        communValidator.validateNotBlanck(addressRequest.getCountry(), "País");
+        communValidator.validateNotBlanck(addressRequest.getNeighborhood(), "Bairro");
+        communValidator.validateNotBlanck(addressRequest.getStreetType(), "Tipo de rua");
+        communValidator.validateNotBlanck(addressRequest.getResidenceType(), "Tipo de residencia");
 
         // Validar Tipo de Rua existe
         if (!streetTypeValidator.streetTypeExists(addressRequest.getStreetType())) {

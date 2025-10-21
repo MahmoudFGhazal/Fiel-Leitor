@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.base.product.BaseBookCommand;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -15,9 +18,6 @@ import com.mahas.dto.request.sale.SaleBookDTORequest;
 import com.mahas.dto.response.product.BookDTOResponse;
 import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyCreateSaleBook implements IPreCommand {
@@ -46,9 +46,9 @@ public class VerifyCreateSaleBook implements IPreCommand {
 
         SaleBookDTORequest saleBookRequest = (SaleBookDTORequest) entity;
 
-        communValidator.validateNotBlack(saleBookRequest.getSale().toString(), "Venda");
-        communValidator.validateNotBlack(saleBookRequest.getBook().toString(), "Livro");
-        communValidator.validateNotBlack(saleBookRequest.getQuantity().toString(), "Quantidade");
+        communValidator.validateNotBlanck(saleBookRequest.getSale(), "Venda");
+        communValidator.validateNotBlanck(saleBookRequest.getBook(), "Livro");
+        communValidator.validateNotBlanck(saleBookRequest.getQuantity(), "Quantidade");
         
         //Validar Vendas
         saleValidator.saleExists(saleBookRequest.getSale());

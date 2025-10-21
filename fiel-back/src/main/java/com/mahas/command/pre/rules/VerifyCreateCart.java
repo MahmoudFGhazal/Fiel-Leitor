@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.BookValidator;
 import com.mahas.command.pre.rules.logs.CartValidator;
@@ -11,9 +14,6 @@ import com.mahas.domain.product.Cart;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.product.CartDTORequest;
 import com.mahas.exception.ValidationException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyCreateCart implements IPreCommand {
@@ -39,9 +39,9 @@ public class VerifyCreateCart implements IPreCommand {
 
         CartDTORequest cartRequest = (CartDTORequest) entity;
 
-        communValidator.validateNotBlack(cartRequest.getUser() == null ? null : cartRequest.getUser().toString(), "Usuario");
-        communValidator.validateNotBlack(cartRequest.getBook() == null ? null : cartRequest.getBook().toString(), "Livro");
-        communValidator.validateNotBlack(cartRequest.getQuantity().toString(), "Quantidade");        
+        communValidator.validateNotBlanck(cartRequest.getUser(), "Usuario");
+        communValidator.validateNotBlanck(cartRequest.getBook(), "Livro");
+        communValidator.validateNotBlanck(cartRequest.getQuantity(), "Quantidade");        
 
         if(cartRequest.getQuantity() < 0) {
             throw new ValidationException("Quantidade");

@@ -66,8 +66,8 @@ export interface ResidenceTypeRequest {
 export interface SaleBookRequest {
     sale: number | null,
     book: number | null,
-    freight: number | null,
-    percent: Date | null,
+    quantity: number | null,
+    price: Date | null,
 }
 
 export interface SaleCardRequest {

@@ -39,6 +39,7 @@ async function request<T>(method: Method, url: string, options?: RequestOptions)
 
         return json as T;
     } catch(error){
+        console.log(url);
         console.error("Erro na Requisição", error);
         throw error;   
     }

@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CommunValidator;
 import com.mahas.command.pre.rules.logs.UserValidator;
@@ -9,9 +12,6 @@ import com.mahas.domain.user.User;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.exception.ValidationException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyDeleteUser implements IPreCommand {
@@ -31,7 +31,7 @@ public class VerifyDeleteUser implements IPreCommand {
 
         UserDTORequest userRequest = (UserDTORequest) entity;
 
-        communValidator.validateNotBlack(userRequest.getId() == null ? null : userRequest.getId().toString(), "Id");
+        communValidator.validateNotBlanck(userRequest.getId(), "Id");
 
         // Verificar se o usuário existe
         if (!userValidator.userExists(userRequest.getId())) {

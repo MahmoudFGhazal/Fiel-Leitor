@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CardValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -25,9 +28,6 @@ import com.mahas.dto.response.sale.SaleBookDTOResponse;
 import com.mahas.dto.response.sale.SaleDTOResponse;
 import com.mahas.dto.response.sale.TraderCouponDTOResponse;
 import com.mahas.exception.ValidationException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyConfirmPayment implements IPreCommand {
@@ -62,11 +62,11 @@ public class VerifyConfirmPayment implements IPreCommand {
 
         SaleDTORequest saleRequest = (SaleDTORequest) entity;
 
-        communValidator.validateNotBlack(saleRequest.getId().toString(), "Id não especificado");
+        communValidator.validateNotBlanck(saleRequest.getId().toString(), "Id não especificado");
 
         for(SaleCardDTORequest saleCard : saleRequest.getCards()) {
-            communValidator.validateNotBlack(saleCard.getCard().toString(), "Cartão");
-            communValidator.validateNotBlack(saleCard.getPercent().toString(), "Porcetagem do cartão");
+            communValidator.validateNotBlanck(saleCard.getCard().toString(), "Cartão");
+            communValidator.validateNotBlanck(saleCard.getPercent().toString(), "Porcetagem do cartão");
         }
 
         SQLRequest sqlRequest = new SQLRequest();

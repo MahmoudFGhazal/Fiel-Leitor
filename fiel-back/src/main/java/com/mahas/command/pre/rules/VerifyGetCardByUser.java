@@ -1,5 +1,8 @@
 package com.mahas.command.pre.rules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CardValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -11,9 +14,6 @@ import com.mahas.domain.user.User;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.user.CardDTORequest;
 import com.mahas.exception.ValidationException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyGetCardByUser implements IPreCommand {
@@ -36,7 +36,7 @@ public class VerifyGetCardByUser implements IPreCommand {
 
         CardDTORequest cardRequest = (CardDTORequest) entity;
 
-        communValidator.validateNotBlack(cardRequest.getUser() == null ? null : cardRequest.getUser().toString(), "Id");
+        communValidator.validateNotBlanck(cardRequest.getUser(), "Id");
 
         Card card = cardValidator.toEntity(cardRequest);
        

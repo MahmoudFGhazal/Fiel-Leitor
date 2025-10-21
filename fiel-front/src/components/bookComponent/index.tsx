@@ -90,8 +90,12 @@ export default function BookComponent({ bookId }: Props) {
 
         const saleItems = [
             {
-                bookId: book.id ?? 0,
-                quantity: quantity,
+                item: [
+                    {
+                        bookId: book.id ?? 0,
+                        quantity: quantity
+                    },
+                ],
                 fromCart: false 
             }
         ];
