@@ -172,6 +172,18 @@ export default function CartSidebar({ onClose }: Props) {
         window.location.href = `/sale?${queryString}`;
     };
 
+    const handleCleanCart = async () => {
+        const res = await api.delete("/cart/clean", { params: { userId: currentUser } }) as ApiResponse;
+    
+        if(res.message) {
+            alert(res.message);
+            return;
+        }
+
+        setItems([]);
+        setItemsChanges([]);
+    };
+
     return (
         <div className={styles.overlay} onClick={handleClose}>
             <div className={styles.cartSidebar} onClick={(e) => e.stopPropagation()}>
@@ -207,6 +219,12 @@ export default function CartSidebar({ onClose }: Props) {
                         type='button'
                         text="Comprar"
                         onClick={handlePurchase}
+                        disabled={items.length === 0}
+                    />
+                    <Button
+                        type='button'
+                        text="Limpar"
+                        onClick={handleCleanCart}
                         disabled={items.length === 0}
                     />
                 </div>

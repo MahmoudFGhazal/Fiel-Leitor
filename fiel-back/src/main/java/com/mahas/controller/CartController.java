@@ -1,5 +1,16 @@
 package com.mahas.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.mahas.command.post.adapters.AddCartAdapter;
 import com.mahas.command.post.adapters.DeleteCartAdapter;
 import com.mahas.command.pre.base.product.BaseCartCommand;
@@ -14,17 +25,6 @@ import com.mahas.dto.request.product.cart.UpdateCartRequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.product.CartDTOResponse;
 import com.mahas.facade.IFacade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -151,7 +151,7 @@ public class CartController {
         return ResponseEntity.ok(lastResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/clean")
     public ResponseEntity<FacadeResponse> deleteCart(
         @RequestParam(value = "userId", required = true) Integer userId
     ) {
