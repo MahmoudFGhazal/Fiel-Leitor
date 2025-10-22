@@ -6,11 +6,12 @@ import api from '@/api/route';
 import { useGlobal } from '@/context/GlobalContext';
 import showToast from '@/utils/showToast';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Button from '../buttonComponents/button';
 import CartItemsList from '../cartItemsList';
 import SelectAddressMethod from '../selectAddressMethod';
 import SelectPaymentMethod from '../selectPaymentMethod';
+import CouponList from './couponList';
 import styles from './saleComponent.module.css';
 
 export interface ItemParam {
@@ -84,42 +85,36 @@ export default function SaleComponent() {
     const ranRef = useRef(false);
     const leavingRef = useRef(false);
     const saleIdRef = useRef<number | null>(null);
+    const [couponDiscount, setCouponDiscount] = useState(0);
+
+    const subtotal = useMemo(() => {
+        return items.reduce((acc, item) => acc + Number(item.book.price ?? 0) * item.quantity, 0);
+    }, [items]);
+
+    const totalPrice = Math.max(0, subtotal - couponDiscount);
 
     async function cancelSaleReliable(saleId: number) {
-        const payload = {
-            data: {
-                id: saleId,
-                user: null,
-                freight: null,
-                deliveryDate: null,
-                status: null,
-                address: null,
-                cards: null,
-                books: null,
-                traderCoupon: null,
-                promotinalCoupons: null,
-            },
+        const payload: SaleRequest = {
+            id: saleId,
+            user: null,
+            freight: null,
+            deliveryDate: null,
+            status: null,
+            address: null,
+            cards: null,
+            books: null,
+            traderCoupon: null,
+            promotinalCoupons: null,
         };
-        const url = '/sale/cancel';
 
         try {
-            const ok = navigator.sendBeacon?.(
-                url,
-                new Blob([JSON.stringify(payload)], { type: 'application/json' })
-            );
-            if (ok) return;
+            const res =await api.put<ApiResponse>('/sale/cancel', { data: payload });
+
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
         } catch {}
-
-        try {
-            await fetch(url, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-                keepalive: true,
-            });
-        } catch (e) {
-            console.error('cancel keepalive error', e);
-        }
     }
 
     const onLeavePage = async () => {
@@ -206,10 +201,10 @@ export default function SaleComponent() {
                     user: currentUser,
                     books: parsedItems.items.map(
                         (i): SaleBookRequest => ({
-                        book: i.bookId,
-                        quantity: i.quantity,
-                        price: null,
-                        sale: null,
+                            book: i.bookId,
+                            quantity: i.quantity,
+                            price: null,
+                            sale: null,
                         })
                     ),
                     id: null,
@@ -352,21 +347,44 @@ export default function SaleComponent() {
                     <SelectPaymentMethod purchaseTotal={total} onSelect={setSelectedCards} />
                 </div>
 
-                <CartItemsList
-                    items={items.map(i => ({
-                        id: i.book.id ?? 0,
-                        name: i.book.name ?? '',
-                        price: i.book.price ?? 0,
-                        quantity: i.quantity
-                    }))}
-                />
+                <div className={styles.cartItemsContainer}>
+                    <h3>Itens</h3>
+                    <CartItemsList
+                        items={items.map(i => ({
+                            id: i.book.id ?? 0,
+                            name: i.book.name ?? '',
+                            price: i.book.price ?? 0,
+                            quantity: i.quantity
+                        }))}
+                    />
+
+                    <div className={styles.total}>
+                        <CouponList onDiscountChange={setCouponDiscount} />
+
+                        <div className={styles.totalsBlock}>
+                            <div className={styles.totalsRow}>
+                                <span>Subtotal: </span>
+                                <strong>R$ {subtotal.toFixed(2)}</strong>
+                            </div>
+                            <div className={styles.totalsRow}>
+                                <span>Descontos: </span>
+                                <strong>R$ {couponDiscount.toFixed(2)}</strong>
+                            </div>
+                            <div className={styles.totalsRowFinal}>
+                                <span>Total: </span>
+                                <strong>R$ {totalPrice.toFixed(2)}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className={styles.buttonContent}>
                 <Button
                     type='button'
                     text='Finalizar Compra'
-                    onClick={() => sendSale()}
+                    onClick={() => sendSale()     
+                    }
                 />
             </div>
         </div>

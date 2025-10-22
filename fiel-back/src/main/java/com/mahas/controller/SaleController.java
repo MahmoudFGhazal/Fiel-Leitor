@@ -1,24 +1,5 @@
 package com.mahas.controller;
 
-import com.mahas.command.pre.base.sale.BaseSaleCommand;
-import com.mahas.command.pre.rules.VerifyCancelSale;
-import com.mahas.command.pre.rules.VerifyConfirmPayment;
-import com.mahas.command.pre.rules.VerifyCreateSaleBook;
-import com.mahas.command.pre.rules.VerifyCreateSaleCard;
-import com.mahas.command.pre.rules.VerifyDecreaseStock;
-import com.mahas.command.pre.rules.VerifyNewSale;
-import com.mahas.command.pre.rules.verifyReleaseReservedStock;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.dto.request.product.BookDTORequest;
-import com.mahas.dto.request.sale.SaleBookDTORequest;
-import com.mahas.dto.request.sale.SaleCardDTORequest;
-import com.mahas.dto.request.sale.SaleDTORequest;
-import com.mahas.dto.response.DTOResponse;
-import com.mahas.dto.response.sale.SaleBookDTOResponse;
-import com.mahas.dto.response.sale.SaleDTOResponse;
-import com.mahas.facade.IFacade;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,6 +10,29 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mahas.command.pre.base.sale.BaseSaleCommand;
+import com.mahas.command.pre.rules.VerifyCancelSale;
+import com.mahas.command.pre.rules.VerifyConfirmPayment;
+import com.mahas.command.pre.rules.VerifyCreateSaleBook;
+import com.mahas.command.pre.rules.VerifyCreateSaleCard;
+import com.mahas.command.pre.rules.VerifyDecreaseStock;
+import com.mahas.command.pre.rules.VerifyNewSale;
+import com.mahas.command.pre.rules.VerifyReleaseReservedStock;
+import com.mahas.command.pre.rules.VerifyUsedPromotionalCoupon;
+import com.mahas.command.pre.rules.VerifyUsedTraderCoupon;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.dto.request.product.BookDTORequest;
+import com.mahas.dto.request.sale.PromotionalCouponDTORequest;
+import com.mahas.dto.request.sale.SaleBookDTORequest;
+import com.mahas.dto.request.sale.SaleCardDTORequest;
+import com.mahas.dto.request.sale.SaleDTORequest;
+import com.mahas.dto.request.sale.TraderCouponDTORequest;
+import com.mahas.dto.response.DTOResponse;
+import com.mahas.dto.response.sale.SaleBookDTOResponse;
+import com.mahas.dto.response.sale.SaleDTOResponse;
+import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -59,7 +63,13 @@ public class SaleController {
     private VerifyCancelSale verifyCancelSale;
 
     @Autowired
-    private verifyReleaseReservedStock verifyReleaseReservedStock;
+    private VerifyReleaseReservedStock verifyReleaseReservedStock;
+
+    @Autowired
+    private VerifyUsedPromotionalCoupon verifyUsedPromotionalCoupon;
+
+    @Autowired
+    private VerifyUsedTraderCoupon verifyUsedTraderCoupon;
 
     @GetMapping("/user")
     public ResponseEntity<FacadeResponse> getSaleByUser(
@@ -168,6 +178,28 @@ public class SaleController {
             saleCardReq.setPreCommand(verifyCreateSaleCard);
 
             facade.update(saleCardReq);
+        }
+
+        FacadeRequest promotionalCouponReq = new FacadeRequest();
+
+        PromotionalCouponDTORequest promotionalCoupon = new PromotionalCouponDTORequest();
+        promotionalCoupon.setId(sale.getPromotionalCoupon());
+
+        promotionalCouponReq.setEntity(promotionalCoupon);
+        promotionalCouponReq.setPreCommand(verifyUsedPromotionalCoupon);
+
+        facade.update(promotionalCouponReq);
+
+        for(Integer traderCouponId : sale.getTraderCoupons()) {
+            FacadeRequest traderCouponReq = new FacadeRequest();
+
+            TraderCouponDTORequest traderCoupon = new TraderCouponDTORequest();
+            traderCoupon.setId(traderCouponId);
+
+            traderCouponReq.setEntity(traderCoupon);
+            traderCouponReq.setPreCommand(verifyUsedTraderCoupon);
+
+            facade.update(traderCouponReq);
         }
         
         return ResponseEntity.ok(facadeSaleRes);

@@ -52,7 +52,7 @@ public class VerifyCancelSale implements IPreCommand {
 
         Sale sale = new Sale();
         sale.setId(saleRequest.getId());
-        System.out.println(saleRequest.getId());
+
         Integer statusSaleId = statusSaleValidator.getStatusSale(StatusSaleName.DECLINED);
         StatusSale statusSale = new StatusSale();
         statusSale.setId(statusSaleId);

@@ -15,6 +15,7 @@ import com.mahas.domain.sale.PromotionalCoupon;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 @Component
@@ -39,6 +40,10 @@ public class PromotionalCouponDAO implements IDAO {
         if (coupon.getId() != null) { 
             where.append(" AND p.id = :id"); 
             params.put("id", coupon.getId()); 
+        }
+        if (coupon.getCode() != null) { 
+            where.append(" AND p.code = :code"); 
+            params.put("code", coupon.getCode()); 
         }
         if (coupon.getUsed() != null) { 
             where.append(" AND p.used = :used"); 
@@ -81,6 +86,39 @@ public class PromotionalCouponDAO implements IDAO {
         response.setTotalItem((int) totalItems); 
         response.setTotalPage(totalPage);
         
+        return response;
+    }
+
+    @Override
+    public SQLResponse update(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof PromotionalCoupon)){
+            return null;
+        }
+
+        PromotionalCoupon promotionalCoupon = (PromotionalCoupon) entity;
+
+        try {
+            System.out.println(promotionalCoupon.getId());
+            PromotionalCoupon existingPromotionalCoupon = entityManager.find(PromotionalCoupon.class, promotionalCoupon.getId());
+            if (existingPromotionalCoupon == null) {
+                response.setEntity(null);
+                return response;
+            }
+            
+            if (promotionalCoupon.getUsed() != null) {
+                existingPromotionalCoupon.setUsed(promotionalCoupon.getUsed());
+            }
+           
+            entityManager.flush();
+
+            response.setEntity(existingPromotionalCoupon);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
         return response;
     }
 }

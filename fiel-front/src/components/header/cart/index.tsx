@@ -125,7 +125,6 @@ export default function CartSidebar({ onClose }: Props) {
     useEffect(() => {
         if (items.length || itemsChanges.length) {
             const diff = getDifferences();
-            console.log("Diferenças atualizadas:", diff);
         }
     }, [items]);
 
@@ -139,7 +138,6 @@ export default function CartSidebar({ onClose }: Props) {
             if (res.message) {
                 alert(res.message);
             } else {
-                console.log("Carrinho atualizado com sucesso!");
                 setItemsChanges([...items]); 
             }
         } catch (err) {

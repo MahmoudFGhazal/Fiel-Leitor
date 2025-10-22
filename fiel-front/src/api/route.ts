@@ -27,6 +27,7 @@ async function request<T>(method: Method, url: string, options?: RequestOptions)
             "Content-Type": "application/json",
         },
         body: options?.data ? JSON.stringify(options.data) : undefined,
+        keepalive: true,
     };
 
     try{

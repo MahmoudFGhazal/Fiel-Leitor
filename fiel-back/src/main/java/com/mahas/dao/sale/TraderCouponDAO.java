@@ -15,6 +15,7 @@ import com.mahas.domain.sale.TraderCoupon;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 @Component
@@ -36,8 +37,18 @@ public class TraderCouponDAO implements IDAO {
         Map<String, Object> params = new HashMap<>();
         StringBuilder where = new StringBuilder();
 
-        if (coupon.getId() != null) { where.append(" AND t.id = :id"); params.put("id", coupon.getId()); }
-        if (coupon.getUsed() != null) { where.append(" AND t.used = :used"); params.put("used", coupon.getUsed()); }
+        if (coupon.getId() != null) { 
+            where.append(" AND t.id = :id"); 
+            params.put("id", coupon.getId()); 
+        }
+        if (coupon.getCode() != null) { 
+            where.append(" AND t.code = :code"); 
+            params.put("code", coupon.getCode()); 
+        }
+        if (coupon.getUsed() != null) { 
+            where.append(" AND t.used = :used"); 
+            params.put("used", coupon.getUsed()); 
+        }
         if (coupon.getAppliedSale() != null && coupon.getAppliedSale().getId() != null) {
             where.append(" AND t.appliedSale.id = :saleId"); params.put("saleId", coupon.getAppliedSale().getId());
         }
@@ -81,6 +92,38 @@ public class TraderCouponDAO implements IDAO {
         response.setTotalItem((int) totalItems); 
         response.setTotalPage(totalPage);
         
+        return response;
+    }
+
+    @Override
+    public SQLResponse update(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof TraderCoupon)){
+            return null;
+        }
+
+        TraderCoupon traderCoupon = (TraderCoupon) entity;
+
+        try {
+            TraderCoupon existingTraderCoupon = entityManager.find(TraderCoupon.class, traderCoupon.getId());
+            if (existingTraderCoupon == null) {
+                response.setEntity(null);
+                return response;
+            }
+            
+            if (traderCoupon.getUsed() != null) {
+                existingTraderCoupon.setUsed(traderCoupon.getUsed());
+            }
+           
+            entityManager.flush();
+
+            response.setEntity(existingTraderCoupon);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
         return response;
     }
 }

@@ -54,6 +54,7 @@ export interface GenderResponse {
 
 export interface PromotionalCouponResponse {
     id: number | null,
+    code: string | null,
     value: number | null,
     used: boolean | null      
 }
@@ -101,9 +102,9 @@ export interface StreetTypeResponse {
 
 export interface TraderCouponResponse {
     id: number | null,
-    sale: SaleResponse | null,    
+    code: string | null,
     value: number | null,
-    user: boolean | null      
+    used: boolean | null      
 }
 
 export interface UserResponse {

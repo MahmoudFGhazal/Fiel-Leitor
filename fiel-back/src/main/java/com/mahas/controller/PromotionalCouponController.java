@@ -30,7 +30,7 @@ public class PromotionalCouponController {
     ) {
         FacadeRequest request = new FacadeRequest();
         
-       PromotionalCouponDTORequest promotionalCouponReq = new PromotionalCouponDTORequest();
+        PromotionalCouponDTORequest promotionalCouponReq = new PromotionalCouponDTORequest();
         promotionalCouponReq.setCode(code);
 
         request.setEntity(promotionalCouponReq);

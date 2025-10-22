@@ -52,7 +52,9 @@ public class VerifyNewSale implements IPreCommand {
         SQLRequest sqlRequest = new SQLRequest();
 
         //Validar Usuario
-        userValidator.userExists(saleRequest.getUser());
+        if(!userValidator.userExists(saleRequest.getUser())) {
+            throw new ValidationException("Usuario não encontrado");
+        }
 
         //Validar Livros
         for(SaleBookDTORequest saleBook : saleRequest.getBooks()) {

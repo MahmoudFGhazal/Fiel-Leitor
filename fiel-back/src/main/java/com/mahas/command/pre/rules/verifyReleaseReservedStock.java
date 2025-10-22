@@ -1,8 +1,5 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.BookValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -13,8 +10,11 @@ import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.product.BookDTORequest;
 import com.mahas.exception.ValidationException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 @Component
-public class verifyReleaseReservedStock implements IPreCommand {
+public class VerifyReleaseReservedStock implements IPreCommand {
     @Autowired
     private BookValidator bookValidator;
 
