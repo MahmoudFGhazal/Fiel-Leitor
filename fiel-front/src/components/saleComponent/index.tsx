@@ -86,6 +86,10 @@ export default function SaleComponent() {
     const leavingRef = useRef(false);
     const saleIdRef = useRef<number | null>(null);
     const [couponDiscount, setCouponDiscount] = useState(0);
+    const [couponIds, setCouponIds] = useState<{ traderCouponIds: number[]; promotionalCouponId: number | null }>({
+        traderCouponIds: [],
+        promotionalCouponId: null,
+    });
 
     const subtotal = useMemo(() => {
         return items.reduce((acc, item) => acc + Number(item.book.price ?? 0) * item.quantity, 0);
@@ -103,8 +107,8 @@ export default function SaleComponent() {
             address: null,
             cards: null,
             books: null,
-            traderCoupon: null,
-            promotinalCoupons: null,
+            traderCoupons: null,
+            promotinalCoupon: null,
         };
 
         try {
@@ -155,7 +159,19 @@ export default function SaleComponent() {
         if (storedSaleId && storedItems && itemsParam && storedItems !== itemsParam) {
         (async () => {
             try {
-                const payload: SaleRequest = { id: storedSaleId, user: null, freight: null, deliveryDate: null, status: null, address: null, cards: null, books: null, traderCoupon: null, promotinalCoupons: null };
+                const payload: SaleRequest = { 
+                    id: storedSaleId, 
+                    user: null, 
+                    freight: null, 
+                    deliveryDate: null, 
+                    status: null, 
+                    address: null,
+                    cards: null, 
+                    books: null, 
+                    traderCoupons: null, 
+                    promotinalCoupon: null 
+                };
+
                 await api.put<ApiResponse>('/sale/cancel', { data: payload });
             } catch (e) {
                 console.error('Erro ao cancelar venda antiga por mudança de URL:', e);
@@ -213,8 +229,8 @@ export default function SaleComponent() {
                     status: null,
                     address: null,
                     cards: null,
-                    traderCoupon: null,
-                    promotinalCoupons: null,
+                    traderCoupons: null,
+                    promotinalCoupon: null,
                 };
 
                 const res = await api.post<ApiResponse>('/sale', { data: payload });
@@ -321,8 +337,8 @@ export default function SaleComponent() {
                 freight: null,
                 deliveryDate: null,
                 status: null,
-                traderCoupon: null,
-                promotinalCoupons: null,
+                traderCoupons: couponIds.traderCouponIds,
+                promotinalCoupon: couponIds.promotionalCouponId,
             };
 
             const res = await api.put<ApiResponse>('/sale/payment', { data: req });
@@ -359,7 +375,7 @@ export default function SaleComponent() {
                     />
 
                     <div className={styles.total}>
-                        <CouponList onDiscountChange={setCouponDiscount} />
+                        <CouponList onDiscountChange={setCouponDiscount} onCouponsChange={setCouponIds} />
 
                         <div className={styles.totalsBlock}>
                             <div className={styles.totalsRow}>

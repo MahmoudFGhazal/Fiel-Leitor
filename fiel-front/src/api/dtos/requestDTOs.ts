@@ -86,8 +86,8 @@ export interface SaleRequest {
     address: number | null,
     cards: SaleCardRequest[] | null,
     books: SaleBookRequest[] | null,
-    traderCoupon: number | null,
-    promotinalCoupons: number[] | null
+    traderCoupons: number[] | null,
+    promotinalCoupon: number | null
 }
 
 export interface StatusSaleRequest {

@@ -6,15 +6,16 @@ import InputText from '@/components/inputComponents/inputText';
 import { useEffect, useState } from 'react';
 import styles from './couponList.module.css';
 
-type CuponListProps = {
-  onDiscountChange?: (totalDiscount: number) => void; 
+type CouponListProps = {
+    onDiscountChange?: (totalDiscount: number) => void;
+    onCouponsChange?: (data: { traderCouponIds: number[]; promotionalCouponId: number | null }) => void; // <--
 };
 
 function sameTraderCoupon(a: TraderCouponResponse, b: TraderCouponResponse) {
-  return (
-    (a?.id != null && b?.id != null && a.id === b.id) ||
-    (!!a?.code && !!b?.code && a.code === b.code)
-  );
+    return (
+        (a?.id != null && b?.id != null && a.id === b.id) ||
+        (!!a?.code && !!b?.code && a.code === b.code)
+    );
 }
 
 function hasTraderCoupon(
@@ -24,7 +25,7 @@ function hasTraderCoupon(
     return !!list?.some(tc => sameTraderCoupon(tc, entity));
 }
 
-export default function CouponList({ onDiscountChange }: CuponListProps) {
+export default function CouponList({ onDiscountChange, onCouponsChange  }: CouponListProps) {
     const [couponCode, setCouponCode] = useState<string>("");
     const [promotionalCoupon, setPromotionalCoupon] = useState<PromotionalCouponResponse>();
     const [traderCoupons, setTraderCoupons] = useState<TraderCouponResponse[]>([]);
@@ -34,7 +35,16 @@ export default function CouponList({ onDiscountChange }: CuponListProps) {
         const promo = Number(promotionalCoupon?.value ?? 0);
         const totalDiscount = traderSum + promo;
         onDiscountChange?.(totalDiscount);
-    }, [traderCoupons, promotionalCoupon, onDiscountChange]);
+
+        const traderCouponIds = traderCoupons
+        .map(c => c?.id)
+        .filter((id): id is number => typeof id === 'number'); 
+
+        const promotionalCouponId =
+        typeof promotionalCoupon?.id === 'number' ? promotionalCoupon.id : null;
+
+        onCouponsChange?.({ traderCouponIds, promotionalCouponId });
+    }, [traderCoupons, promotionalCoupon, onDiscountChange, onCouponsChange]);
 
     const updateCoupon = async () => {
         if(!couponCode) {
