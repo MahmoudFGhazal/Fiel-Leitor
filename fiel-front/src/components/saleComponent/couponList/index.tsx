@@ -109,6 +109,14 @@ export default function CouponList({ onDiscountChange, onCouponsChange  }: Coupo
         }
     };
 
+    function removeTraderCoupon(target: TraderCouponResponse) {
+        setTraderCoupons(prev => prev.filter(tc => !sameTraderCoupon(tc, target)));
+    }
+
+    function removePromotionalCoupon() {
+        setPromotionalCoupon(undefined);
+    }
+
     return (
         <div className={styles.couponSection}>
             <div>
@@ -125,6 +133,7 @@ export default function CouponList({ onDiscountChange, onCouponsChange  }: Coupo
                             updateCoupon();
                         }
                     }}
+                    dataCy='coupon-text'
                 />
             </div>
 
@@ -132,10 +141,21 @@ export default function CouponList({ onDiscountChange, onCouponsChange  }: Coupo
                 <div
                     key={`trader-${c?.id ?? c?.code ?? idx}`}
                     className={styles.row}
+                    data-cy="trader-coupon-row"
                 >
                     <div className={styles.cellName}>{c?.code ?? '-'}</div>
                     <div className={styles.cellType}>Trader</div>
                     <div className={styles.cellValue}>R$ {Number(c?.value ?? 0).toFixed(2)}</div>
+                
+                    <button
+                        type="button"
+                        aria-label={`Remover cupom trader ${c?.code ?? c?.id ?? ''}`}
+                        data-cy="remove-coupon"
+                        className={styles.removeBtn}
+                        onClick={() => removeTraderCoupon(c)}
+                    >
+                        ×
+                    </button>
                 </div>
             ))}
 
@@ -147,11 +167,21 @@ export default function CouponList({ onDiscountChange, onCouponsChange  }: Coupo
                     <div className={styles.cellName}>{promotionalCoupon?.code ?? '-'}</div>
                     <div className={styles.cellType}>Promocional</div>
                     <div className={styles.cellValue}>R$ {Number(promotionalCoupon?.value ?? 0).toFixed(2)}</div>
+                
+                    <button
+                        type="button"
+                        aria-label={`Remover cupom promocional ${promotionalCoupon?.code ?? promotionalCoupon?.id ?? ''}`}
+                        data-cy="remove-coupon"
+                        className={styles.removeBtn}
+                        onClick={removePromotionalCoupon}
+                    >
+                        ×
+                    </button>
                 </div>
             )}
 
             {!promotionalCoupon && traderCoupons.length === 0 && (
-                <div className={styles.emptyHint}>Nenhum cupom aplicado.</div>
+                <div className={styles.emptyHint} data-cy="empty-coupons-hint">Nenhum cupom aplicado.</div>
             )}
         </div>
     );
