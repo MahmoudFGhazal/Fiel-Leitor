@@ -194,13 +194,17 @@ export default function CartSidebar({ onClose }: Props) {
                     {items.map(item => (
                         <div key={item.book?.id ?? Math.random()} className={styles.cartItem}>
                             <div className={styles.nameContent}>
-                                <span>{item.book?.name}</span>
-                                <Button
-                                    type='button'
-                                    onClick={() => removeItem(item.book?.id ?? 0)}
-                                >
-                                    <FaTrash size={15} />
-                                </Button>
+                                <div className={styles.productName} >
+                                    <span>{item.book?.name}</span>
+                                </div>
+                                <div className={styles.trashContent} >
+                                    <Button
+                                        type='button'
+                                        onClick={() => removeItem(item.book?.id ?? 0)}
+                                    >
+                                        <FaTrash size={15} />
+                                    </Button>
+                                </div>
                             </div>
                             <QuantityButtons
                                 quantity={item.quantity ?? 1}

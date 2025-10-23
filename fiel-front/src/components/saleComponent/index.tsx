@@ -399,8 +399,8 @@ export default function SaleComponent() {
                 <Button
                     type='button'
                     text='Finalizar Compra'
-                    onClick={() => sendSale()     
-                    }
+                    onClick={() => sendSale()}
+                    dataCy='finalize-purchase-button'
                 />
             </div>
         </div>

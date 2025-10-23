@@ -91,3 +91,11 @@
     flex-direction: column;
     gap: 10px;
 }
+
+.productName {
+    width: 250px;
+}
+
+.trashContent {
+    width: 50px;
+}
