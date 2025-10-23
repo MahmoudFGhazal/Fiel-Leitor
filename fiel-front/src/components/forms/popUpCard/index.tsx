@@ -1,7 +1,7 @@
 // src/components/forms/PopUpCard.tsx
 'use client';
 import { CardRequest } from '@/api/dtos/requestDTOs';
-import Input from "@/components/input";
+import InputText from '@/components/inputComponents/inputText';
 import styles from './popUpCard.module.css';
 
 interface Props {
@@ -30,14 +30,15 @@ export default function PopUpCard({ card, onChange, disable }: Props) {
 
     return (
         <div className={styles.formContainer}>
-            <Input
+            <InputText
                 type="text"
                 text="Nome do Titular"
                 value={card.holder ?? ""}
                 onChange={(val) => onChange('holder', val)}
+                dataCy="holder-text"
             />
 
-            <Input
+            <InputText
                 type="text"
                 text="Número do Cartão"
                 value={maskPanForDisplay(pan)}
@@ -46,9 +47,10 @@ export default function PopUpCard({ card, onChange, disable }: Props) {
                     onChange('bin', cleaned);
                 }}
                 disabled={disable}
+                dataCy="pan-text"
             />
 
-            <Input
+            <InputText
                 type="text"
                 text="Validade"
                 value={formatExpForDisplay(expInput)}
@@ -57,6 +59,7 @@ export default function PopUpCard({ card, onChange, disable }: Props) {
                     onChange('expMonth', cleaned);
                 }}
                 disabled={disable}
+                dataCy="exp-text"
             />
         </div>
     );

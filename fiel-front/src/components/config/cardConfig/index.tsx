@@ -175,6 +175,7 @@ export default function CardConfig() {
                     label="Criar Cartão" 
                     onClick={() => openEditModal(undefined, true)}
                     color='green'
+                    dataCy="create-card-button"
                 />
             </div>
             <table className={styles.cardTable}>
@@ -194,12 +195,14 @@ export default function CardConfig() {
                                         label="Visualizar" 
                                         onClick={() => openEditModal(card, false)} 
                                         color="gray" 
+                                        dataCy="view-card-button"
                                     />
 
                                     <ActionButton 
                                         label="Apagar" 
                                         onClick={() => handleDelete(card.id!)} 
                                         color="red" 
+                                        dataCy="delete-card-button"
                                     />
                                 </div>
                             </td>
@@ -209,8 +212,8 @@ export default function CardConfig() {
             </table>
 
             {isModalOpen && editedCard && (
-                <div className={styles.modalBackdrop}>
-                    <div className={styles.modal}>
+                <div className={styles.modalBackdrop} data-cy="card-modal-backdrop">
+                    <div className={styles.modal} data-cy="card-modal">
                         <div className={styles.titleContent}>
                             <h3>{editedCard.id ? 'Visualizar Cartão' : (isFormEditable ? 'Criar Cartão' : 'Visualizar Cartão')}</h3>
                         </div>
@@ -224,12 +227,12 @@ export default function CardConfig() {
                         <div className={styles.modalActions}>
                             {editedCard.id ? (
                                 <>
-                                    <Button type="button" onClick={closeModal} text="Fechar" />
+                                    <Button type="button" onClick={closeModal} text="Fechar" dataCy="close-card-button" />
                                 </>
                             ) : (
                                 <>
-                                    <Button type="button" onClick={saveCard} text="Salvar" />
-                                    <Button type="button" onClick={closeModal} text="Cancelar" />
+                                    <Button type="button" onClick={saveCard} text="Salvar" dataCy="save-card-button" />
+                                    <Button type="button" onClick={closeModal} text="Cancelar" dataCy="cancel-card-button" />
                                 </>
                             )}
                         </div>
