@@ -85,9 +85,10 @@ export interface SaleResponse {
   status: StatusSaleResponse | null,           
   address: AddressResponse | null,           
   cards: SaleCardResponse[] | null,            
-  books: SaleBookResponse[] | null,            
+  saleBooks: SaleBookResponse[] | null,            
   traderCoupon: TraderCouponResponse | null,    
-  promotinalCoupons: PromotionalCouponResponse[] | null 
+  promotinalCoupons: PromotionalCouponResponse[] | null,
+  createdAt: Date | null
 }
 
 export interface StatusSaleResponse {

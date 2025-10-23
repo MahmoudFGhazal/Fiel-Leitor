@@ -4,7 +4,7 @@ import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
 import { useGlobal } from '@/context/GlobalContext';
 import { useEffect, useState } from 'react';
-import OrderCard from '../order/orderCard';
+import OrderCard from '../order/orderSale';
 
 export default function ListSales() {
     const { currentUser } = useGlobal();
@@ -12,6 +12,7 @@ export default function ListSales() {
 
     useEffect(() => {
         async function fetchData() {
+            console.log(currentUser)
             try {
                 const res = await api.get<ApiResponse>('/sale/user', { params: { userId: currentUser } });
                 if (res.message) {
@@ -27,7 +28,7 @@ export default function ListSales() {
                 }
                 setSales(entities);
             } catch (err) {
-                console.error("Erro ao carregar cartões", err);
+                console.error("Erro ao carregar vendas", err);
             }
         }
 
