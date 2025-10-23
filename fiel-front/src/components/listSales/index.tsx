@@ -13,7 +13,7 @@ export default function ListSales() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await api.get<ApiResponse>('/card/user', { params: { userId: currentUser } });
+                const res = await api.get<ApiResponse>('/sale/user', { params: { userId: currentUser } });
                 if (res.message) {
                     alert(res.message);
                     return;

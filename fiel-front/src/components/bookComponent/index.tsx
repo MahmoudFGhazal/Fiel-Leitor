@@ -138,12 +138,14 @@ export default function BookComponent({ bookId }: Props) {
                             text="Comprar" 
                             disabled={!currentUser} 
                             onClick={handlePurchase} 
+                            dataCy='sale-button'
                         />
                         <Button
                             type="button"
                             text="Carrinho"
                             disabled={!currentUser}
                             onClick={handleAddToCart}
+                            dataCy='add-button'
                         />
                     </div>
                 </div>

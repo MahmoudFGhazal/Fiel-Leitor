@@ -217,12 +217,14 @@ export default function CartSidebar({ onClose }: Props) {
                         text="Comprar"
                         onClick={handlePurchase}
                         disabled={items.length === 0}
+                        dataCy="sale-cart-button"
                     />
                     <Button
                         type='button'
                         text="Limpar"
                         onClick={handleCleanCart}
                         disabled={items.length === 0}
+                        dataCy="clear-button"
                     />
                 </div>
             </div>

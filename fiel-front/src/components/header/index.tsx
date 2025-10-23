@@ -1,14 +1,14 @@
 'use client'
-import { FaHome, FaShoppingCart, FaDoorOpen, FaSearch, FaArchive } from "react-icons/fa";
+import logo from '@/../public/whitelogo.png';
+import { useGlobal } from "@/context/GlobalContext";
+import Image from 'next/image';
+import Link from "next/link";
+import { useState } from 'react';
+import { FaArchive, FaDoorOpen, FaHome, FaSearch, FaShoppingCart } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { IoLogIn } from "react-icons/io5";
-import Image from 'next/image';
-import logo from '@/../public/whitelogo.png';
-import styles from './header.module.css';
-import { useEffect, useState } from 'react';
 import CartSidebar from "./cart";
-import Link from "next/link";
-import { useGlobal } from "@/context/GlobalContext";
+import styles from './header.module.css';
 
 export default function Header(){
     const [searchQuery, setSearchQuery] = useState('');
@@ -61,7 +61,7 @@ export default function Header(){
                 <div className={styles.right}>
                     {currentUser ? ( 
                         <div className={styles.userHeaderOptions}>
-                            <p className={styles.cartButton} onClick={toggleCart}>
+                            <p className={styles.cartButton} onClick={toggleCart} data-cy="open-cart-button" >
                                 <FaShoppingCart size={20} />    
                             </p>
                             <Link href="/config" className={styles.link}>

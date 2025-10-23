@@ -1,6 +1,5 @@
 describe('Gestão de Endereços', () => {
     beforeEach(() => {
-        // Define currentUser como 20
         cy.window().then(win => {
             win.localStorage.setItem('currentUser', '20');
         });
@@ -9,10 +8,9 @@ describe('Gestão de Endereços', () => {
     });
 
     it('Deve criar um novo endereço com sucesso', () => {
-        // Printando currentUser
         cy.window().then(win => {
             const currentUser = win.localStorage.getItem('currentUser');
-            cy.log('Current User:', currentUser); // aparece no log do Cypress
+            cy.log('Current User:', currentUser); 
         });
 
         cy.get('[data-cy="create-button"]').click();
