@@ -1,5 +1,7 @@
 package com.mahas.command.pre.rules.logs;
 
+import java.security.SecureRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -70,5 +72,50 @@ public class TraderCouponValidator {
         }
 
         return traderCouponRes;
+    }
+
+    private static final SecureRandom RNG = new SecureRandom();
+    private static final String ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    public String randomCode(int length) {
+        if (length <= 0) throw new IllegalArgumentException("length must be > 0");
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(ALPHABET.charAt(RNG.nextInt(ALPHABET.length())));
+        }
+        return sb.toString();
+    }
+
+    public String randomUniqueCode() {
+        int length = 5;
+
+        String code;
+        int attempts = 0;
+        do {
+            if (++attempts > 1000) {
+                length++;
+                attempts = 0;
+            }
+            code = randomCode(length);
+        } while (existsByCode(code));
+
+        return code;
+    }
+
+    public boolean existsByCode(String code) {
+        FacadeRequest req = new FacadeRequest();
+
+        TraderCouponDTORequest traderCoupon = new TraderCouponDTORequest();
+        traderCoupon.setCode(code); 
+
+        req.setEntity(traderCoupon);
+        req.setPreCommand(baseTraderCouponCommand);
+        req.setLimit(1);
+
+        FacadeResponse res = facade.query(req);
+
+        boolean hasSingle = res.getData() != null && res.getData().getEntity() != null;
+      
+        return hasSingle;
     }
 }

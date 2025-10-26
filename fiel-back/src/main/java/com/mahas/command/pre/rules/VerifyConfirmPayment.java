@@ -122,9 +122,6 @@ public class VerifyConfirmPayment implements IPreCommand {
         cardValidator.isUser(saleRequest.getUser(), cardIds);
     
         BigDecimal payable = totalValue.subtract(discount);
-        if (payable.signum() < 0) {
-            payable = BigDecimal.ZERO;
-        }
 
         final BigDecimal MIN_SPLIT = new BigDecimal("10.00");
 

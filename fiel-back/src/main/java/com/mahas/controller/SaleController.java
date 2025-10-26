@@ -1,5 +1,7 @@
 package com.mahas.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import com.mahas.command.pre.rules.VerifyCancelSale;
 import com.mahas.command.pre.rules.VerifyConfirmPayment;
 import com.mahas.command.pre.rules.VerifyCreateSaleBook;
 import com.mahas.command.pre.rules.VerifyCreateSaleCard;
+import com.mahas.command.pre.rules.VerifyCreateTraderCoupon;
 import com.mahas.command.pre.rules.VerifyDecreaseStock;
 import com.mahas.command.pre.rules.VerifyNewSale;
 import com.mahas.command.pre.rules.VerifyReleaseReservedStock;
@@ -32,6 +35,7 @@ import com.mahas.dto.request.sale.TraderCouponDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.sale.SaleBookDTOResponse;
 import com.mahas.dto.response.sale.SaleDTOResponse;
+import com.mahas.dto.response.sale.TraderCouponDTOResponse;
 import com.mahas.facade.IFacade;
 
 @Controller
@@ -70,6 +74,9 @@ public class SaleController {
 
     @Autowired
     private VerifyUsedTraderCoupon verifyUsedTraderCoupon;
+
+    @Autowired
+    private VerifyCreateTraderCoupon verifyCreateTraderCoupon;
 
     @GetMapping("/user")
     public ResponseEntity<FacadeResponse> getSaleByUser(
@@ -170,14 +177,54 @@ public class SaleController {
         DTOResponse entity = facadeSaleRes.getData().getEntity();
         SaleDTOResponse saleRes = (SaleDTOResponse) entity;
 
-        for(SaleCardDTORequest saleCard : sale.getCards()) {
-            FacadeRequest saleCardReq = new FacadeRequest();
+        BigDecimal price = java.math.BigDecimal.ZERO;
+        if (saleRes.getSaleBooks() != null) {
+            for (SaleBookDTOResponse sb : saleRes.getSaleBooks()) {
+                if (sb == null) continue;
+                BigDecimal unit = sb.getPrice() != null ? sb.getPrice() : BigDecimal.ZERO;
+                int qty = java.util.Objects.requireNonNullElse(sb.getQuantity(), 1);
+                price = price.add(unit.multiply(java.math.BigDecimal.valueOf(qty)));
+            }
+        }
 
-            saleCard.setSale(saleRes.getId());
-            saleCardReq.setEntity(saleCard);
-            saleCardReq.setPreCommand(verifyCreateSaleCard);
+        BigDecimal discount = BigDecimal.ZERO;
+        if (saleRes.getTraderCoupons() != null) {
+            for (TraderCouponDTOResponse tc : saleRes.getTraderCoupons()) {
+                if (tc == null) continue;
+                BigDecimal v = tc.getValue() != null ? tc.getValue() : BigDecimal.ZERO;
+                discount = discount.add(v);
+            }
+        }
+        if (saleRes.getPromotionalCoupon() != null) {
+            BigDecimal v = saleRes.getPromotionalCoupon().getValue();
+            if (v != null) discount = discount.add(v);
+        }
 
-            facade.update(saleCardReq);
+        int cmp = price.compareTo(discount);
+
+        if(cmp > 0) {
+            for(SaleCardDTORequest saleCard : sale.getCards()) {
+                FacadeRequest saleCardReq = new FacadeRequest();
+
+                saleCard.setSale(saleRes.getId());
+                saleCardReq.setEntity(saleCard);
+                saleCardReq.setPreCommand(verifyCreateSaleCard);
+
+                facade.update(saleCardReq);
+            }
+        }else if(cmp < 0) {
+            BigDecimal leftover = discount.subtract(price);
+
+            FacadeRequest traderCouponReq = new FacadeRequest();
+
+            TraderCouponDTORequest traderCoupon = new TraderCouponDTORequest();
+            traderCoupon.setOriginSale(saleRes.getId());
+            traderCoupon.setValue(leftover);
+
+            traderCouponReq.setEntity(traderCoupon);
+            traderCouponReq.setPreCommand(verifyCreateTraderCoupon);
+
+            facadeSaleRes = facade.save(traderCouponReq);
         }
 
         FacadeRequest promotionalCouponReq = new FacadeRequest();
