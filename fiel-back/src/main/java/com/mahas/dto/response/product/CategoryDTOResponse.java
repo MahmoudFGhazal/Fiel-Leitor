@@ -15,14 +15,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CategoryDTOResponse implements DTOResponse {
     private Integer id;
-    private String name;
+    private String category;
     private Boolean active;
 
     @Override
     public void mapFromEntity(DomainEntity entity) {
         if (entity instanceof Category c) {
             this.id = c.getId();
-            this.name = c.getName();
+            this.category = c.getCategory();
             this.active = c.getActive();
         }
     }

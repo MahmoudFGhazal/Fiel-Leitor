@@ -3,6 +3,8 @@ package com.mahas.command.post.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.post.IPostCommand;
 import com.mahas.domain.DataResponse;
 import com.mahas.domain.DomainEntity;
@@ -13,8 +15,6 @@ import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.product.BookDTOResponse;
 import com.mahas.dto.response.product.CategoryDTOResponse;
 import com.mahas.exception.ValidationException;
-
-import org.springframework.stereotype.Component;
 
 @Component
 public class GetBookAdapter implements IPostCommand {
@@ -60,7 +60,7 @@ public class GetBookAdapter implements IPostCommand {
 
         CategoryDTOResponse categoryResponse = new CategoryDTOResponse();
         categoryResponse.setId(book.getCategory().getId());
-        categoryResponse.setName(book.getCategory().getName());
+        categoryResponse.setCategory(book.getCategory().getCategory());
         bookResponse.setCategory(categoryResponse);
 
         DataResponse data = new DataResponse();

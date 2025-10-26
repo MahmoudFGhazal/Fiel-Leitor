@@ -43,7 +43,7 @@ export interface CartRequest {
 
 export interface CategoryRequest {
     id: number | null,
-    name: string | null,
+    category: string | null,
     active: boolean | null
 }
 

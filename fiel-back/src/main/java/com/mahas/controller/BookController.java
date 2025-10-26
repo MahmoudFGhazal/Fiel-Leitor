@@ -3,6 +3,16 @@ package com.mahas.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.mahas.command.post.adapters.GetBookAdapter;
 import com.mahas.command.post.adapters.GetBookForSaleAdapter;
 import com.mahas.command.pre.base.product.BaseBookCommand;
@@ -13,15 +23,6 @@ import com.mahas.domain.TypeResponse;
 import com.mahas.dto.request.product.BookDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.IFacade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -69,6 +70,21 @@ public class BookController {
     }
 
     @GetMapping("/active")
+    public ResponseEntity<FacadeResponse> getBooksActive() {
+        FacadeRequest request = new FacadeRequest();
+
+        request.setPreCommand(baseBookCommand);
+        request.setPostCommand(getBookAdapter);
+        BookDTORequest book = new BookDTORequest();
+        book.setActive(true);
+        request.setEntity(book); 
+
+        FacadeResponse response = facade.query(request);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all")
     public ResponseEntity<FacadeResponse> getBooks() {
         FacadeRequest request = new FacadeRequest();
 
@@ -115,6 +131,26 @@ public class BookController {
         listResponse.setData(data);
 
         return ResponseEntity.ok(listResponse);
+    }
+
+    @PutMapping("/active")
+    public ResponseEntity<FacadeResponse> setBookActive(
+        @RequestParam(value = "bookId", required = true) Integer id,
+        @RequestParam(value = "active", required = true) Boolean active
+    ) {
+        FacadeRequest request = new FacadeRequest();
+
+        request.setPreCommand(baseBookCommand);
+        request.setPostCommand(getBookAdapter);
+        BookDTORequest book = new BookDTORequest();
+        book.setId(id);
+        book.setActive(active);
+
+        request.setEntity(book); 
+
+        FacadeResponse response = facade.query(request);
+        
+        return ResponseEntity.ok(response);
     }
 
 }

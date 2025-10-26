@@ -13,6 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CategoryDTORequest implements DTORequest {
     private Integer id;
-    private String name;
+    private String category;
     private Boolean active;
 }

@@ -12,7 +12,7 @@ public class CategoryValidator {
 
         Category c = new Category();
         c.setId(dto.getId() != null ? dto.getId().intValue() : null);
-        c.setName(dto.getName());
+        c.setCategory(dto.getCategory());
         c.setActive(dto.getActive());
 
         return c;

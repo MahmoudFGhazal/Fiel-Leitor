@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.stereotype.Component;
 
@@ -41,9 +42,9 @@ public class CategoryDAO implements IDAO {
             params.put("id", category.getId()); 
         }
 
-        if (category.getName() != null) { 
-            where.append(" AND LOWER(c.name) LIKE LOWER(:name)"); 
-            params.put("name", "%" + category.getName() + "%"); 
+        if (category.getCategory() != null) { 
+            where.append(" AND LOWER(c.category) LIKE LOWER(:category)"); 
+            params.put("category", "%" + category.getCategory() + "%"); 
         }
 
         jpql.append(where); 
@@ -54,7 +55,7 @@ public class CategoryDAO implements IDAO {
         int offset = (limit > 0) ? (page - 1) * limit : 0;
 
         TypedQuery<Category> query = entityManager.createQuery(jpql.toString(), Category.class);
-        for (Map.Entry<String, Object> e : params.entrySet()) {
+        for (Entry<String, Object> e : params.entrySet()) {
             query.setParameter(e.getKey(), e.getValue());
         }
         if (limit > 0) {

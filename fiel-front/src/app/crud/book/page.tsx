@@ -1,20 +1,41 @@
 'use client'
-import { BookData } from '@/modal/productModal';
-import styles from './page.module.css';
-import { useEffect, useState } from "react";
+import { BookResponse } from '@/api/dtos/responseDTOs';
+import { ApiResponse } from '@/api/objects';
+import api from '@/api/route';
 import ActionButton from '@/components/buttonComponents/actionButton';
-import CreateBookPopup from '@/components/popUpCreate';
+import PopUpBookCreate from '@/components/forms/popUpBook';
+import { useEffect, useState } from "react";
+import styles from './page.module.css';
 
 export default function CRUDBookComponent() {
-    const [books, setBooks] = useState<BookData[]>([]);
+    const [books, setBooks] = useState<BookResponse[]>([]);
     const [createShowPopup, setCreateShowPopup] = useState(false);
 
     useEffect(() => {
-        const updatedBooks = JSON.parse(localStorage.getItem('books') || '[]');
-        setBooks(updatedBooks);
+        async function fetchData() {
+            try {
+                const res = await api.get<ApiResponse>('/book/active');
+                if (res.message) {
+                    alert(res.message);
+                    return;
+                }
+                const data = res.data;
+                const entities = (data.entities ?? data) as BookResponse[] | null;
+
+                if (!entities?.length) {
+                    setBooks([]);
+                    return;
+                }
+                setBooks(entities);
+            } catch (err) {
+                console.error("Erro ao carregar vendas", err);
+            }
+        }
+
+        fetchData();
     }, []);
 
-    const handleCreate = (newBook: BookData) => {
+    const handleCreate = (newBook: BookResponse) => {
         const updatedBooks = [...books, newBook];
         setBooks(updatedBooks);
         localStorage.setItem('books', JSON.stringify(updatedBooks));
@@ -31,7 +52,7 @@ export default function CRUDBookComponent() {
     const updateActive = async(index: number) => {
         const updatedBooks = [...books];
         const book = updatedBooks[index];
-        book.isActive = !book.isActive;  
+        book.active = !book.active;  
         setBooks(updatedBooks);
         localStorage.setItem('books', JSON.stringify(updatedBooks));  
     }
@@ -43,11 +64,12 @@ export default function CRUDBookComponent() {
                 <ActionButton 
                     label='Criar' 
                     onClick={() => setCreateShowPopup(true)}
+                    color='green'
                 />
             </div>
 
             {createShowPopup && (
-                <CreateBookPopup 
+                <PopUpBookCreate 
                     onClose={() => setCreateShowPopup(false)}
                     onCreate={handleCreate}
                 />
@@ -73,21 +95,24 @@ export default function CRUDBookComponent() {
                                 <tr key={index}>
                                     <td>{book.id}</td>
                                     <td>{book.name}</td>
-                                    <td>{book.categories}</td>
-                                    <td>{book.price}</td>
+                                    <td>{book.category?.category}</td>
+                                    <td>R${book.price}</td>
                                     <td>{book.stock}</td>
                                     <td>
                                         <ActionButton
                                             label="Excluir"
                                             onClick={() => deleteBook(index)}
+                                            color='orange'
                                         />
                                         <ActionButton
                                             label="Editar"
                                             onClick={() => deleteBook(index)}
+                                            color='blue'
                                         />
                                         <ActionButton
-                                            label={book.isActive ? "Desativar" : "Ativar"}
+                                            label={book.active ? "Desativar" : "Ativar"}
                                             onClick={() => updateActive(index)}
+                                            color={book.active ? 'red' : 'green'}
                                         />
                                     </td>
                                 </tr>

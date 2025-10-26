@@ -30,8 +30,8 @@ public class Category extends DomainEntity {
     @Column(name = "cat_id")
     private Integer id;
 
-    @Column(name = "cat_name", nullable = false)
-    private String name;
+    @Column(name = "cat_category", nullable = false)
+    private String category;
 
     @Column(name = "cat_active", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean active = false;
