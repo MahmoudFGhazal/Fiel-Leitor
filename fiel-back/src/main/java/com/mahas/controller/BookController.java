@@ -3,16 +3,7 @@ package com.mahas.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import com.mahas.command.post.adapters.ActiveBookAdapter;
 import com.mahas.command.post.adapters.GetBookAdapter;
 import com.mahas.command.post.adapters.GetBookForSaleAdapter;
 import com.mahas.command.pre.base.product.BaseBookCommand;
@@ -23,6 +14,16 @@ import com.mahas.domain.TypeResponse;
 import com.mahas.dto.request.product.BookDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.facade.IFacade;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -38,6 +39,9 @@ public class BookController {
     //Post
     @Autowired
     private GetBookAdapter getBookAdapter;
+
+    @Autowired
+    private ActiveBookAdapter activeBookAdapter;
 
     @Autowired
     private GetBookForSaleAdapter getBookForSaleAdapter;
@@ -141,14 +145,14 @@ public class BookController {
         FacadeRequest request = new FacadeRequest();
 
         request.setPreCommand(baseBookCommand);
-        request.setPostCommand(getBookAdapter);
+        request.setPostCommand(activeBookAdapter);
         BookDTORequest book = new BookDTORequest();
         book.setId(id);
         book.setActive(active);
 
         request.setEntity(book); 
 
-        FacadeResponse response = facade.query(request);
+        FacadeResponse response = facade.update(request);
         
         return ResponseEntity.ok(response);
     }

@@ -14,7 +14,7 @@ export default function CRUDBookComponent() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await api.get<ApiResponse>('/book/active');
+                const res = await api.get<ApiResponse>('/book');
                 if (res.message) {
                     alert(res.message);
                     return;

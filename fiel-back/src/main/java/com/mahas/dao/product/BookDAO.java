@@ -15,6 +15,7 @@ import com.mahas.domain.product.Book;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
 @Component
@@ -91,6 +92,50 @@ public class BookDAO implements IDAO {
         response.setLimit(limit);
         response.setTotalItem((int) totalItems);
         response.setTotalPage(totalPage);
+
+        return response;
+    }
+
+    @Override
+    public SQLResponse update(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof Book)){
+            return null;
+        }
+
+        Book book = (Book) entity;
+
+        try {
+            Book existingBook = entityManager.find(Book.class, book.getId());
+            if (existingBook == null) {
+                response.setEntity(null);
+                return response;
+            }
+            
+            if (book.getName() != null) {
+                existingBook.setName(book.getName());
+            }
+            if (book.getActive() != null) {
+                existingBook.setActive(book.getActive());
+            }
+            if (book.getPrice() != null) {
+                existingBook.setPrice(book.getPrice());
+            }
+            if (book.getStock() != null) {
+                existingBook.setStock(book.getStock());
+            }
+            if (book.getCategory() != null) {
+                existingBook.setCategory(book.getCategory());
+            }
+            
+            entityManager.flush();
+
+            response.setEntity(existingBook);
+        } catch (PersistenceException e) {
+            throw e;
+        }
 
         return response;
     }
