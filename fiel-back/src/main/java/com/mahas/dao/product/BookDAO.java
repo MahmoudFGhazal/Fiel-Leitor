@@ -5,17 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.product.Book;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 @Component
@@ -133,6 +134,35 @@ public class BookDAO implements IDAO {
             entityManager.flush();
 
             response.setEntity(existingBook);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
+    @Override
+    public SQLResponse delete(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if (!(entity instanceof Book)) {
+            return null;
+        }
+
+        Book book = (Book) entity;
+
+        String jpql = "DELETE FROM Book b WHERE b.id = :id";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("id", book.getId());
+
+        try {
+            int result = query.executeUpdate();
+            if (result > 0) {
+                response.setEntity(book); 
+            }else {
+                response.setEntity(null);
+            }
         } catch (PersistenceException e) {
             throw e;
         }
