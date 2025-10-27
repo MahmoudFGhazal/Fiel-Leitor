@@ -58,7 +58,7 @@ public class User extends DomainEntity {
     @Column(name = "usr_phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
-    @Column(name = "usr_isDelete", columnDefinition = "TINYINT(1) DEFAULT 1")
+    @Column(name = "usr_is_delete", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean isDelete;
 
     @Column(name = "usr_created_at", nullable = false)

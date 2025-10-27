@@ -265,7 +265,7 @@ SELECT
   (SELECT t.tco_id
      FROM trader_coupons t
     WHERE t.tco_used=0
-      AND t.tco_sal_id = (
+      AND t.tco_origin_sal_id = (
           SELECT s1.sal_id
             FROM sales s1
            WHERE s1.sal_usr_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')

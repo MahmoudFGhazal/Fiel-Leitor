@@ -49,7 +49,7 @@ public class Book extends DomainEntity {
     @JoinColumn(name = "bok_cat_id", nullable = false)
     private Category category;
 
-    @Column(name = "bok_isDelete", columnDefinition = "TINYINT(1) DEFAULT 1")
+    @Column(name = "bok_is_delete", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean isDelete;
 
     @Column(name = "bok_created_at", nullable = false)

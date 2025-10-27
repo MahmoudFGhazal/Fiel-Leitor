@@ -57,7 +57,7 @@ CREATE TABLE users (
     usr_birthday DATE NOT NULL,
     usr_cpf VARCHAR(20) NOT NULL,
     usr_phone_number VARCHAR(20) NOT NULL,
-    usr_isDelete TINYINT(1) DEFAULT 1,
+    usr_is_delete TINYINT(1) DEFAULT 0,
     usr_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     usr_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     usr_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -83,7 +83,7 @@ CREATE TABLE addresses (
     add_country VARCHAR(255) NOT NULL,
     add_sty_id BIGINT NOT NULL,
     add_rty_id BIGINT NOT NULL,
-    add_isDelete TINYINT(1) DEFAULT 1,
+    add_is_delete TINYINT(1) DEFAULT 0,
     add_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     add_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     add_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -102,7 +102,7 @@ CREATE TABLE books (
     bok_active TINYINT(1) DEFAULT 1,
     bok_stock INT DEFAULT 0,
     bok_cat_id BIGINT NOT NULL,
-    bok_isDelete TINYINT(1) DEFAULT 1,
+    bok_is_delete TINYINT(1) DEFAULT 0,
     bok_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     bok_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     bok_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -122,7 +122,7 @@ CREATE TABLE cards (
     car_exp_month VARCHAR(8) NOT NULL,
     car_exp_year VARCHAR(8) NOT NULL,
     car_brand VARCHAR(20),
-    car_isDelete TINYINT(1) DEFAULT 1,
+    car_is_delete TINYINT(1) DEFAULT 0,
     car_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     car_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     car_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -153,10 +153,6 @@ CREATE TABLE trader_coupons (
     tco_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     tco_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT uq_trader_coupons_origin UNIQUE (tco_origin_sal_id),
-    CONSTRAINT fk_trader_coupons_origin  FOREIGN KEY (tco_origin_sal_id)  REFERENCES sales (sal_id),
-    CONSTRAINT fk_trader_coupons_applied FOREIGN KEY (tco_applied_sal_id) REFERENCES sales (sal_id)
 );
 
 -- =============================
@@ -231,6 +227,6 @@ CREATE TABLE sales_trader_coupons (
 );
 
 ALTER TABLE trader_coupons
-    ADD CONSTRAINT fk_trader_coupons_sales
-        FOREIGN KEY (tco_sal_id) REFERENCES sales (sal_id);
-        
+    ADD CONSTRAINT uq_trader_coupons_origin UNIQUE (tco_origin_sal_id),
+    ADD CONSTRAINT fk_trader_coupons_origin  FOREIGN KEY (tco_origin_sal_id)  REFERENCES sales (sal_id),
+    ADD CONSTRAINT fk_trader_coupons_applied FOREIGN KEY (tco_applied_sal_id) REFERENCES sales (sal_id);

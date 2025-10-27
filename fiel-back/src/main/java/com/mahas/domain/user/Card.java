@@ -57,7 +57,7 @@ public class Card extends DomainEntity {
     @Column(name = "car_brand")
     private String brand;
 
-    @Column(name = "car_isDelete", columnDefinition = "TINYINT(1) DEFAULT 1")
+    @Column(name = "car_is_delete", columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean isDelete;
 
     @Column(name = "car_created_at", nullable = false)

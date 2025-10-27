@@ -12,7 +12,6 @@ export default function ListSales() {
 
     useEffect(() => {
         async function fetchData() {
-            console.log(currentUser)
             try {
                 const res = await api.get<ApiResponse>('/sale/user', { params: { userId: currentUser } });
                 if (res.message) {
