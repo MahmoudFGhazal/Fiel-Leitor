@@ -7,10 +7,10 @@ import ActionButton from "@/components/buttonComponents/actionButton";
 import Button from "@/components/buttonComponents/button";
 import PopUpAddress from '@/components/forms/popUpAddress';
 import { useGlobal } from '@/context/GlobalContext';
+import { toRequestAddress } from '@/utils/convertDTOs';
 import showToast from '@/utils/showToast';
 import { useEffect, useState } from "react";
 import styles from './addressConfig.module.css';
-import { toRequestAddress } from '@/utils/convertDTOs';
 
 export default function AddressConfig() {
     const { currentUser } = useGlobal();
@@ -110,7 +110,7 @@ export default function AddressConfig() {
         const confirmed = confirm("Tem certeza que deseja apagar este endereço?");
         if (!confirmed) return;
 
-        const res = await api.delete("/address", { params: { addressId: id } }) as ApiResponse;
+        const res = await api.put("/address/delete", { params: { addressId: id } }) as ApiResponse;
     
         if(res.message) {
             alert(res.message);

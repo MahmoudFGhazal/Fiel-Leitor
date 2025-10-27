@@ -31,7 +31,7 @@ export default function CRUDClientComponent() {
     }, []);
 
     const deleteUser = async(userId: number) => {
-        const res = await api.delete("/user", { params: { userId } }) as ApiResponse;
+        const res = await api.put("/user/delete", { params: { userId } }) as ApiResponse;
 
         if(res.message) {
             alert(res.message);

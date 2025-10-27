@@ -155,7 +155,7 @@ export default function CardConfig() {
         const confirmed = confirm("Tem certeza que deseja apagar este cartão?");
         if (!confirmed) return;
 
-        const res = await api.delete("/card", { params: { cardId: id } }) as ApiResponse;
+        const res = await api.put("/card/delete", { params: { cardId: id } }) as ApiResponse;
 
         if (res.message) {
             alert(res.message);
