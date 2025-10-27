@@ -70,6 +70,9 @@ public class Address extends DomainEntity {
     @Column(name = "add_country", nullable = false)
     private String country;
 
+    @Column(name = "add_isDelete", columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean isDelete;
+
     @ManyToOne
     @JoinColumn(name = "add_sty_id", nullable = false)
     private StreetType streetType;

@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mahas.command.post.adapters.ActiveBookAdapter;
+import com.mahas.command.post.adapters.DeleteBookAdapter;
 import com.mahas.command.post.adapters.GetBookAdapter;
 import com.mahas.command.post.adapters.GetBookForSaleAdapter;
 import com.mahas.command.pre.base.product.BaseBookCommand;
+import com.mahas.command.pre.rules.VerifyCreateBookCommand;
+import com.mahas.command.pre.rules.VerifyDeleteBookCommand;
+import com.mahas.command.pre.rules.VerifyUpdateBookCommand;
 import com.mahas.domain.DataResponse;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -21,7 +25,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,12 +42,24 @@ public class BookController {
     @Autowired
     private BaseBookCommand baseBookCommand;
 
+    @Autowired
+    private VerifyUpdateBookCommand verifyUpdateBookCommand;
+
+    @Autowired
+    private VerifyCreateBookCommand verifyCreateBookCommand;
+
+    @Autowired
+    private VerifyDeleteBookCommand verifyDeleteBookCommand;
+
     //Post
     @Autowired
     private GetBookAdapter getBookAdapter;
 
     @Autowired
     private ActiveBookAdapter activeBookAdapter;
+
+    @Autowired
+    private DeleteBookAdapter deleteBookAdapter;
 
     @Autowired
     private GetBookForSaleAdapter getBookForSaleAdapter;
@@ -137,6 +155,36 @@ public class BookController {
         return ResponseEntity.ok(listResponse);
     }
 
+    @PostMapping
+    public ResponseEntity<FacadeResponse> createBook(
+        @RequestBody BookDTORequest book
+    ) {
+        FacadeRequest request = new FacadeRequest();
+
+        request.setPreCommand(verifyCreateBookCommand);
+        request.setPostCommand(getBookAdapter);
+        request.setEntity(book); 
+
+        FacadeResponse response = facade.save(request);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping
+    public ResponseEntity<FacadeResponse> editBook(
+        @RequestBody BookDTORequest book
+    ) {
+        FacadeRequest request = new FacadeRequest();
+
+        request.setPreCommand(verifyUpdateBookCommand);
+        request.setPostCommand(getBookAdapter);
+        request.setEntity(book); 
+
+        FacadeResponse response = facade.update(request);
+        
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/active")
     public ResponseEntity<FacadeResponse> setBookActive(
         @RequestParam(value = "bookId", required = true) Integer id,
@@ -157,4 +205,21 @@ public class BookController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/delete")
+    public ResponseEntity<FacadeResponse> deleteBook(
+        @RequestParam(value = "bookId", required = true) Integer id
+    ) {
+        FacadeRequest request = new FacadeRequest();
+
+        request.setPreCommand(verifyDeleteBookCommand);
+        request.setPostCommand(deleteBookAdapter);
+        BookDTORequest book = new BookDTORequest();
+        book.setId(id);
+
+        request.setEntity(book); 
+
+        FacadeResponse response = facade.update(request);
+        
+        return ResponseEntity.ok(response);
+    }
 }

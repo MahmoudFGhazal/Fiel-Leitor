@@ -1,8 +1,5 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.AddressValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -12,6 +9,9 @@ import com.mahas.domain.address.Address;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.address.AddressDTORequest;
 import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyDeleteAddress implements IPreCommand {
@@ -41,6 +41,7 @@ public class VerifyDeleteAddress implements IPreCommand {
         Address address = new Address();
 
         address.setId(addressRequest.getId());
+        address.setIsDelete(true);
 
         SQLRequest sqlRequest = new SQLRequest();
         sqlRequest.setEntity(address);

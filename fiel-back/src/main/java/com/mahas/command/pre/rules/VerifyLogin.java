@@ -37,6 +37,7 @@ public class VerifyLogin implements IPreCommand {
         user.setEmail(userRequest.getEmail());
         user.setPassword(userRequest.getPassword());
         user.setActive(true);
+        user.setIsDelete(false);
 
         SQLRequest sqlRequest = new SQLRequest();
         sqlRequest.setEntity(user);

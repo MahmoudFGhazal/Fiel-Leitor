@@ -14,7 +14,7 @@ export default function CRUDBookComponent() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await api.get<ApiResponse>('/book');
+                const res = await api.get<ApiResponse>('/book/all');
                 if (res.message) {
                     alert(res.message);
                     return;
@@ -28,7 +28,7 @@ export default function CRUDBookComponent() {
                 }
                 setBooks(entities);
             } catch (err) {
-                console.error("Erro ao carregar vendas", err);
+                console.error("Erro ao carregar livros", err);
             }
         }
 
@@ -77,12 +77,12 @@ export default function CRUDBookComponent() {
 
             <div className={styles.tableContent}>
                 {books.length === 0 ? (
-                    <p>Nenhum usuário cadastrado.</p>
+                    <p>Nenhum livro cadastrado.</p>
                 ) : (
                     <table className={styles.table}>
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Id</th>
                                 <th>Nome</th>
                                 <th>Categoria</th>
                                 <th>Preço</th>

@@ -57,6 +57,9 @@ public class BookDAO implements IDAO {
             whereClause.append(" AND b.active = :active");
             parameters.put("active", book.getActive());
         }
+        whereClause.append(" AND b.isDelete = :isDelete");
+        parameters.put("isDelete", false);
+
 
         jpql.append(whereClause);
         countJpql.append(whereClause);
@@ -130,6 +133,9 @@ public class BookDAO implements IDAO {
             if (book.getCategory() != null) {
                 existingBook.setCategory(book.getCategory());
             }
+            if (book.getIsDelete() != null) {
+                existingBook.setIsDelete(book.getIsDelete());
+            }
             
             entityManager.flush();
 
@@ -169,4 +175,29 @@ public class BookDAO implements IDAO {
 
         return response;
     }
+
+    @Override
+    public SQLResponse save(SQLRequest request) {
+        SQLResponse response = new SQLResponse();
+
+        DomainEntity entity = request.getEntity();
+        if(!(entity instanceof Book)){
+            return null;
+        }
+
+        Book book = (Book) entity;
+
+        try {
+            entityManager.persist(book);
+
+            entityManager.flush();
+
+            response.setEntity(book);
+        } catch (PersistenceException e) {
+            throw e;
+        }
+
+        return response;
+    }
+
 }

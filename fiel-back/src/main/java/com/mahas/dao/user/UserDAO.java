@@ -64,6 +64,8 @@ public class UserDAO implements IDAO {
             where.append(" AND u.active = :active");
             params.put("active", user.getActive());
         }
+        where.append(" AND u.isDelete = :isDelete");
+        params.put("isDelete", false);
 
         jpql.append(where); 
         countJpql.append(where);
@@ -198,6 +200,9 @@ public class UserDAO implements IDAO {
             }
             if (user.getActive() != null) {
                 existingUser.setActive(user.getActive());
+            }
+            if (user.getIsDelete() != null) {
+                existingUser.setIsDelete(user.getIsDelete());
             }
 
             entityManager.flush();

@@ -1,8 +1,5 @@
 package com.mahas.command.pre.rules;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.IPreCommand;
 import com.mahas.command.pre.rules.logs.CardValidator;
 import com.mahas.command.pre.rules.logs.CommunValidator;
@@ -12,6 +9,9 @@ import com.mahas.domain.user.Card;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.user.CardDTORequest;
 import com.mahas.exception.ValidationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyDeleteCard implements IPreCommand {
@@ -41,6 +41,7 @@ public class VerifyDeleteCard implements IPreCommand {
         Card card = new Card();
 
         card.setId(cardRequest.getId());
+        card.setIsDelete(true);
 
         SQLRequest sqlRequest = new SQLRequest();
         sqlRequest.setEntity(card);
