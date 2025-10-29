@@ -51,7 +51,7 @@ export default function BookCrudComponent() {
             if (!entity) {
                 return;
             }
-
+        
             setBooks(prev => [...prev, entity]);
 
             alert('Livro criado com sucesso!');

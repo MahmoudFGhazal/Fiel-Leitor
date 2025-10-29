@@ -36,13 +36,13 @@ public class VerifyUpdateBookCommand implements IPreCommand {
         BookDTORequest bookRequest = (BookDTORequest) entity;
        
         communValidator.validateNotBlanck(bookRequest.getId(), "Id");
-
+        System.out.println(bookRequest.getCategory());
         if (bookRequest.getCategory() != null) {
             categoryValidator.categoryExists(bookRequest.getCategory());
         }
 
         Book book = bookValidator.toEntity(bookRequest);
-
+        System.out.println(book.getCategory().getId());
         SQLRequest sqlRequest = new SQLRequest();
         sqlRequest.setEntity(book); 
         return sqlRequest;

@@ -70,7 +70,7 @@ public class Address extends DomainEntity {
     @Column(name = "add_country", nullable = false)
     private String country;
 
-    @Column(name = "add_is_delete", columnDefinition = "TINYINT(1) DEFAULT 1")
+    @Column(name = "add_is_delete", columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean isDelete;
 
     @ManyToOne
@@ -92,6 +92,7 @@ public class Address extends DomainEntity {
 
     @PrePersist
     protected void onCreate() {
+        if (isDelete == null) isDelete = false; 
         createdAt = updatedAt = publishedAt = LocalDateTime.now();
     }
 

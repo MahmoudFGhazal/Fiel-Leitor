@@ -49,7 +49,7 @@ public class Book extends DomainEntity {
     @JoinColumn(name = "bok_cat_id", nullable = false)
     private Category category;
 
-    @Column(name = "bok_is_delete", columnDefinition = "TINYINT(1) DEFAULT 1")
+    @Column(name = "bok_is_delete", columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean isDelete;
 
     @Column(name = "bok_created_at", nullable = false)
@@ -63,6 +63,7 @@ public class Book extends DomainEntity {
 
     @PrePersist
     protected void onCreate() {
+        if (isDelete == null) isDelete = false; 
         createdAt = updatedAt = publishedAt = LocalDateTime.now();
     }
 

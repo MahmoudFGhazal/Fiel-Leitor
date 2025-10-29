@@ -3,7 +3,11 @@ package com.mahas.command.post.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.post.IPostCommand;
+import com.mahas.command.pre.rules.logs.CategoryValidator;
 import com.mahas.domain.DataResponse;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.FacadeResponse;
@@ -14,10 +18,11 @@ import com.mahas.dto.response.product.BookDTOResponse;
 import com.mahas.dto.response.product.CategoryDTOResponse;
 import com.mahas.exception.ValidationException;
 
-import org.springframework.stereotype.Component;
-
 @Component
 public class GetBookAdapter implements IPostCommand {
+    @Autowired
+    private CategoryValidator categoryValidator;
+
     @Override
     public FacadeResponse execute(SQLResponse sqlResponse) {
         List<DomainEntity> entities = sqlResponse.getEntities();
@@ -57,10 +62,11 @@ public class GetBookAdapter implements IPostCommand {
         bookResponse.setName(book.getName());
         bookResponse.setPrice(book.getPrice());
         bookResponse.setStock(book.getStock());
+        bookResponse.setActive(book.getActive());
 
-        CategoryDTOResponse categoryResponse = new CategoryDTOResponse();
-        categoryResponse.setId(book.getCategory().getId());
-        categoryResponse.setCategory(book.getCategory().getCategory());
+        CategoryDTOResponse categoryResponse = categoryValidator.categoryExists(book.getCategory().getId());
+        categoryResponse.setId(categoryResponse.getId());
+        categoryResponse.setCategory(categoryResponse.getCategory());
         bookResponse.setCategory(categoryResponse);
 
         DataResponse data = new DataResponse();
