@@ -55,6 +55,7 @@ export default function BookCrudComponent() {
             setBooks(prev => [...prev, entity]);
 
             alert('Livro criado com sucesso!');
+            setCreateShowPopup(false);
         } catch (err) {
             console.error("Erro ao carregar livros", err);
         }
@@ -79,6 +80,7 @@ export default function BookCrudComponent() {
             );
 
             alert('Livro atualizado com sucesso!');
+            setEditShowPopup(false);
         } catch (err) {
             console.error("Erro ao carregar livros", err);
         }
@@ -145,6 +147,7 @@ export default function BookCrudComponent() {
                         label='Criar' 
                         onClick={() => setCreateShowPopup(true)}
                         color='green'
+                        dataCy='create-button'
                     />
                 </div>
             </div>
@@ -192,6 +195,7 @@ export default function BookCrudComponent() {
                                             label="Excluir"
                                             onClick={() => deleteBook(book.id!)}
                                             color='orange'
+                                            dataCy='delete-button'
                                         />
                                         <ActionButton
                                             label="Editar"
@@ -200,11 +204,13 @@ export default function BookCrudComponent() {
                                                 setSelectedBook(book)
                                             }}
                                             color='blue'
+                                            dataCy='edit-button'
                                         />
                                         <ActionButton
                                             label={book.active ? "Desativar" : "Ativar"}
                                             onClick={() => updateActive(book.id!)}
                                             color={book.active ? 'red' : 'green'}
+                                            dataCy='active-button'
                                         />
                                     </td>
                                 </tr>

@@ -91,12 +91,13 @@ export default function PopUpBookCreate({ onClose, onSave, book }: Props) {
         <div className={styles.overlay}>
             <div className={styles.popup}>
                 <h3>Criar Novo Livro</h3>
-                <form onSubmit={handleSubmit} className={styles.form}>
+                <form data-cy="book-form" onSubmit={handleSubmit} className={styles.form}>
                     <InputText
                         type='text'
                         text="Nome"
                         onChange={(val) => updateForm({ name: val as string })}
-                        value={String(form.name)}                  
+                        value={String(form.name)}    
+                        dataCy='name-text'              
                     />
                     <InputSelect
                         text="Categoria"
@@ -126,6 +127,7 @@ export default function PopUpBookCreate({ onClose, onSave, book }: Props) {
                         text="Estoque"
                         value={String(form.stock)}
                         onChange={(val) => updateForm({ stock: Number(val) })}
+                        dataCy='stock-text'
                     />
                     {/* <InputText
                         type='text'
@@ -137,10 +139,12 @@ export default function PopUpBookCreate({ onClose, onSave, book }: Props) {
                             type='button'
                             text="Cancelar"
                             onClick={onClose}
+                            dataCy='cancel-button'
                         />
                         <Button
                             type='submit'
                             text="Salvar"
+                            dataCy='save-button'
                         />
                     </div>
                 </form>
