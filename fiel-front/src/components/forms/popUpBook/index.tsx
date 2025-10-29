@@ -1,89 +1,90 @@
 'use client'
-import { BookResponse } from '@/api/dtos/responseDTOs';
+import { BookRequest } from '@/api/dtos/requestDTOs';
+import { BookResponse, CategoryResponse } from '@/api/dtos/responseDTOs';
 import Button from '@/components/buttonComponents/button';
-import { useState } from 'react';
+import InputSelect from '@/components/inputComponents/inputSelect';
+import InputText from '@/components/inputComponents/inputText';
+import { CategoriesPortuguese } from '@/translate/portuguses';
+import { toRequestBook } from '@/utils/convertDTOs';
+import { getCategories } from '@/utils/getTypes';
+import { useEffect, useState } from 'react';
 import styles from './createBookPopup.module.css';
 
 interface Props {
     onClose: () => void;
-    onCreate: (book: BookResponse) => void;
+    onSave: (book: BookRequest) => void;
+    book?: BookResponse;
 }
 
-export default function PopUpBookCreate({ onClose, onCreate }: Props) {
-    const [form, setForm] = useState<BookResponse>({
+export default function PopUpBookCreate({ onClose, onSave, book }: Props) {
+    const [categoryTypes, setCategoryTypes] = useState<CategoryResponse[] | null>(null);
+        
+    const [form, setForm] = useState<BookRequest>({
         id: null,
         name: '',
         category: null,
         price: 0,
         stock: 0,
-        active: false
+        active: true
     });
 
-    const handleChange = (name: string, value: unknown) => {
-        setForm((prev) => {
-            switch (name) {
-                case 'name':
-                case 'description':
-                return { ...prev, [name]: String(value ?? '') };
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const categories: CategoryResponse[] = await getCategories();
 
-                case 'price': {
-                    const num = Number(value);
-                    return { ...prev, price: Number.isFinite(num) ? num : 0 };
-                }
-
-                case 'stock': {
-                    const num = Number(value);
-                    return { ...prev, stock: Number.isFinite(num) ? Math.trunc(num) : 0 };
-                }
-
-                case 'categories': {
-                    if (Array.isArray(value)) {
-                        return { ...prev, categories: value.map(String) };
-                    }
-                    if (typeof value === 'string') {
-                        return { ...prev, categories: [value] };
-                    }
-                    return prev;
-                }
-
-                case 'active': {
-                    return { ...prev, active: Boolean(value) };
-                }
-
-                default:
-                return prev;
+                setCategoryTypes(categories);
+            } catch (err) {
+                console.error("Erro ao carregar dados", err);
             }
-        });
-    };
+        }
 
-    const handleSubmit = (e: React.FormEvent) => {
+        if(book) {
+            const bookReq = toRequestBook(book);
+
+            setForm(bookReq);
+        }
+
+        fetchData();
+    }, []);
+
+    const updateForm = (data: Partial<BookRequest>) =>
+        setForm(prev => {
+            const next = { ...prev };
+
+            if ('name' in data) {
+                next.name = String(data.name ?? '').trim();
+            }
+
+            if ('price' in data) {
+                const raw = (data.price as any)?.toString?.() ?? '';
+                const parsed = Number(raw.replace(',', '.'));
+                const nonNeg = Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+                next.price = Math.round(nonNeg * 100) / 100;
+            }
+
+            if ('stock' in data) {
+                const n = Number((data.stock as any));
+                next.stock = Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0;
+            }
+
+            if ('category' in data) {
+                const raw = (data.category as any);
+                if (raw === null || raw === '') {
+                    next.category = null;
+                } else {
+                    const n = typeof raw === 'number' ? raw : Number(raw);
+                    next.category = Number.isFinite(n) ? n : prev.category;
+                }
+            }
+
+            return next;
+        }
+    );
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-       /*  if (!form.name.trim()) {
-        alert('Informe o nome do livro.');
-        return;
-        }
-        if (form.price < 0) {
-        alert('Preço não pode ser negativo.');
-        return;
-        }
-        if (form.stock < 0) {
-        alert('Estoque não pode ser negativo.');
-        return;
-        }
-
-        const newBook: BookResponse = {
-            id: Date.now(),
-            name: form.name,
-            category: form.category ?? null,
-            price: form.price,
-            stock: form.stock,
-            description: form.description,
-            active: form.active,
-        } as unknown as BookResponse;
-        
-        onCreate(newBook); */
-        onClose();
+        onSave(form);
     };
 
     return (
@@ -91,39 +92,45 @@ export default function PopUpBookCreate({ onClose, onCreate }: Props) {
             <div className={styles.popup}>
                 <h3>Criar Novo Livro</h3>
                 <form onSubmit={handleSubmit} className={styles.form}>
-                    {/* <Input
+                    <InputText
                         type='text'
                         text="Nome"
-                        value={form.name}
-                        onChange={(val) => handleChange('name', val)}
+                        onChange={(val) => updateForm({ name: val as string })}
+                        value={String(form.name)}                  
                     />
-                    <Input
-                        text="Categorias"
-                        value={form.categories} 
-                        onChange={(val) => handleChange('categories', val)}
-                        options={Object.values(CategoriesPortuguese).map((cat) => ({
-                            value: cat,
-                            label: cat,
-                        }))}
-                        multiple
-                    /> */}
-                    <Input
+                    <InputSelect
+                        text="Categoria"
+                        value={form.category != null ? String(form.category) : ''}
+                        onChange={(val: string) => {
+                            const n = val ? Number(val) : null;
+                            updateForm({ category: Number.isFinite(n as number) ? (n as number) : null });
+                        }}
+                        options={
+                            (categoryTypes ?? []).map(c => ({
+                                value: c.id?.toString() || '',
+                                label: CategoriesPortuguese[
+                                    c.category as keyof typeof CategoriesPortuguese
+                                ] ?? c.category
+                            }))
+                        }
+                        dataCy="category-select"
+                    />
+                    <InputText
                         type='number'
                         text="Preço"
                         value={String(form.price)}
-                        onChange={(val) => handleChange('price', val)}
+                        onChange={(val) => updateForm({ price: Number(val) })}
                     />
-                    <Input
+                    <InputText
                         type='number'
                         text="Estoque"
                         value={String(form.stock)}
-                        onChange={(val) => handleChange('stock', val)}
+                        onChange={(val) => updateForm({ stock: Number(val) })}
                     />
-                    {/* <Input
+                    {/* <InputText
                         type='text'
                         text="Descrição"
-                        value={form.description}
-                        onChange={(val) => handleChange('description', val)}
+                        onChange={(val) => updateForm({ description: val as string })}                   
                     /> */}
                     <div className={styles.actions}>
                         <Button

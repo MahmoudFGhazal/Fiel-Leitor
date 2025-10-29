@@ -1,4 +1,4 @@
-import { Categories, Genders, TypeResidences, TypeStreets } from "./base"
+import { Categories, Genders, TypeResidences, TypeStreets } from "./base";
 
 export const TypeResidencesPortuguese: Record<TypeResidences, string> = {
     [TypeResidences.HOUSE]: 'Casa',
@@ -25,8 +25,14 @@ export const GendersPortuguese: Record<Genders, string> = {
 }
 
 export const CategoriesPortuguese: Record<Categories, string> = {
-    [Categories.SUSPENSE]: 'Suspense',
-    [Categories.COMEDY]: 'Comédia',
-    [Categories.ADVENTURE]: 'Aventura',
-    [Categories.ROMANCE]: 'Romance'
-}
+    [Categories.GENERAL_MEDICINE]: 'Medicina Geral',
+    [Categories.PHARMACOLOGY]: 'Farmacologia',
+    [Categories.ANATOMY]: 'Anatomia',
+    [Categories.PHYSIOLOGY]: 'Fisiologia',
+    [Categories.PATHOLOGY]: 'Patologia',
+    [Categories.MICROBIOLOGY]: 'Microbiologia',
+    [Categories.PEDIATRICS]: 'Pediatria',
+    [Categories.GYNECOLOGY_OBSTETRICS]: 'Ginecologia e Obstetrícia',
+    [Categories.GENERAL_SURGERY]: 'Cirurgia Geral',
+    [Categories.PSYCHIATRY]: 'Psiquiatria',
+};

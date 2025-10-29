@@ -21,7 +21,7 @@ export interface BookRequest {
     price: number | null,
     active: boolean | null,
     stock: number | null,
-    category: CategoryRequest | null
+    category: number | null
 }
 
 export interface CardRequest {

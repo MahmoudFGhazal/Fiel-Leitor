@@ -11,7 +11,6 @@ import com.mahas.domain.SQLRequest;
 import com.mahas.domain.product.Category;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.product.CategoryDTORequest;
-import com.mahas.dto.request.user.CardDTORequest;
 import com.mahas.exception.ValidationException;
 
 @Component
@@ -24,8 +23,8 @@ public class BaseCategoryCommand implements IPreCommand {
     public SQLRequest execute(FacadeRequest request) {
         DTORequest entity = request.getEntity();
 
-        if (!(entity instanceof CardDTORequest)) {
-            throw new ValidationException("Tipo de entidade inválido, esperado CardDTORequest");
+        if (!(entity instanceof CategoryDTORequest)) {
+            throw new ValidationException("Tipo de entidade inválido, esperado CategoryDTORequest");
         }
 
         CategoryDTORequest categoryRequest = (CategoryDTORequest) entity;

@@ -152,7 +152,7 @@ CREATE TABLE trader_coupons (
     tco_applied_sal_id BIGINT NULL,
     tco_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     tco_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =============================

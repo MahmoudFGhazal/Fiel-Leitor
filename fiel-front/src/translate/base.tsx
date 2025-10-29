@@ -6,12 +6,17 @@ export enum Genders {
     PREFERNOTTOSAY = 'Prefer not to say'
 }
 
-
 export enum Categories {
-    SUSPENSE = 'suspense',
-    COMEDY = 'comedy',
-    ADVENTURE = 'adventure',
-    ROMANCE = 'romance'
+    GENERAL_MEDICINE = 'general_medicine',
+    PHARMACOLOGY = 'pharmacology',
+    ANATOMY = 'anatomy',
+    PHYSIOLOGY = 'physiology',
+    PATHOLOGY = 'pathology',
+    MICROBIOLOGY = 'microbiology',
+    PEDIATRICS = 'pediatrics',
+    GYNECOLOGY_OBSTETRICS = 'gynecology_obstetrics',
+    GENERAL_SURGERY = 'general_surgery',
+    PSYCHIATRY = 'psychiatry',
 }
 
 export enum TypeResidences {

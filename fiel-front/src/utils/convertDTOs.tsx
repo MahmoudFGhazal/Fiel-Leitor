@@ -1,5 +1,5 @@
-import { AddressRequest, CardRequest, CartRequest, UserRequest } from "@/api/dtos/requestDTOs";
-import { AddressResponse, CardResponse, CartResponse, UserResponse } from "@/api/dtos/responseDTOs";
+import { AddressRequest, BookRequest, CardRequest, CartRequest, UserRequest } from "@/api/dtos/requestDTOs";
+import { AddressResponse, BookResponse, CardResponse, CartResponse, UserResponse } from "@/api/dtos/responseDTOs";
 
 
 export function toRequestUser(user: UserResponse | null): UserRequest {
@@ -110,4 +110,27 @@ export function toRequestCart(cart: CartResponse | null): CartRequest {
         book: cart.book?.id ?? null,
         quantity: cart.quantity ?? null
     }
+}
+
+
+export function toRequestBook(book: BookResponse | null): BookRequest {
+    if (!book) {
+        return {
+            id: null,
+            name: null,
+            price: null,
+            active: null,
+            stock: null,
+            category: null
+        };
+    }
+
+    return {
+        id: book.id,
+        name: book.name,
+        price: book.price,
+        active: book.active,
+        stock: book.stock,
+        category: book.category?.id ?? null
+    };
 }

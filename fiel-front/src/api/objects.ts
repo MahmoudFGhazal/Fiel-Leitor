@@ -1,5 +1,5 @@
-import { AddCartRequest, AddressRequest, CardRequest, CartRequest, GenderRequest, PromotionalCouponRequest, ResidenceTypeRequest, SaleBookRequest, SaleCardRequest, SaleRequest, SignRequest, StatusSaleRequest, StreetTypeRequest, TraderCouponRequest, UpdateCartRequest, UserRequest } from "./dtos/requestDTOs";
-import { AddressResponse, CardResponse, CartResponse, GenderResponse, PromotionalCouponResponse, ResidenceTypeResponse, SaleBookResponse, SaleCardResponse, SaleResponse, StatusSaleResponse, StreetTypeResponse, TraderCouponResponse, UserResponse } from "./dtos/responseDTOs";
+import { AddCartRequest, AddressRequest, CardRequest, CartRequest, CategoryRequest, GenderRequest, PromotionalCouponRequest, ResidenceTypeRequest, SaleBookRequest, SaleCardRequest, SaleRequest, SignRequest, StatusSaleRequest, StreetTypeRequest, TraderCouponRequest, UpdateCartRequest, UserRequest } from "./dtos/requestDTOs";
+import { AddressResponse, CardResponse, CartResponse, CategoryResponse, GenderResponse, PromotionalCouponResponse, ResidenceTypeResponse, SaleBookResponse, SaleCardResponse, SaleResponse, StatusSaleResponse, StreetTypeResponse, TraderCouponResponse, UserResponse } from "./dtos/responseDTOs";
 
 export interface ApiResponse {
     data: {
@@ -25,6 +25,7 @@ export type DatasRequest =
   | AddressRequest
   | CardRequest
   | CartRequest
+  | CategoryRequest
   | GenderRequest
   | PromotionalCouponRequest
   | ResidenceTypeRequest
@@ -38,6 +39,7 @@ export type DatasRequest =
   | AddressRequest[]
   | CardRequest[]
   | CartRequest[]
+  | CategoryRequest[]
   | GenderRequest[]
   | PromotionalCouponRequest[]
   | ResidenceTypeRequest[]
@@ -57,6 +59,7 @@ export type DatasResponde =
   | AddressResponse
   | CardResponse
   | CartResponse
+  | CategoryResponse
   | GenderResponse
   | PromotionalCouponResponse
   | ResidenceTypeResponse
@@ -70,6 +73,7 @@ export type DatasResponde =
   | AddressResponse[]
   | CardResponse[]
   | CartResponse[]
+  | CategoryResponse[]
   | GenderResponse[]
   | PromotionalCouponResponse[]
   | ResidenceTypeResponse[]
