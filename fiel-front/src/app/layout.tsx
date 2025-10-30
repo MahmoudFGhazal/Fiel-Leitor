@@ -1,8 +1,9 @@
+import ChatIA from "@/components/chatIA";
+import Footer from "@/components/footer";
+import Header from "@/components/header";
+import { GlobalProvider } from "@/context/GlobalContext";
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import { GlobalProvider } from "@/context/GlobalContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,6 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="app">
+        <ChatIA />
+        
         <GlobalProvider>
           <Header />
           <main className="content">{children}</main>

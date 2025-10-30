@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 9999;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 56px;
+    height: 56px;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 22px;
+    background: #1a1a1a;      
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+
+.chat {
+    width: calc(300px + 20vw);
+    height: 80vh;
+    max-width: 500px;
+    max-height: 800px;
+    border-radius: 10px;
+    background: #1a1a1a; 
+}
