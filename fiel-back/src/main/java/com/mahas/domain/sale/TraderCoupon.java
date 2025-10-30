@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.mahas.domain.DomainEntity;
+import com.mahas.domain.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,6 +44,10 @@ public class TraderCoupon extends DomainEntity {
     @JoinColumn(name = "tco_applied_sal_id", nullable = true)
     private Sale appliedSale;
 
+    @ManyToOne
+    @JoinColumn(name = "tco_usr_id", nullable = true)
+    private User user;
+
     @Column(name = "tco_code", nullable = false)
     private String code;
 
@@ -50,7 +55,7 @@ public class TraderCoupon extends DomainEntity {
     private BigDecimal value;
 
     @Column(name = "tco_used", columnDefinition = "TINYINT(1) DEFAULT 1")
-    private Boolean used = false;
+    private Boolean used;
 
     @Column(name = "tco_created_at", nullable = false)
     private LocalDateTime createdAt;

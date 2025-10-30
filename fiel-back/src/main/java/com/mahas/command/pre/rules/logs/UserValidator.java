@@ -3,6 +3,9 @@ package com.mahas.command.pre.rules.logs;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.base.user.BaseUserCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -12,9 +15,6 @@ import com.mahas.dto.request.user.UserDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class UserValidator {

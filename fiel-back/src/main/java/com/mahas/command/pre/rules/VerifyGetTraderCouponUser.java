@@ -1,24 +1,23 @@
 package com.mahas.command.pre.rules;
 
+import com.mahas.command.pre.IPreCommand;
+import com.mahas.command.pre.rules.logs.CommunValidator;
+import com.mahas.command.pre.rules.logs.UserValidator;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.SQLRequest;
+import com.mahas.domain.sale.TraderCoupon;
+import com.mahas.domain.user.User;
+import com.mahas.dto.request.DTORequest;
+import com.mahas.dto.request.sale.TraderCouponDTORequest;
+import com.mahas.exception.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.mahas.command.pre.IPreCommand;
-import com.mahas.command.pre.rules.logs.CommunValidator;
-import com.mahas.command.pre.rules.logs.TraderCouponValidator;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.SQLRequest;
-import com.mahas.domain.sale.Sale;
-import com.mahas.domain.sale.TraderCoupon;
-import com.mahas.dto.request.DTORequest;
-import com.mahas.dto.request.sale.TraderCouponDTORequest;
-import com.mahas.dto.response.sale.TraderCouponDTOResponse;
-import com.mahas.exception.ValidationException;
-
 @Component
-public class VerifyUsedTraderCoupon implements IPreCommand {
+public class VerifyGetTraderCouponUser implements IPreCommand {
     @Autowired
-    private TraderCouponValidator traderCouponValidator;
+    private UserValidator userValidator;
 
     @Autowired
     private CommunValidator communValidator;
@@ -33,26 +32,32 @@ public class VerifyUsedTraderCoupon implements IPreCommand {
 
         TraderCouponDTORequest traderCouponRequest = (TraderCouponDTORequest) entity;
 
-        communValidator.validateNotBlanck(traderCouponRequest.getId(), "Id não especificado");
+        communValidator.validateNotBlanck(traderCouponRequest.getUser(), "Id do usuario não especificado");
 
         SQLRequest sqlRequest = new SQLRequest();
 
-        TraderCouponDTOResponse tcRes = traderCouponValidator.isUsed(traderCouponRequest.getId());
-        
-        if(tcRes == null) {
-            throw new ValidationException(": Cupom não encontrado");
-        }
+        userValidator.userExists(traderCouponRequest.getUser());
 
         TraderCoupon traderCoupon = new TraderCoupon();
-        traderCoupon.setId(traderCouponRequest.getId());
-        traderCoupon.setUsed(true);
 
-        Sale appliedSale = new Sale();
-        appliedSale.setId(traderCouponRequest.getAppliedSale());
+        User user = new User();
+        user.setId(traderCouponRequest.getUser());
 
-        traderCoupon.setAppliedSale(appliedSale);
+        traderCoupon.setUser(user);
 
         sqlRequest.setEntity(traderCoupon);
+
+        if(request.getLimit() != null && request.getLimit() > 0) {
+            sqlRequest.setLimit(request.getLimit());
+            if(request.getPage() != null && request.getPage() > 0) {
+                sqlRequest.setPage(request.getPage());
+            }else {
+                sqlRequest.setPage(1);
+            }
+        }else {
+            sqlRequest.setLimit(10);
+            sqlRequest.setPage(1);
+        }
 
         return sqlRequest;
     }

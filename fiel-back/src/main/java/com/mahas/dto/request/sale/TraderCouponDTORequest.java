@@ -17,6 +17,7 @@ public class TraderCouponDTORequest implements DTORequest {
     private Integer id;
     private Integer originSale;
     private Integer appliedSale;
+    private Integer user;
     private String code;
     private BigDecimal value;
     private Boolean used;

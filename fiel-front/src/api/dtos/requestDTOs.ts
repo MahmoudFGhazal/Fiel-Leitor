@@ -102,9 +102,11 @@ export interface StreetTypeRequest {
 
 export interface TraderCouponRequest {
     id: number | null,
-    sale: number | null,
+    originSale: number | null,
+    appliedSale: number | null,
+    user: number | null,
     value: number | null,
-    user: boolean | null
+    user: boolean | null,
 }
 
 export interface UserRequest {

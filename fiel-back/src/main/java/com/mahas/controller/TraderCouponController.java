@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.pre.base.sale.BaseTraderCouponCommand;
+import com.mahas.command.pre.rules.VerifyGetTraderCouponUser;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.dto.request.sale.TraderCouponDTORequest;
@@ -20,6 +21,9 @@ import com.mahas.facade.IFacade;
 public class TraderCouponController {
     @Autowired
     private IFacade facade;
+
+    @Autowired
+    private VerifyGetTraderCouponUser verifyGetTraderCouponUser;
 
     @Autowired
     private BaseTraderCouponCommand baseTraderCouponCommand;
@@ -36,6 +40,23 @@ public class TraderCouponController {
         request.setEntity(traderCouponReq);
         request.setPreCommand(baseTraderCouponCommand);
         request.setLimit(1);
+
+        FacadeResponse response = facade.query(request);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<FacadeResponse> getTraderCouponByUser(
+        @RequestParam(value = "userId", required = true) Integer userId
+    ) {
+        FacadeRequest request = new FacadeRequest();
+        
+        TraderCouponDTORequest traderCouponReq = new TraderCouponDTORequest();
+        traderCouponReq.setUser(userId);
+
+        request.setEntity(traderCouponReq);
+        request.setPreCommand(verifyGetTraderCouponUser);
 
         FacadeResponse response = facade.query(request);
         

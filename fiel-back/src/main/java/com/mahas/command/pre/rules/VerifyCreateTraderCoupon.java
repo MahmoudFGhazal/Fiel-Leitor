@@ -11,6 +11,7 @@ import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.sale.Sale;
 import com.mahas.domain.sale.TraderCoupon;
+import com.mahas.domain.user.User;
 import com.mahas.dto.request.DTORequest;
 import com.mahas.dto.request.sale.TraderCouponDTORequest;
 import com.mahas.exception.ValidationException;
@@ -38,6 +39,7 @@ public class VerifyCreateTraderCoupon implements IPreCommand {
 
         communValidator.validateNotBlanck(traderCouponRequest.getOriginSale(), "Venda");
         communValidator.validateNotBlanck(traderCouponRequest.getValue(), "Valor");
+        communValidator.validateNotBlanck(traderCouponRequest.getUser(), "Usuario");
 
         saleValidator.saleExists(traderCouponRequest.getOriginSale());
 
@@ -50,9 +52,13 @@ public class VerifyCreateTraderCoupon implements IPreCommand {
         Sale sale = new Sale();
         sale.setId(traderCouponRequest.getOriginSale());
 
+        User user = new User();
+        user.setId(traderCouponRequest.getUser());
+
+        traderCoupon.setUser(user);
         traderCoupon.setOriginSale(sale);
 
-        SQLRequest sqlRequest = new SQLRequest();
+        SQLRequest sqlRequest = new SQLRequest();        
         sqlRequest.setEntity(traderCoupon);
         return sqlRequest;
     }

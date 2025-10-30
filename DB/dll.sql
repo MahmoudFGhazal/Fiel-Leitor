@@ -109,6 +109,55 @@ CREATE TABLE books (
     CONSTRAINT fk_books_categories FOREIGN KEY (bok_cat_id) REFERENCES categories (cat_id)
 );
 
+
+/* CREATE TABLE books (
+    bok_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    bok_name VARCHAR(100) NOT NULL,
+    bok_title VARCHAR(150) NOT NULL,
+    bok_author VARCHAR(120) NOT NULL,
+    bok_publisher VARCHAR(120) NOT NULL,   
+    bok_edition VARCHAR(30) NOT NULL,    
+    bok_year YEAR NOT NULL,  
+    bok_isbn VARCHAR(20) NOT NULL,
+    bok_barcode VARCHAR(20) NOT NULL,
+    bok_cat_id BIGINT NOT NULL,
+    bok_pgr_id BIGINT NOT NULL,
+    bok_synopsis TEXT NOT NULL,
+
+    bok_height_cm DECIMAL(6,2),
+    bok_width_cm DECIMAL(6,2),
+    bok_depth_cm DECIMAL(6,2) NOT ,
+    bok_weight_kg DECIMAL(7,3) NOT NULL,
+
+    bok_price DECIMAL(10, 2) NOT NULL,
+    bok_stock INT DEFAULT 0,
+
+    CONSTRAINT uq_books_isbn UNIQUE (bok_isbn),
+    CONSTRAINT uq_books_barcode UNIQUE (bok_barcode),
+
+    bok_active TINYINT(1) DEFAULT 1,
+    bok_is_delete TINYINT(1) DEFAULT 0,
+
+    bok_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    bok_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    bok_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_books_categories FOREIGN KEY (bok_cat_id) REFERENCES categories (cat_id)
+);
+
+CREATE TABLE price_groups (
+    prg_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    prg_name VARCHAR(120) NOT NULL,
+    prg_margin_pct DECIMAL(5,2) NOT NULL DEFAULT 0.00,
+    prg_active TINYINT(1) NOT NULL DEFAULT 1,
+
+    bok_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    bok_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    bok_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uq_price_groups_name UNIQUE (prg_name)
+); */
+
 -- =============================
 -- Pagamentos
 -- =============================
@@ -150,6 +199,7 @@ CREATE TABLE trader_coupons (
     tco_used TINYINT(1) DEFAULT 0,
     tco_origin_sal_id BIGINT NOT NULL,
     tco_applied_sal_id BIGINT NULL,
+    tco_usr_id BIGINT NULL,
     tco_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     tco_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -229,4 +279,5 @@ CREATE TABLE sales_trader_coupons (
 ALTER TABLE trader_coupons
     ADD CONSTRAINT uq_trader_coupons_origin UNIQUE (tco_origin_sal_id),
     ADD CONSTRAINT fk_trader_coupons_origin  FOREIGN KEY (tco_origin_sal_id)  REFERENCES sales (sal_id),
-    ADD CONSTRAINT fk_trader_coupons_applied FOREIGN KEY (tco_applied_sal_id) REFERENCES sales (sal_id);
+    ADD CONSTRAINT fk_trader_coupons_applied FOREIGN KEY (tco_applied_sal_id) REFERENCES sales (sal_id),
+    ADD CONSTRAINT fk_trader_coupons_user FOREIGN KEY (tco_usr_id)  REFERENCES users (usr_id);

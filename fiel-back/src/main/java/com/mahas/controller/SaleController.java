@@ -220,6 +220,7 @@ public class SaleController {
             TraderCouponDTORequest traderCoupon = new TraderCouponDTORequest();
             traderCoupon.setOriginSale(saleRes.getId());
             traderCoupon.setValue(leftover);
+            traderCoupon.setUser(saleRes.getUser().getId());
 
             traderCouponReq.setEntity(traderCoupon);
             traderCouponReq.setPreCommand(verifyCreateTraderCoupon);

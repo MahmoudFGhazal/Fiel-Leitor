@@ -2,19 +2,20 @@ package com.mahas.command.pre.rules.logs;
 
 import java.security.SecureRandom;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.mahas.command.pre.base.sale.BaseTraderCouponCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.sale.Sale;
 import com.mahas.domain.sale.TraderCoupon;
+import com.mahas.domain.user.User;
 import com.mahas.dto.request.sale.TraderCouponDTORequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.sale.TraderCouponDTOResponse;
 import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class TraderCouponValidator {
@@ -43,6 +44,12 @@ public class TraderCouponValidator {
             Sale s = new Sale();
             s.setId(dto.getOriginSale());
             tc.setOriginSale(s);
+        }
+
+        if (dto.getUser() != null) {
+            User u = new User();
+            u.setId(dto.getUser());
+            tc.setUser(u);
         }
 
         return tc;

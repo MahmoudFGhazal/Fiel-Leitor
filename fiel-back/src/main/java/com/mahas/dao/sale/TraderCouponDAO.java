@@ -55,6 +55,10 @@ public class TraderCouponDAO implements IDAO {
         if (coupon.getOriginSale() != null && coupon.getOriginSale().getId() != null) {
             where.append(" AND t.originSale.id = :saleId"); params.put("saleId", coupon.getOriginSale().getId());
         }
+        System.out.println(coupon.getUser().getId());
+        if (coupon.getUser() != null && coupon.getUser().getId() != null) {
+            where.append(" AND t.user.id = :userId"); params.put("userId", coupon.getUser().getId());
+        }
 
         jpql.append(where); 
         countJpql.append(where);
@@ -115,6 +119,10 @@ public class TraderCouponDAO implements IDAO {
             
             if (traderCoupon.getUsed() != null) {
                 existingTraderCoupon.setUsed(traderCoupon.getUsed());
+            }
+
+            if (traderCoupon.getAppliedSale() != null) {
+                existingTraderCoupon.setAppliedSale(traderCoupon.getAppliedSale());
             }
            
             entityManager.flush();
