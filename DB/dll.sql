@@ -192,19 +192,6 @@ CREATE TABLE promotional_coupons (
     pco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE trader_coupons (
-    tco_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tco_code VARCHAR(20) NOT NULL,
-    tco_value DECIMAL(10,2) NOT NULL,
-    tco_used TINYINT(1) DEFAULT 0,
-    tco_origin_sal_id BIGINT NOT NULL,
-    tco_applied_sal_id BIGINT NULL,
-    tco_usr_id BIGINT NULL,
-    tco_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    tco_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
 -- =============================
 -- Carrinho e vendas
 -- =============================
@@ -268,6 +255,37 @@ CREATE TABLE sales_cards (
     CONSTRAINT fk_sales_cards_cards FOREIGN KEY (sca_car_id) REFERENCES cards (car_id)
 );
 
+CREATE TABLE request_status (
+  rst_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  rst_status VARCHAR(75) NOT NULL
+);
+
+CREATE TABLE requet_trader_coupons (
+  rtc_sal_id BIGINT NOT NULL,
+  rtc_rst_id BIGINT NOT NULL,
+  PRIMARY KEY (rtc_sal_id),
+  CONSTRAINT rtc_sal_FK FOREIGN KEY (rtc_sal_id) REFERENCES sales (sal_id),
+  CONSTRAINT rtc_rst_FK FOREIGN KEY (rtc_rst_id) REFERENCES request_status (rst_id)
+);
+
+CREATE TABLE trader_coupons (
+    tco_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    tco_code VARCHAR(20) NOT NULL,
+    tco_value DECIMAL(10,2) NOT NULL,
+    tco_used TINYINT(1) DEFAULT 0,
+    tco_rtc_id BIGINT NOT NULL,
+    tco_usr_id BIGINT NULL,
+    tco_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    tco_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    tco_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uq_trader_coupons_origin UNIQUE (tco_rtc_id),
+    CONSTRAINT uq_trader_coupons_code   UNIQUE (tco_code),
+
+    CONSTRAINT tco_rtc_FK  FOREIGN KEY (tco_rtc_id)  REFERENCES requet_trader_coupons (rtc_sal_id),
+    CONSTRAINT tco_usr_FK FOREIGN KEY (tco_usr_id)  REFERENCES users (usr_id)
+);
+
 CREATE TABLE sales_trader_coupons (
   sat_sal_id BIGINT NOT NULL,
   sat_tco_id BIGINT NOT NULL,
@@ -275,9 +293,3 @@ CREATE TABLE sales_trader_coupons (
   CONSTRAINT sat_sal_FK FOREIGN KEY (sat_sal_id) REFERENCES sales (sal_id),
   CONSTRAINT sat_pco_FK FOREIGN KEY (sat_tco_id) REFERENCES trader_coupons (tco_id)
 );
-
-ALTER TABLE trader_coupons
-    ADD CONSTRAINT uq_trader_coupons_origin UNIQUE (tco_origin_sal_id),
-    ADD CONSTRAINT fk_trader_coupons_origin  FOREIGN KEY (tco_origin_sal_id)  REFERENCES sales (sal_id),
-    ADD CONSTRAINT fk_trader_coupons_applied FOREIGN KEY (tco_applied_sal_id) REFERENCES sales (sal_id),
-    ADD CONSTRAINT fk_trader_coupons_user FOREIGN KEY (tco_usr_id)  REFERENCES users (usr_id);
