@@ -3,6 +3,7 @@ package com.mahas.dto.request.sale;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.mahas.domain.sale.StatusSaleName;
 import com.mahas.dto.request.DTORequest;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class SaleDTORequest implements DTORequest {
     private BigDecimal freight;
     private LocalDate deliveryDate;
     private Integer status;
+    private StatusSaleName statusName;
     private Integer address;
     private SaleCardDTORequest[] cards;
     private SaleBookDTORequest[] books;

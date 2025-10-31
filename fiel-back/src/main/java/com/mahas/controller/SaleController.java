@@ -1,6 +1,7 @@
 package com.mahas.controller;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +21,15 @@ import com.mahas.command.pre.rules.VerifyCreateSaleBook;
 import com.mahas.command.pre.rules.VerifyCreateSaleCard;
 import com.mahas.command.pre.rules.VerifyCreateTraderCoupon;
 import com.mahas.command.pre.rules.VerifyDecreaseStock;
+import com.mahas.command.pre.rules.VerifyDefineSaleStatus;
+import com.mahas.command.pre.rules.VerifyDefineTransport;
 import com.mahas.command.pre.rules.VerifyNewSale;
 import com.mahas.command.pre.rules.VerifyReleaseReservedStock;
 import com.mahas.command.pre.rules.VerifyUsedPromotionalCoupon;
 import com.mahas.command.pre.rules.VerifyUsedTraderCoupon;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
+import com.mahas.domain.sale.StatusSaleName;
 import com.mahas.dto.request.product.BookDTORequest;
 import com.mahas.dto.request.sale.PromotionalCouponDTORequest;
 import com.mahas.dto.request.sale.SaleBookDTORequest;
@@ -78,6 +82,12 @@ public class SaleController {
     @Autowired
     private VerifyCreateTraderCoupon verifyCreateTraderCoupon;
 
+    @Autowired
+    private VerifyDefineTransport verifyDefineTransport;
+
+    @Autowired
+    private VerifyDefineSaleStatus verifyDefineSaleStatus;
+
     @GetMapping("/user")
     public ResponseEntity<FacadeResponse> getSaleByUser(
         @RequestParam(value = "userId", required = true) Integer userId
@@ -95,12 +105,12 @@ public class SaleController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("cancel")
+    @PutMapping("/cancel")
     public ResponseEntity<FacadeResponse> cancelSale(
         @RequestBody SaleDTORequest sale
     ) {
         FacadeRequest saleReq = new FacadeRequest();
-        
+
         saleReq.setEntity(sale);
         saleReq.setPreCommand(verifyCancelSale);
 
@@ -253,4 +263,123 @@ public class SaleController {
         return ResponseEntity.ok(facadeSaleRes);
     }
 
+    @PutMapping("/transit")
+    public ResponseEntity<FacadeResponse> defineTransport(
+        @RequestParam(value = "saleId", required = true) Integer saleId,
+        @RequestParam(value = "deliveryDate", required = true) LocalDate deliveryDate,
+        @RequestParam(value = "freight", required = true) BigDecimal freight
+    ) {
+        FacadeRequest saleReq = new FacadeRequest();
+        
+        SaleDTORequest sale = new SaleDTORequest();
+        sale.setId(saleId);
+        sale.setDeliveryDate(deliveryDate);
+        sale.setFreight(freight);
+        sale.setStatusName(StatusSaleName.IN_TRANSIT);
+
+        saleReq.setEntity(sale);
+        saleReq.setPreCommand(verifyDefineTransport);
+
+        FacadeResponse facadeSaleRes = facade.update(saleReq);
+  
+        return ResponseEntity.ok(facadeSaleRes);
+    }
+
+    @PutMapping("/delivered")
+    public ResponseEntity<FacadeResponse> defineDelivered(
+        @RequestParam(value = "saleId", required = true) Integer saleId
+    ) {
+        FacadeRequest saleReq = new FacadeRequest();
+        
+        SaleDTORequest sale = new SaleDTORequest();
+        sale.setId(saleId);
+        sale.setStatusName(StatusSaleName.DELIVERED);
+
+        saleReq.setEntity(sale);
+        saleReq.setPreCommand(verifyDefineSaleStatus);
+
+        FacadeResponse facadeSaleRes = facade.update(saleReq);
+  
+        return ResponseEntity.ok(facadeSaleRes);
+    }
+
+    @PutMapping("/trade/request")
+    public ResponseEntity<FacadeResponse> requestTrade(
+        @RequestParam(value = "saleId", required = true) Integer saleId
+    ) {
+        FacadeRequest saleReq = new FacadeRequest();
+        
+        SaleDTORequest sale = new SaleDTORequest();
+        sale.setId(saleId);
+        sale.setStatusName(StatusSaleName.EXCHANGE_REQUESTED);
+
+        saleReq.setEntity(sale);
+        saleReq.setPreCommand(verifyDefineSaleStatus);
+
+        FacadeResponse facadeSaleRes = facade.update(saleReq);
+  
+        return ResponseEntity.ok(facadeSaleRes);
+    }
+
+    @PutMapping("/trade/status")
+    public ResponseEntity<FacadeResponse> defineStatusTrade(
+        @RequestParam(value = "saleId", required = true) Integer saleId,
+        @RequestParam(value = "confirm", required = true) Boolean confirm
+    ) {
+        FacadeRequest saleReq = new FacadeRequest();
+        
+        SaleDTORequest sale = new SaleDTORequest();
+        sale.setId(saleId);
+
+        if(confirm) {
+            sale.setStatusName(StatusSaleName.EXCHANGE_AUTHORIZED);
+        }else {
+            sale.setStatusName(StatusSaleName.DECLINED);
+        }
+
+        saleReq.setEntity(sale);
+        saleReq.setPreCommand(verifyDefineSaleStatus);
+
+        FacadeResponse facadeSaleRes = facade.update(saleReq);
+
+        return ResponseEntity.ok(facadeSaleRes);
+    }
+
+    @PutMapping("/trade/delivered")
+    public ResponseEntity<FacadeResponse> defineTradeDelivered(
+        @RequestParam(value = "saleId", required = true) Integer saleId
+    ) {
+        FacadeRequest saleReq = new FacadeRequest();
+        
+        SaleDTORequest sale = new SaleDTORequest();
+        sale.setId(saleId);
+        sale.setStatusName(StatusSaleName.EXCHANGED);
+
+
+        saleReq.setEntity(sale);
+        saleReq.setPreCommand(verifyDefineSaleStatus);
+
+        FacadeResponse facadeSaleRes = facade.update(saleReq);
+
+        SaleDTOResponse saleRes = (SaleDTOResponse) facadeSaleRes.getData().getEntity();
+
+        for(SaleBookDTOResponse saleBook : saleRes.getSaleBooks()) {
+            FacadeRequest bookReq = new FacadeRequest();
+
+            BookDTORequest book = new BookDTORequest();
+
+            book.setId(saleBook.getBook().getId());
+            book.setStock(saleBook.getQuantity());
+
+            bookReq.setEntity(book);
+            bookReq.setPreCommand(verifyReleaseReservedStock);
+
+            facade.update(bookReq);
+        }
+
+        return ResponseEntity.ok(facadeSaleRes);
+    }
+
 }
+
+

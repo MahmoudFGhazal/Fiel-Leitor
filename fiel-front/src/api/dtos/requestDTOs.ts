@@ -82,7 +82,7 @@ export interface SaleRequest {
     user: number | null,
     freight: number | null,
     deliveryDate: Date | null,
-    status: number | null,
+    status: string | null,
     address: number | null,
     cards: SaleCardRequest[] | null,
     books: SaleBookRequest[] | null,
