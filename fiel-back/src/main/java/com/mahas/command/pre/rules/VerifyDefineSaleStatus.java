@@ -42,15 +42,16 @@ public class VerifyDefineSaleStatus implements IPreCommand {
         communValidator.validateNotBlanck(saleRequest.getStatusName(), "Status");
 
         SaleDTOResponse saleRes = saleValidator.saleExists(saleRequest.getId());
-
+        System.out.println(saleRequest.getStatusName().getValue());
+        System.out.println(saleRes.getStatusSale().getStatus());
         if(saleRequest.getStatusName() == StatusSaleName.DELIVERED && (saleRes.getStatusSale().getStatus() == null ? StatusSaleName.IN_TRANSIT.getValue() != null : !saleRes.getStatusSale().getStatus().equals(StatusSaleName.IN_TRANSIT.getValue()))) {
             throw new ValidationException("Não é possivel deixar a função como entrega");
         } else if(saleRequest.getStatusName() == StatusSaleName.EXCHANGE_REQUESTED && (saleRes.getStatusSale().getStatus() == null ? StatusSaleName.DELIVERED.getValue() != null : !saleRes.getStatusSale().getStatus().equals(StatusSaleName.DELIVERED.getValue()))) {
             throw new ValidationException("Não é possivel pedir a troca desse produto");
         } else if(saleRequest.getStatusName() == StatusSaleName.EXCHANGE_AUTHORIZED && (saleRes.getStatusSale().getStatus() == null ? StatusSaleName.EXCHANGE_REQUESTED.getValue() != null : !saleRes.getStatusSale().getStatus().equals(StatusSaleName.EXCHANGE_REQUESTED.getValue()))) {
-            throw new ValidationException("Não é possivel pedir a troca desse produto");
+            throw new ValidationException("Não é possivel colocar como aprovado a troca desse produto");
         } else if(saleRequest.getStatusName() == StatusSaleName.EXCHANGED && (saleRes.getStatusSale().getStatus() == null ? StatusSaleName.EXCHANGE_AUTHORIZED.getValue() != null : !saleRes.getStatusSale().getStatus().equals(StatusSaleName.EXCHANGE_AUTHORIZED.getValue()))) {
-            throw new ValidationException("Não é possivel pedir a troca desse produto");
+            throw new ValidationException("Não é possivel completar essa troca desse produto");
         } else if(saleRequest.getStatusName() != StatusSaleName.DELIVERED && saleRequest.getStatusName() != StatusSaleName.EXCHANGE_REQUESTED && saleRequest.getStatusName() != StatusSaleName.EXCHANGE_AUTHORIZED && saleRequest.getStatusName() != StatusSaleName.EXCHANGED && saleRequest.getStatusName() != StatusSaleName.DECLINED) {
             throw new ValidationException("Função não suporta esse mudança de status");
         }
