@@ -42,8 +42,7 @@ public class VerifyDefineSaleStatus implements IPreCommand {
         communValidator.validateNotBlanck(saleRequest.getStatusName(), "Status");
 
         SaleDTOResponse saleRes = saleValidator.saleExists(saleRequest.getId());
-        System.out.println(saleRequest.getStatusName().getValue());
-        System.out.println(saleRes.getStatusSale().getStatus());
+
         if(saleRequest.getStatusName() == StatusSaleName.DELIVERED && (saleRes.getStatusSale().getStatus() == null ? StatusSaleName.IN_TRANSIT.getValue() != null : !saleRes.getStatusSale().getStatus().equals(StatusSaleName.IN_TRANSIT.getValue()))) {
             throw new ValidationException("Não é possivel deixar a função como entrega");
         } else if(saleRequest.getStatusName() == StatusSaleName.EXCHANGE_REQUESTED && (saleRes.getStatusSale().getStatus() == null ? StatusSaleName.DELIVERED.getValue() != null : !saleRes.getStatusSale().getStatus().equals(StatusSaleName.DELIVERED.getValue()))) {

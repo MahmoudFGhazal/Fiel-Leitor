@@ -3,8 +3,8 @@ import ButtonLink from '@/components/buttonComponents/buttonLink';
 import AddressConfig from '@/components/config/addressConfig';
 import CardConfig from '@/components/config/cardConfig';
 import ChangePasswordConfig from '@/components/config/changePasswordConfig';
+import CouponConfig from '@/components/config/couponConfig';
 import ProfileConfig from '@/components/config/profileConfig';
-import CardConfig from '@/components/config/couponConfig';
 import styles from './page.module.css';
 
 type Tab = 'profile' | 'addresses' | 'cards' | 'password' | 'coupons';
@@ -24,7 +24,7 @@ export default async function Config({
                 <ButtonLink text="Alterar Senha" href="?tab=password" />
                 <ButtonLink text="Endereços" href="?tab=addresses" />
                 <ButtonLink text="Cartões" href="?tab=cards" />
-                <ButtonLink text="Botões" href="?tab=coupons" />
+                <ButtonLink text="Cupom" href="?tab=coupons" />
             </div>
 
             <div className={styles.tabContent}>

@@ -36,6 +36,7 @@ public class TraderCouponController {
         
         TraderCouponDTORequest traderCouponReq = new TraderCouponDTORequest();
         traderCouponReq.setCode(code);
+        traderCouponReq.setUsed(false);
 
         request.setEntity(traderCouponReq);
         request.setPreCommand(baseTraderCouponCommand);

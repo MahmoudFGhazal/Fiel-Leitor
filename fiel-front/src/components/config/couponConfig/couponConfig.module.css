@@ -1,35 +1,26 @@
 .container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 5%;
-    border-bottom: 1px solid #eee;
+  padding: 20px;
 }
 
-.cancelContainer {
-    display: flex;
-    gap: 12px;
-    flex-direction: row;
+.headerContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.editButton {
-    cursor: pointer;
-    background-color: #0070f3;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    user-select: none;
-    border: none;
+.couponTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-.editButton:hover {
-    background-color: #005bb5;
+.couponTable th,
+.couponTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
 }
 
-.editButton:active {
-    transform: scale(0.96);
+.couponTable th {
+  background-color: #f0f0f0;
 }
