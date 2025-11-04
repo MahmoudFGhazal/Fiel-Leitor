@@ -1,0 +1,35 @@
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.tabContent {
+    width: 80%;
+    align-items: center;
+}
+
+.sideBar {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    width: 200px;
+    padding: 30px 10px;
+    background-color: black;
+    gap: 10px;
+    border-top-right-radius: 20px;   
+    border-bottom-right-radius: 20px;
+}
+
+.sideBar button {
+    border-bottom: 1px solid gray;
+    margin-bottom: 5px;           
+    color: white;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+}
+
+button + .button { 
+    border-top: 1px solid gray;
+}

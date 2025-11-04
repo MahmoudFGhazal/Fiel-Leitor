@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mahas.command.post.adapters.GetFinishedSaleAdapter;
 import com.mahas.command.post.adapters.GetPedingSaleAdapter;
+import com.mahas.command.post.adapters.GetTradeSaleAdapter;
 import com.mahas.command.pre.base.sale.BaseSaleCommand;
 import com.mahas.command.pre.rules.VerifyCancelSale;
 import com.mahas.command.pre.rules.VerifyConfirmPayment;
@@ -97,6 +98,9 @@ public class SaleController {
     @Autowired
     private GetPedingSaleAdapter getPedingSaleAdapter;
 
+    @Autowired
+    private GetTradeSaleAdapter getTradeSaleAdapter;
+
     @GetMapping("/user")
     public ResponseEntity<FacadeResponse> getSaleByUser(
         @RequestParam(value = "userId", required = true) Integer userId
@@ -138,6 +142,21 @@ public class SaleController {
         request.setEntity(sale);
         request.setPreCommand(baseSaleCommand);
         request.setPostCommand(getPedingSaleAdapter);
+
+        FacadeResponse response = facade.query(request);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/trade")
+    public ResponseEntity<FacadeResponse> getTradeSale() {
+        FacadeRequest request = new FacadeRequest();
+        
+        SaleDTORequest sale = new SaleDTORequest();
+
+        request.setEntity(sale);
+        request.setPreCommand(baseSaleCommand);
+        request.setPostCommand(getTradeSaleAdapter);
 
         FacadeResponse response = facade.query(request);
         

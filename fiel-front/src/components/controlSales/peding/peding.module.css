@@ -1,0 +1,26 @@
+.container {
+  padding: 20px;
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.saleTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.saleTable th,
+.saleTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.saleTable th {
+  background-color: #f0f0f0;
+}

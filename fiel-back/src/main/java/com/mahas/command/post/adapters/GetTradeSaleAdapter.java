@@ -17,7 +17,7 @@ import com.mahas.dto.response.sale.SaleDTOResponse;
 import com.mahas.exception.ValidationException;
 
 @Component
-public class GetPedingSaleAdapter implements IPostCommand {
+public class GetTradeSaleAdapter implements IPostCommand {
     @Override
     public FacadeResponse execute(SQLResponse sqlResponse) {
         List<DomainEntity> entities = sqlResponse.getEntities();
@@ -35,9 +35,9 @@ public class GetPedingSaleAdapter implements IPostCommand {
             if(
                 (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.DELIVERED.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.DELIVERED.getValue())) ||
                 (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.DECLINED.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.DECLINED.getValue())) ||
-                (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.EXCHANGED.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.EXCHANGED.getValue())) ||
-                (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.EXCHANGE_AUTHORIZED.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.EXCHANGE_AUTHORIZED.getValue())) ||
-                (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.EXCHANGE_REQUESTED.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.EXCHANGE_REQUESTED.getValue()))
+                (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.APPROVED.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.APPROVED.getValue())) ||
+                (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.IN_TRANSIT.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.IN_TRANSIT.getValue())) ||
+                (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.PROCESSING.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.PROCESSING.getValue()))
             ) continue;
             
             dtoList.add(saleResponse);

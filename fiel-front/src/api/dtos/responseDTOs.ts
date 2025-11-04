@@ -78,22 +78,22 @@ export interface SaleCardResponse {
 }
 
 export interface SaleResponse {
-  id: number | null,
-  user: UserResponse | null,                   
-  freight: number | null,
-  deliveryDate: Date | null,
-  status: StatusSaleResponse | null,           
-  address: AddressResponse | null,           
-  cards: SaleCardResponse[] | null,            
-  saleBooks: SaleBookResponse[] | null,            
-  traderCoupon: TraderCouponResponse | null,    
-  promotinalCoupons: PromotionalCouponResponse[] | null,
-  createdAt: Date | null
+    id: number | null,
+    user: UserResponse | null,                   
+    freight: number | null,
+    deliveryDate: Date | null,
+    statusSale: StatusSaleResponse | null,           
+    address: AddressResponse | null,           
+    cards: SaleCardResponse[] | null,            
+    saleBooks: SaleBookResponse[] | null,            
+    traderCoupon: TraderCouponResponse | null,    
+    promotinalCoupons: PromotionalCouponResponse[] | null,
+    createdAt: Date | null
 }
 
 export interface StatusSaleResponse {
     id: number | null,
-    name: string | null  
+    status: string | null  
 }
 
 export interface StreetTypeResponse {
