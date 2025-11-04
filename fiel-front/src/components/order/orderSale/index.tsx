@@ -1,5 +1,7 @@
 'use client'
 import { SaleResponse } from '@/api/dtos/responseDTOs';
+import { ApiResponse } from '@/api/objects';
+import api from '@/api/route';
 import { useEffect, useMemo, useState } from 'react';
 import OrderItem from '../orderItem';
 import styles from './orderCard.module.css';
@@ -12,15 +14,36 @@ function formatDate(d: Date | string | null | undefined) {
 
 export default function OrderSale({ sale }: { sale: SaleResponse }) {
     const [total, setTotal] = useState<number>(0);
-    console.log(JSON.stringify(sale, null, 2))
+    const [currentStatus, setCurrentStatus] = useState<string | null>(
+        sale.statusSale?.status ?? null
+    );
+
     useEffect(() => {
         if (!sale?.saleBooks?.length) return;
-        console.log(JSON.stringify(sale, null, 2))
+
         const sum = sale.saleBooks.reduce((acc, book) => acc + (book.price ?? 0), 0);
         setTotal(sum);
     }, [sale]);
 
+    const requestTrade = async () => {
+        try {
+            const res = await api.put<ApiResponse>('/sale/trade/request', { params: { saleId: sale.id } });
+            if (res.message) {
+                alert(res.message);
+                return;
+            }
+            
+            setCurrentStatus('EXCHANGE_REQUESTED');
+
+            alert("Requisição enviada");
+        } catch (err) {
+            console.error("Erro ao carregar vendas", err);
+        }
+    }
+
     const createdAtStr = useMemo(() => formatDate(sale?.createdAt), [sale?.createdAt]);
+
+    const canRequestTrade = currentStatus === 'DELIVERED';
 
     return (
         <div className={styles.orderSale}>
@@ -28,6 +51,18 @@ export default function OrderSale({ sale }: { sale: SaleResponse }) {
                 <div>
                     <p><strong>Pedido realizado:</strong> {createdAtStr}</p>
                     <p><strong>Total:</strong> R$ {total.toFixed(2)}</p>
+                    <p className={styles.statusLine}>
+                        <strong>Status:</strong> {currentStatus}
+                        {canRequestTrade && (
+                        <button
+                            type="button"
+                            onClick={requestTrade}
+                            className={styles.tradeButton}
+                        >
+                            Pedir troca
+                        </button>
+                        )}
+                    </p>
                 </div>
                 <div>
                     <p><strong>Pedido nº</strong> {sale.id}</p>

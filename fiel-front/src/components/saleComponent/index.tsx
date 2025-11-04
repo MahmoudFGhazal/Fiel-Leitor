@@ -34,7 +34,7 @@ const SALE_SS_KEY = 'sale_ctx_v1';
 function isNavigationReload(): boolean {
     const entry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
     if (entry?.type) return entry.type === 'reload';
-    // @ts-ignore legacy
+
     return window.performance?.navigation?.type === 1;
 }
 
