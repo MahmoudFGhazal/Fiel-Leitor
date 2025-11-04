@@ -33,6 +33,7 @@ public class GetPedingSaleAdapter implements IPostCommand {
             saleResponse.mapFromEntity(e);
 
             if(
+                (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.PROCESSING.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.PROCESSING.getValue())) ||
                 (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.DELIVERED.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.DELIVERED.getValue())) ||
                 (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.DECLINED.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.DECLINED.getValue())) ||
                 (saleResponse.getStatusSale().getStatus() == null ? StatusSaleName.EXCHANGED.getValue() == null : saleResponse.getStatusSale().getStatus().equals(StatusSaleName.EXCHANGED.getValue())) ||

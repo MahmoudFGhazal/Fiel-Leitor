@@ -41,12 +41,8 @@ public class SaleDAO implements IDAO {
 
         StringBuilder jpql = new StringBuilder(
             fetch
-            ? "SELECT DISTINCT s FROM Sale s " +
-            "LEFT JOIN FETCH sb.book " +
-            "LEFT JOIN FETCH s.statusSale ss " +
-            "WHERE 1=1"
-            : "SELECT s FROM Sale s " +
-            "WHERE 1=1"
+            ? "SELECT DISTINCT s FROM Sale s LEFT JOIN FETCH s.saleBooks sb LEFT JOIN FETCH sb.book WHERE 1=1"
+            : "SELECT s FROM Sale s WHERE 1=1"
         );
 
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(s) FROM Sale s WHERE 1=1");

@@ -2,6 +2,7 @@
 import { SaleResponse } from '@/api/dtos/responseDTOs';
 import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
+import ActionButton from '@/components/buttonComponents/actionButton';
 import { useEffect, useState } from 'react';
 import styles from './trade.module.css';
 
@@ -26,7 +27,7 @@ export default function TradeSales() {
                 setSales(entities);
             } catch (err) {
                 console.error(err);
-                alert("Erro ao carregar cupons");
+                alert("Erro ao carregar pedidos");
             } 
         };
 
@@ -36,7 +37,7 @@ export default function TradeSales() {
     return (
         <div className={styles.container}>
             <div className={styles.headerContent}>
-                <h2>Cupons</h2>
+                <h2>Pedidos de Troca</h2>
             </div>
 
             <table className={styles.saleTable}>
@@ -59,7 +60,22 @@ export default function TradeSales() {
                                 <td>{sale.id}</td>
                                 <td>{sale?.statusSale?.status}</td>
                                 <td>R${sale?.saleBooks?.map((sb: any) => sb.price)}</td>
-                                <td>Botão</td>
+                                <td>
+                                    <ActionButton 
+                                        label={''} 
+                                        onClick={function (): void {
+                                                throw new Error('Function not implemented.');
+                                            } 
+                                        }                                        
+                                    />
+                                    <ActionButton 
+                                        label={''} 
+                                        onClick={function (): void {
+                                                throw new Error('Function not implemented.');
+                                            } 
+                                        }                                        
+                                    />
+                                </td>
                             </tr>
                         ))
                     )}

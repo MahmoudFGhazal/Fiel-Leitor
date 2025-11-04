@@ -26,7 +26,7 @@ export default function FinishedSales() {
                 setSales(entities);
             } catch (err) {
                 console.error(err);
-                alert("Erro ao carregar cupons");
+                alert("Erro ao carregar pedidos");
             } 
         };
 

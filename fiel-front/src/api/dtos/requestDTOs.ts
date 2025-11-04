@@ -106,7 +106,7 @@ export interface TraderCouponRequest {
     appliedSale: number | null,
     user: number | null,
     value: number | null,
-    user: boolean | null,
+    used: boolean | null,
 }
 
 export interface UserRequest {
