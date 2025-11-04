@@ -59,6 +59,7 @@ export default function OrderSale({ sale }: { sale: SaleResponse }) {
                                 text='Pedir Troca'
                                 type="button"
                                 onClick={requestTrade}
+                                dataCy='request-button'
                             />
                         )}
                     </p>

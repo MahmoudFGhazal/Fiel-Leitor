@@ -126,7 +126,7 @@ export default function PedingSales() {
     return (
         <div className={styles.container}>
             <div className={styles.headerContent}>
-                <h2>Cupons</h2>
+                <h2>Pedidos Pendentes</h2>
             </div>
 
             <table className={styles.saleTable}>
@@ -141,7 +141,7 @@ export default function PedingSales() {
                 <tbody>
                     {sales.length === 0 ? (
                         <tr>
-                            <td colSpan={4}>Nenhum cupom encontrado.</td>
+                            <td colSpan={4}>Nenhum pedido encontrado.</td>
                         </tr>
                     ) : (
                         sales.map((sale) => (
@@ -154,6 +154,7 @@ export default function PedingSales() {
                                         color='green'
                                         label='Passar' 
                                         onClick={() => nextStage(sale.id, sale?.statusSale?.status ?? null)}
+                                        dataCy='pass-button'
                                     />
                                 </td>
                             </tr>

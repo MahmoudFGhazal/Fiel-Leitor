@@ -57,7 +57,7 @@ export default function PopUpInTransit({ onSubmit, id, onClose }: Props) {
             alert('Informe o frete');
             return;
         }
-        console.log(form.deliveryDate)
+
         onSubmit(form);
     };
 
