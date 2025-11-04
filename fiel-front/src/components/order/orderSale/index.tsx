@@ -2,6 +2,7 @@
 import { SaleResponse } from '@/api/dtos/responseDTOs';
 import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
+import Button from '@/components/buttonComponents/button';
 import { useEffect, useMemo, useState } from 'react';
 import OrderItem from '../orderItem';
 import styles from './orderCard.module.css';
@@ -54,13 +55,11 @@ export default function OrderSale({ sale }: { sale: SaleResponse }) {
                     <p className={styles.statusLine}>
                         <strong>Status:</strong> {currentStatus}
                         {canRequestTrade && (
-                        <button
-                            type="button"
-                            onClick={requestTrade}
-                            className={styles.tradeButton}
-                        >
-                            Pedir troca
-                        </button>
+                            <Button
+                                text='Pedir Troca'
+                                type="button"
+                                onClick={requestTrade}
+                            />
                         )}
                     </p>
                 </div>

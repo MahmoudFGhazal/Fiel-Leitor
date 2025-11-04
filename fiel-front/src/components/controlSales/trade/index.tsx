@@ -2,9 +2,9 @@
 import { SaleResponse } from '@/api/dtos/responseDTOs';
 import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
-import ActionButton from '@/components/buttonComponents/actionButton';
 import { useEffect, useState } from 'react';
 import styles from './trade.module.css';
+import TradeSaleLine from './tradeSaleLine';
 
 
 export default function TradeSales() {
@@ -57,25 +57,7 @@ export default function TradeSales() {
                     ) : (
                         sales.map((sale) => (
                             <tr key={sale.id}>
-                                <td>{sale.id}</td>
-                                <td>{sale?.statusSale?.status}</td>
-                                <td>R${sale?.saleBooks?.map((sb: any) => sb.price)}</td>
-                                <td>
-                                    <ActionButton 
-                                        label={''} 
-                                        onClick={function (): void {
-                                                throw new Error('Function not implemented.');
-                                            } 
-                                        }                                        
-                                    />
-                                    <ActionButton 
-                                        label={''} 
-                                        onClick={function (): void {
-                                                throw new Error('Function not implemented.');
-                                            } 
-                                        }                                        
-                                    />
-                                </td>
+                                <TradeSaleLine sale={sale}  />
                             </tr>
                         ))
                     )}
