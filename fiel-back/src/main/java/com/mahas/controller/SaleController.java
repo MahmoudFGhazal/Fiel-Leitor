@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mahas.command.post.adapters.GetFinishedSaleAdapter;
+import com.mahas.command.post.adapters.GetPedingSaleAdapter;
 import com.mahas.command.pre.base.sale.BaseSaleCommand;
 import com.mahas.command.pre.rules.VerifyCancelSale;
 import com.mahas.command.pre.rules.VerifyConfirmPayment;
@@ -88,6 +90,13 @@ public class SaleController {
     @Autowired
     private VerifyDefineSaleStatus verifyDefineSaleStatus;
 
+    //Adapter
+    @Autowired
+    private GetFinishedSaleAdapter getFinishedSaleAdapter;
+
+    @Autowired
+    private GetPedingSaleAdapter getPedingSaleAdapter;
+
     @GetMapping("/user")
     public ResponseEntity<FacadeResponse> getSaleByUser(
         @RequestParam(value = "userId", required = true) Integer userId
@@ -104,6 +113,37 @@ public class SaleController {
         
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/finished")
+    public ResponseEntity<FacadeResponse> getFinishedSale() {
+        FacadeRequest request = new FacadeRequest();
+        
+        SaleDTORequest sale = new SaleDTORequest();
+
+        request.setEntity(sale);
+        request.setPreCommand(baseSaleCommand);
+        request.setPostCommand(getFinishedSaleAdapter);
+
+        FacadeResponse response = facade.query(request);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/peding")
+    public ResponseEntity<FacadeResponse> getPedingSale() {
+        FacadeRequest request = new FacadeRequest();
+        
+        SaleDTORequest sale = new SaleDTORequest();
+
+        request.setEntity(sale);
+        request.setPreCommand(baseSaleCommand);
+        request.setPostCommand(getPedingSaleAdapter);
+
+        FacadeResponse response = facade.query(request);
+        
+        return ResponseEntity.ok(response);
+    }
+
 
     @PutMapping("/cancel")
     public ResponseEntity<FacadeResponse> cancelSale(

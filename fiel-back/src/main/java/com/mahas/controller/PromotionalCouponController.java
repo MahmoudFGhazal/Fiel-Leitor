@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,6 +40,18 @@ public class PromotionalCouponController {
         request.setLimit(1);
 
         FacadeResponse response = facade.query(request);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<FacadeResponse> newPromotionalCoupon(@RequestBody PromotionalCouponDTORequest coupon) {
+        FacadeRequest request = new FacadeRequest();
+
+        request.setEntity(coupon);
+        request.setPreCommand(basePromotionalCouponCommand);
+
+        FacadeResponse response = facade.save(request);
         
         return ResponseEntity.ok(response);
     }

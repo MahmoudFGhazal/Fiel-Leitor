@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
 import com.mahas.dao.IDAO;
 import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.sale.Sale;
+
+import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -41,9 +41,14 @@ public class SaleDAO implements IDAO {
 
         StringBuilder jpql = new StringBuilder(
             fetch
-            ? "SELECT DISTINCT s FROM Sale s LEFT JOIN FETCH s.saleBooks sb LEFT JOIN FETCH sb.book WHERE 1=1"
-            : "SELECT s FROM Sale s WHERE 1=1"
+            ? "SELECT DISTINCT s FROM Sale s " +
+            "LEFT JOIN FETCH sb.book " +
+            "LEFT JOIN FETCH s.statusSale ss " +
+            "WHERE 1=1"
+            : "SELECT s FROM Sale s " +
+            "WHERE 1=1"
         );
+
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(s) FROM Sale s WHERE 1=1");
 
         Map<String, Object> params = new HashMap<>();
@@ -74,7 +79,6 @@ public class SaleDAO implements IDAO {
             query.setParameter(e.getKey(), e.getValue());
         }
 
-        // ✅ Agora o offset só é calculado e usado quando realmente aplicamos paginação
         if (!fetch && limit > 0) {
             int offset = (page > 0) ? (page - 1) * limit : 0;
             query.setFirstResult(offset);
