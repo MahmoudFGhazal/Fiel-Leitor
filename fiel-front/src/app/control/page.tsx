@@ -7,7 +7,7 @@ import styles from './page.module.css';
 
 type Tab = 'peding' | 'finished' | 'trade';
 
-export default async function Config({
+export default async function Control({
         searchParams,
     }: {
         searchParams: Promise<{ tab?: Tab }>;

@@ -414,7 +414,6 @@ public class SaleController {
         sale.setId(saleId);
         sale.setStatusName(StatusSaleName.EXCHANGED);
 
-
         saleReq.setEntity(sale);
         saleReq.setPreCommand(verifyDefineSaleStatus);
 
@@ -422,7 +421,9 @@ public class SaleController {
 
         SaleDTOResponse saleRes = (SaleDTOResponse) facadeSaleRes.getData().getEntity();
 
+        BigDecimal sum = BigDecimal.ZERO;
         for(SaleBookDTOResponse saleBook : saleRes.getSaleBooks()) {
+            sum = sum.add(saleBook.getPrice());
             FacadeRequest bookReq = new FacadeRequest();
 
             BookDTORequest book = new BookDTORequest();
@@ -435,6 +436,18 @@ public class SaleController {
 
             facade.update(bookReq);
         }
+
+        FacadeRequest traderCouponReq = new FacadeRequest();
+
+        TraderCouponDTORequest traderCoupon = new TraderCouponDTORequest();
+        traderCoupon.setOriginSale(saleRes.getId());
+        traderCoupon.setValue(sum);
+        traderCoupon.setUser(saleRes.getUser().getId());
+
+        traderCouponReq.setEntity(traderCoupon);
+        traderCouponReq.setPreCommand(verifyCreateTraderCoupon);
+
+        facadeSaleRes = facade.save(traderCouponReq);
 
         return ResponseEntity.ok(facadeSaleRes);
     }

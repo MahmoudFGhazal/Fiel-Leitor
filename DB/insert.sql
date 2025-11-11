@@ -336,3 +336,215 @@ SELECT s.sal_id, c.car_id, 100.00
  WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
  ORDER BY s.sal_id DESC
  LIMIT 1;
+
+ INSERT INTO sales (
+  sal_usr_id, sal_freight, sal_delivery_date, sal_ssa_id, sal_pco_id, sal_add_id
+)
+VALUES (
+  (SELECT usr_id FROM users WHERE usr_email='renata@example.com'),
+  15.90,
+  DATE_ADD(CURDATE(), INTERVAL -3 DAY),
+  (SELECT ssa_id FROM status_sale WHERE ssa_status='DELIVERED'),
+  (SELECT pco_id FROM promotional_coupons WHERE pco_used=0 ORDER BY pco_id LIMIT 1),
+  (SELECT add_id
+     FROM addresses
+    WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+      AND add_nickname='Casa'
+    LIMIT 1)
+);
+
+-- Itens da SALE #4
+INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
+SELECT s.sal_id, b.bok_id, 1, b.bok_price
+  FROM sales s
+  JOIN books b ON b.bok_name='Fisiologia Moderna'
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
+
+-- Pagamento 100% no cartão principal
+INSERT INTO sales_cards (sca_sal_id, sca_car_id, sca_percent)
+SELECT s.sal_id, c.car_id, 100.00
+  FROM sales s
+  JOIN cards c ON c.car_usr_id = s.sal_usr_id AND c.car_principal=1
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
+
+-- Marca o cupom como usado
+UPDATE promotional_coupons p
+   SET p.pco_used = 1
+ WHERE p.pco_id = (
+   SELECT sal_pco_id FROM sales s
+    WHERE s.sal_usr_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+    ORDER BY s.sal_id DESC
+    LIMIT 1
+ );
+
+ INSERT INTO sales (
+  sal_usr_id, sal_freight, sal_delivery_date, sal_ssa_id, sal_pco_id, sal_add_id
+)
+VALUES (
+  (SELECT usr_id FROM users WHERE usr_email='renata@example.com'),
+  15.90,
+  DATE_ADD(CURDATE(), INTERVAL -10 DAY),
+  (SELECT ssa_id FROM status_sale WHERE ssa_status='DELIVERED'),
+  (SELECT pco_id FROM promotional_coupons WHERE pco_used=0 ORDER BY pco_id LIMIT 1),
+  (SELECT add_id
+     FROM addresses
+    WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+      AND add_nickname='Casa'
+    LIMIT 1)
+);
+
+-- Itens da SALE #4
+INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
+SELECT s.sal_id, b.bok_id, 1, b.bok_price
+  FROM sales s
+  JOIN books b ON b.bok_name='Fisiologia Moderna'
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
+
+-- Pagamento 100% no cartão principal
+INSERT INTO sales_cards (sca_sal_id, sca_car_id, sca_percent)
+SELECT s.sal_id, c.car_id, 100.00
+  FROM sales s
+  JOIN cards c ON c.car_usr_id = s.sal_usr_id AND c.car_principal=1
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
+
+-- Marca o cupom como usado
+UPDATE promotional_coupons p
+   SET p.pco_used = 1
+ WHERE p.pco_id = (
+   SELECT sal_pco_id FROM sales s
+    WHERE s.sal_usr_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+    ORDER BY s.sal_id DESC
+    LIMIT 1
+ );
+
+ -- SALE #5 (Mahmoud) – entregue há 7 dias
+INSERT INTO sales (
+  sal_usr_id, sal_freight, sal_delivery_date, sal_ssa_id, sal_pco_id, sal_add_id
+)
+VALUES (
+  (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com'),
+  10.90,
+  DATE_ADD(CURDATE(), INTERVAL -7 DAY),
+  (SELECT ssa_id FROM status_sale WHERE ssa_status='DELIVERED'),
+  NULL,
+  (SELECT add_id
+     FROM addresses
+    WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
+      AND add_nickname='Trabalho'
+    LIMIT 1)
+);
+
+INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
+SELECT s.sal_id, b.bok_id, 1, b.bok_price
+  FROM sales s
+  JOIN books b ON b.bok_name='Patologia Geral'
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
+
+INSERT INTO sales_cards (sca_sal_id, sca_car_id, sca_percent)
+SELECT s.sal_id, c.car_id, 100.00
+  FROM sales s
+  JOIN cards c ON c.car_usr_id = s.sal_usr_id AND c.car_principal=1
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='mahmoud@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
+
+-- SALE #6 (Renata) – entregue há 3 dias, cupom de troca usado
+INSERT INTO sales (
+  sal_usr_id, sal_freight, sal_delivery_date, sal_ssa_id, sal_pco_id, sal_add_id
+)
+VALUES (
+  (SELECT usr_id FROM users WHERE usr_email='renata@example.com'),
+  0.00,
+  DATE_ADD(CURDATE(), INTERVAL -3 DAY),
+  (SELECT ssa_id FROM status_sale WHERE ssa_status='DELIVERED'),
+  NULL,
+  (SELECT add_id
+     FROM addresses
+    WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+      AND add_nickname='Casa'
+    LIMIT 1)
+);
+
+INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
+SELECT s.sal_id, b.bok_id, 1, b.bok_price
+  FROM sales s
+  JOIN books b ON b.bok_name='Microbiologia Clínica'
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
+
+-- Pagamento com cupom de troca (gerado da venda anterior)
+INSERT INTO sales_trader_coupons (sat_sal_id, sat_tco_id)
+SELECT
+  (SELECT s2.sal_id
+     FROM sales s2
+    WHERE s2.sal_usr_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+    ORDER BY s2.sal_id DESC
+    LIMIT 1), -- última venda (SALE #6)
+  (SELECT t.tco_id
+     FROM trader_coupons t
+    WHERE t.tco_used=0
+      AND t.tco_usr_id IS NULL
+    ORDER BY t.tco_id ASC
+    LIMIT 1
+  );
+
+UPDATE trader_coupons t
+   SET t.tco_used = 1, t.tco_applied_sal_id = (
+     SELECT s.sal_id FROM sales s
+      WHERE s.sal_usr_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+      ORDER BY s.sal_id DESC LIMIT 1
+   )
+ WHERE t.tco_id = (
+   SELECT t2.tco_id FROM trader_coupons t2
+    WHERE t2.tco_used=0
+    ORDER BY t2.tco_id ASC LIMIT 1
+ );
+
+ -- SALE #7 (Renata) – troca concluída ontem, gera novo cupom de crédito
+INSERT INTO sales (
+  sal_usr_id, sal_freight, sal_delivery_date, sal_ssa_id, sal_pco_id, sal_add_id
+)
+VALUES (
+  (SELECT usr_id FROM users WHERE usr_email='renata@example.com'),
+  0.00,
+  DATE_ADD(CURDATE(), INTERVAL -1 DAY),
+  (SELECT ssa_id FROM status_sale WHERE ssa_status='EXCHANGED'),
+  NULL,
+  (SELECT add_id
+     FROM addresses
+    WHERE add_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+      AND add_nickname='Casa'
+    LIMIT 1)
+);
+
+INSERT INTO sales_books (sbo_sal_id, sbo_bok_id, sbo_quantity, sbo_price)
+SELECT s.sal_id, b.bok_id, 1, b.bok_price
+  FROM sales s
+  JOIN books b ON b.bok_name='Cirurgia Geral: Princípios e Prática'
+ WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+ ORDER BY s.sal_id DESC
+ LIMIT 1;
+
+-- Gera novo trader coupon (crédito da troca)
+INSERT INTO trader_coupons (tco_code, tco_value, tco_used, tco_origin_sal_id, tco_usr_id)
+  SELECT CONCAT('TCO', LPAD(s.sal_id, 8, '0')),
+         80.00,
+         0,
+         s.sal_id,
+         s.sal_usr_id
+    FROM sales s
+   WHERE s.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+   ORDER BY s.sal_id DESC
+   LIMIT 1;
+

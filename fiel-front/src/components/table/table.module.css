@@ -19,3 +19,31 @@
 .tooltipBg { fill: rgba(0,0,0,.75); }
 .tooltipText { fill:#fff; font-size:12px; }
 .hint { color:#666; font-size:.9rem; margin-top:8px; }
+
+.toggle {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.toggle button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.toggle button:hover {
+  background-color: #f2f2f2;
+}
+
+.toggle button.active,
+.toggle button[class~="active"] {
+  background-color: #000000;
+  border-color: #000000;
+  color: #fff;
+}
