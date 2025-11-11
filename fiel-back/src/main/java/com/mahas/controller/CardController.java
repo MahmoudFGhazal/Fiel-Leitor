@@ -1,16 +1,5 @@
 package com.mahas.controller;
 
-import com.mahas.command.post.adapters.CreateCardAdapter;
-import com.mahas.command.post.adapters.DeleteCardAdapter;
-import com.mahas.command.pre.base.user.BaseCardCommand;
-import com.mahas.command.pre.rules.VerifyCreateCard;
-import com.mahas.command.pre.rules.VerifyDeleteCard;
-import com.mahas.command.pre.rules.VerifyGetCardByUser;
-import com.mahas.domain.FacadeRequest;
-import com.mahas.domain.FacadeResponse;
-import com.mahas.dto.request.user.CardDTORequest;
-import com.mahas.facade.IFacade;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,6 +10,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mahas.command.post.adapters.CreateCardAdapter;
+import com.mahas.command.post.adapters.DeleteCardAdapter;
+import com.mahas.command.pre.base.user.BaseCardCommand;
+import com.mahas.command.pre.rules.VerifyCreateCard;
+import com.mahas.command.pre.rules.VerifyDeleteCard;
+import com.mahas.command.pre.rules.VerifyGetCardByUser;
+import com.mahas.domain.FacadeRequest;
+import com.mahas.domain.FacadeResponse;
+import com.mahas.dto.request.user.CardDTORequest;
+import com.mahas.facade.IFacade;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -110,7 +110,7 @@ public class CardController {
         request.setPreCommand(verifyDeleteCard);
         request.setPostCommand(deleteCardAdapter);
         
-        FacadeResponse response = facade.delete(request);
+        FacadeResponse response = facade.update(request);
         
         return ResponseEntity.ok(response);
     }

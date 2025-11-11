@@ -1,5 +1,17 @@
 package com.mahas.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.mahas.command.post.adapters.DeleteUserAdapter;
 import com.mahas.command.post.adapters.LoginAdapter;
 import com.mahas.command.post.adapters.SetActiveUserAdapter;
@@ -20,18 +32,6 @@ import com.mahas.dto.request.user.sign.SignInRequest;
 import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.user.UserDTOResponse;
 import com.mahas.facade.IFacade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -193,7 +193,7 @@ public class UserController {
         request.setPreCommand(verifyDeleteUser);
         request.setPostCommand(deleteUserAdapter);
         
-        FacadeResponse response = facade.delete(request);
+        FacadeResponse response = facade.update(request);
         
         return ResponseEntity.ok(response);
     }

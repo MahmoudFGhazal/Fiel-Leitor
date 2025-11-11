@@ -39,7 +39,7 @@ public class VerifyGetAddressByUser implements IPreCommand {
         communValidator.validateNotBlanck(addressRequest.getUser(), "Usuario");
 
         Address address = addressValidator.toEntity(addressRequest);
-       
+
         User user = address.getUser();
 
         // Verificar se o usuário existe

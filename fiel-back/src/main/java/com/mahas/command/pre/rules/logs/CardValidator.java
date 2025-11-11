@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.mahas.command.pre.base.user.BaseCardCommand;
 import com.mahas.domain.FacadeRequest;
 import com.mahas.domain.FacadeResponse;
@@ -15,9 +18,6 @@ import com.mahas.dto.response.DTOResponse;
 import com.mahas.dto.response.user.CardDTOResponse;
 import com.mahas.exception.ValidationException;
 import com.mahas.facade.Facade;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class CardValidator {

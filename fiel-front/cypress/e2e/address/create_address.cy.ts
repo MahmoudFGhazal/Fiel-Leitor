@@ -1,7 +1,7 @@
 describe('Gestão de Endereços', () => {
     beforeEach(() => {
         cy.window().then(win => {
-            win.localStorage.setItem('currentUser', '20');
+            win.localStorage.setItem('currentUser', '1');
         });
 
         cy.visit('/config?tab=addresses'); 
