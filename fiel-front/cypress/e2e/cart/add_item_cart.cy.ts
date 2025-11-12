@@ -4,7 +4,7 @@ describe('Carrinho - adicionar item a partir da página do livro', () => {
     beforeEach(() => {
         cy.visit('/', {
             onBeforeLoad(win) {
-                win.localStorage.setItem('currentUser', '20');
+                win.localStorage.setItem('currentUser', '1');
             },
         });
 

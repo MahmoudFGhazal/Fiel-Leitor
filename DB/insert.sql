@@ -548,3 +548,12 @@ INSERT INTO trader_coupons (tco_code, tco_value, tco_used, tco_origin_sal_id, tc
    ORDER BY s.sal_id DESC
    LIMIT 1;
 
+INSERT INTO promotional_coupons (
+    pco_code,
+    pco_value,
+    pco_used
+) VALUES (
+    'PROMO10',
+    10.00,
+    0
+);
