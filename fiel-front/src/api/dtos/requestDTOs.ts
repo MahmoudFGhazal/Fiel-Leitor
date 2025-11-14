@@ -16,12 +16,31 @@ export interface AddressRequest {
 }
 
 export interface BookRequest {
-    id: number | null,
-    name: string | null,
-    price: number | null,
-    active: boolean | null,
-    stock: number | null,
-    category: number | null
+    id: number | null;
+
+    name: string;
+    author: string;
+    publisher: string;
+    edition: string;
+    year: number;
+
+    isbn: string;
+    barcode: string;
+    synopsis: string;
+
+    pages: number;
+
+    height: number | null;
+    width: number | null;
+    depth: number | null;
+    weight: number | null;
+
+    price: number;
+    stock: number;
+    active: boolean;
+
+    priceGroupId: number;     
+    categories: number[];    
 }
 
 export interface CardRequest {
@@ -50,6 +69,13 @@ export interface CategoryRequest {
 export interface GenderRequest {
     id: number | null,
     gender: string | null
+}
+
+export interface PriceGroupRequest {
+    id: number | null;
+    name: string;
+    marginPct: number;
+    active: boolean;
 }
 
 export interface PromotionalCouponRequest {

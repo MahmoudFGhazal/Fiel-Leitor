@@ -95,68 +95,55 @@ CREATE TABLE addresses (
 -- =============================
 -- Catálogos e livros
 -- =============================
-CREATE TABLE books (
-    bok_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    bok_name VARCHAR(100) NOT NULL,
-    bok_price DECIMAL(10, 2) NOT NULL,
-    bok_active TINYINT(1) DEFAULT 1,
-    bok_stock INT DEFAULT 0,
-    bok_cat_id BIGINT NOT NULL,
-    bok_is_delete TINYINT(1) DEFAULT 0,
-    bok_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    bok_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    bok_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_books_categories FOREIGN KEY (bok_cat_id) REFERENCES categories (cat_id)
-);
-
-
-/* CREATE TABLE books (
-    bok_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-
-    bok_name VARCHAR(100) NOT NULL,
-    bok_title VARCHAR(150) NOT NULL,
-    bok_author VARCHAR(120) NOT NULL,
-    bok_publisher VARCHAR(120) NOT NULL,   
-    bok_edition VARCHAR(30) NOT NULL,    
-    bok_year YEAR NOT NULL,  
-    bok_isbn VARCHAR(20) NOT NULL,
-    bok_barcode VARCHAR(20) NOT NULL,
-    bok_cat_id BIGINT NOT NULL,
-    bok_pgr_id BIGINT NOT NULL,
-    bok_synopsis TEXT NOT NULL,
-
-    bok_height_cm DECIMAL(6,2),
-    bok_width_cm DECIMAL(6,2),
-    bok_depth_cm DECIMAL(6,2) NOT ,
-    bok_weight_kg DECIMAL(7,3) NOT NULL,
-
-    bok_price DECIMAL(10, 2) NOT NULL,
-    bok_stock INT DEFAULT 0,
-
-    CONSTRAINT uq_books_isbn UNIQUE (bok_isbn),
-    CONSTRAINT uq_books_barcode UNIQUE (bok_barcode),
-
-    bok_active TINYINT(1) DEFAULT 1,
-    bok_is_delete TINYINT(1) DEFAULT 0,
-
-    bok_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    bok_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    bok_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_books_categories FOREIGN KEY (bok_cat_id) REFERENCES categories (cat_id)
-);
-
 CREATE TABLE price_groups (
     prg_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     prg_name VARCHAR(120) NOT NULL,
     prg_margin_pct DECIMAL(5,2) NOT NULL DEFAULT 0.00,
     prg_active TINYINT(1) NOT NULL DEFAULT 1,
 
+    prg_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    prg_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    prg_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uq_price_groups_name UNIQUE (prg_name)
+);
+
+CREATE TABLE books (
+    bok_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    bok_name VARCHAR(150) NOT NULL,
+    bok_author VARCHAR(120) NOT NULL,
+    bok_publisher VARCHAR(120) NOT NULL,
+    bok_edition VARCHAR(30) NOT NULL,
+    bok_year YEAR NOT NULL,
+    bok_isbn VARCHAR(20) NOT NULL,
+    bok_barcode VARCHAR(20) NOT NULL,
+    bok_synopsis TEXT NOT NULL,
+    bok_pages INT NOT NULL,
+
+    bok_height_cm DECIMAL(6,2),
+    bok_width_cm DECIMAL(6,2),
+    bok_depth_cm DECIMAL(6,2),
+    bok_weight_kg DECIMAL(7,3),
+
+    bok_price DECIMAL(10, 2) NOT NULL,
+    bok_stock INT DEFAULT 0,
+
+    bok_prg_id BIGINT NOT NULL,
+
+    bok_active TINYINT(1) DEFAULT 1,
+    bok_is_delete TINYINT(1) DEFAULT 0,
+
     bok_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     bok_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     bok_published_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT uq_price_groups_name UNIQUE (prg_name)
-); */
+    CONSTRAINT uq_books_isbn UNIQUE (bok_isbn),
+    CONSTRAINT uq_books_barcode UNIQUE (bok_barcode),
+
+    CONSTRAINT fk_books_price_groups FOREIGN KEY (bok_prg_id) REFERENCES price_groups (prg_id)
+);
+
 
 -- =============================
 -- Pagamentos

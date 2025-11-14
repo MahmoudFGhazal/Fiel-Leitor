@@ -34,17 +34,149 @@ INSERT INTO categories (cat_category, cat_active) VALUES
   ('Cirurgia Geral', 1),
   ('Psiquiatria', 1);
 
-INSERT INTO books (bok_name, bok_price, bok_active, bok_stock, bok_cat_id) VALUES
-  ('Introdução à Medicina', 89.90, 1, 15, 1),
-  ('Farmacologia Básica', 129.50, 1, 10, 2),
-  ('Anatomia Humana Completa', 299.00, 1, 5, 3),
-  ('Fisiologia Moderna', 159.90, 1, 8, 4),
-  ('Patologia Geral', 189.00, 1, 12, 5),
-  ('Microbiologia Clínica', 139.90, 1, 7, 6),
-  ('Pediatria Essencial', 179.90, 1, 9, 7),
-  ('Ginecologia e Obstetrícia', 199.90, 1, 6, 8),
-  ('Cirurgia Geral: Princípios e Prática', 249.00, 1, 4, 9),
-  ('Psiquiatria Clínica', 169.00, 1, 10, 10);
+INSERT INTO price_groups (prg_name, prg_margin_pct)
+VALUES
+ ('Padrão', 10.00),
+ ('Premium', 15.00),
+ ('Acadêmico', 5.00);
+ 
+INSERT INTO books (
+    bok_title, bok_author, bok_publisher, bok_edition, bok_year,
+    bok_isbn, bok_barcode, bok_synopsis, bok_pages,
+    bok_height_cm, bok_width_cm, bok_depth_cm, bok_weight_kg,
+    bok_price, bok_stock, bok_prg_id
+)
+VALUES
+('Introdução à Medicina',
+ 'José Carlos Souza',
+ 'Editora Ciência Médica',
+ '3ª',
+ 2022,
+ '9781234567001',
+ '1234567890001',
+ 'Livro introdutório sobre fundamentos da prática médica moderna.',
+ 480,
+ 23.5, 16.0, 3.2, 0.850,
+ 89.90, 15, 1
+),
+
+('Farmacologia Básica',
+ 'Maria Fernanda Prado',
+ 'MedBooks',
+ '2ª',
+ 2021,
+ '9781234567002',
+ '1234567890002',
+ 'Princípios gerais da farmacologia, incluindo farmacocinética e farmacodinâmica.',
+ 720,
+ 24.0, 17.0, 4.0, 1.200,
+ 129.50, 10, 1
+),
+
+('Anatomia Humana Completa',
+ 'Roberto Cavalcanti',
+ 'Atlas Saúde',
+ '6ª',
+ 2020,
+ '9781234567003',
+ '1234567890003',
+ 'Estudo detalhado do corpo humano com imagens e descrições anatômicas.',
+ 1024,
+ 28.0, 21.0, 5.5, 2.000,
+ 299.00, 5, 2
+),
+
+('Fisiologia Moderna',
+ 'Carlos H. J. Lima',
+ 'Editora FisioMed',
+ '5ª',
+ 2021,
+ '9781234567004',
+ '1234567890004',
+ 'A fisiologia do corpo humano com foco em mecanismos clínicos e aplicados.',
+ 840,
+ 25.0, 18.0, 4.2, 1.450,
+ 159.90, 8, 1
+),
+
+('Patologia Geral',
+ 'Luciana Barros',
+ 'Editora Médica Nacional',
+ '4ª',
+ 2019,
+ '9781234567005',
+ '1234567890005',
+ 'Fundamentos da patologia celular, inflamação, cicatrização e imunopatologia.',
+ 680,
+ 24.0, 17.0, 4.0, 1.300,
+ 189.00, 12, 1
+),
+
+('Microbiologia Clínica',
+ 'Mariana S. Tavares',
+ 'HealthScience Publisher',
+ '3ª',
+ 2020,
+ '9781234567006',
+ '1234567890006',
+ 'Agentes infecciosos, diagnóstico laboratorial e antimicrobianos.',
+ 560,
+ 24.0, 17.5, 3.8, 1.100,
+ 139.90, 7, 1
+),
+
+('Pediatria Essencial',
+ 'Ana Paula Ribeiro',
+ 'Editora Infância Médica',
+ '2ª',
+ 2022,
+ '9781234567007',
+ '1234567890007',
+ 'Cuidados essenciais, emergências e desenvolvimento pediátrico.',
+ 780,
+ 25.0, 18.0, 4.0, 1.400,
+ 179.90, 9, 1
+),
+
+('Ginecologia e Obstetrícia',
+ 'Fernanda P. Martins',
+ 'GinecoMed',
+ '3ª',
+ 2021,
+ '9781234567008',
+ '1234567890008',
+ 'Conteúdo completo sobre saúde da mulher, gestação e parto.',
+ 760,
+ 25.5, 19.0, 4.3, 1.500,
+ 199.90, 6, 1
+),
+
+('Cirurgia Geral: Princípios e Prática',
+ 'Eduardo F. Rocha',
+ 'CirurgiaPro',
+ '7ª',
+ 2020,
+ '9781234567009',
+ '1234567890009',
+ 'Abordagem abrangente das técnicas, fundamentos e protocolos cirúrgicos.',
+ 1100,
+ 28.0, 21.0, 5.7, 2.300,
+ 249.00, 4, 2
+),
+
+('Psiquiatria Clínica',
+ 'Henrique A. Nogueira',
+ 'Saúde Mental Press',
+ '4ª',
+ 2022,
+ '9781234567010',
+ '1234567890010',
+ 'Transtornos mentais, diagnóstico e abordagens terapêuticas.',
+ 620,
+ 24.0, 17.0, 3.5, 1.200,
+ 169.00, 10, 1
+);
+
 
 -- =============================
 -- STATUS (corrigido: ssa_status)

@@ -16,12 +16,31 @@ export interface AddressResponse {
 }
 
 export interface BookResponse {
-    id: number | null,
-    name: string | null,
-    price: number | null,
-    active: boolean | null,
-    stock: number | null,
-    category: CategoryResponse | null
+    id: number;
+
+    name: string;
+    author: string;
+    publisher: string;
+    edition: string;
+    year: number;
+
+    isbn: string;
+    barcode: string;
+    synopsis: string;
+
+    pages: number;
+
+    height: number | null;
+    width: number | null;
+    depth: number | null;
+    weight: number | null;
+
+    price: number;
+    stock: number;
+    active: boolean;
+
+    priceGroup: PriceGroupResponse;
+    categories: CategoryResponse[];
 }
 
 export interface CardResponse {
@@ -50,6 +69,13 @@ export interface CategoryResponse {
 export interface GenderResponse {
     id: number | null,
     gender: string | null
+}
+
+export interface PriceGroupResponse {
+    id: number;
+    name: string;
+    marginPct: number;
+    active: boolean;
 }
 
 export interface PromotionalCouponResponse {

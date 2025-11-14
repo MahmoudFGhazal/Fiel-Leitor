@@ -12,6 +12,7 @@ import com.mahas.domain.DomainEntity;
 import com.mahas.domain.SQLRequest;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.product.Book;
+import com.mahas.domain.product.Category;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -49,10 +50,13 @@ public class BookDAO implements IDAO {
             whereClause.append(" AND LOWER(b.name) LIKE LOWER(:name)");
             parameters.put("name", "%" + book.getName() + "%");
         }
-        if (book.getCategory() != null && book.getCategory().getId() != null) {
-            whereClause.append(" AND b.category.id = :catId");
-            parameters.put("catId", book.getCategory().getId());
+        if (book.getCategories() != null && !book.getCategories().isEmpty()) {
+            whereClause.append(" AND c.id IN :catIds");
+            parameters.put("catIds", book.getCategories().stream()
+                    .map(Category::getId)
+                    .toList());
         }
+
         if (book.getActive() != null) {
             whereClause.append(" AND b.active = :active");
             parameters.put("active", book.getActive());
@@ -118,23 +122,36 @@ public class BookDAO implements IDAO {
                 return response;
             }
             
-            if (book.getName() != null) {
-                existingBook.setName(book.getName());
+            if (book.getName() != null) existingBook.setName(book.getName());
+            if (book.getAuthor() != null) existingBook.setAuthor(book.getAuthor());
+            if (book.getPublisher() != null) existingBook.setPublisher(book.getPublisher());
+            if (book.getEdition() != null) existingBook.setEdition(book.getEdition());
+            if (book.getYear() != null) existingBook.setYear(book.getYear());
+            if (book.getIsbn() != null) existingBook.setIsbn(book.getIsbn());
+            if (book.getBarcode() != null) existingBook.setBarcode(book.getBarcode());
+            if (book.getSynopsis() != null) existingBook.setSynopsis(book.getSynopsis());
+            if (book.getPages() != null) existingBook.setPages(book.getPages());
+
+            // DIMENSÕES
+            if (book.getHeight() != null) existingBook.setHeight(book.getHeight());
+            if (book.getWidth() != null) existingBook.setWidth(book.getWidth());
+            if (book.getDepth() != null) existingBook.setDepth(book.getDepth());
+            if (book.getWeight() != null) existingBook.setWeight(book.getWeight());
+
+            if (book.getPrice() != null) existingBook.setPrice(book.getPrice());
+            if (book.getStock() != null) existingBook.setStock(book.getStock());
+            if (book.getActive() != null) existingBook.setActive(book.getActive());
+            if (book.getIsDelete() != null) existingBook.setIsDelete(book.getIsDelete());
+
+            // PRICE GROUP
+            if (book.getPriceGroup() != null && book.getPriceGroup().getId() != null) {
+                existingBook.setPriceGroup(book.getPriceGroup());
             }
-            if (book.getActive() != null) {
-                existingBook.setActive(book.getActive());
-            }
-            if (book.getPrice() != null) {
-                existingBook.setPrice(book.getPrice());
-            }
-            if (book.getStock() != null) {
-                existingBook.setStock(book.getStock());
-            }
-            if (book.getCategory() != null) {
-                existingBook.setCategory(book.getCategory());
-            }
-            if (book.getIsDelete() != null) {
-                existingBook.setIsDelete(book.getIsDelete());
+
+            // CATEGORIAS — N:N
+            if (book.getCategories() != null && !book.getCategories().isEmpty()) {
+                existingBook.getCategories().clear();
+                existingBook.getCategories().addAll(book.getCategories());
             }
             
             entityManager.flush();

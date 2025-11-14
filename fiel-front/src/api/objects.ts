@@ -1,5 +1,5 @@
-import { AddCartRequest, AddressRequest, CardRequest, CartRequest, CategoryRequest, GenderRequest, PromotionalCouponRequest, ResidenceTypeRequest, SaleBookRequest, SaleCardRequest, SaleRequest, SignRequest, StatusSaleRequest, StreetTypeRequest, TraderCouponRequest, UpdateCartRequest, UserRequest } from "./dtos/requestDTOs";
-import { AddressResponse, CardResponse, CartResponse, CategoryResponse, GenderResponse, PromotionalCouponResponse, ResidenceTypeResponse, SaleBookResponse, SaleCardResponse, SaleResponse, StatusSaleResponse, StreetTypeResponse, TraderCouponResponse, UserResponse } from "./dtos/responseDTOs";
+import { AddCartRequest, AddressRequest, CardRequest, CartRequest, CategoryRequest, GenderRequest, PriceGroupRequest, PromotionalCouponRequest, ResidenceTypeRequest, SaleBookRequest, SaleCardRequest, SaleRequest, SignRequest, StatusSaleRequest, StreetTypeRequest, TraderCouponRequest, UpdateCartRequest, UserRequest } from "./dtos/requestDTOs";
+import { AddressResponse, CardResponse, CartResponse, CategoryResponse, GenderResponse, PriceGroupResponse, PromotionalCouponResponse, ResidenceTypeResponse, SaleBookResponse, SaleCardResponse, SaleResponse, StatusSaleResponse, StreetTypeResponse, TraderCouponResponse, UserResponse } from "./dtos/responseDTOs";
 
 export interface ApiResponse {
     data: {
@@ -52,7 +52,9 @@ export type DatasRequest =
   | UserRequest[]
   | SignRequest
   | UpdateCartRequest
-  | AddCartRequest;
+  | AddCartRequest
+  | PriceGroupRequest
+  | PriceGroupRequest[];
 
   
 export type DatasResponde =
@@ -83,4 +85,6 @@ export type DatasResponde =
   | StatusSaleResponse[]
   | StreetTypeResponse[]
   | TraderCouponResponse[]
-  | UserResponse[];
+  | UserResponse[]
+  | PriceGroupResponse
+  | PriceGroupResponse[];
