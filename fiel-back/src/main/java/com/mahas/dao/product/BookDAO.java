@@ -56,6 +56,18 @@ public class BookDAO implements IDAO {
                     .map(Category::getId)
                     .toList());
         }
+        if (book.getAuthor() != null && !book.getAuthor().isEmpty()) {
+            whereClause.append(" AND LOWER(b.author) LIKE LOWER(:author)");
+            parameters.put("author", "%" + book.getAuthor() + "%");
+        }
+        if (book.getPublisher() != null && !book.getPublisher().isEmpty()) {
+            whereClause.append(" AND LOWER(b.publisher) LIKE LOWER(:publisher)");
+            parameters.put("publisher", "%" + book.getPublisher() + "%");
+        }
+        if (book.getPrice() != null) {
+            whereClause.append(" AND b.price <= :price");
+            parameters.put("price", book.getPrice());
+        }
 
         if (book.getActive() != null) {
             whereClause.append(" AND b.active = :active");
