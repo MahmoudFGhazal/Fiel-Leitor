@@ -51,7 +51,7 @@ function buildBookRequest(type: string, value: any) {
 
     switch (type) {
         case "genre":
-            base.categories = [Number(value) || 0]; // ou ID da categoria
+            base.categories = [Number(value) || 0];
             break;
 
         case "author":
@@ -64,6 +64,10 @@ function buildBookRequest(type: string, value: any) {
 
         case "price":
             base.price = Number(value);
+            break;
+
+        case "year":       
+            base.year = Number(value);
             break;
     }
 

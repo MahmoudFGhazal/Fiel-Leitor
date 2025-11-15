@@ -68,7 +68,10 @@ public class BookDAO implements IDAO {
             whereClause.append(" AND b.price <= :price");
             parameters.put("price", book.getPrice());
         }
-
+        if (book.getYear() != null && book.getYear() > 0) {
+            whereClause.append(" AND b.year = :year");
+            parameters.put("year", book.getYear());
+        }
         if (book.getActive() != null) {
             whereClause.append(" AND b.active = :active");
             parameters.put("active", book.getActive());
