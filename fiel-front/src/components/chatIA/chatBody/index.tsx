@@ -1,6 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { BookResponse } from '@/api/dtos/responseDTOs';
+import Image from "next/image";
+import { useEffect, useRef, useState } from 'react';
+import bookImage from '../../../../public/book.png';
 import styles from './chatBody.module.css';
 
 type Message = {
@@ -22,6 +25,13 @@ export default function ChatBody() {
     const [input, setInput] = useState('');
     const [step, setStep] = useState<Step>("chooseFilter");
     const [selectedFilter, setSelectedFilter] = useState<SelectedFilter>(null);
+    const bottomRef = useRef<HTMLDivElement | null>(null);
+
+    const [selectedBook, setSelectedBook] = useState<BookResponse | null>(null);
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
 
     function addMessage(sender: 'user' | 'bot', text: string) {
         setMessages(prev => [...prev, { sender, text }]);
@@ -97,7 +107,11 @@ export default function ChatBody() {
 
             const data = await res.json();
 
-            addMessage("bot", data.reply || "Nenhum livro encontrado 😅");
+            if (data.reply && typeof data.reply === "object") {
+                setSelectedBook(data.reply);
+            } else {
+                addMessage("bot", "Nenhum livro encontrado 😅");
+            }
 
             // Resetar fluxo
             setStep("chooseFilter");
@@ -107,6 +121,22 @@ export default function ChatBody() {
             return;
         }
     }
+
+    function handleReturn() {
+        setSelectedBook(null);
+        setStep("chooseFilter");
+        setSelectedFilter(null);
+
+        const lastMessage = messages[messages.length - 1]?.text;
+
+        const filterText =
+            "Escolha outro filtro:\n1️⃣ Gênero\n2️⃣ Autor\n3️⃣ Editora\n4️⃣ Preço máximo\n5️⃣ Ano de lançamento";
+
+        if (lastMessage !== filterText) {
+            addMessage("bot", filterText);
+        }
+    }
+
 
     return (
         <div className={styles.container}>
@@ -123,6 +153,7 @@ export default function ChatBody() {
                         {msg.text}
                     </div>
                 ))}
+                <div ref={bottomRef}></div>
             </div>
 
             <footer className={styles.chatFooter}>
@@ -138,6 +169,54 @@ export default function ChatBody() {
                     ➤
                 </button>
             </footer>
+
+            {selectedBook && (
+                <div className={styles.bookCard}>
+                    <Image
+                        src={bookImage}
+                        alt={selectedBook.name}
+                        className={styles.bookImage}
+                        width={120}
+                        height={180}
+                    />
+
+                    <h2 className={styles.bookTitle}>{selectedBook.name}</h2>
+
+                    <p><b>Autor:</b> {selectedBook.author || "Não informado"}</p>
+
+                    <p>
+                        <b>Categorias:</b>{" "}
+                        {selectedBook.categories?.length
+                            ? selectedBook.categories.join(", ")
+                            : "Não informado"}
+                    </p>
+
+                    <p><b>Ano de lançamento:</b> {selectedBook.year || "—"}</p>
+
+                    <p>
+                        <b>Preço:</b>{" "}
+                        {typeof selectedBook.price === "number"
+                            ? `R$ ${selectedBook.price.toFixed(2)}`
+                            : "—"}
+                    </p>
+
+                    <div className={styles.buttonRow}>
+                        <a
+                            href={`/book?bookId=${selectedBook.id}`}
+                            className={styles.openButton}
+                        >
+                            Ver livro 📚
+                        </a>
+
+                        <button
+                            onClick={handleReturn}
+                            className={styles.returnButton}
+                        >
+                            Voltar ⬅️
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

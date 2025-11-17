@@ -1,4 +1,5 @@
 import { BookRequest } from "@/api/dtos/requestDTOs";
+import { ApiResponse } from "@/api/objects";
 import api from "@/api/route";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,14 +16,24 @@ export async function POST(req: NextRequest) {
     const bookRequest = buildBookRequest(body.type, body.value);
 
     console.log("Payload enviado para o backend:", bookRequest);
-
-    const response = await api.post<{ reply: string }>(
+    console.log(bookRequest)
+    const response = await api.post<ApiResponse>(
         "/book/recommend",
         { data: bookRequest }
     );
 
+    const books = response.data.entities; 
+    console.log(books)
+    if (!books) {
+        return NextResponse.json({ reply: "Não encontrei nada 😅" });
+    }
+
+    const booksArray = books as any[];
+
+    const randomBook = booksArray[Math.floor(Math.random() * booksArray.length)];
+
     return NextResponse.json({
-        reply: response.reply || "Não encontrei nada 😅",
+        reply: randomBook,
     });
 }
 

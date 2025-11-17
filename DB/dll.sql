@@ -144,6 +144,20 @@ CREATE TABLE books (
     CONSTRAINT fk_books_price_groups FOREIGN KEY (bok_prg_id) REFERENCES price_groups (prg_id)
 );
 
+CREATE TABLE books_categories (
+    bca_bok_id BIGINT NOT NULL,
+    bca_cat_id BIGINT NOT NULL,
+
+    PRIMARY KEY (bca_bok_id, bca_cat_id),
+
+    CONSTRAINT fk_bca_book
+        FOREIGN KEY (bca_bok_id) REFERENCES books (bok_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_bca_category
+        FOREIGN KEY (bca_cat_id) REFERENCES categories (cat_id)
+        ON DELETE CASCADE
+);
 
 -- =============================
 -- Pagamentos

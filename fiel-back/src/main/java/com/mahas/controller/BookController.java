@@ -223,12 +223,11 @@ public class BookController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/recommend")
+    @PostMapping("/recommend")
     public ResponseEntity<FacadeResponse> getRecommend(@RequestBody BookDTORequest book) {
         FacadeRequest request = new FacadeRequest();
 
         request.setPreCommand(baseBookCommand);
-
         request.setEntity(book); 
 
         FacadeResponse response = facade.query(request);

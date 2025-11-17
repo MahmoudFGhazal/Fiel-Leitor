@@ -178,6 +178,65 @@ VALUES
  169.00, 10, 1
 );
 
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Medicina Geral'
+WHERE b.bok_name = 'Introdução à Medicina';
+
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Farmacologia'
+WHERE b.bok_name = 'Farmacologia Básica';
+
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Anatomia'
+WHERE b.bok_name = 'Anatomia Humana Completa';
+
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Fisiologia'
+WHERE b.bok_name = 'Fisiologia Moderna';
+
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Patologia'
+WHERE b.bok_name = 'Patologia Geral';
+
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Microbiologia'
+WHERE b.bok_name = 'Microbiologia Clínica';
+
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Pediatria'
+WHERE b.bok_name = 'Pediatria Essencial';
+
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Ginecologia e Obstetrícia'
+WHERE b.bok_name = 'Ginecologia e Obstetrícia';
+
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Cirurgia Geral'
+WHERE b.bok_name = 'Cirurgia Geral: Princípios e Prática';
+
+INSERT INTO books_categories (bca_bok_id, bca_cat_id)
+SELECT b.bok_id, c.cat_id
+FROM books b
+JOIN categories c ON c.cat_category = 'Psiquiatria'
+WHERE b.bok_name = 'Psiquiatria Clínica';
 
 
 -- =============================
@@ -683,11 +742,14 @@ LIMIT 1;
 INSERT INTO sales_trader_coupons (sat_sal_id, sat_tco_id)
 SELECT
   (SELECT s2.sal_id FROM sales s2
-   WHERE s2.sal_usr_id=(SELECT usr_id FROM users WHERE usr_email='renata@example.com')
+   WHERE s2.sal_usr_id = (SELECT usr_id FROM users WHERE usr_email='renata@example.com')
    ORDER BY s2.sal_id DESC LIMIT 1),
-  (SELECT t.tco_id FROM trader_coupons t
-   WHERE t.tco_used=0
-   ORDER BY t.tco_id ASC LIMIT 1);
+  t.tco_id
+FROM trader_coupons t
+WHERE t.tco_used = 0
+ORDER BY t.tco_id ASC
+LIMIT 1;
+
 
 UPDATE trader_coupons t
 JOIN (
