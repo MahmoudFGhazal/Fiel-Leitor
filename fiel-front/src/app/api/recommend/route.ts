@@ -1,86 +1,53 @@
-import { BookRequest } from "@/api/dtos/requestDTOs";
 import { ApiResponse } from "@/api/objects";
 import api from "@/api/route";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
-    console.log("Body recebido:", body);
 
     if (!body.type || body.value === undefined) {
         return NextResponse.json({
-            reply: "Requisição inválida 😅 (faltou type ou value)"
+            reply: "Requisição inválida 😅 (faltou type ou value)",
         });
     }
 
-    const bookRequest = buildBookRequest(body.type, body.value);
+    // Requisição: buscar TODOS os livros
+    const response = await api.get<ApiResponse>("/book/all");
+    const allBooks = response.data.entities;
 
-    console.log("Payload enviado para o backend:", bookRequest);
-    console.log(bookRequest)
-    const response = await api.post<ApiResponse>(
-        "/book/recommend",
-        { data: bookRequest }
-    );
-
-    const books = response.data.entities; 
-    console.log(books)
-    if (!books) {
-        return NextResponse.json({ reply: "Não encontrei nada 😅" });
+    if (!Array.isArray(allBooks)) {
+        return NextResponse.json({ reply: [] });
     }
 
-    const booksArray = books as any[];
-
-    const randomBook = booksArray[Math.floor(Math.random() * booksArray.length)];
+    const books = filterBooks(body.type, body.value, allBooks);
 
     return NextResponse.json({
-        reply: randomBook,
+        reply: books // sempre lista
     });
 }
 
-function buildBookRequest(type: string, value: any) {
-    const base: BookRequest = {
-        id: null,
-        name: "",
-        author: "",
-        publisher: "",
-        edition: "",
-        year: 0,
-        isbn: "",
-        barcode: "",
-        synopsis: "",
-        pages: 0,
-        height: null,
-        width: null,
-        depth: null,
-        weight: null,
-        price: 0,
-        stock: 0,
-        active: true,
-        priceGroupId: 0,
-        categories: []
-    };
-
+function filterBooks(type: string, value: any, books: any[]) {
     switch (type) {
         case "genre":
-            base.categories = [Number(value) || 0];
-            break;
+            return books.filter(b => b.categories?.includes(Number(value)));
 
         case "author":
-            base.author = value;
-            break;
+            return books.filter(b =>
+                b.author?.toLowerCase().includes(value.toLowerCase())
+            );
 
         case "publisher":
-            base.publisher = value;
-            break;
+            return books.filter(b =>
+                b.publisher?.toLowerCase().includes(value.toLowerCase())
+            );
 
         case "price":
-            base.price = Number(value);
-            break;
+            return books.filter(b => b.price <= Number(value));
 
-        case "year":       
-            base.year = Number(value);
-            break;
+        case "year":
+            return books.filter(b => b.year === Number(value));
+
+        default:
+            return [];
     }
-
-    return base;
 }
