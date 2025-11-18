@@ -60,7 +60,7 @@ export default function ChatBody() {
 
         // link extra (se existir)
         if (data.link) {
-            addMessage("bot", `🔗 Livro recomendado: ${data.link}`);
+            addMessage("bot", `🔗 Livro recomendado: <a href="${data.link}" class="chatLink">clique aqui</a>`);
         }
     }
 
@@ -79,7 +79,7 @@ export default function ChatBody() {
                         {/* Renderiza texto com links clicáveis */}
                         <div
                             dangerouslySetInnerHTML={{
-                                __html: formatMessage(msg.text)
+                                __html: msg.text
                             }}
                         />
                     </div>
