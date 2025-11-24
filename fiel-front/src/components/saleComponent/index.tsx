@@ -279,7 +279,7 @@ export default function SaleComponent() {
                 }
 
                 const data = res.data;
-                const entities = (data.entities ?? data) as BookResponse[];
+                const entities = (data.entities ?? data) as unknown as BookResponse[];
 
                 const detailed: SaleItemDetail[] = parsedItems.items
                     .map((p) => {

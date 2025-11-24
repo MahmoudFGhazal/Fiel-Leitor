@@ -19,16 +19,6 @@ export default function ChatBody() {
         setMessages(prev => [...prev, { sender, text }]);
     }
 
-    // 🔗 Transformar textos com "/book?bookId=ID" em links clicáveis
-    function formatMessage(text: string) {
-        const urlRegex = /(\/book\?bookId=\d+)/g;
-
-        return text.replace(urlRegex, (match) => {
-            return `<a href="${match}" class="chatLink">${match}</a>`;
-        });
-    }
-
-    // ✨ Agora o FRONT chama nossa API interna /api/chat
     async function sendToAI(prompt: string) {
         const response = await fetch("/api/chat", {
             method: "POST",
@@ -37,7 +27,7 @@ export default function ChatBody() {
         });
 
         const data = await response.json();
-        return data; // <-- retorna {reply, link}
+        return data; 
     }
 
     async function handleSend() {
@@ -52,13 +42,10 @@ export default function ChatBody() {
         const data = await sendToAI(userMsg);
         console.log("DATA RECEBIDA:", data);
 
-        // remove "bot digitando"
         setMessages(prev => prev.filter(m => m.text !== "✍️ Processando..."));
 
-        // mensagem da IA
         addMessage("bot", data.reply);
 
-        // link extra (se existir)
         if (data.link) {
             addMessage("bot", `🔗 Livro recomendado: <a href="${data.link}" class="chatLink">clique aqui</a>`);
         }
