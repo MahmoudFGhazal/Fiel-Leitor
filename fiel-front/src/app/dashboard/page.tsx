@@ -8,7 +8,8 @@ import styles from './page.module.css';
 export default async function Dashboard() {
     const res = await api.get<ApiResponse>(`/sale/finished`);
     const entities = res.data?.entities as SaleResponse[] ?? [];
-    console.log(entities)
+    console.log("VENDAS:\n", JSON.stringify(entities, null, 4));
+
     return (
         <div className={styles.container}>
             <Table data={entities} />

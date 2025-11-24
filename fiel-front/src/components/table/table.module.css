@@ -1,49 +1,111 @@
-.container { width:100%; max-width:980px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 12px 28px rgba(0,0,0,.08); }
-.header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-.title { margin:0; font-size:1.125rem; }
-.kpis { display:flex; gap:12px; color:#444; }
-.kpi { background:#f7f7f8; padding:6px 10px; border-radius:10px; }
-
-.chartWrap { width:100%; height:320px; }
-.svg { width:100%; height:100%; display:block; }
-
-.axis { stroke:#999; stroke-width:1; }
-.grid { stroke:#eee; stroke-width:1; }
-.tick { fill:#555; font-size:12px; }
-
-.line { stroke: currentColor; stroke-width:2.5; }
-.dot { fill: currentColor; }
-.hoverLine { stroke:#bbb; stroke-dasharray:3 3; }
-.hoverDot { fill: currentColor; stroke:#fff; stroke-width:2; }
-
-.tooltipBg { fill: rgba(0,0,0,.75); }
-.tooltipText { fill:#fff; font-size:12px; }
-.hint { color:#666; font-size:.9rem; margin-top:8px; }
-
-.toggle {
-  display: flex;
-  gap: 6px;
-  margin-left: auto;
+/* ----- CONTAINER GERAL ----- */
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e5e5;
 }
 
-.toggle button {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #fff;
-  color: #333;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+/* ----- FILTROS ----- */
+.filters {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 0;
+    flex-wrap: wrap;  
+    border-bottom: 1px solid #eee;
 }
 
-.toggle button:hover {
-  background-color: #f2f2f2;
+.filterBlock {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
 }
 
-.toggle button.active,
-.toggle button[class~="active"] {
-  background-color: #000000;
-  border-color: #000000;
-  color: #fff;
+.filterBlock label {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.filterBlock input[type="date"],
+.filterBlock select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+    font-size: 14px;
+    min-width: 160px;
+}
+
+.filterBlock select[multiple] {
+    height: 100px;
+    resize: vertical;
+}
+
+/* NOVA LEGENDA EM GRADE */
+.legendGrid {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 colunas */
+    gap: 10px 20px; /* espaço horizontal e vertical */
+    width: 100%;
+    padding: 10px 0;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.colorDot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ----- GRÁFICO SVG ----- */
+.svg {
+    width: 100%;
+    height: 350px;
+    overflow: visible;
+}
+
+.line {
+    stroke-width: 2;
+}
+
+.dot {
+    stroke: white;
+    stroke-width: 1;
+}
+
+/* ----- HOVER LINE ----- */
+.hoverLine {
+    stroke: #999;
+    stroke-dasharray: 4 4;
+    stroke-width: 1;
+}
+
+.hoverDot {
+    stroke: #fff;
+    stroke-width: 1;
+}
+
+/* ----- TOOLTIP ----- */
+.tooltipBg {
+    fill: rgba(0, 0, 0, 0.7);
+}
+
+.tooltipText {
+    fill: white;
+    font-size: 12px;
 }

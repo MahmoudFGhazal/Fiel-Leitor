@@ -117,20 +117,60 @@ export function toRequestBook(book: BookResponse | null): BookRequest {
     if (!book) {
         return {
             id: null,
-            name: null,
-            price: null,
-            active: null,
-            stock: null,
-            category: null
+
+            name: "",
+            author: "",
+            publisher: "",
+            edition: "",
+            year: 0,
+
+            isbn: "",
+            barcode: "",
+            synopsis: "",
+
+            pages: 0,
+
+            height: null,
+            width: null,
+            depth: null,
+            weight: null,
+
+            price: 0,
+            stock: 0,
+            active: false,
+
+            priceGroupId: 0,
+            categories: []
         };
     }
 
     return {
-        id: book.id,
+        id: book.id ?? null,
+
         name: book.name,
+        author: book.author,
+        publisher: book.publisher,
+        edition: book.edition,
+        year: book.year,
+
+        isbn: book.isbn,
+        barcode: book.barcode,
+        synopsis: book.synopsis,
+
+        pages: book.pages,
+
+        height: book.height,
+        width: book.width,
+        depth: book.depth,
+        weight: book.weight,
+
         price: book.price,
-        active: book.active,
         stock: book.stock,
-        category: book.category?.id ?? null
+        active: book.active,
+
+        priceGroupId: book.priceGroup?.id ?? 0,
+        categories: book.categories
+            ?.map(c => c.id)
+            .filter((id): id is number => id !== null && id !== undefined) ?? []
     };
 }
