@@ -1,14 +1,13 @@
 'use client';
+import { SaleResponse } from '@/api/dtos/responseDTOs';
 import { useMemo, useRef, useState } from 'react';
 import styles from './table.module.css';
-import { SaleResponse } from '@/api/dtos/responseDTOs';
 
 type P = { data?: SaleResponse[] };
 
 export default function Table({ data }: P) {
   const [mode, setMode] = useState<'daily' | 'monthly'>('daily');
-  console.log("aaaaaaaaaaaaaaaaaaaaaaaa")
-  console.log(data);
+
   const points = useMemo(() => {
     if (!data?.length) return [];
 

@@ -14,10 +14,12 @@ export default function ListSales() {
         async function fetchData() {
             try {
                 const res = await api.get<ApiResponse>('/sale/user', { params: { userId: currentUser } });
+
                 if (res.message) {
                     alert(res.message);
                     return;
                 }
+
                 const data = res.data;
                 const entities = (data.entities ?? data) as SaleResponse[] | null;
 
@@ -25,6 +27,7 @@ export default function ListSales() {
                     setSales([]);
                     return;
                 }
+
                 setSales(entities);
             } catch (err) {
                 console.error("Erro ao carregar vendas", err);
@@ -38,7 +41,10 @@ export default function ListSales() {
     return (
         <div>
             {sales.map((sale) => (
-                <OrderCard sale={sale} key={sale.id} />
+                <OrderCard
+                    key={sale.id}
+                    sale={sale}
+                />
             ))}
         </div>
     );

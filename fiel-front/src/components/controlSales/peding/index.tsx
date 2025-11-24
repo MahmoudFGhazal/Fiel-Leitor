@@ -3,14 +3,28 @@ import { SaleResponse } from '@/api/dtos/responseDTOs';
 import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
 import ActionButton from '@/components/buttonComponents/actionButton';
+import { StatusSale } from '@/translate/base';
+import { StatusSalePortuguese } from '@/translate/portuguses';
 import { useEffect, useState } from 'react';
 import styles from './peding.module.css';
 import PopUpInTransit from './popUpInTransit';
+
 
 export interface ReqInTrasit {
     id: number,
     deliveryDate: string,
     freight: number
+}
+
+function normalizeStatus(status?: string | null): StatusSale | null {
+    if (!status) return null;
+
+    const upper = status.toUpperCase();
+    if (upper in StatusSale) {
+        return StatusSale[upper as keyof typeof StatusSale];
+    }
+
+    return null;
 }
 
 export default function PedingSales() {
@@ -22,21 +36,16 @@ export default function PedingSales() {
         const fetchCoupons = async () => {
             try {
                 const res = await api.get<ApiResponse>(`/sale/peding`);
-                if(!res.data) {
-                    return;
-                }
+                if (!res.data) return;
 
                 const entities = res.data.entities as SaleResponse[];
-
-                if(!entities) {
-                    return;
-                }
+                if (!entities) return;
 
                 setSales(entities);
             } catch (err) {
                 console.error(err);
                 alert("Erro ao carregar pedidos");
-            } 
+            }
         };
 
         fetchCoupons();
@@ -44,84 +53,73 @@ export default function PedingSales() {
 
     async function defineInTrasit(req: ReqInTrasit) {
         try {
-            console.log(req)
-            const res = await api.put<ApiResponse>(`/sale/transit`, { 
+            const res = await api.put<ApiResponse>(`/sale/transit`, {
                 params: {
                     saleId: req.id,
                     deliveryDate: req.deliveryDate,
                     freight: req.freight
                 }
             });
-            if(!res.data) {
-                return;
-            }
 
-            if(res.message) alert(res.message);
+            if (!res.data) return;
+            if (res.message) alert(res.message);
 
-            setSales((prev) =>
-                prev.map((sale) => {
-                    if (sale.id !== req.id) return sale;
-
-                    return {
-                        ...sale,
-                        statusSale: sale.statusSale
-                            ? { ...sale.statusSale, status: 'IN_TRANSIT' }
-                            : ({ status: 'IN_TRANSIT' } as any),
-                        deliveryDate: req.deliveryDate,
-                        freight: req.freight,
-                    } as unknown as SaleResponse;
-                })
+            setSales(prev =>
+                prev.map(sale => sale.id === req.id ? {
+                    ...sale,
+                    statusSale: { status: StatusSale.IN_TRANSIT },
+                    deliveryDate: req.deliveryDate,
+                    freight: req.freight
+                } as unknown as SaleResponse : sale)
             );
-
 
             alert("Venda atualizada com sucesso");
             setIsOpen(false);
             setIdInTransit(null);
+
         } catch (err) {
             console.error(err);
             alert("Erro ao mudar status pedidos");
-        } 
+        }
     }
-
 
     async function defineDelivered(id: number) {
         try {
-            const res = await api.put<ApiResponse>(`/sale/delivered`, { params: { saleId: id }} );
-                                                                        
-            if(!res.data) {
-                return;
-            }
+            const res = await api.put<ApiResponse>(`/sale/delivered`, {
+                params: { saleId: id }
+            });
 
-            if(res.message) alert(res.message);
+            if (!res.data) return;
+            if (res.message) alert(res.message);
 
-            setSales((prev) => prev.filter((sale) => sale.id !== id));
-
+            setSales(prev => prev.filter(sale => sale.id !== id));
             alert("Venda atualizada com sucesso");
+
         } catch (err) {
             console.error(err);
             alert("Erro ao mudar status pedidos");
-        } 
+        }
     }
 
     const nextStage = async (id: number | null, status: string | null) => {
-        if(!id) {
-            alert("Erro ao pegar o ID");
-            return;
-        }
+        if (!id) return alert("Erro ao pegar o ID");
 
-        switch(status) {
-            case "APPROVED":
+        const normalized = normalizeStatus(status);
+
+        switch (normalized) {
+            case StatusSale.APPROVED:
                 setIdInTransit(id);
                 setIsOpen(true);
                 break;
-            case "IN_TRANSIT":
+
+            case StatusSale.IN_TRANSIT:
                 await defineDelivered(id);
                 break;
+
             default:
-                alert("Erro ao pegar o status");
+                alert("Status inválido");
         }
-        
-    }
+    };
 
     return (
         <div className={styles.container}>
@@ -144,21 +142,24 @@ export default function PedingSales() {
                             <td colSpan={4}>Nenhum pedido encontrado.</td>
                         </tr>
                     ) : (
-                        sales.map((sale) => (
-                            <tr key={sale.id}>
-                                <td>{sale.id}</td>
-                                <td>{sale?.statusSale?.status}</td>
-                                <td>R${sale?.saleBooks?.map((sb: any) => sb.price)}</td>
-                                <td>
-                                    <ActionButton 
-                                        color='green'
-                                        label='Passar' 
-                                        onClick={() => nextStage(sale.id, sale?.statusSale?.status ?? null)}
-                                        dataCy='pass-button'
-                                    />
-                                </td>
-                            </tr>
-                        ))
+                        sales.map(sale => {
+                            const norm = normalizeStatus(sale?.statusSale?.status);
+                            return (
+                                <tr key={sale.id}>
+                                    <td>{sale.id}</td>
+                                    <td>{norm ? StatusSalePortuguese[norm] : "Desconhecido"}</td>
+                                    <td>R${sale.saleBooks?.map(sb => sb.price)}</td>
+                                    <td>
+                                        <ActionButton
+                                            color='green'
+                                            label='Passar'
+                                            onClick={() => nextStage(sale.id, sale?.statusSale?.status ?? null)}
+                                            dataCy='pass-button'
+                                        />
+                                    </td>
+                                </tr>
+                            );
+                        })
                     )}
                 </tbody>
             </table>

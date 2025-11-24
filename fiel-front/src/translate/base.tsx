@@ -6,6 +6,17 @@ export enum Genders {
     PREFERNOTTOSAY = 'Prefer not to say'
 }
 
+export enum StatusSale {
+    PROCESSING = 'processing',
+    APPROVED = 'approved',
+    DECLINED = 'declined',
+    IN_TRANSIT = 'in_transit',
+    DELIVERED = 'delivered',
+    EXCHANGE_REQUESTED = 'exchange_requested',
+    EXCHANGE_AUTHORIZED = 'exchange_authorized',
+    EXCHANGED = 'exchanged',
+}
+
 export enum Categories {
     GENERAL_MEDICINE = 'general_medicine',
     PHARMACOLOGY = 'pharmacology',

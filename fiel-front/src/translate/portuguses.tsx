@@ -1,4 +1,4 @@
-import { Categories, Genders, TypeResidences, TypeStreets } from "./base";
+import { Categories, Genders, StatusSale, TypeResidences, TypeStreets } from "./base";
 
 export const TypeResidencesPortuguese: Record<TypeResidences, string> = {
     [TypeResidences.HOUSE]: 'Casa',
@@ -35,4 +35,15 @@ export const CategoriesPortuguese: Record<Categories, string> = {
     [Categories.GYNECOLOGY_OBSTETRICS]: 'Ginecologia e Obstetrícia',
     [Categories.GENERAL_SURGERY]: 'Cirurgia Geral',
     [Categories.PSYCHIATRY]: 'Psiquiatria',
+};
+
+export const StatusSalePortuguese: Record<StatusSale, string> = {
+    [StatusSale.PROCESSING]: 'Em processamento',
+    [StatusSale.APPROVED]: 'Aprovado',
+    [StatusSale.DECLINED]: 'Recusado',
+    [StatusSale.IN_TRANSIT]: 'Em trânsito',
+    [StatusSale.DELIVERED]: 'Entregue',
+    [StatusSale.EXCHANGE_REQUESTED]: 'Troca solicitada',
+    [StatusSale.EXCHANGE_AUTHORIZED]: 'Troca autorizada',
+    [StatusSale.EXCHANGED]: 'Trocado',
 };

@@ -2,10 +2,10 @@
 import { SaleResponse } from '@/api/dtos/responseDTOs';
 import { ApiResponse } from '@/api/objects';
 import api from '@/api/route';
+import { normalizeStatus } from '@/utils/normalize';
 import { useEffect, useState } from 'react';
 import styles from './trade.module.css';
 import TradeSaleLine from './tradeSaleLine';
-
 
 export default function TradeSales() {
     const [sales, setSales] = useState<SaleResponse[]>([]);
@@ -14,15 +14,10 @@ export default function TradeSales() {
         const fetchCoupons = async () => {
             try {
                 const res = await api.get<ApiResponse>(`/sale/trade`);
-                if(!res.data) {
-                    return;
-                }
+                if(!res.data) return;
 
                 const entities = res.data.entities as SaleResponse[];
-
-                if(!entities) {
-                    return;
-                }
+                if(!entities) return;
 
                 setSales(entities);
             } catch (err) {
@@ -55,11 +50,23 @@ export default function TradeSales() {
                             <td colSpan={3}>Nenhum cupom encontrado.</td>
                         </tr>
                     ) : (
-                        sales.map((sale) => (
-                            <tr key={sale.id}>
-                                <TradeSaleLine sale={sale}  />
-                            </tr>
-                        ))
+                        sales.map((sale) => {
+                            const status = normalizeStatus(sale?.statusSale?.status);
+
+                            return (
+                                <tr key={sale.id}>
+                                    <TradeSaleLine 
+                                        sale={{
+                                            ...sale,
+                                            statusSale: {
+                                                id: sale.statusSale?.id ?? null,
+                                                status: status ? String(status) : null
+                                            }
+                                        }}  
+                                    />
+                                </tr>
+                            );
+                        })
                     )}
                 </tbody>
             </table>
