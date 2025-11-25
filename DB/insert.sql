@@ -1,7 +1,5 @@
 USE Fiel;
 
-USE Fiel;
-
 INSERT INTO genders (gen_gender) VALUES
   ('Male'),
   ('Female'),

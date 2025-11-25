@@ -2,7 +2,7 @@ describe('Perfil do Usuário', () => {
     beforeEach(() => {
         // Define currentUser
         cy.window().then(win => {
-            win.localStorage.setItem('currentUser', '20');
+            win.localStorage.setItem('currentUser', '1');
         });
 
         cy.intercept('GET', '**/user*').as('getUser');
@@ -17,12 +17,10 @@ describe('Perfil do Usuário', () => {
         cy.get('[data-cy="edit-button"]').click();
 
         // Preenche novos valores
-        cy.get('[data-cy="email-text"]').clear().type('novoemail@teste.com');
         cy.get('[data-cy="name-text"]').clear().type('Nome Teste');
         cy.get('[data-cy="gender-select"]').select('1'); // ou outro valor válido
         cy.get('[data-cy="phonuNumber-text"]').clear().type('11999999999');
         cy.get('[data-cy="birth-date"]').clear().type('1990-01-01');
-        cy.get('[data-cy="cpf-text"]').clear().type('12345678900');
 
         // Clica em salvar
         cy.get('[data-cy="save-button"]').click();

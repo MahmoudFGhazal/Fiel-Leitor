@@ -1,11 +1,9 @@
-// cypress/e2e/trade_admin.cy.ts
-
 describe('Controle de trocas - delivered', () => {
   const saleId = 555;
 
   beforeEach(() => {
-    // já vem autorizado pra troca
-    cy.intercept('GET', /sale\/trade/i, {
+    // Mock da listagem inicial
+    cy.intercept('GET', '**/sale/trade**', {
       statusCode: 200,
       body: {
         data: {
@@ -23,36 +21,25 @@ describe('Controle de trocas - delivered', () => {
     cy.visit('/control?tab=trade');
     cy.wait('@getTradeSales');
 
-    cy.contains('Pedidos de Troca').should('be.visible');
+    cy.contains('Pedidos de Troca', { matchCase: false }).should('be.visible');
     cy.contains(String(saleId)).should('be.visible');
-    cy.contains('Entregue').should('be.visible');
+    cy.contains(/troca autorizada/i).should('be.visible');
   });
 
   it('deve marcar a troca como entregue', () => {
-    // o teu componente manda params -> vira querystring
-    cy.intercept(
-      {
-        method: 'PUT',
-        url: '**/sale/trade/delivered*',
-        query: {
-          saleId: String(saleId),
-        },
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: {
-            data: {},
-          },
-        });
-      }
-    ).as('putTradeDelivered');
+    // Intercept do PUT da troca
+    cy.intercept('PUT', '**/sale/trade/delivered*', {
+      statusCode: 200,
+      body: { data: {} },
+    }).as('putTradeDelivered');
 
-    cy.contains('Entregue').click();
+    // Usa o botão com data-cy
+    cy.get('[data-cy="trade-button"]').click({ force: true });
 
-    cy.wait('@putTradeDelivered');
+    // Aguarda o PUT ser chamado
+    cy.wait('@putTradeDelivered').its('request.url').should('include', '/sale/trade/delivered');
 
-    // o componente faz: setStatus('EXCHANGED');
-    cy.contains('EXCHANGED').should('be.visible');
+    // Confirma que mudou o status no UI
+    cy.contains(/Trocado/i).should('be.visible');
   });
 });

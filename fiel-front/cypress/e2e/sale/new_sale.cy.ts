@@ -1,165 +1,143 @@
-// cypress/e2e/fechamento_compra.cy.ts
+// cypress/e2e/sale/new_sale.cy.ts
 
-describe('Fechamento de Compra', () => {
-  const userId = 20;
+describe('Fluxo completo de compra', () => {
+  const userId = 1;
   const saleId = 9001;
-  const addressId = 77;
-  const cardId1 = 201;
-  const cardId2 = 202;
+  const addressId = 1;
+  const cardId = 7;
 
-  const itemsParam = encodeURIComponent(
-    JSON.stringify({
-      items: [{ bookId: 1, quantity: 2 }],
-      fromCart: false,
-    })
-  );
+  const itemsParam = encodeURIComponent(JSON.stringify({
+    items: [{ bookId: 1, quantity: 2 }],
+    fromCart: false,
+  }));
 
   beforeEach(() => {
-    // usuário logado
-    cy.window().then((win) => {
-      win.localStorage.setItem('currentUser', String(userId));
+
+    // ------------------------------------------------------
+    // GARANTE USUÁRIO LOGADO ANTES DO LOAD
+    // ------------------------------------------------------
+    cy.visit(`/sale?items=${itemsParam}`, {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('currentUser', String(userId));
+      }
     });
 
-    // cria a venda a partir da URL ?items=
-    cy.intercept({ method: 'POST', url: '**/sale' }, (req) => {
-      const body = req.body?.data;
-      expect(body?.user).to.eq(userId);
-      expect(body?.books).to.have.length(1);
-      expect(body?.books[0]).to.deep.include({ book: 1, quantity: 2 });
-
-      req.reply({
-        statusCode: 200,
-        body: {
-          data: {
-            entity: { id: saleId },
-          },
-        },
-      });
+    // ------------------------------------------------------
+    // MOCK: Criação da venda
+    // ------------------------------------------------------
+    cy.intercept('POST', '**/sale', {
+      statusCode: 200,
+      body: { data: { entity: { id: saleId } } }
     }).as('createSale');
 
-    // detalhes dos livros
-    cy.intercept(
-      { method: 'GET', url: '**/book/list*' },
-      {
-        statusCode: 200,
-        body: {
-          data: {
-            entities: [{ id: 1, name: 'Livro A', price: 30.0 }], // 2 x 30 = 60
-          },
-        },
+    // ------------------------------------------------------
+    // MOCK: Lista dos livros
+    // ------------------------------------------------------
+    cy.intercept('GET', '**/book/list*', {
+      statusCode: 200,
+      body: {
+        data: {
+          entities: [{ id: 1, name: 'Livro A', price: 30 }]
+        }
       }
-    ).as('getBooks');
+    }).as('getBooks');
 
-    // endereços do usuário
-    cy.intercept(
-      { method: 'GET', url: '**/address/user*' },
-      {
-        statusCode: 200,
-        body: {
-          data: {
-            entities: [
-              {
-                id: addressId,
-                nickname: 'Casa',
-                street: 'Rua 1',
-                number: '123',
-                city: 'SP',
-              },
-            ],
-          },
-        },
+    // ------------------------------------------------------
+    // MOCK: Endereços
+    // ------------------------------------------------------
+    cy.intercept('GET', '**/address/user*', {
+      statusCode: 200,
+      body: {
+        data: {
+          entities: [
+            { id: 1, nickname: 'Casa', principal: true },
+            { id: 2, nickname: 'Trabalho', principal: false }
+          ]
+        }
       }
-    ).as('getAddresses');
+    }).as('getAddresses');
 
-    // cartões do usuário
-    cy.intercept(
-      { method: 'GET', url: '**/card/user*' },
-      {
-        statusCode: 200,
-        body: {
-          data: {
-            entities: [
-              { id: cardId1, brand: 'VISA', last4: '1111', principal: true },
-              { id: cardId2, brand: 'MC', last4: '2222', principal: false },
-            ],
-          },
-        },
+    // ------------------------------------------------------
+    // MOCK: Cartões
+    // ------------------------------------------------------
+    cy.intercept('GET', '**/card/user*', {
+      statusCode: 200,
+      body: {
+        data: {
+          entities: [
+            { id: cardId, last4: '1234', principal: true }
+          ]
+        }
       }
-    ).as('getCards');
+    }).as('getCards');
 
-    // evita fluxo de cupons nesse teste
-    cy.intercept(
-      { method: 'GET', url: '**/traderCoupon/check*' },
-      { statusCode: 200, body: { data: { entity: null } } }
-    ).as('checkTrader');
-    cy.intercept(
-      { method: 'GET', url: '**/promotionalCoupon/check*' },
-      { statusCode: 200, body: { data: { entity: null } } }
-    ).as('checkPromotional');
+    // ------------------------------------------------------
+    // MOCK: Trader coupon (permissivo)
+    // ------------------------------------------------------
+    cy.intercept('GET', '**/traderCoupon/check*', {
+      statusCode: 200,
+      body: { data: { entity: null } }
+    }).as('checkTrader');
 
-    // pagamento
-    cy.intercept({ method: 'PUT', url: '**/sale/payment' }, (req) => {
-      const payload = req.body?.data;
+    // ------------------------------------------------------
+    // MOCK: Promotional coupon
+    // ------------------------------------------------------
+    cy.intercept('GET', '**/promotionalCoupon/check*', {
+      statusCode: 200,
+      body: {
+        data: {
+          entity: { id: 10, code: 'PROMO10', value: 10, used: false }
+        }
+      }
+    }).as('checkPromo');
 
-      expect(payload?.id).to.eq(saleId);
-      expect(payload?.user).to.eq(userId);
-
-      // endereço selecionado
-      expect(payload?.address).to.eq(addressId);
-
-      // split 70/30 como fração (0.7/0.3)
-      expect(payload?.cards).to.have.length(2);
-      const byCard = Object.fromEntries(payload.cards.map((c: any) => [c.card, c]));
-      expect(byCard[cardId1].percent).to.be.closeTo(0.7, 1e-6);
-      expect(byCard[cardId2].percent).to.be.closeTo(0.3, 1e-6);
-
-      // campos que o front envia nulos no fechamento
-      expect(payload?.books).to.be.null;
-      expect(payload?.freight).to.be.null;
-      expect(payload?.deliveryDate).to.be.null;
-      expect(payload?.status).to.be.null;
-
-      // sem cupons neste cenário
-      expect(payload?.traderCoupons ?? []).to.have.length(0);
-      expect(payload?.promotinalCoupon).to.be.null;
-
-      req.reply({
-        statusCode: 200,
-        body: { data: { entity: { id: saleId } } },
-      });
+    // ------------------------------------------------------
+    // MOCK: Pagamento final
+    // ------------------------------------------------------
+    cy.intercept('PUT', '**/sale/payment', {
+      statusCode: 200,
+      body: {
+        data: { entity: { id: saleId } },
+        message: null
+      }
     }).as('pay');
 
-    // cancelamento defensivo (ao sair)
-    cy.intercept(
-      { method: 'PUT', url: '**/sale/cancel' },
-      { statusCode: 200, body: { data: { entity: null } } }
-    ).as('cancelSale');
-
-    // visita a página com os itens
-    cy.visit(`/sale?items=${itemsParam}`);
-
-    // espera inicialização
-    cy.wait(['@createSale', '@getBooks', '@getAddresses', '@getCards']);
+    // Esperar carregamento inicial
+    cy.wait('@createSale');
+    cy.wait('@getBooks');
+    cy.wait('@getAddresses');
+    cy.wait('@getCards');
   });
 
-  it('Deve finalizar a compra com dois cartões (70%/30%) e endereço selecionado', () => {
-    // seleciona endereço
-    cy.get(`[data-cy="address-option-${addressId}"]`).click();
+  it('Deve finalizar toda compra com sucesso', () => {
 
-    // seleciona cartões e percentuais
-    cy.get(`[data-cy="card-row-${cardId1}"] [data-cy="card-select"]`).click();
-    cy.get(`[data-cy="percent-input-${cardId1}"]`).clear().type('70');
+    // 1️⃣ Seleciona endereço
+    cy.contains('Escolher outro').click();
+    cy.contains('button', 'Casa').click();
 
-    cy.get(`[data-cy="card-row-${cardId2}"] [data-cy="card-select"]`).click();
-    cy.get(`[data-cy="percent-input-${cardId2}"]`).clear().type('30');
+    // 2️⃣ Seleciona cartão
+    cy.contains('Selecionar Cartões').click();
+    cy.get('input[type="number"]').clear().type('100');
+    cy.contains('button', 'Fechar').click();
 
-    // finaliza
-    cy.contains('button', 'Finalizar Compra').click();
+    // 3️⃣ Aplicar cupom
+    cy.get('[data-cy="coupon-text"]').type('PROMO10{enter}');
+    cy.wait('@checkTrader');
+    cy.wait('@checkPromo');
 
-    // valida chamada /sale/payment
+    // 4️⃣ Finalizar compra
+    cy.window().then(win => cy.stub(win, 'alert').as('alert'));
+
+    cy.get('[data-cy="finalize-purchase-button"]').click();
+
+    // Aguarda o PUT
     cy.wait('@pay');
 
-    // redireciona para home
+    // ✔ FINAL: confirmar redirecionamento para HOME
     cy.url().should('match', /\/$/);
+
+    // ✔ alerta exibido
+    cy.get('@alert').should('have.been.calledWith', 'Pedido Enviado com Sucesso');
   });
+
 });

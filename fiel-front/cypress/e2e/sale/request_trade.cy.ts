@@ -62,6 +62,6 @@ describe('Pedido - solicitar troca', () => {
     // agora o componente deve ter feito setCurrentStatus('EXCHANGE_REQUESTED')
     // o <p className={styles.statusLine}> é o pai, então dá pra checar nele
     cy.get('p.orderCard_statusLine__eYM2_')
-      .should('contain.text', 'EXCHANGE_REQUESTED');
+      .should('contain.text', 'Troca solicitada');
   });
 });

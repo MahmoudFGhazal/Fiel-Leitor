@@ -62,7 +62,7 @@ export default function TradeSales() {
                                                 id: sale.statusSale?.id ?? null,
                                                 status: status ? String(status) : null
                                             }
-                                        }}  
+                                        }}
                                     />
                                 </tr>
                             );

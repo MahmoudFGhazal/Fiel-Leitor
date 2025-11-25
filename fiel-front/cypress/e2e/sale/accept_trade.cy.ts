@@ -55,7 +55,7 @@ describe('Controle de trocas - aceitar e recusar', () => {
     cy.wait('@putTradeStatusAccept');
 
     // o componente faz: setStatus('DECLINED');
-    cy.contains('DECLINED').should('be.visible');
+    cy.contains('Recusado').should('be.visible');
   });
 
   it('deve recusar a solicitação de troca (fluxo atual do componente → vira EXCHANGE_AUTHORIZED)', () => {
@@ -86,6 +86,6 @@ describe('Controle de trocas - aceitar e recusar', () => {
     cy.wait('@putTradeStatusReject');
 
     // o componente faz: setStatus('EXCHANGE_AUTHORIZED');
-    cy.contains('EXCHANGE_AUTHORIZED').should('be.visible');
+    cy.contains('Troca autorizada').should('be.visible');
   });
 });
