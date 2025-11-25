@@ -79,7 +79,7 @@ public class UserController {
     private DeleteUserAdapter deleteUserAdapter;
 
     @PostMapping("/login")
-    public ResponseEntity<FacadeResponse> Login(@RequestBody UserDTORequest user) {
+    public ResponseEntity<FacadeResponse> login(@RequestBody UserDTORequest user) {
         FacadeRequest request = new FacadeRequest();
 
         request.setEntity(user);
@@ -233,7 +233,7 @@ public class UserController {
     }
 
     @PutMapping("/password")
-    public ResponseEntity<FacadeResponse> ChangePassword(@RequestBody UserDTORequest user) {
+    public ResponseEntity<FacadeResponse> changePassword(@RequestBody UserDTORequest user) {
         FacadeRequest request = new FacadeRequest();
 
         request.setEntity(user);

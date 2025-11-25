@@ -9,16 +9,16 @@ import com.mahas.domain.FacadeResponse;
 import com.mahas.domain.SQLResponse;
 import com.mahas.domain.user.User;
 import com.mahas.dto.response.user.UserDTOResponse;
-import com.mahas.exception.ValidationException;
 
 @Component
 public class LoginAdapter implements IPostCommand {
     @Override
     public FacadeResponse execute(SQLResponse sqlResponse) {
+        FacadeResponse response = new FacadeResponse();
         DomainEntity entity = sqlResponse.getEntity();
-
+        
         if (!(entity instanceof User)) {
-            throw new ValidationException("Tipo de entidade inválido, esperado User");
+            return response;
         }
 
         User user = (User) entity;
@@ -30,7 +30,6 @@ public class LoginAdapter implements IPostCommand {
         DataResponse data = new DataResponse();
         data.setEntity(userResponse);
 
-        FacadeResponse response = new FacadeResponse();
         response.setData(data);
 
         return response;
