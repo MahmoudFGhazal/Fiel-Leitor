@@ -25,6 +25,7 @@ public class LoginAdapter implements IPostCommand {
         
         UserDTOResponse userResponse = new UserDTOResponse();
         userResponse.setId(user.getId());
+        userResponse.setName(user.getName());
         userResponse.setActive(user.getActive());
 
         DataResponse data = new DataResponse();

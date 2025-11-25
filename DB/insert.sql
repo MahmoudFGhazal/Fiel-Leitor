@@ -289,7 +289,7 @@ INSERT INTO users (
 VALUES
 (
   'renata@example.com',
-  '$2a$10$hashFake1',
+  '12345678',
   'Renata Giannini',
   1,
   (SELECT gen_id FROM genders WHERE gen_gender='Female' LIMIT 1),
@@ -299,13 +299,29 @@ VALUES
 ),
 (
   'mahmoud@example.com',
-  '$2a$10$hashFake2',
+  '12345678',
   'Mahmoud A.',
   1,
   (SELECT gen_id FROM genders WHERE gen_gender='Male' LIMIT 1),
   '1998-03-22',
   '987.654.321-00',
   '+55 11 90000-0002'
+);
+
+INSERT INTO users (
+  usr_email, usr_password, usr_name, usr_active, usr_gen_id,
+  usr_birthday, usr_cpf, usr_phone_number
+)
+VALUES
+(
+  'admin@example.com',
+  '12345678',
+  'admin',
+  1,
+  (SELECT gen_id FROM genders WHERE gen_gender='Female' LIMIT 1),
+  '2000-05-10',
+  '123.456.789-00',
+  '+55 11 90000-0001'
 );
 -- =============================
 -- ADDRESSES

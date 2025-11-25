@@ -56,10 +56,9 @@ function generateSmartMonths(filteredData: SaleResponse[], startDate: string, en
     const s = new Date(startDate);
     const e = new Date(endDate);
 
-    return generateMonthRange(
-      new Date(s.getFullYear(), s.getMonth(), 1),
-      new Date(e.getFullYear(), e.getMonth(), 1)
-    );
+    const start = new Date(s.getFullYear(), s.getMonth(), 1);
+    const end = new Date(e.getFullYear(), e.getMonth(), 1);
+    return generateMonthRange(start, end);
   }
 
   const allDates = filteredData.map((s) => safeDate(s.createdAt ?? s.deliveryDate));
@@ -95,7 +94,9 @@ export default function Table({ data }: Props) {
     if (!data) return [];
 
     return data.filter((sale) => {
-      const d = safeDate(sale.createdAt ?? sale.deliveryDate);
+      const d = sale.createdAt
+        ? safeDate(sale.createdAt)
+        : safeDate(sale.deliveryDate);
 
       if (startDate && d < new Date(startDate)) return false;
       if (endDate && d > new Date(endDate)) return false;
@@ -109,7 +110,6 @@ export default function Table({ data }: Props) {
 
     const allMonths = generateSmartMonths(filteredData, startDate, endDate);
 
-    // Todas as categorias
     if (selectedCats.length === 0) {
       const map = new Map(allMonths.map((m) => [m, 0]));
 
@@ -139,14 +139,18 @@ export default function Table({ data }: Props) {
       ];
     }
 
-    // Categorias específicas
     return selectedCats.map((catId, idx) => {
       const catName = categories.find((c) => c.id === catId)?.category ?? 'Categoria';
       const map = new Map(allMonths.map((m) => [m, 0]));
 
       for (const sale of filteredData) {
-        const d = safeDate(sale.deliveryDate ?? sale.createdAt);
+        const d = sale.createdAt
+          ? safeDate(sale.createdAt)
+          : safeDate(sale.deliveryDate);
+
         const month = getMonthKey(d);
+
+        if (!allMonths.includes(month)) continue;
 
         const total =
           sale.saleBooks

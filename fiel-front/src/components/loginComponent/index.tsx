@@ -21,7 +21,7 @@ interface LoginData {
 
 export default function LoginComponent() {
     const router = useRouter();
-    const { setCurrentUser } = useGlobal();
+    const { setCurrentUser, setIsAdmin } = useGlobal();
     const [formData, setFormData] = useState<LoginData>({
         email: '',
         password: '',
@@ -76,10 +76,16 @@ export default function LoginComponent() {
 
         await showToast('Login efetuado com sucesso!');
 
-        if (formData.refresh) {
-            localStorage.setItem('currentUser', JSON.stringify(user.id));
-        } 
         setCurrentUser(user.id);
+
+        const userName = user?.name;
+        console.log(userName)
+        if(userName == "admin") setIsAdmin(true);
+
+        if (!formData.refresh) {
+            localStorage.removeItem("currentUser");
+            localStorage.removeItem("isAdmin");
+        } 
 
         router.push("/");
     }

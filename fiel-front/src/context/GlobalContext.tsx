@@ -1,25 +1,44 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 type GlobalContextType = {
-  currentUser: number;
-  setCurrentUser: (t: number) => void;
+    currentUser: number;
+    setCurrentUser: (t: number) => void;
+
+    isAdmin: boolean;
+    setIsAdmin: (v: boolean) => void;
+
+    logout: () => void;
 };
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export function GlobalProvider({ children }: { children: ReactNode }) {
     const [currentUser, setCurrentUser] = useState<number>(0);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+    const router = useRouter(); 
 
     useEffect(() => {
-        const storedUser = JSON.parse(localStorage.getItem("currentUser") || "0");
-        if (storedUser) {
-            setCurrentUser(storedUser);
-        }
+        const storedUser = Number(localStorage.getItem("currentUser"));
+        const storedAdmin = localStorage.getItem("isAdmin") === "true";
+
+        if (storedUser) setCurrentUser(storedUser);
+        setIsAdmin(storedAdmin);
     }, []);
 
+    const logout = () => {
+        setCurrentUser(0);
+        setIsAdmin(false);
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("isAdmin");
+
+        router.push("/");
+    };
+
     return (
-        <GlobalContext.Provider value={{ currentUser, setCurrentUser }}>
+        <GlobalContext.Provider value={{ currentUser, setCurrentUser, isAdmin, setIsAdmin, logout }}>
             {children}
         </GlobalContext.Provider>
     );
