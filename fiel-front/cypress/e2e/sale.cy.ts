@@ -105,15 +105,16 @@ describe('Fluxo completo de compra (E2E)', () => {
   });
 
   it('Deve realizar uma compra completa com sucesso', () => {
+
     // 🔹 Acessa a página do livro
     cy.visit('/book?bookId=1');
     cy.wait('@getBook');
 
     // 🔹 Adiciona ao carrinho
-    cy.window().then((win) => cy.stub(win, 'alert').as('alert'));
+    cy.window().then((win) => cy.stub(win, 'alert').as('alertAdd'));
     cy.get('[data-cy="add-button"]').click();
     cy.wait('@addCart');
-    cy.get('@alert').should('have.been.calledWith', 'Livro adicionado ao carrinho!');
+    cy.get('@alertAdd').should('have.been.calledWith', 'Livro adicionado ao carrinho!');
 
     // 🔹 Abre o carrinho
     cy.get('[data-cy="open-cart-button"]').click();
@@ -129,34 +130,26 @@ describe('Fluxo completo de compra (E2E)', () => {
     cy.wait('@getAddresses');
     cy.wait('@getCards');
 
-    // 🔹 Aplica um cupom
-    cy.intercept('GET', '**/traderCoupon/check*', {
-        statusCode: 404,
-        body: { message: 'Trader coupon não encontrado' },
-    }).as('checkTrader');
+    // ============================================================
+    // 🔹 TROCA O ENDEREÇO
+    // ============================================================
+    cy.contains('Escolher outro').click();
+    cy.contains('Trabalho').click();
 
-    // ✅ Segundo: mock do promotionalCoupon (cupom válido)
-    cy.intercept('GET', '**/promotionalCoupon/check*', {
-        statusCode: 200,
-        body: {
-            data: {
-            entity: { id: 10, code: 'PROMO10', value: 10, used: false },
-            },
-        },
-    }).as('checkPromo');
+    // ============================================================
+    // 🔹 TROCA O CARTÃO E AJUSTA PERCENTUAL
+    // ============================================================
+    cy.contains('Selecionar Cartões').click();
+    cy.get('input[type="checkbox"]').check();
+    cy.get('input[type="number"]').clear().type('10');
+    cy.contains('Fechar').click();
 
-    // 🔹 Seleciona endereço e cartão
-    cy.contains('Casa').should('be.visible');
-    cy.contains('**** 1234').should('be.visible');
-
-    // 🔹 Finaliza a compra
-    cy.window().then((win) => cy.stub(win, 'alert').as('alert'));
-
-    // Finaliza a compra
+    // ============================================================
+    // 🔹 FINALIZA A COMPRA (APENAS UMA VEZ)
+    // ============================================================
+    cy.window().then(win => cy.stub(win, 'alert').as('alertFinish'));
     cy.get('[data-cy="finalize-purchase-button"]').click();
     cy.wait('@finalizeSale');
-
-    // Valida o alerta exibido
-    cy.get('@alert').should('have.been.calledWith', 'Pedido Enviado com Sucesso');
+    cy.get('@alertFinish').should('have.been.calledWith', 'Pedido Enviado com Sucesso');
   });
 });

@@ -61,7 +61,6 @@ export default function PedingSales() {
                 }
             });
 
-            if (!res.data) return;
             if (res.message) alert(res.message);
 
             setSales(prev =>
@@ -73,9 +72,9 @@ export default function PedingSales() {
                 } as unknown as SaleResponse : sale)
             );
 
-            alert("Venda atualizada com sucesso");
             setIsOpen(false);
             setIdInTransit(null);
+            alert("Venda atualizada com sucesso");
 
         } catch (err) {
             console.error(err);

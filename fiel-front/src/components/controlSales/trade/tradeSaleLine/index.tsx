@@ -32,11 +32,30 @@ export default function TradeSaleLine({ sale }: Props) {
             );
 
             if (res.message) alert(res.message);
-
             setStatus(StatusSale.EXCHANGED);
         } catch (err) {
             console.error(err);
-            alert('Erro ao carregar pedidos');
+            alert('Erro ao marcar troca como entregue');
+        }
+    };
+
+    const updateTradeStatus = async (id: number, confirm: boolean) => {
+        try {
+            const res = await api.put<ApiResponse>(
+                `/sale/trade/status`,
+                { params: { saleId: id, confirm } }
+            );
+
+            if (res.message) alert(res.message);
+
+            setStatus(
+                confirm
+                    ? StatusSale.DECLINED
+                    : StatusSale.EXCHANGE_AUTHORIZED
+            );
+        } catch (err) {
+            console.error(err);
+            alert('Erro ao atualizar troca');
         }
     };
 
@@ -44,16 +63,32 @@ export default function TradeSaleLine({ sale }: Props) {
         if (!id || !status) return null;
 
         switch (status) {
-            case StatusSale.EXCHANGE_AUTHORIZED:
+            case StatusSale.EXCHANGE_REQUESTED:
                 return (
                     <>
                         <ActionButton
                             color="green"
-                            label="Troca autorizada"
-                            onClick={() => defineExchanged(id)}
-                            dataCy="trade-button"
+                            label="Aceitar"
+                            onClick={() => updateTradeStatus(id, true)}
+                            dataCy="accept-button"
+                        />
+                        <ActionButton
+                            color="red"
+                            label="Rejeitar"
+                            onClick={() => updateTradeStatus(id, false)}
+                            dataCy="reject-button"
                         />
                     </>
+                );
+
+            case StatusSale.EXCHANGE_AUTHORIZED:
+                return (
+                    <ActionButton
+                        color="green"
+                        label="Troca autorizada"
+                        onClick={() => defineExchanged(id)}
+                        dataCy="trade-button"
+                    />
                 );
 
             default:
