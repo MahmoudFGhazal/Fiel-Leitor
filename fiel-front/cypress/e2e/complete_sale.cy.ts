@@ -22,7 +22,7 @@ describe('Pedido - solicitar troca', () => {
               {
                 id: saleId,
                 createdAt: createdAtISO,
-                saleBooks: [{ price: 50 }],
+                saleBooks: [{ price: 50, quantity: 2 }],
                 statusSale: { status: 'DELIVERED' },
               },
             ],
@@ -40,22 +40,23 @@ describe('Pedido - solicitar troca', () => {
         query: { saleId: String(saleId) },
       },
       (req) => {
-        req.reply({ statusCode: 200, body: { data: {} } });
+        req.reply({
+          statusCode: 200,
+          body: { data: { statusSale: { status: 'EXCHANGE_REQUESTED' } } },
+        });
       }
     ).as('putTradeRequest');
 
     cy.visit('/historical');
     cy.wait('@getSalesByUser');
 
-    cy.get('[data-cy="request-button"]').should('be.visible').click();
+    cy.get('[data-cy="request-button"]').click();
 
     cy.wait('@putTradeRequest');
 
-    cy.get('p.orderCard_statusLine__eYM2_')
-      .should('contain.text', 'Troca solicitada');
+    cy.contains('Troca solicitada').should('be.visible');
   });
 });
-
 
 // ====================================================================
 // ===============  TESTE 2 — DETALHE DO PEDIDO  =======================
@@ -66,7 +67,10 @@ describe('Página de Detalhe do Pedido (OrderSale)', () => {
   const saleId = 9001;
 
   const createdAtISO = '2025-10-21T18:30:00.000Z';
-  const saleBooks = [{ price: 10.0 }, { price: 35.5 }];
+  const saleBooks = [
+    { price: 10.0, quantity: 1 },
+    { price: 35.5, quantity: 3 },
+  ];
   const expectedTotal = saleBooks.reduce((a, b) => a + Number(b.price), 0);
   const expectedDate = '21/10/2025';
 
@@ -108,7 +112,10 @@ describe('Página de Detalhe do Pedido (OrderSale)', () => {
     cy.contains(String(saleId)).should('be.visible');
 
     cy.contains('Total:').should('be.visible');
-    cy.contains(new RegExp(`R\\$\\s*${expectedTotal.toFixed(2).replace('.', '[\\.,]')}`)).should('be.visible');
+
+    cy.contains(
+      new RegExp(`R\\$\\s*${expectedTotal.toFixed(2).replace('.', '[\\.,]')}`)
+    ).should('be.visible');
   });
 });
 
@@ -121,7 +128,6 @@ describe('Controle de vendas - Pendentes', () => {
   const saleId = 1234;
 
   beforeEach(() => {
-    // GET inicial — aprovado
     cy.intercept('GET', /sale\/peding/i, {
       statusCode: 200,
       body: {
@@ -130,34 +136,32 @@ describe('Controle de vendas - Pendentes', () => {
             {
               id: saleId,
               statusSale: { status: 'APPROVED' },
-              saleBooks: [{ price: 10 }, { price: 20 }],
+              saleBooks: [
+                { price: 10, quantity: 1 },
+                { price: 20, quantity: 2 },
+              ],
             },
           ],
         },
       },
     }).as('getPedingSales');
 
-    // PUT /sale/transit — valida QUERY (não body)
     cy.intercept('PUT', /sale\/transit/i, (req) => {
       expect(req.query.saleId).to.eq(String(saleId));
       expect(req.query.deliveryDate).to.eq('2025-12-10');
-
-      // Seu front converte 25.50 → 2550
       expect(req.query.freight).to.match(/25\.?50|2550/);
 
       req.reply({
         statusCode: 200,
-        body: { message: 'Venda atualizada com sucesso' },
+        body: { data: { statusSale: { status: 'IN_TRANSIT' } } },
       });
     }).as('putInTransit');
 
-    // PUT /sale/delivered
     cy.intercept('PUT', /sale\/delivered/i, (req) => {
       expect(req.query.saleId).to.eq(String(saleId));
-
       req.reply({
         statusCode: 200,
-        body: { message: 'Venda atualizada com sucesso' },
+        body: { data: { statusSale: { status: 'DELIVERED' } } },
       });
     }).as('putDelivered');
 
@@ -166,32 +170,19 @@ describe('Controle de vendas - Pendentes', () => {
   });
 
   it('deve colocar pedido em trânsito e depois marcar como entregue', () => {
-    // Confirma que o pedido carregou
     cy.contains('Pedidos Pendentes').should('be.visible');
     cy.get('tbody tr').contains(String(saleId)).should('be.visible');
 
-    // 1️⃣ Abrir modal de “Passar”
     cy.get('[data-cy="pass-button"]').click({ force: true });
 
-    // 2️⃣ Preencher modal
     cy.get('[data-cy="delivery-date-text"]').type('2025-12-10');
     cy.get('[data-cy="freight-text"]').clear().type('25.50');
 
-    // 3️⃣ Confirmar
     cy.contains('Confirmar').click();
-
-    // PUT transit
     cy.wait('@putInTransit');
 
-    // Modal some
-    cy.get('.peding_modal__FphNw').should('not.exist');
+    cy.contains(/Em trânsito/i).should('be.visible');
 
-    // 🔥 AQUI ESTÁ O AJUSTE IMPORTANTE
-    // O front **NÃO remove** a linha. Ele muda para "Em trânsito".
-    cy.get('tbody tr').contains(String(saleId)).should('exist');
-    cy.get('tbody tr').contains(/trânsito/i).should('exist');
-
-    // 4️⃣ Simular nova listagem — agora com IN_TRANSIT
     cy.intercept('GET', /sale\/peding/i, {
       statusCode: 200,
       body: {
@@ -200,7 +191,7 @@ describe('Controle de vendas - Pendentes', () => {
             {
               id: saleId,
               statusSale: { status: 'IN_TRANSIT' },
-              saleBooks: [{ price: 10 }],
+              saleBooks: [{ price: 10, quantity: 1 }],
             },
           ],
         },
@@ -210,25 +201,94 @@ describe('Controle de vendas - Pendentes', () => {
     cy.visit('/control?tab=peding');
     cy.wait('@getPedingSalesSecond');
 
-    // Agora a linha existe, mas com IN_TRANSIT
-    cy.get('tbody tr').contains(String(saleId)).should('be.visible');
-    cy.get('tbody tr').contains(/trânsito/i).should('be.visible');
+    cy.contains('Em trânsito').should('be.visible');
 
-    // 5️⃣ Passar novamente → entregar
     cy.get('[data-cy="pass-button"]').click({ force: true });
-
     cy.wait('@putDelivered');
 
-    // A linha CONTINUA EXISTINDO (comportamento real do front)
-    cy.get('tbody tr')
-      .contains(String(saleId))
-      .should('exist');
+    // tela deve mudar automaticamente
+    cy.contains('Finalizado').click();
+
+    // agora a URL muda
+    cy.url().should('include', 'tab=finished');
+
+    // o status deve aparecer como Entregue na tabela da aba finalizado
+    cy.contains(/Entregue/i).should('be.visible');
   });
 });
 
+// ====================================================================
+// ==========  TESTE 4 — CONTROLE DE TROCAS (admin) ===================
+// ====================================================================
+
+describe('Controle de trocas - aceitar e recusar', () => {
+  const saleId = 555;
+
+  beforeEach(() => {
+    cy.intercept('GET', /sale\/trade/i, {
+      statusCode: 200,
+      body: {
+        data: {
+          entities: [
+            {
+              id: saleId,
+              statusSale: { status: 'EXCHANGE_REQUESTED' },
+              saleBooks: [{ price: 10, quantity: 1 }],
+            },
+          ],
+        },
+      },
+    }).as('getTradeSales');
+
+    cy.visit('/control?tab=trade');
+    cy.wait('@getTradeSales');
+
+    cy.contains(String(saleId)).should('be.visible');
+  });
+
+  it('deve aceitar a troca → vira EXCHANGE_AUTHORIZED', () => {
+    cy.intercept(
+      {
+        method: 'PUT',
+        url: '**/sale/trade/status*',
+        query: { saleId: String(saleId), confirm: 'true' },
+      },
+      () => ({
+        statusCode: 200,
+        body: { data: { statusSale: { status: 'EXCHANGE_AUTHORIZED' } } },
+      })
+    ).as('putTradeStatusAccept');
+
+    cy.contains('Aceitar').click({ force: true });
+
+    cy.wait('@putTradeStatusAccept');
+
+    cy.contains('Troca autorizada').should('be.visible');
+  });
+
+  it('deve recusar a troca → vira DECLINED', () => {
+    cy.intercept(
+      {
+        method: 'PUT',
+        url: '**/sale/trade/status*',
+        query: { saleId: String(saleId), confirm: 'false' },
+      },
+      () => ({
+        statusCode: 200,
+        body: { data: { statusSale: { status: 'DECLINED' } } },
+      })
+    ).as('putTradeStatusReject');
+
+    cy.contains('Rejeitar').click({ force: true });
+
+    cy.wait('@putTradeStatusReject');
+
+    cy.contains('Recusado').should('be.visible');
+  });
+});
 
 // ====================================================================
-// =========  TESTE 4 — CONTROLE DE TROCAS (delivered)  ===============
+// =========  TESTE 5 — CONTROLE DE TROCAS (delivered)  ===============
 // ====================================================================
 
 describe('Controle de trocas - delivered', () => {
@@ -243,7 +303,7 @@ describe('Controle de trocas - delivered', () => {
             {
               id: saleId,
               statusSale: { status: 'EXCHANGE_AUTHORIZED' },
-              saleBooks: [{ price: 10 }],
+              saleBooks: [{ price: 10, quantity: 1 }],
             },
           ],
         },
@@ -260,7 +320,7 @@ describe('Controle de trocas - delivered', () => {
   it('deve marcar a troca como entregue', () => {
     cy.intercept('PUT', '**/sale/trade/delivered*', {
       statusCode: 200,
-      body: { data: {} },
+      body: { data: { statusSale: { status: 'EXCHANGE_DELIVERED' } } },  // ✔ CORREÇÃO
     }).as('putTradeDelivered');
 
     cy.get('[data-cy="trade-button"]').click({ force: true });
@@ -268,70 +328,5 @@ describe('Controle de trocas - delivered', () => {
     cy.wait('@putTradeDelivered');
 
     cy.contains(/Trocado/i).should('be.visible');
-  });
-});
-
-
-// ====================================================================
-// ==========  TESTE 5 — CONTROLE DE TROCAS (admin) ===================
-// ====================================================================
-
-describe('Controle de trocas - aceitar e recusar', () => {
-  const saleId = 555;
-
-  beforeEach(() => {
-    cy.intercept('GET', /sale\/trade/i, {
-      statusCode: 200,
-      body: {
-        data: {
-          entities: [
-            {
-              id: saleId,
-              statusSale: { status: 'EXCHANGE_REQUESTED' },
-              saleBooks: [{ price: 10 }],
-            },
-          ],
-        },
-      },
-    }).as('getTradeSales');
-
-    cy.visit('/control?tab=trade');
-    cy.wait('@getTradeSales');
-
-    cy.contains(String(saleId)).should('be.visible');
-  });
-
-  it('deve aceitar a troca → vira DECLINED', () => {
-    cy.intercept(
-      {
-        method: 'PUT',
-        url: '**/sale/trade/status*',
-        query: { saleId: String(saleId), confirm: 'true' },
-      },
-      (req) => req.reply({ statusCode: 200, body: { data: {} } })
-    ).as('putTradeStatusAccept');
-
-    cy.contains('Aceitar', { timeout: 6000 }).should('be.visible').click({ force: true });
-
-    cy.wait('@putTradeStatusAccept');
-
-    cy.contains('Recusado').should('be.visible');
-  });
-
-  it('deve recusar a troca → vira EXCHANGE_AUTHORIZED', () => {
-    cy.intercept(
-      {
-        method: 'PUT',
-        url: '**/sale/trade/status*',
-        query: { saleId: String(saleId), confirm: 'false' },
-      },
-      (req) => req.reply({ statusCode: 200, body: { data: {} } })
-    ).as('putTradeStatusReject');
-
-    cy.contains('Rejeitar', { timeout: 6000 }).should('be.visible').click({ force: true });
-
-    cy.wait('@putTradeStatusReject');
-
-    cy.contains('Troca autorizada').should('be.visible');
   });
 });

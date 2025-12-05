@@ -74,4 +74,5 @@ export const StatusSalePortuguese: Record<StatusSale, string> = {
     [StatusSale.EXCHANGE_REQUESTED]: 'Troca solicitada',
     [StatusSale.EXCHANGE_AUTHORIZED]: 'Troca autorizada',
     [StatusSale.EXCHANGED]: 'Trocado',
+    [StatusSale.EXCHANGE_DELIVERED]: 'Troca entregue',
 };

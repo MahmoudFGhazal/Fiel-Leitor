@@ -144,7 +144,7 @@ export default function CouponList({ onDiscountChange, onCouponsChange  }: Coupo
                     data-cy="trader-coupon-row"
                 >
                     <div className={styles.cellName}>{c?.code ?? '-'}</div>
-                    <div className={styles.cellType}>Trader</div>
+                    <div className={styles.cellType}>Troca</div>
                     <div className={styles.cellValue}>R$ {Number(c?.value ?? 0).toFixed(2)}</div>
                 
                     <button

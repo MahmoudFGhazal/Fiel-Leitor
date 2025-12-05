@@ -83,9 +83,15 @@ export default function LoginComponent() {
         if(userName == "admin") setIsAdmin(true);
 
         if (!formData.refresh) {
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem("isAdmin");
-        } 
+            localStorage.setItem("currentUser", String(user.id));
+            localStorage.setItem("isAdmin", String(userName === "admin"));
+        } else {
+            const expires = new Date();
+            expires.setDate(expires.getDate() + 30);
+
+            document.cookie = `currentUser=${user.id}; expires=${expires.toUTCString()}; path=/`;
+            document.cookie = `isAdmin=${userName === "admin"}; expires=${expires.toUTCString()}; path=/`;
+        }
 
         router.push("/");
     }

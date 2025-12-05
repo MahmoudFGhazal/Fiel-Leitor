@@ -21,6 +21,15 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
     const router = useRouter(); 
 
     useEffect(() => {
+        const cookieUser = getCookie("currentUser");
+        const cookieAdmin = getCookie("isAdmin");
+
+        if (cookieUser) {
+            setCurrentUser(Number(cookieUser));
+            setIsAdmin(cookieAdmin === "true");
+            return;
+        }
+
         const storedUser = Number(localStorage.getItem("currentUser"));
         const storedAdmin = localStorage.getItem("isAdmin") === "true";
 
@@ -48,4 +57,9 @@ export function useGlobal() {
     const ctx = useContext(GlobalContext);
     if (!ctx) throw new Error("useGlobal deve estar dentro de GlobalProvider");
     return ctx;
+}
+
+function getCookie(name: string): string | null {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
 }

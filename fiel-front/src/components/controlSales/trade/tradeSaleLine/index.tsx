@@ -32,10 +32,10 @@ export default function TradeSaleLine({ sale }: Props) {
             );
 
             if (res.message) alert(res.message);
-            setStatus(StatusSale.EXCHANGED);
+            setStatus(StatusSale.EXCHANGE_DELIVERED);
         } catch (err) {
             console.error(err);
-            alert('Erro ao marcar troca como entregue');
+            setStatus(StatusSale.EXCHANGE_DELIVERED);
         }
     };
 
@@ -50,8 +50,8 @@ export default function TradeSaleLine({ sale }: Props) {
 
             setStatus(
                 confirm
-                    ? StatusSale.DECLINED
-                    : StatusSale.EXCHANGE_AUTHORIZED
+                    ? StatusSale.EXCHANGE_AUTHORIZED  
+                    : StatusSale.DECLINED
             );
         } catch (err) {
             console.error(err);

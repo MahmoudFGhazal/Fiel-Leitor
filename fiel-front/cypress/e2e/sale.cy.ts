@@ -82,6 +82,7 @@ describe('Fluxo completo de compra (E2E)', () => {
         data: {
           entities: [
             { id: 7, last4: '1234', principal: true, bin: '555555', holder: 'RENATA' },
+            { id: 8, last4: '5678', principal: false, bin: '12345', holder: 'MAHMOUD' },
           ],
         },
       },
@@ -140,8 +141,15 @@ describe('Fluxo completo de compra (E2E)', () => {
     // 🔹 TROCA O CARTÃO E AJUSTA PERCENTUAL
     // ============================================================
     cy.contains('Selecionar Cartões').click();
-    cy.get('input[type="checkbox"]').check();
-    cy.get('input[type="number"]').clear().type('10');
+
+    // Marca os dois cartões
+    cy.get('input[type="checkbox"]').eq(0).check();
+    cy.get('input[type="checkbox"]').eq(1).check();
+
+    // Ajusta os percentuais — assume que aparecem dois inputs numéricos
+    cy.get('input[type="number"]').eq(0).clear().type('5');
+    cy.get('input[type="number"]').eq(1).clear().type('5');
+
     cy.contains('Fechar').click();
 
     // ============================================================

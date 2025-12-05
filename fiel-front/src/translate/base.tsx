@@ -15,6 +15,7 @@ export enum StatusSale {
     EXCHANGE_REQUESTED = 'exchange_requested',
     EXCHANGE_AUTHORIZED = 'exchange_authorized',
     EXCHANGED = 'exchanged',
+    EXCHANGE_DELIVERED = 'exchange_delivered',
 }
 
 export enum Categories {
@@ -73,4 +74,10 @@ export enum TypeStreets {
     BOULEVARD = 'Boulevard',
     HIGHWAY = 'Highway',
     SQUARE = 'Square'
+}
+
+export enum TypeCoupons {
+    TRADE = 'trade',
+    PROMOTIONAL = 'promotional'
+
 }

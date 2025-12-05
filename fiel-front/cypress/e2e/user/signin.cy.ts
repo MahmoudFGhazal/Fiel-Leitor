@@ -8,7 +8,7 @@ describe("SignInComponent", () => {
         cy.intercept("POST", "**/user/sign").as("signUser");
 
         // Step 1 - Usuário
-        cy.get('[data-cy=email-text]').type("teste2@exemplo.com");
+        cy.get('[data-cy=email-text]').type("teste655@exemplo.com");
         cy.get('[data-cy=password-text]').first().type("123@Pass");
         cy.get('[data-cy=newPassword-text]').type("123@Pass");
         cy.get('[data-cy=next-button]').should('be.visible').click();
@@ -17,7 +17,7 @@ describe("SignInComponent", () => {
         cy.get('[data-cy=name-text]').type("Usuário Teste");
         cy.get('[data-cy=gender-select]').select(1);
         cy.get('[data-cy=birth-date]').type("2000-01-01");
-        cy.get('[data-cy=cpf-text]').type("79666000172");
+        cy.get('[data-cy=cpf-text]').type("21114968048");
         cy.get('[data-cy=phone-text]').type("11999999999");
         cy.get('[data-cy=next-button]').should('be.visible').click();
 
